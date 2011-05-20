@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <table border=1>
+            <tr>
+                <td>&nbsp;</td>
+                <td>{{station.name}}</td>
+            </tr>
+            {% for row in group_states %}
+            <tr>
+                <td>{{row[0].name}}</td>
+                <td>{{row[1]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>

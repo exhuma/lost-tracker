@@ -1,0 +1,20 @@
+<html>
+    <body>
+        <table border=1>
+            <tr>
+                <td>&nbsp;</td>
+            {% for row in stations %}
+                <td>{{row.name.encode('base64')}}</td>
+            {% endfor %}
+            </tr>
+            {% for row in matrix %}
+            <tr>
+                <td>{{row[0].name[0:4]}}</td>
+            {% for col in row[1:] %}
+            <td><img src="/static/icons/time.png" /></td>
+            {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
