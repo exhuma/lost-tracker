@@ -14,12 +14,21 @@
             DIV.group:hover{
                 background: #ccc;
             }
+            DIV.state_0 {
+               background: #ffffff;
+            }
+            DIV.state_1 {
+               background: #ffffaa;
+            }
+            DIV.state_2 {
+               background: #aaffaa;
+            }
         </style>
     </head>
     <body>
         <div>{{station.name}}</div>
             {% for row in group_states %}
-            <div class="group" onclick="advanceState({{row[0].id}});">
+            <div class="group state_{{row[1] and row[1][0][0] or '0'}}" onclick="advanceState({{row[0].id}});">
                 <img id="icon_{{station.id}}_{{row[0].id}}" src="/static/icons/{{row[1] and row[1][0][0] or '0'}}.png" />
                 {{row[0].name}}<br />
             </div>
