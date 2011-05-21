@@ -1,16 +1,44 @@
 <html>
+    <head>
+        <style>
+            BODY{
+                max-width: 360px;
+                margin: auto;
+            }
+            DIV.group{
+                border: 1px solid black;
+                border-radius: 5px;
+                margin: 0.5em 1em;
+                padding: 2em 1em;
+            }
+            DIV.group:hover{
+                background: #ccc;
+            }
+        </style>
+    </head>
     <body>
-        <table border=1>
-            <tr>
-                <td>&nbsp;</td>
-                <td>{{station.name}}</td>
-            </tr>
+        <div>{{station.name}}</div>
             {% for row in group_states %}
-            <tr>
-                <td>{{row[0].name}}</td>
-                <td>{{row[1]}}</td>
-            </tr>
+            <div class="group" onclick="advanceState({{row[0].id}});">
+                <img id="icon_{{station.id}}_{{row[0].id}}" src="/static/icons/{{row[1] and row[1][0][0] or '0'}}.png" />
+                {{row[0].name}}<br />
+            </div>
             {% endfor %}
         </table>
+        <script type="text/javascript" src="/static/js/jquery-1.6.1.min.js"></script>
+        <script type="text/javascript">
+            function advanceState(groupId){
+                $.getJSON('/advance/'+groupId+'/'+{{station.id}},
+                function(data){
+                        if (data.new_state === undefined){
+                            return;
+                        }
+                        var elem = document.getElementById('icon_'+data.station_id+'_'+data.group_id);
+                        if (elem){
+                            elem.src = '/static/icons/'+data.new_state+'.png';
+                        }
+                });
+            }
+        </script>
     </body>
 </html>
