@@ -1,4 +1,35 @@
 <html>
+    <head>
+        <meta http-equiv="refresh" content="60" />
+        <style>
+           .cancelled {
+               text-decoration: line-through;
+               color: #aaa;
+           }
+           .state1 {
+               background-color: #ffa;
+           }
+           .state2 {
+               background-color: #afa;
+           }
+           TABLE TD {
+               border: 1px solid #ccc;
+               padding: 0.1em 0.5em;
+           }
+           TD.state {
+               text-align: center;
+           }
+           .unknown {
+               color: #008;
+           }
+           .arrived {
+               background: #ff8;
+           }
+           .finished {
+               background: #afa;
+           }
+        </style>
+    </head>
     <body>
         <table border=1>
             <tr>
@@ -15,6 +46,17 @@
             {% endfor %}
             </tr>
             {% endfor %}
+            <tr>
+                <td>SUM</td>
+            {% for col in sums %}
+                <td>
+                    <span class="unknown">{{col[0]}}</span>
+                    <span class="arrived">{{col[1]}}</span>
+                    <span class="finished">{{col[2]}}</span>
+                </td>
+            {% endfor %}
+            </tr>
+
         </table>
     </body>
 </html>
