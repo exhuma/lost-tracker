@@ -1,13 +1,19 @@
 from setuptools import setup, find_packages
 setup(
    name = "lost-tracker",
-   version = "1.0",
+   version = "1.2",
    packages = find_packages(),
    install_requires = [
       'flask',
       'flask-sqlalchemy',
-      'sqlalchemy'
+      'sqlalchemy',
+      'psycopg2',
       ],
+   package_data={'lost_tracker': [
+       'templates/*.html',
+       'static/icons/*.png',
+       'static/js/*.js'
+       ]},
    author = "Michel Albert",
    author_email = "michel@albert.lu",
    description = "Tracker for Lost in the Darkness",

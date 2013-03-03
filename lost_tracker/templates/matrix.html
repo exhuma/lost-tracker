@@ -1,5 +1,5 @@
 <html>
-    <head>
+   <head>
         <meta http-equiv="refresh" content="60" />
         <style>
            .cancelled {
@@ -31,32 +31,43 @@
         </style>
     </head>
     <body>
-        <table border=1>
+        <table>
             <tr>
                 <td>&nbsp;</td>
             {% for row in stations %}
-            <td><a href="/station/{{row.name.encode('base64')}}">{{row.name}}</a></td>
+            <td><a href="{{url_for('station', name=row.name)}}">{{row.name}}</a></td>
             {% endfor %}
+            </tr>
+            <tr>
+                 <td>SUM</td>
+                 {% for col in sums %}
+                     <td>
+                         <span class="unknown">{{col[0]}}</span>
+                         <span class="arrived">{{col[1]}}</span>
+                         <span class="finished">{{col[2]}}</span>
+                     </td>
+                 {% endfor %}
             </tr>
             {% for row in matrix %}
-            <tr>
+            <tr class="{{row[0].cancelled and 'cancelled' or ''}}">
                 <td>{{row[0].name}}</td>
             {% for col in row[1:] %}
-            <td><img src="/static/icons/{{col and col[0][0] or '0'}}.png" /></td>
+                {% set icon = col and col[0][0] or '0' %}
+                {% set icon_file = 'icons/%s.png' % icon %}
+                <td class="state state{{icon}}"><img src="{{url_for('static', filename=icon_file)}}" /></td>
             {% endfor %}
             </tr>
             {% endfor %}
             <tr>
-                <td>SUM</td>
-            {% for col in sums %}
-                <td>
-                    <span class="unknown">{{col[0]}}</span>
-                    <span class="arrived">{{col[1]}}</span>
-                    <span class="finished">{{col[2]}}</span>
-                </td>
-            {% endfor %}
+                 <td>SUM</td>
+                 {% for col in sums %}
+                     <td>
+                         <span class="unknown">{{col[0]}}</span>
+                         <span class="arrived">{{col[1]}}</span>
+                         <span class="finished">{{col[2]}}</span>
+                     </td>
+                 {% endfor %}
             </tr>
-
         </table>
     </body>
 </html>

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, and_
+from sqlalchemy import Column, Integer, Unicode, ForeignKey, Table, and_, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
 from lost_tracker.database import Base, engine
@@ -65,7 +65,9 @@ def advance(group_id, station_id):
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True)
+    name = Column(Unicode(50), unique=True)
+    order = Column(Integer)
+    cancelled = Column(Boolean)
 
     def __init__(self, name=None):
         self.name = name
@@ -76,8 +78,9 @@ class Group(Base):
 class Station(Base):
     __tablename__ = 'station'
     id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True)
+    name = Column(Unicode(50), unique=True)
     groups = relationship('Group', secondary=group_station_state)
+    order = Column(Integer)
 
     def __init__(self, name=None):
         self.name = name

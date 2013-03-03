@@ -1,5 +1,5 @@
 from flask import Flask, render_template, abort, jsonify
-from lost_tracker.models import Group, Station, get_state, advance as db_advance, group_station_state, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED
+from lost_tracker.models import Group, Station, get_state, advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED
 from lost_tracker.database import db_session as session
 app = Flask(__name__)
 
@@ -41,18 +41,18 @@ def advance(groupId, station_id):
             station_id=station_id,
             new_state=new_state)
 
-@app.route('/station/<base64key>')
-def station(base64key):
+@app.route('/station/<path:name>')
+def station(name):
     qry = session.query(Station)
-    qry = qry.filter_by( name = base64key.decode('base64') )
+    qry = qry.filter_by( name = name )
     station = qry.first()
     if not station:
         return abort(404)
 
     groups = Group.query
-    groups = groups.outerjoin(group_station_state)
-    groups = groups.filter(or_(group_station_state.c.state <> STATE_FINISHED,
-        group_station_state.c.state == None))
+    #groups = groups.outerjoin(group_station_state)
+    #groups = groups.filter(or_(group_station_state.c.state <> STATE_FINISHED,
+    #    group_station_state.c.state == None))
     groups = groups.order_by(Group.order)
     groups = groups.all()
     return render_template('station.html',

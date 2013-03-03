@@ -4,6 +4,7 @@
             BODY{
                 max-width: 360px;
                 margin: auto;
+                margin-top: 3em;
             }
             DIV.group{
                 border: 1px solid black;
@@ -23,18 +24,41 @@
             DIV.state_2 {
                background: #aaffaa;
             }
+            H1, H2 {
+               text-align: center;
+            }
+            #contact {
+               font-size: x-small;
+               text-align: center;
+               position: fixed;
+               background: #fff;
+               top: 0px;
+               left: 0px;
+               width: 100%;
+               height: 3em;
+               border-bottom: 1px solid black;
+            }
+           .cancelled {
+               text-decoration: line-through;
+               color: #aaa;
+           }
         </style>
+        <meta http-equiv="refresh" content="300" />
     </head>
     <body>
-        <div>{{station.name}}</div>
+        <h1>{{station.name}}</h1>
+        <h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
+        <div id="contact">Contact info</div>
             {% for row in group_states %}
-            <div class="group state_{{row[1] and row[1][0][0] or '0'}}" onclick="advanceState({{row[0].id}});">
-                <img id="icon_{{station.id}}_{{row[0].id}}" src="/static/icons/{{row[1] and row[1][0][0] or '0'}}.png" />
+            <div class="group state_{{row[1] and row[1][0][0] or '0'}} {{row[0].cancelled and 'cancelled' or ''}}" onclick="advanceState({{row[0].id}});">
+                {% set icon = row[1] and row[1][0][0] or '0' %}
+                {% set icon_file = 'icons/%s.png' % icon %}
+                <img id="icon_{{station.id}}_{{row[0].id}}" src="{{url_for('static', filename=icon_file)}}" />
                 {{row[0].name}}<br />
             </div>
             {% endfor %}
         </table>
-        <script type="text/javascript" src="/static/js/jquery-1.6.1.min.js"></script>
+        <script type="text/javascript" src="{{url_for('static', filename='js/jquery-1.6.1.min.js')}}"></script>
         <script type="text/javascript">
             function advanceState(groupId){
                 $.getJSON('/advance/'+groupId+'/'+{{station.id}},
@@ -44,7 +68,7 @@
                         }
                         var elem = document.getElementById('icon_'+data.station_id+'_'+data.group_id);
                         if (elem){
-                            elem.src = '/static/icons/'+data.new_state+'.png';
+                        elem.src = '{{url_for('static', filename='icons')}}/'+data.new_state+'.png';
                         }
                 });
             }
