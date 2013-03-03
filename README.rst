@@ -54,23 +54,3 @@ Without virtualenv
 - run the installer::
 
      python setup.py install
-
-Finished & Trying things out
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The script is now installed in you system's binary path as "lost-tracker". When
-using virtualenv, this will be /path/to/your/env/bin, otherwise it will most
-likely be ``/usr/local/bin``
-
-You may now deactivate the virtualenv by entering "deactivate". In the future
-it will no longer be necessary to activate the environment manually. The
-executable script will run automatically in the proper environment.
-
-To see if everything worked as expected, you may run::
-
-   /path/to/your/env/lost-tracker --help
-
-or simply (if it's on your ``$PATH``)::
-
-   lost-tracker --help
-
