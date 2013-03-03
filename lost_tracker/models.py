@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, Unicode, ForeignKey, Table, and_, Boolean
+from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
+        Boolean)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
 from lost_tracker.database import Base, engine
@@ -15,6 +16,7 @@ group_station_state = Table(
         Column('state', Integer, default=STATE_UNKNOWN)
         )
 
+
 def get_state(group_id, station_id):
     s = select(['state'], and_(
         group_station_state.c.group_id == group_id,
@@ -22,6 +24,7 @@ def get_state(group_id, station_id):
         ))
     s.bind = engine
     return list(s.execute())
+
 
 def advance(group_id, station_id):
     s = select(['state'], and_(
@@ -34,9 +37,9 @@ def advance(group_id, station_id):
         i = group_station_state.insert().values(
                 group_id=group_id,
                 station_id=station_id,
-                state = STATE_ARRIVED
+                state=STATE_ARRIVED
                 )
-        i.bind=engine
+        i.bind = engine
         i.execute()
         return STATE_ARRIVED
 
@@ -62,6 +65,7 @@ def advance(group_id, station_id):
     except IndexError:
         pass
 
+
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
@@ -75,6 +79,7 @@ class Group(Base):
     def __repr__(self):
         return '<Group %r>' % (self.name)
 
+
 class Station(Base):
     __tablename__ = 'station'
     id = Column(Integer, primary_key=True)
@@ -87,4 +92,3 @@ class Station(Base):
 
     def __repr__(self):
         return '<Station %r>' % (self.name)
-

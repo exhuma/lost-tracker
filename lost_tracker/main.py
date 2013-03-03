@@ -1,7 +1,9 @@
 from flask import Flask, render_template, abort, jsonify
-from lost_tracker.models import Group, Station, get_state, advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED
+from lost_tracker.models import (Group, Station, get_state,
+        advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED)
 from lost_tracker.database import db_session as session
 app = Flask(__name__)
+
 
 @app.route('/')
 def index():
@@ -31,7 +33,11 @@ def index():
                 elif elem[0][0] == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
 
-    return render_template('matrix.html', matrix=state_matrix, stations=stations, sums=sums)
+    return render_template('matrix.html',
+            matrix=state_matrix,
+            stations=stations,
+            sums=sums)
+
 
 @app.route('/advance/<groupId>/<station_id>')
 def advance(groupId, station_id):
@@ -40,6 +46,7 @@ def advance(groupId, station_id):
             group_id=groupId,
             station_id=station_id,
             new_state=new_state)
+
 
 @app.route('/station/<path:name>')
 def station(name):
@@ -50,14 +57,12 @@ def station(name):
         return abort(404)
 
     groups = Group.query
-    #groups = groups.outerjoin(group_station_state)
-    #groups = groups.filter(or_(group_station_state.c.state <> STATE_FINISHED,
-    #    group_station_state.c.state == None))
     groups = groups.order_by(Group.order)
     groups = groups.all()
     return render_template('station.html',
             station=station,
-            group_states=[ (grp, get_state(grp.id, station.id)) for grp in groups ])
+            group_states=[(grp, get_state(grp.id, station.id))
+                          for grp in groups])
 
 if __name__ == '__main__':
     app.run(debug=True)
