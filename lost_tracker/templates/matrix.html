@@ -52,9 +52,8 @@
             <tr class="{{row[0].cancelled and 'cancelled' or ''}}">
                 <td>{{row[0].name}}</td>
             {% for col in row[1:] %}
-                {% set icon = col and col[0][0] or '0' %}
-                {% set icon_file = 'icons/%s.png' % icon %}
-                <td class="state state{{icon}}"><img src="{{url_for('static', filename=icon_file)}}" /></td>
+                {% set icon_file = 'icons/%s.png' % col %}
+                <td class="state state{{col}}"><img src="{{url_for('static', filename=icon_file)}}" /></td>
             {% endfor %}
             </tr>
             {% endfor %}

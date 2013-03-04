@@ -18,12 +18,30 @@ group_station_state = Table(
 
 
 def get_state(group_id, station_id):
+    """
+    Given a group and station ID this will return the  state of the given
+    group at the given station. If no the group does not have a state at that
+    station, the default state (STATE_UNKNOWN) is returned.
+
+    :param group_id: The group ID
+    :type group_id: int
+    :param station_id: The station ID
+    :type station_id: int
+    :return: The state
+    :rtype: int
+    """
     s = select(['state'], and_(
         group_station_state.c.group_id == group_id,
         group_station_state.c.station_id == station_id
         ))
     s.bind = engine
-    return list(s.execute())
+    result = s.execute().first()
+
+    if not result:
+        return STATE_UNKNOWN
+
+    else:
+        return result[0]
 
 
 def advance(group_id, station_id):

@@ -43,12 +43,12 @@ def index():
     if state_matrix:
         sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
         for row in state_matrix:
-            for i, elem in enumerate(row[1:]):
-                if not elem or elem[0][0] == STATE_UNKNOWN:
+            for i, state in enumerate(row[1:]):
+                if not state or state == STATE_UNKNOWN:
                     sums[i][STATE_UNKNOWN] += 1
-                elif elem[0][0] == STATE_ARRIVED:
+                elif state == STATE_ARRIVED:
                     sums[i][STATE_ARRIVED] += 1
-                elif elem[0][0] == STATE_FINISHED:
+                elif state == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
 
     return render_template('matrix.html',

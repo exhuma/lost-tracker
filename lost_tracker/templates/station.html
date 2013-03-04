@@ -50,9 +50,8 @@
         <h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
         <div id="contact">Contact info</div>
             {% for row in group_states %}
-            <div class="group state_{{row[1] and row[1][0][0] or '0'}} {{row[0].cancelled and 'cancelled' or ''}}" onclick="advanceState({{row[0].id}});">
-                {% set icon = row[1] and row[1][0][0] or '0' %}
-                {% set icon_file = 'icons/%s.png' % icon %}
+            <div class="group state_{{row[1]}} {{row[0].cancelled and 'cancelled' or ''}}" onclick="advanceState({{row[0].id}});">
+                {% set icon_file = 'icons/%s.png' % row[1] %}
                 <img id="icon_{{station.id}}_{{row[0].id}}" src="{{url_for('static', filename=icon_file)}}" />
                 {{row[0].name}}<br />
             </div>
