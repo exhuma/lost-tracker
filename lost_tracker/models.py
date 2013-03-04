@@ -2,7 +2,7 @@ from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
         Boolean)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
-from lost_tracker.database import Base, engine
+from lost_tracker.database import Base
 
 STATE_UNKNOWN = 0
 STATE_ARRIVED = 1
@@ -34,7 +34,6 @@ def get_state(group_id, station_id):
         group_station_state.c.group_id == group_id,
         group_station_state.c.station_id == station_id
         ))
-    s.bind = engine
     result = s.execute().first()
 
     if not result:
@@ -49,7 +48,6 @@ def advance(group_id, station_id):
         group_station_state.c.group_id == group_id,
         group_station_state.c.station_id == station_id
         ))
-    s.bind = engine
     result = list(s.execute())
     if not result:
         i = group_station_state.insert().values(
@@ -57,7 +55,6 @@ def advance(group_id, station_id):
                 station_id=station_id,
                 state=STATE_ARRIVED
                 )
-        i.bind = engine
         i.execute()
         return STATE_ARRIVED
 
@@ -76,7 +73,6 @@ def advance(group_id, station_id):
                 ).values(
                         state=new_state
                         )
-        upd.bind = engine
         upd.execute()
         return new_state
 

@@ -54,3 +54,21 @@ Without virtualenv
 - run the installer::
 
      python setup.py install
+
+
+Configuration
+-------------
+
+Configuration is handled using default Python script files. Currently the only
+configuration variable is ``DB_DSN`` representing the database connection
+string.
+
+An example config file could be::
+
+    DB_DSN = 'postgres://user:passwd@localhost/dbname'
+
+The file is only read by setting an environment variable called
+LOST_TRACKER_SETTINGS pointing to the file. For example::
+
+    export LOST_TRACKER_SETTINGS="/tmp/my/conf/file.py"
+    ./env/bin/python lost_tracker/main.py

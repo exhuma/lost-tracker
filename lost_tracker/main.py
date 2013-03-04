@@ -1,8 +1,12 @@
 import os
 
+from sqlalchemy import create_engine
 from flask import Flask, render_template, abort, jsonify, g
+
 from lost_tracker.models import (Group, Station, get_state,
         advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED)
+from lost_tracker.database import Base
+
 app = Flask(__name__)
 app.config.from_object('lost_tracker.default_settings')
 
@@ -12,6 +16,8 @@ else:
     app.logger.warning('Running with default settings! Specify your own '
             'config file using the LOST_TRACKER_SETTINGS environment '
             'variable!')
+
+Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
 
 
 @app.before_request
