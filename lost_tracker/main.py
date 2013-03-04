@@ -1,8 +1,26 @@
-from flask import Flask, render_template, abort, jsonify
+import os
+
+from flask import Flask, render_template, abort, jsonify, g
 from lost_tracker.models import (Group, Station, get_state,
         advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED)
-from lost_tracker.database import db_session as session
 app = Flask(__name__)
+app.config.from_object('lost_tracker.default_settings')
+
+if 'LOST_TRACKER_SETTINGS' in os.environ:
+    app.config.from_envvar('LOST_TRACKER_SETTINGS')
+else:
+    app.logger.warning('Running with default settings! Specify your own '
+            'config file using the LOST_TRACKER_SETTINGS environment '
+            'variable!')
+
+
+@app.before_request
+def before_request():
+    # This import is deferred as it triggers the DB engine constructor on
+    # first import! As it may not yet be configured at global import time this
+    # would fail if imported globally.
+    from lost_tracker.database import db_session as session
+    g.session = session
 
 
 @app.route('/')
@@ -50,7 +68,7 @@ def advance(groupId, station_id):
 
 @app.route('/station/<path:name>')
 def station(name):
-    qry = session.query(Station)
+    qry = g.session.query(Station)
     qry = qry.filter_by( name = name )
     station = qry.first()
     if not station:
