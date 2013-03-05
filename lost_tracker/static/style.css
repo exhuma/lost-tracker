@@ -1,0 +1,55 @@
+DIV.group{
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 0.5em 1em;
+    padding: 2em 1em;
+}
+
+DIV.group:hover{
+    background: #ccc;
+}
+
+.state_0,
+.unknown {
+    background: #ffffff;
+}
+
+.state_1,
+.arrived {
+    background: #ffffaa;
+}
+
+.state_2,
+.finished {
+    background: #aaffaa;
+}
+
+H1, H2 {
+    text-align: center;
+}
+
+#contact {
+    font-size: x-small;
+    text-align: center;
+    position: fixed;
+    background: #fff;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 3em;
+    border-bottom: 1px solid black;
+}
+
+.cancelled {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+#Matrix TD {
+    border: 1px solid #ccc;
+    padding: 0.1em 0.5em;
+}
+
+TD.state {
+    text-align: center;
+}

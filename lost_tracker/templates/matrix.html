@@ -1,72 +1,46 @@
-<html>
-   <head>
-        <meta http-equiv="refresh" content="60" />
-        <style>
-           .cancelled {
-               text-decoration: line-through;
-               color: #aaa;
-           }
-           .state1 {
-               background-color: #ffa;
-           }
-           .state2 {
-               background-color: #afa;
-           }
-           TABLE TD {
-               border: 1px solid #ccc;
-               padding: 0.1em 0.5em;
-           }
-           TD.state {
-               text-align: center;
-           }
-           .unknown {
-               color: #008;
-           }
-           .arrived {
-               background: #ff8;
-           }
-           .finished {
-               background: #afa;
-           }
-        </style>
-    </head>
-    <body>
-        <table>
-            <tr>
-                <td>&nbsp;</td>
-            {% for row in stations %}
-            <td><a href="{{url_for('station', name=row.name)}}">{{row.name}}</a></td>
-            {% endfor %}
-            </tr>
-            <tr>
-                 <td>SUM</td>
-                 {% for col in sums %}
-                     <td>
-                         <span class="unknown">{{col[0]}}</span>
-                         <span class="arrived">{{col[1]}}</span>
-                         <span class="finished">{{col[2]}}</span>
-                     </td>
-                 {% endfor %}
-            </tr>
-            {% for row in matrix %}
-            <tr class="{{row[0].cancelled and 'cancelled' or ''}}">
-                <td>{{row[0].name}}</td>
-            {% for col in row[1:] %}
-                {% set icon_file = 'icons/%s.png' % col %}
-                <td class="state state{{col}}"><img src="{{url_for('static', filename=icon_file)}}" /></td>
-            {% endfor %}
-            </tr>
-            {% endfor %}
-            <tr>
-                 <td>SUM</td>
-                 {% for col in sums %}
-                     <td>
-                         <span class="unknown">{{col[0]}}</span>
-                         <span class="arrived">{{col[1]}}</span>
-                         <span class="finished">{{col[2]}}</span>
-                     </td>
-                 {% endfor %}
-            </tr>
-        </table>
-    </body>
-</html>
+{% extends "master.html" %}
+
+{% block head %}
+<meta http-equiv="refresh" content="60" />
+{% endblock %}
+
+{% block content %}
+<table id="Matrix">
+    <tr>
+        <td>&nbsp;</td>
+        {% for row in stations %}
+        <td><a href="{{url_for('station', name=row.name)}}">{{row.name}}</a></td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <td>SUM</td>
+        {% for col in sums %}
+        <td>
+            <span class="unknown">{{col[0]}}</span>
+            <span class="arrived">{{col[1]}}</span>
+            <span class="finished">{{col[2]}}</span>
+        </td>
+        {% endfor %}
+    </tr>
+    {% for row in matrix %}
+    <tr class="{{row[0].cancelled and 'cancelled' or ''}}">
+        <td>{{row[0].name}}</td>
+        {% for col in row[1:] %}
+        {% set icon_file = 'icons/%s.png' % col %}
+        <td class="state state{{col}}"><img src="{{url_for('static', filename=icon_file)}}" /></td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    <tr>
+        <td>SUM</td>
+        {% for col in sums %}
+        <td>
+            <span class="unknown">{{col[0]}}</span>
+            <span class="arrived">{{col[1]}}</span>
+            <span class="finished">{{col[2]}}</span>
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+
+{% endblock %}

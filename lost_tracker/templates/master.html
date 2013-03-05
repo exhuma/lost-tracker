@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lost Tracker {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <div id="contact">Contact info</div>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
