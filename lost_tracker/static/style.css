@@ -33,11 +33,13 @@ H1, H2 {
     text-align: center;
     position: fixed;
     background: #fff;
-    top: 0px;
-    left: 0px;
-    width: 100%;
+    bottom: 0px;
+    right: 0px;
+    width: 300px;
     height: 3em;
-    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
 }
 
 .cancelled {
