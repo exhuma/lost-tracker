@@ -48,8 +48,10 @@ def advance(group_id, station_id):
         group_station_state.c.group_id == group_id,
         group_station_state.c.station_id == station_id
         ))
-    result = list(s.execute())
-    if not result:
+    db_row = s.execute().first()
+
+    # The first state to set - if there is nothing yet - is "ARRIVED"
+    if not db_row:
         i = group_station_state.insert().values(
                 group_id=group_id,
                 station_id=station_id,
@@ -58,26 +60,24 @@ def advance(group_id, station_id):
         i.execute()
         return STATE_ARRIVED
 
-    try:
-        the_state = result[0][0]
-        if the_state == STATE_UNKNOWN:
-            new_state = STATE_ARRIVED
-        elif the_state == STATE_ARRIVED:
-            new_state = STATE_FINISHED
-        elif the_state == STATE_FINISHED:
-            new_state = STATE_UNKNOWN
-        upd = group_station_state.update().where(
-                and_(
-                    group_station_state.c.group_id == group_id,
-                    group_station_state.c.station_id == station_id)
-                ).values(
-                        state=new_state
-                        )
-        upd.execute()
-        return new_state
-
-    except IndexError:
-        pass
+    the_state = db_row[0]
+    if the_state == STATE_UNKNOWN:
+        new_state = STATE_ARRIVED
+    elif the_state == STATE_ARRIVED:
+        new_state = STATE_FINISHED
+    elif the_state == STATE_FINISHED:
+        new_state = STATE_UNKNOWN
+    else:
+        raise ValueError('%r is not a valid state!' % the_state)
+    upd = group_station_state.update().where(
+            and_(
+                group_station_state.c.group_id == group_id,
+                group_station_state.c.station_id == station_id)
+            ).values(
+                    state=new_state
+                    )
+    upd.execute()
+    return new_state
 
 
 class Group(Base):
