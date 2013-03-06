@@ -90,20 +90,39 @@ def station(name):
             group_states=[(grp, get_state(grp.id, station.id))
                           for grp in groups])
 
-def add_grp(name):
-    new_grp = Group(name)
-    g.session.add(name)
+def add_grp(grp_name):
+    new_grp = Group(grp_name)
+    g.session.add(grp_name)
+    try:
+        g.session.commit()
+    except SQLError as exc:
+        return "SQL ERROR: {0}".format(exc)
+    return "Group " + grp_name + " was successfully added into the DB."
+
+def add_station(stat_name):
+    new_station = Sation(stat_name)
+    g.session.add(stat_name)
     g.session.commit()
 
-def add_station(name):
-    new_station = Sation(name)
-    g.session.add(name)
-    g.session.commit()
+@app.route('/grp_form1')
+def init_grp_form():
+    message = ""
+    return render_template('add_group.html', message=message)
 
-@app.route('/grp_form')
+@app.route('/grp_form', methods=['GET', 'POST'])
 def grp_form():
-    name = request.form['name']
-    return 
+    grp_name = request.form['grp_name']
+    grp_contact = request.form['grp_contact']
+    grp_tel = request.form['grp_tel']
+    grp_direction = request.form['grp_direction']
+    if grp_direction:
+        direction = "Blo"
+    else:
+        direction = "Giel"
+
+    #message = add_grp(grp_name)
+    message = "bla done! for: " + grp_name + grp_contact + grp_tel + grp_direction + direction
+    return render_template('add_group.html', message=message)
 
 if __name__ == '__main__':
     app.run(debug=True, port=7000)
