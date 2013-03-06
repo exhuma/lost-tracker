@@ -1,7 +1,7 @@
 import os
 
 from sqlalchemy import create_engine
-from flask import Flask, render_template, abort, jsonify, g
+from flask import Flask, render_template, abort, jsonify, g, request
 
 from lost_tracker.models import (Group, Station, get_state,
         advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED)
@@ -37,6 +37,8 @@ def index():
     groups = Group.query
     groups = groups.order_by(Group.order)
     groups = groups.all()
+    
+    print request
 
     state_matrix = []
     for group in groups:
@@ -88,5 +90,20 @@ def station(name):
             group_states=[(grp, get_state(grp.id, station.id))
                           for grp in groups])
 
+def add_grp(name):
+    new_grp = Group(name)
+    g.session.add(name)
+    g.session.commit()
+
+def add_station(name):
+    new_station = Sation(name)
+    g.session.add(name)
+    g.session.commit()
+
+@app.route('/grp_form')
+def grp_form():
+    name = request.form['name']
+    return 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=7000)
