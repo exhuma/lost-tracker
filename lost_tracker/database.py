@@ -13,4 +13,6 @@ def init_db():
     # you will have to import them first before calling init_db()
 
     import lost_tracker.models  # NOQA
-    Base.metadata.create_all(bind=engine)
+    import lost_tracker.main  # NOQA
+    Base.metadata.create_all()
+    print 'Database created on {0}'.format(Base.metadata)

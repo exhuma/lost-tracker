@@ -56,6 +56,17 @@ Without virtualenv
      python setup.py install
 
 
+Database initialisation
+~~~~~~~~~~~~~~~~~~~~~~~
+
+To initialise the database run the following commands::
+
+    # export LOST_TRACKER_SETTINGS="/tmp/my/conf/file.py"
+    # ./env/bin/python
+    >>> from lost_tracker.database import init_db
+    >>> init_db()
+
+
 Configuration
 -------------
 
