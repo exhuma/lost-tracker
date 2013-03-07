@@ -9,6 +9,7 @@ from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 app = Flask(__name__)
 app.config.from_object('lost_tracker.default_settings')
+app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
 
 if 'LOST_TRACKER_SETTINGS' in os.environ:
     app.config.from_envvar('LOST_TRACKER_SETTINGS')
