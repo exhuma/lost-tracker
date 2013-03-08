@@ -1,12 +1,12 @@
 import os
 
 from sqlalchemy import create_engine
-from flask import Flask, render_template, abort, jsonify, g, request
+from flask import Flask, render_template, abort, jsonify, g, request, flash, url_for
 
 from lost_tracker.models import (Group, Station, get_state,
         advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED)
 from lost_tracker.database import Base
-
+from sqlalchemy.exc import IntegrityError
 app = Flask(__name__)
 app.config.from_object('lost_tracker.default_settings')
 
@@ -92,24 +92,24 @@ def station(name):
 
 def add_grp(grp_name):
     new_grp = Group(grp_name)
-    g.session.add(grp_name)
+    g.session.add(new_grp)
     try:
         g.session.commit()
-    except SQLError as exc:
+    except IntegrityError as exc:
         return "SQL ERROR: {0}".format(exc)
     return "Group " + grp_name + " was successfully added into the DB."
 
 def add_station(stat_name):
     new_station = Sation(stat_name)
-    g.session.add(stat_name)
+    g.session.add(new_station)
     g.session.commit()
 
-@app.route('/grp_form1')
+@app.route('/group')
 def init_grp_form():
     message = ""
     return render_template('add_group.html', message=message)
 
-@app.route('/grp_form', methods=['GET', 'POST'])
+@app.route('/group', methods=['POST'])
 def grp_form():
     grp_name = request.form['grp_name']
     grp_contact = request.form['grp_contact']
@@ -120,9 +120,11 @@ def grp_form():
     else:
         direction = "Giel"
 
-    #message = add_grp(grp_name)
-    message = "bla done! for: " + grp_name + grp_contact + grp_tel + grp_direction + direction
-    return render_template('add_group.html', message=message)
+    message = add_grp(grp_name)
+    #message = "bla done! for: " + grp_name + grp_contact + grp_tel + grp_direction + direction
+    flash(message)
+    redirect(url_for(init_grp_form))
+    #return render_template('add_group.html', message=message)
 
 if __name__ == '__main__':
     app.run(debug=True, port=7000)
