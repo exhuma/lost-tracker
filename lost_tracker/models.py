@@ -86,9 +86,17 @@ class Group(Base):
     name = Column(Unicode(50), unique=True)
     order = Column(Integer)
     cancelled = Column(Boolean)
+    contact = Column(Unicode(50))
+    phone = Column(Unicode(20))
+    direction = Column(Boolean)
+    start_time = Column(Unicode(5))
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, contact=None, phone=None, direction=None, start_time=None):
         self.name = name
+        self.contact = contact
+        self.phone = phone
+        self.direction = direction
+        self.start_time = start_time
 
     def __repr__(self):
         return '<Group %r>' % (self.name)
@@ -100,9 +108,13 @@ class Station(Base):
     name = Column(Unicode(50), unique=True)
     groups = relationship('Group', secondary=group_station_state)
     order = Column(Integer)
+    contact = Column(Unicode(50))
+    phone = Column(Unicode(20))
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, contact=None, phone=None):
         self.name = name
+        self.contact = contact
+        self.phone = phone
 
     def __repr__(self):
         return '<Station %r>' % (self.name)

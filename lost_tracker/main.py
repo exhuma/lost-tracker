@@ -1,7 +1,7 @@
 import os
 
 from sqlalchemy import create_engine
-from flask import Flask, render_template, abort, jsonify, g, request, flash, url_for
+from flask import Flask, render_template, abort, jsonify, g, request, flash, url_for, redirect
 
 from lost_tracker.models import (Group, Station, get_state,
         advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED)
@@ -91,19 +91,31 @@ def station(name):
             group_states=[(grp, get_state(grp.id, station.id))
                           for grp in groups])
 
-def add_grp(grp_name):
-    new_grp = Group(grp_name)
+def add_grp(grp_name, contact, phone, direction, start_time):
+    print "Direction: " + direction
+    if direction is "1":
+        color = "Giel"
+    else:
+        color = "Roud"
+
+    new_grp = Group(grp_name, contact, phone, direction, start_time)
     g.session.add(new_grp)
     try:
         g.session.commit()
     except IntegrityError as exc:
-        return "SQL Integrety Error: {0}".format(exc)
-    return "Group " + grp_name + " was successfully added into the DB."
+        g.session.rollback()
+        return "SQL ERROR: {0}".format(exc)
+    return "Group " + grp_name + " with Contact " + contact + " / " + phone + " was successfully added into the DB. The given start-time is " + start_time + " and the direction is " + color
 
-def add_station(stat_name):
-    new_station = Sation(stat_name)
+def add_station(stat_name, contact, phone):
+    new_station = Station(stat_name, contact, phone)
     g.session.add(new_station)
-    g.session.commit()
+    try:
+        g.session.commit()
+    except IntegrityError as exc:
+        g.session.rollback()
+        return "SQL ERROR: {0}".format(exc)
+    return "Station " + stat_name + " added. Contact: " + contact + " / " + phone
 
 @app.route('/group')
 def init_grp_form():
@@ -116,16 +128,26 @@ def grp_form():
     grp_contact = request.form['grp_contact']
     grp_tel = request.form['grp_tel']
     grp_direction = request.form['grp_direction']
-    if grp_direction:
-        direction = "Blo"
-    else:
-        direction = "Giel"
+    grp_start = request.form['grp_start']
 
-    message = add_grp(grp_name)
-    #message = "bla done! for: " + grp_name + grp_contact + grp_tel + grp_direction + direction
+    message = add_grp(grp_name, grp_contact, grp_tel, grp_direction, grp_start)
     flash(message)
-    redirect(url_for(init_grp_form))
-    #return render_template('add_group.html', message=message)
+    return redirect(url_for("init_grp_form"))
+
+@app.route('/add_station')
+def init_stat_form():
+    message = ""
+    return render_template('add_station.html', message=message)
+
+@app.route('/add_station', methods=['POST'])
+def stat_form():
+    name = request.form['stat_name']
+    contact = request.form['stat_contact']
+    phone = request.form['stat_phone']
+
+    message = add_station(name, contact, phone)
+    flash(message)
+    return redirect(url_for("init_stat_form"))
 
 if __name__ == '__main__':
     app.run(debug=True, port=7000)
