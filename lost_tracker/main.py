@@ -91,6 +91,12 @@ def station(name):
             group_states=[(grp, get_state(grp.id, station.id))
                           for grp in groups])
 
+def get_grps():
+    groups = Group.query
+    groups = groups.order_by(Group.order)
+    groups = groups.all()
+    return groups
+
 def add_grp(grp_name, contact, phone, direction, start_time):
     print "Direction: " + direction
     if direction is "1":
@@ -120,7 +126,8 @@ def add_station(stat_name, contact, phone):
 @app.route('/group')
 def init_grp_form():
     message = ""
-    return render_template('add_group.html', message=message)
+    grps = get_grps()
+    return render_template('add_group.html', message=message, groups=grps)
 
 @app.route('/group', methods=['POST'])
 def grp_form():

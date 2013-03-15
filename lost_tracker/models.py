@@ -16,6 +16,40 @@ group_station_state = Table(
         Column('state', Integer, default=STATE_UNKNOWN)
         )
 
+group_station_points = Table(
+        'group_station_points',
+        Base.metadata,
+        Column('group_id', Integer, ForeignKey('group.id')),
+        Column('station_id', Integer, ForeignKey('station.id')),
+        Column('questionnaire_score', Integer, default=0),
+        Column('questionnaire_id', Integer),
+        Column('post_score', Integer, default=0)
+        )
+
+def get_score(group_id=None, station_id=None):
+    if group_id:
+        if station_id:
+            s = select(['*'],
+                and_(
+                group_station_points.c.group_id == group_id,
+                group_station_points.c.station_id == station_id
+                ))
+        else:
+            s = select(['*'],
+                and_(
+                group_station_points.c.group_id == group_id
+                ))
+    else:
+        if station_id:
+            s = select(
+                and_(
+                group_station_points.c.station_id == station_id
+                ))
+        else:
+            s = select()
+
+    result = s.execute()
+    return result
 
 def get_state(group_id, station_id):
     """
@@ -42,6 +76,42 @@ def get_state(group_id, station_id):
     else:
         return result[0]
 
+def set_score(group_id, station_id, questionnaire_score=None,questionnaire_id=None, post_score=None):
+    s = select(
+        and_(
+        group_station_points.c.group_id == group_id,
+        group_station_points.c.station_id == station_id
+        ))
+    db_row = s.execute().first()
+
+    if not db_row:
+        i = group_station_points.insert().values(
+                questionnaire_score = questionnaire_score,
+                questionnaire_id = questionnaire_id,
+                post_score = post_score
+                )
+        i.execute()
+        return 'insert'
+    else:
+        if not questionnaire_score:
+            q_score = db_row[2]
+        if not questionnaire_id:
+            q_id = db_row[3]
+        if not post_score:
+            p_score = db_row[4]
+
+        u = group_station_points.filter_by(
+            group_id=group_id,
+            station_id=station_id
+            ).update({
+            'questionnaire_score': q_score,
+            'questionnaire_id': q_id,
+            'post_score': p_score
+            },
+            synchronize_session=False
+            )
+        u.execute()
+        return 'update'
 
 def advance(group_id, station_id):
     s = select(['state'], and_(

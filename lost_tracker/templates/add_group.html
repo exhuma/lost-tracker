@@ -43,10 +43,28 @@
         </tr>
         <tr>
             <td aligne="right">Startzäit:</td>
-            <td><input type="text" name="grp_start" size="5" maxlength="5"
+            <td><input type="text" name="grp_start" size="5" maxlength="5">
     </table>
     <input type="submit">
 </form>
 
+<table border=1">
+    <tr>
+        <th>Gruppennumm</th>
+        <th>Kontakt</th>
+        <th>GSM</th>
+        <th>Richtung</th>
+        <th>Startzäit</th>
+    </tr>
+{% for row in groups %}
+    <tr>
+        <td aligne="right">{{row.name}}</td>
+        <td aligne="right">{{row.contact}}</td>
+        <td aligne="right">{{row.phone}}</td>
+        <td aligne="right">{{row.direction}}</td>
+        <td aligne="right">{{row.start_time}}</td>
+    </tr>
+{% endfor %}
+</table>
 {% endblock %}
 
