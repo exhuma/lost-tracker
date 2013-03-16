@@ -4,7 +4,8 @@ from sqlalchemy import create_engine
 from flask import Flask, render_template, abort, jsonify, g, request, flash, url_for, redirect
 
 from lost_tracker.models import (Group, Station, get_state,
-        advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED)
+        advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED,
+        set_score, get_score)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 app = Flask(__name__)
@@ -155,6 +156,37 @@ def stat_form():
     message = add_station(name, contact, phone)
     flash(message)
     return redirect(url_for("init_stat_form"))
+
+@app.route('/set_score')
+def init_score_form():
+    message = ""
+    score = get_score()
+    groups = get_grps()
+    return render_template('set_score.html', message=message, score=score, groups=groups)
+
+@app.route('/set_score', methods=['POST'])
+def score_form():
+    grp_id = request.form['grp_id']
+    stat_id = request.form['stat_id']
+    q_score = request.form['q_score']
+    q_id = request.form['q_id']
+    p_score = request.form['p_score']
+    if not grp_id or not stat_d:
+        message = "You have to specify the Group AND the Station for which you want to enter the score. Nothing entered!"
+        flash(message)
+        return redirect(url_for("init_score_form"))
+    if q_score and not q_id:
+        message = "You need to specify a questionnaire id when entering questionnaire points. Nothing entered!"
+        flash(message)
+        return redirect(url_for("init_score_form"))
+    out = set_score(grp_id, stat_id, q_score, q_id, p_score)
+    if out == "insert":
+        message = "Score added for Group ID" + grp_id + "for Station ID" + stat_id + "Questionnaire Nr " + q_id + " : " + q_score + " , Post score: " + p_score
+        flush(message)
+        return redirect(url_for("init_score_form"))
+    else:
+        message = "Score updated for Group ID " + grp_id + "for Station ID" + stat_id + "Questionnaire Nr " + q_id + " : " + q_score + " , Post score: " + p_score
+        return redirect(url_for("init_score_form"))
 
 if __name__ == '__main__':
     app.run(debug=True, port=7000)

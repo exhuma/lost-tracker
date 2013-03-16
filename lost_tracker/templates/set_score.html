@@ -1,0 +1,73 @@
+{% extends "master.html" %}
+
+{% block head %}
+<style>
+    BODY{
+        max-width: 360px;
+        margin: auto;
+        margin-top: 3em;
+    }
+</style>
+<meta http-equiv="refresh" content="300" />
+{% endblock %}
+
+{% block content %}
+
+<h1>Punkten bearbechtung</h1>
+<h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
+<br>
+<br>
+
+<h2>{{message}}</h2>
+
+<br>
+<form action="{{url_for('score_form')}}" method="post">
+    <table border="0" cellpadding="0" cellspacing="4">
+        <tr>
+            <td align="right">GruppenID:</td>
+            <td><select name="grp_id">
+            {% for row in groups %}
+            <option>{{row.id}}</option>
+            {% endfor %}</select></td>
+        </tr>
+        <tr>
+            <td align="right">Kontaktpersoun:</td>
+            <td><input name="grp_contact" type="text" size="30" maxlength="50"></td>
+        </tr>
+        <tr>
+            <td align="right">GSM Nummer:</td>
+            <td><input name="grp_tel" type="text" size="9" maxlength="20"></td>
+        </tr>
+        <tr>
+            <td aligne="right">Richtung:</td>
+            <td><input type="radio" name="grp_direction" value="0">Roud<br>
+                <input type="radio" name="grp_direction" value="1">Giel
+            </td>
+        </tr>
+        <tr>
+            <td aligne="right">Startzäit:</td>
+            <td><input type="text" name="grp_start" size="5" maxlength="5">
+    </table>
+    <input type="submit">
+</form>
+
+<table border=1">
+    <tr>
+        <th>GruppenID</th>
+        <th>StatiounsID</th>
+        <th>Froebou</th>
+        <th>Punkten FB</th>
+        <th>Punten Posten</th>
+    </tr>
+{% for row in score %}
+    <tr>
+        <td aligne="right">{{row.group_id}}</td>
+        <td aligne="right">{{row.station_id}}</td>
+        <td aligne="right">{{row.questionnaire_id}}</td>
+        <td aligne="right">{{row.questionnaire_score}}</td>
+        <td aligne="right">{{row.post_score}}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+

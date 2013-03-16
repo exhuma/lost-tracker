@@ -29,26 +29,29 @@ group_station_points = Table(
 def get_score(group_id=None, station_id=None):
     if group_id:
         if station_id:
-            s = select(['*'],
+            s = select([group_station_points],
                 and_(
                 group_station_points.c.group_id == group_id,
                 group_station_points.c.station_id == station_id
                 ))
+            result = s.execute()
         else:
-            s = select(['*'],
+            s = select([group_station_points],
                 and_(
                 group_station_points.c.group_id == group_id
                 ))
+            result = s.execute()
     else:
         if station_id:
             s = select(
                 and_(
                 group_station_points.c.station_id == station_id
                 ))
+            result = s.execute()
         else:
-            s = select()
+            s = select([group_station_points])
+            result = s.execute()
 
-    result = s.execute()
     return result
 
 def get_state(group_id, station_id):
