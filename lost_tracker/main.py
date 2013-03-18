@@ -97,7 +97,7 @@ def add_grp(grp_name):
     try:
         g.session.commit()
     except IntegrityError as exc:
-        return "SQL ERROR: {0}".format(exc)
+        return "SQL Integrety Error: {0}".format(exc)
     return "Group " + grp_name + " was successfully added into the DB."
 
 def add_station(stat_name):
