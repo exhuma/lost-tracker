@@ -140,5 +140,11 @@ def score_form():
         message = "Score updated for Group ID " + grp_id + "for Station ID" + stat_id + "Questionnaire Nr " + q_id + " : " + q_score + " , Post score: " + p_score
         return redirect(url_for("init_score_form"))
 
+
+@app.route('/jstest')
+def jstest():
+  return render_template('jstest.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=7000)

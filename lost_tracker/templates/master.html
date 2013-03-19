@@ -19,7 +19,10 @@
         </div>
         {% endif %}
     {% endwith %}
-    {% block content %}
-    {% endblock %}
+    <div id="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+    {% block page_end %}{% endblock %}
 </body>
 </html>
