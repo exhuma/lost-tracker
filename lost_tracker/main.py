@@ -33,39 +33,16 @@ def before_request():
 
 @app.route('/')
 def index():
-    stations = Station.query
-    stations = stations.order_by(Station.order)
-    stations = stations.all()
-    groups = Group.query
-    groups = groups.order_by(Group.order)
-    groups = groups.all()
-    
-    print request
+    stations = get_stations()
+    groups = get_grps()
 
-    state_matrix = []
-    for group in groups:
-        tmp = [group]
-        for station in stations:
-            tmp.append(get_state(group.id, station.id))
-        state_matrix.append(tmp)
-
-    sums = []
-    if state_matrix:
-        sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
-        for row in state_matrix:
-            for i, state in enumerate(row[1:]):
-                if not state or state == STATE_UNKNOWN:
-                    sums[i][STATE_UNKNOWN] += 1
-                elif state == STATE_ARRIVED:
-                    sums[i][STATE_ARRIVED] += 1
-                elif state == STATE_FINISHED:
-                    sums[i][STATE_FINISHED] += 1
+    state_matrix = get_matrix(stations, groups)
+    sums = get_state_sum(state_matrix)
 
     return render_template('matrix.html',
             matrix=state_matrix,
             stations=stations,
             sums=sums)
-
 
 @app.route('/advance/<groupId>/<station_id>')
 def advance(groupId, station_id):
@@ -74,7 +51,6 @@ def advance(groupId, station_id):
             group_id=groupId,
             station_id=station_id,
             new_state=new_state)
-
 
 @app.route('/station/<path:name>')
 def station(name):
@@ -91,6 +67,31 @@ def station(name):
             station=station,
             group_states=[(grp, get_state(grp.id, station.id))
                           for grp in groups])
+
+def get_matrix(stations, groups):
+
+    state_matrix = []
+    for group in groups:
+        tmp = [group]
+        for station in stations:
+            tmp.append(get_state(group.id, station.id))
+        state_matrix.append(tmp)
+    return state_matrix
+
+def get_state_sum(state_matrix):
+    sums = []
+    if state_matrix:
+        sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
+        for row in state_matrix:
+            for i, state in enumerate(row[1:]):
+                if not state or state == STATE_UNKNOWN:
+                    sums[i][STATE_UNKNOWN] += 1
+                elif state == STATE_ARRIVED:
+                    sums[i][STATE_ARRIVED] += 1
+                elif state == STATE_FINISHED:
+                    sums[i][STATE_FINISHED] += 1
+
+    return sums
 
 def get_grps():
     groups = Group.query
@@ -113,6 +114,12 @@ def add_grp(grp_name, contact, phone, direction, start_time):
         g.session.rollback()
         return "SQL ERROR: {0}".format(exc)
     return "Group " + grp_name + " with Contact " + contact + " / " + phone + " was successfully added into the DB. The given start-time is " + start_time + " and the direction is " + color
+
+def get_stations():
+    stations = Station.query
+    stations = stations.order_by(Station.order)
+    stations = stations.all()
+    return stations
 
 def add_station(stat_name, contact, phone):
     new_station = Station(stat_name, contact, phone)
