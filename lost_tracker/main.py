@@ -1,13 +1,14 @@
 import os
-
+#
 from sqlalchemy import create_engine
+from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
+        get_stations, add_station, get_stat_by_name)
 from flask import Flask, render_template, abort, jsonify, g, request, flash, url_for, redirect
-
-from lost_tracker.models import (Group, Station, get_state,
-        advance as db_advance, STATE_FINISHED, STATE_UNKNOWN, STATE_ARRIVED,
-        set_score, get_score)
+#
+from lost_tracker.models import (get_state, advance as db_advance, set_score, get_score)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
+
 app = Flask(__name__)
 app.config.from_object('lost_tracker.default_settings')
 app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
@@ -30,6 +31,14 @@ def before_request():
     from lost_tracker.database import db_session as session
     g.session = session
 
+@app.teardown_request
+def teardown_request(exc):
+    try:
+        g.session.commit()
+    except IntegrityError:
+        g.session.rollback()
+        message = "SQL ERROR: {0}".format(exc)
+        flash(message)
 
 @app.route('/')
 def index():
@@ -54,82 +63,18 @@ def advance(groupId, station_id):
 
 @app.route('/station/<path:name>')
 def station(name):
-    qry = g.session.query(Station)
-    qry = qry.filter_by( name = name )
-    station = qry.first()
+    #qry = g.session.query(Station)
+    #qry = qry.filter_by( name = name )
+    #station = qry.first()
+    station =  get_stat_by_name(name)
     if not station:
         return abort(404)
 
-    groups = Group.query
-    groups = groups.order_by(Group.order)
-    groups = groups.all()
+    groups = get_grps()
     return render_template('station.html',
             station=station,
             group_states=[(grp, get_state(grp.id, station.id))
                           for grp in groups])
-
-def get_matrix(stations, groups):
-
-    state_matrix = []
-    for group in groups:
-        tmp = [group]
-        for station in stations:
-            tmp.append(get_state(group.id, station.id))
-        state_matrix.append(tmp)
-    return state_matrix
-
-def get_state_sum(state_matrix):
-    sums = []
-    if state_matrix:
-        sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
-        for row in state_matrix:
-            for i, state in enumerate(row[1:]):
-                if not state or state == STATE_UNKNOWN:
-                    sums[i][STATE_UNKNOWN] += 1
-                elif state == STATE_ARRIVED:
-                    sums[i][STATE_ARRIVED] += 1
-                elif state == STATE_FINISHED:
-                    sums[i][STATE_FINISHED] += 1
-
-    return sums
-
-def get_grps():
-    groups = Group.query
-    groups = groups.order_by(Group.order)
-    groups = groups.all()
-    return groups
-
-def add_grp(grp_name, contact, phone, direction, start_time):
-    print "Direction: " + direction
-    if direction is "1":
-        color = "Giel"
-    else:
-        color = "Roud"
-
-    new_grp = Group(grp_name, contact, phone, direction, start_time)
-    g.session.add(new_grp)
-    try:
-        g.session.commit()
-    except IntegrityError as exc:
-        g.session.rollback()
-        return "SQL ERROR: {0}".format(exc)
-    return "Group " + grp_name + " with Contact " + contact + " / " + phone + " was successfully added into the DB. The given start-time is " + start_time + " and the direction is " + color
-
-def get_stations():
-    stations = Station.query
-    stations = stations.order_by(Station.order)
-    stations = stations.all()
-    return stations
-
-def add_station(stat_name, contact, phone):
-    new_station = Station(stat_name, contact, phone)
-    g.session.add(new_station)
-    try:
-        g.session.commit()
-    except IntegrityError as exc:
-        g.session.rollback()
-        return "SQL ERROR: {0}".format(exc)
-    return "Station " + stat_name + " added. Contact: " + contact + " / " + phone
 
 @app.route('/group')
 def init_grp_form():
@@ -145,7 +90,7 @@ def grp_form():
     grp_direction = request.form['grp_direction']
     grp_start = request.form['grp_start']
 
-    message = add_grp(grp_name, grp_contact, grp_tel, grp_direction, grp_start)
+    message = add_grp(grp_name, grp_contact, grp_tel, grp_direction, grp_start, g.session)
     flash(message)
     return redirect(url_for("init_grp_form"))
 
@@ -160,7 +105,7 @@ def stat_form():
     contact = request.form['stat_contact']
     phone = request.form['stat_phone']
 
-    message = add_station(name, contact, phone)
+    message = add_station(name, contact, phone, g.session)
     flash(message)
     return redirect(url_for("init_stat_form"))
 
