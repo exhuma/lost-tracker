@@ -1,7 +1,7 @@
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
         Boolean)
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import select, order_by
+from sqlalchemy.sql import select
 from lost_tracker.database import Base
 
 STATE_UNKNOWN = 0
@@ -122,7 +122,7 @@ def insert_station_score(group_id, station_id, score):
         station_id = station_id,
         score = score
         )
-        return i
+    return i
         
 def update_station_score(group_id, station_id, score):
     u = station_scores.filter_by(
