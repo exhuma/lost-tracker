@@ -1,7 +1,7 @@
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
         Boolean)
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import select
+from sqlalchemy.sql import select, order_by
 from lost_tracker.database import Base
 
 STATE_UNKNOWN = 0
@@ -16,43 +16,65 @@ group_station_state = Table(
         Column('state', Integer, default=STATE_UNKNOWN)
         )
 
-group_station_points = Table(
-        'group_station_points',
+station_scores = Table(
+        'station_scores',
         Base.metadata,
         Column('group_id', Integer, ForeignKey('group.id')),
         Column('station_id', Integer, ForeignKey('station.id')),
-        Column('questionnaire_score', Integer, default=0),
-        Column('questionnaire_id', Integer),
-        Column('post_score', Integer, default=0)
+        Column('score', Integer, default=0)
         )
 
-def get_score(group_id=None, station_id=None):
-    if group_id:
-        if station_id:
-            s = select([group_station_points],
-                and_(
-                group_station_points.c.group_id == group_id,
-                group_station_points.c.station_id == station_id
-                ))
-            result = s.execute()
-        else:
-            s = select([group_station_points],
-                and_(
-                group_station_points.c.group_id == group_id
-                ))
-            result = s.execute()
-    else:
-        if station_id:
-            s = select(
-                and_(
-                group_station_points.c.station_id == station_id
-                ))
-            result = s.execute()
-        else:
-            s = select([group_station_points])
-            result = s.execute()
+form_scores = Table(
+        'form_scores',
+        Base.metadata,
+        Column('group_id', Integer, ForeignKey('group.id')),
+        Column('form_id', Integer),
+        Column('score', Integer, default=0)
+        )
 
-    return result
+def get_station_score(group_id, station_id):
+    s = select([score],
+        and_(
+        station_scores.c.group_id == group_id,
+        station_scores.c.station_id == station_id
+        ))
+    return s.execute().first()
+
+def get_station_score_by_station(station_id):
+    s = select([group_id, score],
+        and_(
+        station_scores.c.station_id == station_id
+        )).order_by(station_scores.group_id)
+    return s.execute()
+
+def get_station_score_by_group(group_id):
+    s = select([station_id, score],
+        and_(
+        station_scores.c.group_id == group_id
+        )).order_by(station_scores.station_id)
+    return s.execute()
+
+def get_form_score(group_id, form_id):
+    s = select([score],
+        and_(
+        form_scores.c.group_id == group_id,
+        form_scores.c.form_id == form_id
+        ))
+    return s.execute().first()
+
+def get_form_score_by_group(group_id):
+    s = select([form_id, score],
+        and_(
+        form_scores.c.group_id == group_id,
+        )).order_by(form_scores.form_id)
+    return s.execute()
+
+def get_form_score_by_form(form_id):
+    s = select([group_id, score],
+        and_(
+        form_scores.c.form_id == form_id
+        )).order_by(form_scores.group_id)
+    return s.execute()
 
 def get_state(group_id, station_id):
     """
@@ -79,42 +101,73 @@ def get_state(group_id, station_id):
     else:
         return result[0]
 
-def set_score(group_id, station_id, questionnaire_score=None,questionnaire_id=None, post_score=None):
-    s = select(
+def set_station_score(group_id, station_id, score):
+    s = select([station_scores],
         and_(
-        group_station_points.c.group_id == group_id,
-        group_station_points.c.station_id == station_id
+        station_scores.c.group_id == group_id,
+        station_scores.c.station_id == station_id
         ))
-    db_row = s.execute().first()
+    row = s.execute().first()
 
-    if not db_row:
-        i = group_station_points.insert().values(
-                questionnaire_score = questionnaire_score,
-                questionnaire_id = questionnaire_id,
-                post_score = post_score
-                )
+    if not row:
+        i = insert_station_score(group_id, station_id, score)
         i.execute()
-        return 'insert'
     else:
-        if not questionnaire_score:
-            q_score = db_row[2]
-        if not questionnaire_id:
-            q_id = db_row[3]
-        if not post_score:
-            p_score = db_row[4]
-
-        u = group_station_points.filter_by(
-            group_id=group_id,
-            station_id=station_id
-            ).update({
-            'questionnaire_score': q_score,
-            'questionnaire_id': q_id,
-            'post_score': p_score
-            },
-            synchronize_session=False
-            )
+        u = update_station_score(group_id, station_id, score)
         u.execute()
-        return 'update'
+
+def insert_station_score(group_id, station_id, score):
+    i = station_scores.inster().values(
+        group_id = group_id,
+        station_id = station_id,
+        score = score
+        )
+        return i
+        
+def update_station_score(group_id, station_id, score):
+    u = station_scores.filter_by(
+        group_id = group_id,
+        station_id = station_id
+        ).update({
+        'score': score
+        },
+        synchronize_session=False
+        )
+    return u 
+
+def set_form_score(group_id, form_id, score):
+    s = select([form_scores],
+        and_(
+        form_scores.c.group_id == group_id,
+        form_scores.c.form_id == form_id
+        ))
+    row = s.execute().first()
+
+    if not row:
+        i = insert_form_score(group_id, form_id, score)
+        i.execute()
+    else:
+        u = update_form_score(group_id, form_id, score)
+        u.execute()
+
+def insert_form_score(group_id, form_id, score):
+    i = form_scores.insert().values(
+        group_id = group_id,
+        form_id = form_id,
+        score = score
+        )
+    return i
+
+def update_form_score(group_id, form_id, score):
+    u = form_scores.filter_by(
+        group_id = group_id,
+        form_id = form_id
+        ).update({
+        'score': score
+        },
+        synchronize_session=False
+        )
+    return u
 
 def advance(group_id, station_id):
     s = select(['state'], and_(
