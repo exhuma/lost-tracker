@@ -5,7 +5,7 @@ from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
         get_stations, add_station, get_stat_by_name)
 from flask import Flask, render_template, abort, jsonify, g, request, flash, url_for, redirect
 #
-from lost_tracker.models import (get_state, advance as db_advance)
+from lost_tracker.models import (get_state, advance as db_advance, get_form_score_full, set_form_score)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -108,6 +108,23 @@ def stat_form():
     message = add_station(name, contact, phone, g.session)
     flash(message)
     return redirect(url_for("init_stat_form"))
+
+@app.route('/form_score')
+def init_form_score():
+    grps = get_grps()
+    form_scores = get_form_score_full()
+    return render_template('form_score.html', form_scores=form_scores, groups=grps)
+
+@app.route('/form_score', methods=['POST'])
+def form_score():
+    group_id = request.form['group_id']
+    form_id = request.form['form_id']
+    score = request.form['score']
+
+    if group_id != "NA":
+        set_form_score(group_id, form_id, score)
+
+    return redirect(url_for("init_form_score"))
 
 if __name__ == '__main__':
     app.run(debug=True, port=7000)

@@ -44,14 +44,18 @@ def get_station_score_by_station(station_id):
     s = select([group_id, score],
         and_(
         station_scores.c.station_id == station_id
-        )).order_by(station_scores.group_id)
+        )).order_by(station_scores.c.group_id)
     return s.execute()
 
 def get_station_score_by_group(group_id):
     s = select([station_id, score],
         and_(
         station_scores.c.group_id == group_id
-        )).order_by(station_scores.station_id)
+        )).order_by(station_scores.c.station_id)
+    return s.execute()
+
+def get_station_score_full():
+    s = select([station_scores]).order_by(station_scores.c.station_id)
     return s.execute()
 
 def get_form_score(group_id, form_id):
@@ -66,14 +70,18 @@ def get_form_score_by_group(group_id):
     s = select([form_id, score],
         and_(
         form_scores.c.group_id == group_id,
-        )).order_by(form_scores.form_id)
+        )).order_by(form_scores.c.form_id)
     return s.execute()
 
 def get_form_score_by_form(form_id):
     s = select([group_id, score],
         and_(
         form_scores.c.form_id == form_id
-        )).order_by(form_scores.group_id)
+        )).order_by(form_scores.c.group_id)
+    return s.execute()
+
+def get_form_score_full():
+    s = select([form_scores]).order_by(form_scores.c.form_id)
     return s.execute()
 
 def get_state(group_id, station_id):

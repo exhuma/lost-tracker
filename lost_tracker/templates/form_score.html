@@ -1,0 +1,64 @@
+{% extends "master.html" %}
+
+{% block head %}
+<style>
+    BODY{
+        max-width: 360px;
+        margin: auto;
+        margin-top: 3em;
+    }
+</style>
+<meta http-equiv="refresh" content="300" />
+{% endblock %}
+
+{% block content %}
+
+<h1>Froebou Punkten</h1>
+<h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
+<br>
+<br>
+
+<h2>{{message}}</h2>
+
+<br>
+<form action="{{url_for('form_score')}}" method="post">
+    <table border="0" cellpadding="0" cellspacing="4">
+        <tr>
+            <td align="right">Gruppennumm:</td>
+                <td>
+                <select name="group_id">
+                    <option value="NA">--</option>
+                {% for row in groups %}
+                    <option value="{{row.id}}">{{row.name}}</option>
+                {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">Form_id:</td>
+            <td><input name="form_id" type="text" size="2" maxlength="2"></td>
+        </tr>
+        <tr>
+            <td align="right">Score:</td>
+            <td><input name="score" type="text" size="3" maxlength="3"></td>
+        </tr>
+    </table>
+    <input type="submit">
+</form>
+
+<table border=1">
+    <tr>
+        <th>Gruppenid</th>
+        <th>Froebou</th>
+        <th>Punkten</th>
+    </tr>
+{% for row in form_scores %}
+    <tr>
+        <td aligne="right">{{row.group_id}}</td>
+        <td aligne="right">{{row.form_id}}</td>
+        <td aligne="right">{{row.score}}</td>
+    </tr>
+{% endfor %}
+</table>
+{% endblock %}
+
