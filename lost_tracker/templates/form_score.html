@@ -27,7 +27,7 @@
             <td align="right">Gruppennumm:</td>
                 <td>
                 <select name="group_id">
-                    <option value="NA">--</option>
+                    <option value="">--</option>
                 {% for row in groups %}
                     <option value="{{row.id}}">{{row.name}}</option>
                 {% endfor %}

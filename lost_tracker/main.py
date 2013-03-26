@@ -121,7 +121,7 @@ def form_score():
     form_id = request.form['form_id']
     score = request.form['score']
 
-    if group_id != "NA":
+    if group_id:
         set_form_score(group_id, form_id, score)
 
     return redirect(url_for("init_form_score"))
