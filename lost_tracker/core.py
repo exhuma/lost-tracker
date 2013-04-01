@@ -75,4 +75,5 @@ def get_stat_by_name(name):
 def add_station(stat_name, contact, phone, session):
     new_station = Station(stat_name, contact, phone)
     session.add(new_station)
-    return "Station " + stat_name + " added. Contact: " + contact + " / " + phone
+    return "Station {0} added. Contact: {1} / {2}".format(
+        stat_name, contact, phone)
