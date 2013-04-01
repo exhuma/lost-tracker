@@ -1,11 +1,13 @@
 import os
-#
+
 from sqlalchemy import create_engine
 from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
-        get_stations, add_station, get_stat_by_name)
-from flask import Flask, render_template, abort, jsonify, g, request, flash, url_for, redirect
-#
-from lost_tracker.models import (get_state, advance as db_advance, get_form_score_full, set_form_score)
+                               get_stations, add_station, get_stat_by_name)
+from flask import (Flask, render_template, abort, jsonify, g, request, flash,
+                   url_for, redirect)
+
+from lost_tracker.models import (get_state, advance as db_advance,
+                                 get_form_score_full, set_form_score)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -17,8 +19,8 @@ if 'LOST_TRACKER_SETTINGS' in os.environ:
     app.config.from_envvar('LOST_TRACKER_SETTINGS')
 else:
     app.logger.warning('Running with default settings! Specify your own '
-            'config file using the LOST_TRACKER_SETTINGS environment '
-            'variable!')
+                       'config file using the LOST_TRACKER_SETTINGS '
+                       'environment variable!')
 
 Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
 
@@ -31,6 +33,7 @@ def before_request():
     from lost_tracker.database import db_session as session
     g.session = session
 
+
 @app.teardown_request
 def teardown_request(exc):
     try:
@@ -39,6 +42,7 @@ def teardown_request(exc):
         g.session.rollback()
         message = "SQL ERROR: {0}".format(exc)
         flash(message)
+
 
 @app.route('/')
 def index():
@@ -49,38 +53,43 @@ def index():
     sums = get_state_sum(state_matrix)
 
     return render_template('matrix.html',
-            matrix=state_matrix,
-            stations=stations,
-            sums=sums)
+                           matrix=state_matrix,
+                           stations=stations,
+                           sums=sums)
+
 
 @app.route('/advance/<groupId>/<station_id>')
 def advance(groupId, station_id):
     new_state = db_advance(groupId, station_id)
     return jsonify(
-            group_id=groupId,
-            station_id=station_id,
-            new_state=new_state)
+        group_id=groupId,
+        station_id=station_id,
+        new_state=new_state)
+
 
 @app.route('/station/<path:name>')
 def station(name):
     #qry = g.session.query(Station)
     #qry = qry.filter_by( name = name )
     #station = qry.first()
-    station =  get_stat_by_name(name)
+    station = get_stat_by_name(name)
     if not station:
         return abort(404)
 
     groups = get_grps()
-    return render_template('station.html',
-            station=station,
-            group_states=[(grp, get_state(grp.id, station.id))
-                          for grp in groups])
+    return render_template(
+        'station.html',
+        station=station,
+        group_states=[(grp, get_state(grp.id, station.id))
+                      for grp in groups])
+
 
 @app.route('/group')
 def init_grp_form():
     message = ""
     grps = get_grps()
     return render_template('add_group.html', message=message, groups=grps)
+
 
 @app.route('/group', methods=['POST'])
 def grp_form():
@@ -90,14 +99,23 @@ def grp_form():
     grp_direction = request.form['grp_direction']
     grp_start = request.form['grp_start']
 
-    message = add_grp(grp_name, grp_contact, grp_tel, grp_direction, grp_start, g.session)
+    message = add_grp(
+        grp_name,
+        grp_contact,
+        grp_tel,
+        grp_direction,
+        grp_start,
+        g.session)
+
     flash(message)
     return redirect(url_for("init_grp_form"))
+
 
 @app.route('/add_station')
 def init_stat_form():
     message = ""
     return render_template('add_station.html', message=message)
+
 
 @app.route('/add_station', methods=['POST'])
 def stat_form():
@@ -109,11 +127,16 @@ def stat_form():
     flash(message)
     return redirect(url_for("init_stat_form"))
 
+
 @app.route('/form_score')
 def init_form_score():
     grps = get_grps()
     form_scores = get_form_score_full()
-    return render_template('form_score.html', form_scores=form_scores, groups=grps)
+    return render_template(
+        'form_score.html',
+        form_scores=form_scores,
+        groups=grps)
+
 
 @app.route('/form_score', methods=['POST'])
 def form_score():
