@@ -1,4 +1,5 @@
 import os
+from collections import namedtuple
 
 from sqlalchemy import create_engine
 from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
@@ -74,10 +75,12 @@ def station(name):
         return abort(404)
 
     groups = get_grps()
+    group_state_row = namedtuple('group_state_row',
+                                 'group, state')
     return render_template(
         'station.html',
         station=station,
-        group_states=[(grp, get_state(grp.id, station.id))
+        group_states=[group_state_row(grp, get_state(grp.id, station.id))
                       for grp in groups])
 
 

@@ -10,14 +10,14 @@
 <h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
 
 {% for row in group_states %}
-<div class="group state_{{row[1]}} {{row[0].cancelled and 'cancelled' or ''}}">
+<div class="group state_{{row.state}} {{row.group.cancelled and 'cancelled' or ''}}">
     <div class="icon">
-        {% set icon_file = 'icons/%s.png' % row[1] %}
-        <img id="icon_{{station.id}}_{{row[0].id}}" src="{{url_for('static', filename=icon_file)}}" />
+        {% set icon_file = 'icons/%s.png' % row.state %}
+        <img id="icon_{{station.id}}_{{row.group.id}}" src="{{url_for('static', filename=icon_file)}}" />
     </div>
     <div class="details">
-        <div class="name" onclick="advanceState({{row[0].id}});">
-            {{row[0].name}}
+        <div class="name" onclick="advanceState({{row.group.id}});">
+            {{row.group.name}}
         </div>
         <div>
             <input type="number" name="score" />
