@@ -1,5 +1,5 @@
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
-        Boolean)
+                        Boolean)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
 from lost_tracker.database import Base
@@ -9,28 +9,26 @@ STATE_ARRIVED = 1
 STATE_FINISHED = 2
 
 group_station_state = Table(
-        'group_station_state',
-        Base.metadata,
-        Column('group_id', Integer, ForeignKey('group.id')),
-        Column('station_id', Integer, ForeignKey('station.id')),
-        Column('state', Integer, default=STATE_UNKNOWN)
-        )
+    'group_station_state',
+    Base.metadata,
+    Column('group_id', Integer, ForeignKey('group.id')),
+    Column('station_id', Integer, ForeignKey('station.id')),
+    Column('state', Integer, default=STATE_UNKNOWN))
 
 station_scores = Table(
-        'station_scores',
-        Base.metadata,
-        Column('group_id', Integer, ForeignKey('group.id')),
-        Column('station_id', Integer, ForeignKey('station.id')),
-        Column('score', Integer, default=0)
-        )
+    'station_scores',
+    Base.metadata,
+    Column('group_id', Integer, ForeignKey('group.id')),
+    Column('station_id', Integer, ForeignKey('station.id')),
+    Column('score', Integer, default=0))
 
 form_scores = Table(
-        'form_scores',
-        Base.metadata,
-        Column('group_id', Integer, ForeignKey('group.id')),
-        Column('form_id', Integer),
-        Column('score', Integer, default=0)
-        )
+    'form_scores',
+    Base.metadata,
+    Column('group_id', Integer, ForeignKey('group.id')),
+    Column('form_id', Integer),
+    Column('score', Integer, default=0))
+
 
 def get_station_score(group_id, station_id):
     s = select([score],
@@ -40,12 +38,14 @@ def get_station_score(group_id, station_id):
         ))
     return s.execute().first()
 
+
 def get_station_score_by_station(station_id):
     s = select([group_id, score],
         and_(
         station_scores.c.station_id == station_id
         )).order_by(station_scores.c.group_id)
     return s.execute()
+
 
 def get_station_score_by_group(group_id):
     s = select([station_id, score],
@@ -54,9 +54,11 @@ def get_station_score_by_group(group_id):
         )).order_by(station_scores.c.station_id)
     return s.execute()
 
+
 def get_station_score_full():
     s = select([station_scores]).order_by(station_scores.c.station_id)
     return s.execute()
+
 
 def get_form_score(group_id, form_id):
     s = select([score],
@@ -66,12 +68,14 @@ def get_form_score(group_id, form_id):
         ))
     return s.execute().first()
 
+
 def get_form_score_by_group(group_id):
     s = select([form_id, score],
         and_(
         form_scores.c.group_id == group_id,
         )).order_by(form_scores.c.form_id)
     return s.execute()
+
 
 def get_form_score_by_form(form_id):
     s = select([group_id, score],
@@ -80,9 +84,11 @@ def get_form_score_by_form(form_id):
         )).order_by(form_scores.c.group_id)
     return s.execute()
 
+
 def get_form_score_full():
     s = select([form_scores]).order_by(form_scores.c.form_id)
     return s.execute()
+
 
 def get_state(group_id, station_id):
     """
@@ -109,6 +115,7 @@ def get_state(group_id, station_id):
     else:
         return result[0]
 
+
 def set_station_score(group_id, station_id, score):
     s = select([station_scores],
         and_(
@@ -124,6 +131,7 @@ def set_station_score(group_id, station_id, score):
         u = update_station_score(group_id, station_id, score)
         u.execute()
 
+
 def insert_station_score(group_id, station_id, score):
     i = station_scores.inster().values(
         group_id = group_id,
@@ -131,7 +139,8 @@ def insert_station_score(group_id, station_id, score):
         score = score
         )
     return i
-        
+
+
 def update_station_score(group_id, station_id, score):
     u = station_scores.filter_by(
         group_id = group_id,
@@ -142,6 +151,7 @@ def update_station_score(group_id, station_id, score):
         synchronize_session=False
         )
     return u 
+
 
 def set_form_score(group_id, form_id, score):
     s = select([form_scores],
@@ -158,6 +168,7 @@ def set_form_score(group_id, form_id, score):
         u = update_form_score(group_id, form_id, score)
         u.execute()
 
+
 def insert_form_score(group_id, form_id, score):
     i = form_scores.insert().values(
         group_id = group_id,
@@ -165,6 +176,7 @@ def insert_form_score(group_id, form_id, score):
         score = score
         )
     return i
+
 
 def update_form_score(group_id, form_id, score):
     u = form_scores.filter_by(
@@ -176,6 +188,7 @@ def update_form_score(group_id, form_id, score):
         synchronize_session=False
         )
     return u
+
 
 def advance(group_id, station_id):
     s = select(['state'], and_(
