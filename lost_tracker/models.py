@@ -237,7 +237,8 @@ class Group(Base):
     direction = Column(Boolean)
     start_time = Column(Unicode(5))
 
-    def __init__(self, name=None, contact=None, phone=None, direction=None, start_time=None):
+    def __init__(self, name=None, contact=None,
+                 phone=None, direction=None, start_time=None):
         self.name = name
         self.contact = contact
         self.phone = phone
