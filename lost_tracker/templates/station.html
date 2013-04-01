@@ -16,7 +16,7 @@
         <img id="icon_{{station.id}}_{{row.group.id}}" src="{{url_for('static', filename=icon_file)}}" />
     </div>
     <div class="details">
-        <div class="name" onclick="advanceState({{row.group.id}});">
+        <div class="name" onclick="advanceState(this, {{row.group.id}});">
             {{row.group.name}}
         </div>
         <div>
@@ -29,7 +29,9 @@
 {% endfor %}
 
 <script type="text/javascript">
-  function advanceState(groupId){
+  function advanceState(event_source, groupId){
+    var container = event_source.parentNode.parentNode;
+    $(container).removeClass('state_0 state_1 state_2');
     $.getJSON('/advance/' + groupId + '/' + {{station.id}},
       function(data){
         if (data.new_state === undefined){
@@ -42,6 +44,7 @@
           elem.src = '{{url_for('static', filename='icons')}}/' +
               data.new_state + '.png';
         }
+        $(container).addClass('state_' + data.new_state);
       });
     }
 </script>
