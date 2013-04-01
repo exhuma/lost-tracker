@@ -2,7 +2,6 @@ from lost_tracker.models import (
     Group,
     Station,
     get_state,
-    advance as db_advance,
     STATE_FINISHED,
     STATE_UNKNOWN,
     STATE_ARRIVED)
