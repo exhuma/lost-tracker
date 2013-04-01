@@ -15,10 +15,6 @@ DIV.group INPUT {
     font-size: 2em;
 }
 
-DIV.group:hover{
-    background: rgba(0, 0, 0, 0.03);
-}
-
 DIV.group .icon {
     float: left;
 }
@@ -33,17 +29,32 @@ DIV.group .name{
 
 .state_0,
 .unknown {
-    background: #ffffff;
+    background: hsl(0, 100%, 100%);
 }
 
 .state_1,
 .arrived {
-    background: #ffffaa;
+    background: hsl(60, 100%, 90%);
 }
 
 .state_2,
 .finished {
-    background: #aaffaa;
+    background: hsl(120, 100%, 90%);
+}
+
+.state_0:hover,
+.unknown:hover {
+    background: hsl(0, 0%, 90%);
+}
+
+.state_1:hover,
+.arrived:hover {
+    background: hsl(60, 100%, 70%);
+}
+
+.state_2:hover,
+.finished:hover {
+    background: hsl(120, 100%, 70%);
 }
 
 H1, H2 {
