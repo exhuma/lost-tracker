@@ -69,9 +69,6 @@ def advance(groupId, station_id):
 
 @app.route('/station/<path:name>')
 def station(name):
-    #qry = g.session.query(Station)
-    #qry = qry.filter_by( name = name )
-    #station = qry.first()
     station = get_stat_by_name(name)
     if not station:
         return abort(404)
