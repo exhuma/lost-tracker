@@ -1,13 +1,6 @@
 {% extends "master.html" %}
 
 {% block head %}
-<style>
-    BODY{
-        max-width: 360px;
-        margin: auto;
-        margin-top: 3em;
-    }
-</style>
 <meta http-equiv="refresh" content="300" />
 {% endblock %}
 
@@ -17,10 +10,21 @@
 <h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
 
 {% for row in group_states %}
-<div class="group state_{{row[1]}} {{row[0].cancelled and 'cancelled' or ''}}" onclick="advanceState({{row[0].id}});">
-    {% set icon_file = 'icons/%s.png' % row[1] %}
-    <img id="icon_{{station.id}}_{{row[0].id}}" src="{{url_for('static', filename=icon_file)}}" />
-    {{row[0].name}}<br />
+<div class="group state_{{row[1]}} {{row[0].cancelled and 'cancelled' or ''}}">
+    <div class="icon">
+        {% set icon_file = 'icons/%s.png' % row[1] %}
+        <img id="icon_{{station.id}}_{{row[0].id}}" src="{{url_for('static', filename=icon_file)}}" />
+    </div>
+    <div class="details">
+        <div class="name" onclick="advanceState({{row[0].id}});">
+            {{row[0].name}}
+        </div>
+        <div>
+            <input type="number" name="score" />
+            <input type="number" name="forobou" />
+            <input type="submit" value="OK" />
+        </div>
+    </div>
 </div>
 {% endfor %}
 
