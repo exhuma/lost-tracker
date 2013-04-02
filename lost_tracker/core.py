@@ -8,6 +8,20 @@ from lost_tracker.models import (
 
 
 def get_matrix(stations, groups):
+    """
+    Returns a 2-dimensional array containing an entry for each group.
+
+    Each row has the group as first element, and all stations as subsequent
+    elements. For example::
+
+        [
+            [group1, station1, station2, station3, ... ],
+            [group2, station1, station2, station3, ... ],
+            [group3, station1, station2, station3, ... ],
+            ...
+        ]
+    """
+    # TODO: make this a list of dicts or a list of namedtuples!
 
     state_matrix = []
     for group in groups:
@@ -19,6 +33,11 @@ def get_matrix(stations, groups):
 
 
 def get_state_sum(state_matrix):
+    """
+    Creates a list where each element contains the sum of "unknown", "arrived"
+    and "finished" states for each station.
+    """
+    # TODO: make this a list of namedtuples!
     sums = []
     if state_matrix:
         sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
@@ -34,6 +53,9 @@ def get_state_sum(state_matrix):
 
 
 def get_grps():
+    """
+    Returns all groups from the database as :py:class:`Group` instances.
+    """
     groups = Group.query
     groups = groups.order_by(Group.order)
     groups = groups.all()
@@ -41,7 +63,10 @@ def get_grps():
 
 
 def add_grp(grp_name, contact, phone, direction, start_time, session):
-    if direction is "1":
+    """
+    Creates a new group in the database.
+    """
+    if direction is "1":  # TODO: "1" = magic string!
         color = "Giel"
     else:
         color = "Roud"
@@ -58,6 +83,9 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
 
 
 def get_stations():
+    """
+    Returns all stations from the database as :py:class:`Station` instances.
+    """
     stations = Station.query
     stations = stations.order_by(Station.order)
     stations = stations.all()
@@ -65,6 +93,10 @@ def get_stations():
 
 
 def get_stat_by_name(name):
+    """
+    Returns a :py:class:`Station` by class name. Can be ``None`` if no
+    matching station is found.
+    """
     qry = Station.query
     qry = qry.filter_by(name=name)
     qry = qry.first()
@@ -72,6 +104,9 @@ def get_stat_by_name(name):
 
 
 def add_station(stat_name, contact, phone, session):
+    """
+    Creates a new :py:class:`Station` in the database.
+    """
     new_station = Station(stat_name, contact, phone)
     session.add(new_station)
     return "Station {0} added. Contact: {1} / {2}".format(
