@@ -9,7 +9,6 @@ goog.require('goog.net.XhrIo');
  * @constructor
  */
 lost_tracker.app = function() {
-  alert(1);
 };
 
 
