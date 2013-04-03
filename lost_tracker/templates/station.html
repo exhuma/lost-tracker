@@ -10,7 +10,7 @@
 <h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
 
 {% for row in group_states %}
-<div class="group state_{{row.state}} {{row.group.cancelled and 'cancelled' or ''}}">
+<div class="group group state_{{row.state}} {{row.group.cancelled and 'cancelled' or ''}}">
     <div class="icon">
         {% set icon_file = 'icons/%s.png' % row.state %}
         <img id="icon_{{station.id}}_{{row.group.id}}" src="{{url_for('static', filename=icon_file)}}" />
@@ -21,11 +21,18 @@
             {{row.group.name}}
         </div>
         <div>
-            <input type="number" name="score" />
-            <input type="number" name="forobou" />
-            <input type="submit" value="OK" />
+            <form action="{{url_for('index')}}" method="POST">
+                <p style="display: none;"><input type="hidden" name="group_id"
+                    value="{{row.group.id}}" /></p>
+                <input type="number" name="score" />
+                <input type="number" name="forobou" />
+                <input type="submit" value="OK" />
+            </form>
         </div>
     </div>
 </div>
 {% endfor %}
+<script type="text/javascript">
+  lost_tracker.app.attachEvents({{station.id}});
+</script>
 {% endblock %}
