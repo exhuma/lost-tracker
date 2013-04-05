@@ -52,14 +52,17 @@ lost_tracker.app.attachEvents = function(stationId) {
     });
     goog.events.listen(submit_buttons[0], goog.events.EventType.CLICK, function(evt) {
       var formData = goog.dom.forms.getFormDataMap(evt.target.form);
+      var formString = goog.dom.forms.getFormDataString(evt.target.form);
       goog.net.XhrIo.send(
-          '/group/' + formData.get('group_id')[0] + '/' + stationId,
+          '/form_score',
           function(evt){
             var xhr = evt.target;
             var data = xhr.getResponseJson();
             window['console']['log'](data);
-          }, 'POST',
-          'score=' + formData.get('score')[0]);
+          }, 'POST', formString, {
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          });
       evt.preventDefault();
     });
   });

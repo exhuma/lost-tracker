@@ -147,6 +147,9 @@ def form_score():
     if group_id:
         set_form_score(group_id, form_id, score)
 
+    if request.is_xhr:
+        return jsonify(status='ok')
+
     return redirect(url_for("init_form_score"))
 
 if __name__ == '__main__':

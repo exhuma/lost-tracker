@@ -22,10 +22,11 @@
         </div>
         <div>
             <form action="{{url_for('index')}}" method="POST">
+                <p style="display: none;"><input type="hidden" name="form_id"
+                    value="{{station.id}}" /></p>
                 <p style="display: none;"><input type="hidden" name="group_id"
                     value="{{row.group.id}}" /></p>
                 <input type="number" name="score" />
-                <input type="number" name="forobou" />
                 <input type="submit" value="OK" />
             </form>
         </div>
