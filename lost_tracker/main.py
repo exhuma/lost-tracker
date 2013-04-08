@@ -8,7 +8,8 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
                    url_for, redirect)
 
 from lost_tracker.models import (get_state, advance as db_advance,
-                                 get_form_score_full, set_form_score)
+                                 get_form_score_full, set_form_score,
+                                 set_station_score as save_station_score)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -136,6 +137,21 @@ def init_form_score():
         'form_score.html',
         form_scores=form_scores,
         groups=grps)
+
+
+@app.route('/station_score', methods=['POST'])
+def set_station_score():
+    group_id = request.form['group_id']
+    station_id = request.form['station_id']
+    score = request.form['score']
+
+    if group_id:
+        save_station_score(group_id, station_id, score)
+
+    if request.is_xhr:
+        return jsonify(status='ok')
+
+    return redirect(url_for("/"))  # TODO: redirect to station page
 
 
 @app.route('/form_score', methods=['POST'])
