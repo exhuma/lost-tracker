@@ -27,7 +27,10 @@
         <td>{{row[0].name}}</td>
         {% for col in row[1:] %}
         {% set icon_file = 'icons/%s.png' % col %}
-        <td class="state state{{col}}"><img src="{{url_for('static', filename=icon_file)}}" /></td>
+        <td class="state state{{col}}"><img
+          src="{{url_for('static', filename=icon_file)}}"
+          width="16"
+          height="16" /></td>
         {% endfor %}
     </tr>
     {% endfor %}
