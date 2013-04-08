@@ -11,10 +11,8 @@
 
 {% for row in group_states %}
 <div class="group group state_{{row.state}} {{row.group.cancelled and 'cancelled' or ''}}">
-    <div class="icon">
-        {% set icon_file = 'icons/%s.png' % row.state %}
-        <img id="icon_{{station.id}}_{{row.group.id}}" src="{{url_for('static', filename=icon_file)}}" />
-    </div>
+    {% set icon_file = 'icons/%s.png' % row.state %}
+    <img class="icon" id="icon_{{station.id}}_{{row.group.id}}" src="{{url_for('static', filename=icon_file)}}" />
     <div class="details">
         <div class="name" onclick="lost_tracker.app.advanceState(this,
           {{row.group.id}}, {{station.id}});">

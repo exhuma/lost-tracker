@@ -17,6 +17,8 @@ DIV.group INPUT {
 
 DIV.group .icon {
     float: left;
+    width: 5em;
+    margin-right: 1em;
 }
 
 DIV.group .details {

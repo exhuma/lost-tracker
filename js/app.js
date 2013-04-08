@@ -7,6 +7,7 @@ goog.require('goog.dom.forms');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.net.XhrIo');
+goog.require('goog.style');
 
 
 /**
@@ -65,6 +66,14 @@ lost_tracker.app.attachEvents = function(stationId) {
           });
       evt.preventDefault();
     });
+  });
+
+  goog.array.forEach(goog.dom.getElementsByTagNameAndClass('img', 'icon'),
+      function(element) {
+        var sibling = goog.dom.getNextElementSibling(element);
+        var siblingSize = goog.style.getSize(sibling);
+        goog.style.setHeight(element, siblingSize.height);
+        goog.style.setWidth(element, siblingSize.width);
   });
 };
 
