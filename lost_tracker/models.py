@@ -137,7 +137,7 @@ def set_station_score(group_id, station_id, score):
 
 
 def insert_station_score(group_id, station_id, score):
-    i = station_scores.inster().values(
+    i = station_scores.insert().values(
         group_id=group_id,
         station_id=station_id,
         score=score)
@@ -145,12 +145,12 @@ def insert_station_score(group_id, station_id, score):
 
 
 def update_station_score(group_id, station_id, score):
-    u = station_scores.filter_by(
-        group_id=group_id,
-        station_id=station_id
-    ).update({
-        'score': score
-    }, synchronize_session=False)
+    u = station_scores.update().where(
+        and_(
+            station_scores.c.group_id == group_id,
+            station_scores.c.station_id == station_id)
+    ).values(
+        score = score)
     return u
 
 
@@ -180,12 +180,12 @@ def insert_form_score(group_id, form_id, score):
 
 
 def update_form_score(group_id, form_id, score):
-    u = form_scores.filter_by(
-        group_id=group_id,
-        form_id=form_id
-    ).update({
-        'score': score
-    }, synchronize_session=False)
+    u = form_scores.update().where(
+        and_(
+            form_scores.c.group_id == group_id,
+            form_scores.c.form_id == form_id)
+        ).values(
+        score = score)
     return u
 
 
