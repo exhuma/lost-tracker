@@ -19,6 +19,9 @@ lost_tracker.app = function() {
 
 lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
   var container = event_source.parentNode;
+  var elem = goog.dom.getElement(
+    'icon_' + stationId + '_' + groupId);
+  elem.src = '/static/icons/loading.gif';
   goog.dom.classlist.removeAll(
       container, ['state_0', 'state_1', 'state_2']);
   goog.net.XhrIo.send(
@@ -29,13 +32,8 @@ lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
         if (!goog.isDefAndNotNull(data.new_state)){
           return;
         }
-        var elem = goog.dom.getElement(
-          'icon_' + data.station_id + '_' + data.group_id);
 
-        if (goog.isDefAndNotNull(elem)){
-          elem.src = '/static/icons/' +
-              data.new_state + '.png';
-        }
+        elem.src = '/static/icons/' + data.new_state + '.png';
         goog.dom.classlist.add(container, 'state_' + data.new_state);
       });
 };
