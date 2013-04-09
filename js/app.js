@@ -18,7 +18,7 @@ lost_tracker.app = function() {
 
 
 lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
-  var container = event_source.parentNode.parentNode;
+  var container = event_source.parentNode;
   goog.dom.classlist.removeAll(
       container, ['state_0', 'state_1', 'state_2']);
   goog.net.XhrIo.send(
@@ -48,6 +48,7 @@ lost_tracker.app.attachEvents = function(stationId) {
   goog.array.forEach(goog.dom.getElementsByTagNameAndClass('div', 'group'),
       function(element) {
     var form = goog.dom.getElementsByTagNameAndClass('form', null, element);
+    var initialFormData = goog.dom.forms.getFormDataMap(form[0]);
     var submit_buttons = goog.array.filter(form[0], function(felement) {
       return felement.type == 'submit';
     });
@@ -65,6 +66,14 @@ lost_tracker.app.attachEvents = function(stationId) {
             'X-Requested-With': 'XMLHttpRequest'
           });
       evt.preventDefault();
+    });
+
+    // Handle clicks on the icon
+    var icons = goog.dom.getElementsByTagNameAndClass('img', 'icon', element);
+    goog.events.listen(icons[0], goog.events.EventType.CLICK, function(evt) {
+      lost_tracker.app.advanceState(evt.target,
+                                    initialFormData.get('group_id')[0],
+                                    initialFormData.get('station_id')[0]);
     });
   });
 

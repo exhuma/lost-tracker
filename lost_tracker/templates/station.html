@@ -14,10 +14,7 @@
     {% set icon_file = 'icons/%s.png' % row.state %}
     <img class="icon" id="icon_{{station.id}}_{{row.group.id}}" src="{{url_for('static', filename=icon_file)}}" />
     <div class="details">
-        <div class="name" onclick="lost_tracker.app.advanceState(this,
-          {{row.group.id}}, {{station.id}});">
-            {{row.group.name}}
-        </div>
+        <div class="name">{{row.group.name}}</div>
         <div>
             <form action="{{url_for('set_station_score')}}" method="POST">
                 <p style="display: none;"><input type="hidden" name="station_id"
