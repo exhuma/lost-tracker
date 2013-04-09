@@ -21,7 +21,14 @@
                     value="{{station.id}}" /></p>
                 <p style="display: none;"><input type="hidden" name="group_id"
                     value="{{row.group.id}}" /></p>
-                <input type="number" name="score" />
+                <div>
+                  <img src="{{url_for('static', filename='icons/game.png')}}"
+                    height="64"
+                    style="vertical-align: middle;" /><input type="number" name="score" />
+                </div>
+                <div>
+                  <img src="{{url_for('static', filename='icons/questionnaire.png')}}" height="64" style="vertical-align: middle;" /><input type="number" name="score" />
+                </div>
                 <input type="submit" value="OK" />
             </form>
         </div>
