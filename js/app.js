@@ -28,13 +28,17 @@ lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
       '/advance/' + groupId + '/' + stationId,
       function(evt){
         var xhr = evt.target;
-        var data = xhr.getResponseJson();
-        if (!goog.isDefAndNotNull(data.new_state)){
-          return;
-        }
+        if (xhr.isSuccess()){
+          var data = xhr.getResponseJson();
+          if (!goog.isDefAndNotNull(data.new_state)){
+            return;
+          }
 
-        elem.src = '/static/icons/' + data.new_state + '.png';
-        goog.dom.classlist.add(container, 'state_' + data.new_state);
+          elem.src = '/static/icons/' + data.new_state + '.png';
+          goog.dom.classlist.add(container, 'state_' + data.new_state);
+        } else {
+          elem.src = '/static/icons/status-warning.png';
+        }
       });
 };
 
