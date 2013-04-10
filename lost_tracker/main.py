@@ -156,6 +156,14 @@ def set_station_score():
 
 @app.route('/form_score', methods=['POST'])
 def form_score():
+    """
+    Saves the score for one questionnaire into the database.  It takes the
+    following POST parameters:
+
+    :param group_id: The group ID
+    :param form_id: The form/questionnaire ID
+    :param score: The score.
+    """
     group_id = request.form['group_id']
     form_id = request.form['form_id']
     score = request.form['score']
