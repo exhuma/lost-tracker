@@ -164,9 +164,13 @@ def form_score():
     :param form_id: The form/questionnaire ID
     :param score: The score.
     """
-    group_id = request.form['group_id']
-    form_id = request.form['form_id']
-    score = request.form['score']
+
+    try:
+        group_id = int(request.form['group_id'])
+        form_id = int(request.form['form_id'])
+        score = int(request.form['score'])
+    except ValueError as exc:
+        abort(409, str(exc))
 
     if group_id:
         set_form_score(group_id, form_id, score)
