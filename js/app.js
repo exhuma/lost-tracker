@@ -58,11 +58,10 @@ lost_tracker.app.attachEvents = function(stationId) {
       var formData = goog.dom.forms.getFormDataMap(evt.target.form);
       var formString = goog.dom.forms.getFormDataString(evt.target.form);
       goog.net.XhrIo.send(
-          '/station_score',
+          '/score/' + formData.get('group_id'),
           function(evt){
             var xhr = evt.target;
             var data = xhr.getResponseJson();
-            window['console']['log'](data);
           }, 'POST', formString, {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'

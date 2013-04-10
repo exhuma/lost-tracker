@@ -24,10 +24,18 @@
                 <div>
                   <img src="{{url_for('static', filename='icons/game.png')}}"
                     height="64"
-                    style="vertical-align: middle;" /><input type="number" name="score" />
+                    style="vertical-align: middle;" /><input
+                      type="number"
+                      name="station_score" />
                 </div>
                 <div>
-                  <img src="{{url_for('static', filename='icons/questionnaire.png')}}" height="64" style="vertical-align: middle;" /><input type="number" name="score" />
+                  <img src="{{url_for('static', filename='icons/questionnaire.png')}}"
+                    height="64"
+                    style="vertical-align: middle;" /><input
+                      type="number"
+                      name="form_score" />&nbsp;<input
+                        type="number"
+                        name="form_id" />
                 </div>
                 <input type="submit" value="OK" />
             </form>

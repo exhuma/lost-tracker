@@ -139,6 +139,25 @@ def init_form_score():
         groups=grps)
 
 
+@app.route('/score/<int:group_id>', methods=['POST'])
+def score(group_id):
+    station_id = int(request.form['station_id'])
+    station_score = request.form['station_score']
+    form_id = int(request.form['form_id'])
+    form_score = request.form['form_score']
+
+    if station_score:
+        save_station_score(group_id, station_id, int(station_score))
+
+    if form_score:
+        set_form_score(group_id, form_id, int(form_score))
+
+    if request.is_xhr:
+        return jsonify(status='ok')
+
+    return redirect(url_for("/"))  # TODO: redirect to station page
+
+
 @app.route('/station_score', methods=['POST'])
 def set_station_score():
     group_id = request.form['group_id']
