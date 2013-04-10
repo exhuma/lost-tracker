@@ -15,6 +15,12 @@ DIV.group INPUT {
     font-size: 2em;
 }
 
+DIV.group INPUT[type="submit"],
+DIV.group SELECT {
+  width: 100%;
+  font-size: 2em;
+}
+
 DIV.group .icon {
     float: left;
     width: 5em;

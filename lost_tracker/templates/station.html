@@ -33,18 +33,22 @@
                       name="station_score" />
                 </div>
                 <div>
+                  <select name="form_id">
+                    <option value="1">Frobou 1</option>
+                    <option value="2">Frobou 2</option>
+                    <option value="3">Frobou 3</option>
+                    <option value="4">Frobou 4</option>
+                    <option value="5">Frobou 5</option>
+                    <option value="6">Frobou 6</option>
+                  </select>
+                  <br />
                   <img src="{{url_for('static', filename='icons/questionnaire.png')}}"
                     height="64"
-                    style="vertical-align: middle;" /><input
-                      type="number"
-                      placeholder="Frobou"
-                      name="form_score" />&nbsp;<input
-                        type="number"
-                        placeholder="#"
-                        min="0"
-                        max="100"
-                        step="10"
-                        name="form_id" />
+                    style="vertical-align: middle;" />
+                  <input
+                    type="number"
+                    placeholder="#"
+                    name="form_score" />
                 </div>
                 <input type="submit" value="OK" />
             </form>
