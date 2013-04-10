@@ -91,5 +91,3 @@ lost_tracker.app.attachEvents = function(stationId) {
 
 goog.exportSymbol('lost_tracker.app.attachEvents',
     lost_tracker.app.attachEvents);
-goog.exportSymbol('lost_tracker.app.advanceState',
-    lost_tracker.app.advanceState);
