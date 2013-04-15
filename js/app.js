@@ -80,10 +80,8 @@ lost_tracker.app.attachEvents = function(stationId) {
 
   goog.array.forEach(goog.dom.getElementsByTagNameAndClass('img', 'icon'),
       function(element) {
-        var sibling = goog.dom.getNextElementSibling(element);
-        var siblingSize = goog.style.getSize(sibling);
-        goog.style.setHeight(element, siblingSize.height);
-        goog.style.setWidth(element, siblingSize.height);
+        goog.style.setHeight(element, 64);
+        goog.style.setWidth(element, 64);
   });
 };
 
