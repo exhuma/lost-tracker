@@ -88,9 +88,39 @@ H1, H2 {
     color: #aaa;
 }
 
+#Matrix {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+#Matrix TD {
+  line-height: 2em;
+}
+
 #Matrix TD {
     border: 0.1em solid #ccc;
-    padding: 0.1em 0.5em;
+    width: 100%;
+    vertical-align: middle;
+}
+
+#Matrix THEAD TR.sum TD {
+  padding-bottom: 0.5em;
+  border-bottom: 3px double #ccf;
+}
+
+#Matrix TFOOT TR.sum TD {
+  padding-top: 0.5em;
+  border-top: 3px double #ccf;
+}
+
+#Matrix THEAD TH,
+#Matrix TFOOT TD,
+#Matrix THEAD TD {
+  white-space: nowrap;
+}
+
+#Matrix TBODY TR:hover TD {
+  background-color: #eee;
 }
 
 TD.state {

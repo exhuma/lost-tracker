@@ -6,44 +6,50 @@
 
 {% block content %}
 <table id="Matrix">
-    <tr>
-        <td>&nbsp;</td>
-        {% for row in stations %}
-        <td><a href="{{url_for('station', name=row.name)}}">{{row.name}}</a></td>
-        {% endfor %}
-    </tr>
-    <tr>
-        <td>SUM</td>
-        {% for col in sums %}
-        <td>
-            <span class="unknown">{{col[0]}}</span>
-            <span class="arrived">{{col[1]}}</span>
-            <span class="finished">{{col[2]}}</span>
-        </td>
-        {% endfor %}
-    </tr>
-    {% for row in matrix %}
-    <tr class="{{row[0].cancelled and 'cancelled' or ''}}">
-        <td>{{row[0].name}}</td>
-        {% for col in row[1:] %}
-        {% set icon_file = 'icons/%s.png' % col %}
-        <td class="state state{{col}}"><img
-          src="{{url_for('static', filename=icon_file)}}"
-          width="16"
-          height="16" /></td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-    <tr>
-        <td>SUM</td>
-        {% for col in sums %}
-        <td>
-            <span class="unknown">{{col[0]}}</span>
-            <span class="arrived">{{col[1]}}</span>
-            <span class="finished">{{col[2]}}</span>
-        </td>
-        {% endfor %}
-    </tr>
+    <thead>
+      <tr>
+          <th>&nbsp;</th>
+          {% for row in stations %}
+          <th><a href="{{url_for('station', name=row.name)}}">{{row.name}}</a></th>
+          {% endfor %}
+      <tr class="sum">
+          <td>SUM</td>
+          {% for col in sums %}
+          <td>
+              <span class="unknown">{{col[0]}}</span>
+              <span class="arrived">{{col[1]}}</span>
+              <span class="finished">{{col[2]}}</span>
+          </td>
+          {% endfor %}
+      </tr>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr class="sum">
+          <td>SUM</td>
+          {% for col in sums %}
+          <td>
+              <span class="unknown">{{col[0]}}</span>
+              <span class="arrived">{{col[1]}}</span>
+              <span class="finished">{{col[2]}}</span>
+          </td>
+          {% endfor %}
+      </tr>
+    </tfoot>
+    <tbody>
+      {% for row in matrix %}
+      <tr class="{{row[0].cancelled and 'cancelled' or ''}}">
+          <td class="group">{{row[0].name}}</td>
+          {% for col in row[1:] %}
+          {% set icon_file = 'icons/%s.png' % col %}
+          <td class="state state{{col}}"><img
+            src="{{url_for('static', filename=icon_file)}}"
+            width="16"
+            height="16" /></td>
+          {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}
