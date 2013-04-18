@@ -265,3 +265,19 @@ class Station(Base):
 
     def __repr__(self):
         return '<Station %r>' % (self.name)
+
+
+class Form(Base):
+    __tablename__ = 'form'
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode(20))
+    max_score = Column(Integer)
+
+    def __init__(self, id=0, name=None, max_score=100):
+        self.name = name
+        self.max_score = max_score
+
+    def __repr__(self):
+        return '<Form %r>' % (self.name)
+
+

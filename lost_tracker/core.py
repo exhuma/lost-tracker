@@ -1,6 +1,7 @@
 from lost_tracker.models import (
     Group,
     Station,
+    Form,
     get_state,
     STATE_FINISHED,
     STATE_UNKNOWN,
@@ -111,3 +112,12 @@ def add_station(stat_name, contact, phone, session):
     session.add(new_station)
     return "Station {0} added. Contact: {1} / {2}".format(
         stat_name, contact, phone)
+
+
+def add_form_db(form_id, name, max_score, session):
+    new_form = Form(form_id, name, max_score)
+    session.add(new_form)
+    return "Form added: {0} - {1} - max: {2}".format(
+        form_id, name, max_score)
+
+
