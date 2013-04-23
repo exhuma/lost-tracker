@@ -3,7 +3,8 @@ from collections import namedtuple
 
 from sqlalchemy import create_engine
 from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
-                               get_stations, add_station, get_stat_by_name)
+                               get_stations, add_station, get_stat_by_name,
+                               add_form_db, get_forms)
 from flask import (Flask, render_template, abort, jsonify, g, request, flash,
                    url_for, redirect)
 
@@ -198,6 +199,24 @@ def form_score():
         return jsonify(status='ok')
 
     return redirect(url_for("init_form_score"))
+
+
+@app.route('/add_form')
+def init_add_form():
+    message = ""
+    forms = get_forms()
+    return render_template('add_form.html', message=message, forms=forms)
+
+
+@app.route('/add_form', methods=['POST'])
+def add_form():
+    form_id = int(request.form['form_id'])
+    name = request.form['name']
+    max_score = int(request.form['max_score'])
+    message = add_form_db(form_id, name, max_score, g.session)
+    flash(message)
+    return redirect(url_for("init_add_form"))
+
 
 if __name__ == '__main__':
     app.run(debug=app.config.get('DEBUG', False),
