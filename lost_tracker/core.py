@@ -115,9 +115,32 @@ def add_station(stat_name, contact, phone, session):
 
 
 def add_form_db(form_id, name, max_score, session):
-    new_form = Form(form_id, name, max_score)
-    session.add(new_form)
-    return "Form added: {0} - {1} - max: {2}".format(
-        form_id, name, max_score)
+    tmp_form = get_form_by_id(form_id)
+    if tmp_form:
+        tmp_form.name = name
+        tmp_form.max_score = max_score
+        return "Form {0} updated: {1} - max: {2}".format(
+            form_id, name, max_score)
+    else:
+        new_form = Form(form_id, name, max_score)
+        session.add(new_form)
+        return "Form added: {0} - {1} - max: {2}".format(
+            form_id, name, max_score)
 
+def get_forms():
+    """
+    Returns all forms from the database as :py:class`Form` instances.
+    """
+    forms = Form.query
+    forms = forms.order_by(Form.id)
+    forms = forms.all()
+    return forms
 
+def get_form_by_id(id):
+    """
+    Returns a :py:class:`Form` by class id.
+    """
+    qry = Form.query
+    qry = qry.filter_by(id=id)
+    qry = qry.first()
+    return qry
