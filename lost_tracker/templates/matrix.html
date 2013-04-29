@@ -12,6 +12,7 @@
           {% for row in stations %}
           <th><a href="{{url_for('station', name=row.name)}}">{{row.name}}</a></th>
           {% endfor %}
+      </tr>
       <tr class="sum">
           <td>SUM</td>
           {% for col in sums %}
@@ -21,7 +22,6 @@
               <span class="finished">{{col[2]}}</span>
           </td>
           {% endfor %}
-      </tr>
       </tr>
     </thead>
     <tfoot>
