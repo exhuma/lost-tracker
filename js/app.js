@@ -86,5 +86,34 @@ lost_tracker.app.attachEvents = function(stationId) {
 };
 
 
+/**
+ * Replace the "sum" elements by grpahs.
+ */
+lost_tracker.app.drawSums = function(stationId) {
+  var table = goog.dom.getElement('Matrix');
+  var head = goog.dom.getElementsByTagNameAndClass('thead', null, table)[0];
+  var foot = goog.dom.getElementsByTagNameAndClass('tfoot', null, table)[0];
+  var topSumRow = goog.dom.getLastElementChild(head);
+  var topSums = goog.dom.getElementsByTagNameAndClass('td', null, topSumRow);
+  topSums = goog.array.toArray(topSums)
+
+  // ignore the first column in the row (the "title")
+  topSums.shift();
+
+  // no loop over the remaining columns.
+  goog.array.forEach(topSums, function(element) {
+    var spans = goog.dom.getElementsByTagNameAndClass('span', null, element);
+    var unknown = spans[0].innerHTML;
+    var arrived = spans[1].innerHTML;
+    var finished = spans[2].innerHTML;
+    // TODO: draw canvas
+  });
+
+};
+
+
 goog.exportSymbol('lost_tracker.app.attachEvents',
     lost_tracker.app.attachEvents);
+
+goog.exportSymbol('lost_tracker.app.drawSums',
+    lost_tracker.app.drawSums);
