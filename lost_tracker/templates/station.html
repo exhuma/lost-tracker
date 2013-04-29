@@ -30,12 +30,11 @@
                 </div>
                 <div>
                   <select name="form_id">
-                    <option value="1">Frobou 1</option>
-                    <option value="2">Frobou 2</option>
-                    <option value="3">Frobou 3</option>
-                    <option value="4">Frobou 4</option>
-                    <option value="5">Frobou 5</option>
-                    <option value="6">Frobou 6</option>
+                    {% for quest in questionnaires %}
+                      <option value="{{quest.id}}">
+                        {{quest.id}}: {{quest.name}} (0-{{quest.max_score}})
+                      </option>
+                    {% endfor %}
                   </select>
                   <br />
                   <img src="{{url_for('static', filename='icons/questionnaire.png')}}"

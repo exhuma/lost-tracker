@@ -79,9 +79,11 @@ def station(name):
     groups = get_grps()
     group_state_row = namedtuple('group_state_row',
                                  'group, state')
+    questionnaires = get_forms()
     return render_template(
         'station.html',
         station=station,
+        questionnaires=questionnaires,
         group_states=[group_state_row(grp, get_state(grp.id, station.id))
                       for grp in groups])
 
