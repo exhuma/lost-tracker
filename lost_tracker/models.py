@@ -1,5 +1,5 @@
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
-                        Boolean)
+                        Boolean, PrimaryKeyConstraint)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
 from lost_tracker.database import Base
@@ -13,21 +13,25 @@ group_station_state = Table(
     Base.metadata,
     Column('group_id', Integer, ForeignKey('group.id')),
     Column('station_id', Integer, ForeignKey('station.id')),
-    Column('state', Integer, default=STATE_UNKNOWN))
+    Column('state', Integer, default=STATE_UNKNOWN),
+    PrimaryKeyConstraint('group_id', 'station_id'))
 
 station_scores = Table(
     'station_scores',
     Base.metadata,
     Column('group_id', Integer, ForeignKey('group.id')),
     Column('station_id', Integer, ForeignKey('station.id')),
-    Column('score', Integer, default=0))
+    Column('score', Integer, default=0),
+    PrimaryKeyConstraint('group_id', 'station_id'))
 
 form_scores = Table(
     'form_scores',
     Base.metadata,
     Column('group_id', Integer, ForeignKey('group.id')),
-    Column('form_id', Integer),
-    Column('score', Integer, default=0))
+    Column('station_id', Integer, ForeignKey('station.id')),
+    Column('form_id', Integer, ForeignKey('form.id')),
+    Column('score', Integer, default=0),
+    PrimaryKeyConstraint('group_id', 'form_id'))
 
 
 def get_station_score(group_id, station_id):
