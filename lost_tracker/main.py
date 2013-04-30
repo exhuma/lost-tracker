@@ -10,7 +10,7 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
-                                 GroupStation)
+                                 GroupStation, get_form_score)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -148,6 +148,12 @@ def init_form_score():
         'form_score.html',
         form_scores=form_scores,
         groups=grps)
+
+
+@app.route('/score/<int:group_id>/<int:form_id>')
+def group_form_score(group_id, form_id):
+    return jsonify(
+        score=get_form_score(group_id, form_id))
 
 
 @app.route('/score/<int:group_id>', methods=['POST'])

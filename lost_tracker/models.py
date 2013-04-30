@@ -23,6 +23,14 @@ def get_form_score_full():
     return s.execute()
 
 
+def get_form_score(group_id, form_id):
+    s = select([form_scores])
+    s = s.where(form_scores.c.group_id == group_id)
+    s = s.where(form_scores.c.form_id == form_id)
+    result = s.execute().fetchone()
+    return result.score
+
+
 def get_state(group_id, station_id):
     """
     Given a group and station ID this will return the  state of the given

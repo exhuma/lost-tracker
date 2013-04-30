@@ -76,6 +76,27 @@ lost_tracker.app.attachEvents = function(stationId) {
                                     initialFormData.get('group_id')[0],
                                     initialFormData.get('station_id')[0]);
     });
+
+    // Retrieve the form score when the form changes.
+    var selects = goog.dom.getElementsByTagNameAndClass('select', null, element);
+    var form_id_selects = goog.array.filter(selects, function(felement) {
+      return felement.name == 'form_id';
+    });
+    var form_selector = form_id_selects[0];
+
+    var inputs = goog.dom.getElementsByTagNameAndClass('input', null, element);
+    var form_score_fields = goog.array.filter(inputs, function(felement) {
+      return felement.name == 'form_score';
+    });
+    var form_score_field = form_score_fields[0];
+
+    goog.events.listen(form_selector, goog.events.EventType.CHANGE, function(evt) {
+      var formData = goog.dom.forms.getFormDataMap(evt.target.form);
+      lost_tracker.app.getFormScore(
+        formData.get('group_id'),
+        formData.get('form_id'),
+        form_score_field);
+    });
   });
 
   goog.array.forEach(goog.dom.getElementsByTagNameAndClass('img', 'icon'),
@@ -83,6 +104,23 @@ lost_tracker.app.attachEvents = function(stationId) {
         goog.style.setHeight(element, 64);
         goog.style.setWidth(element, 64);
   });
+};
+
+
+/**
+ * Get the form score for a group, and update the value of a specific elemnt
+ */
+lost_tracker.app.getFormScore = function(group_id, form_id, element) {
+  goog.net.XhrIo.send(
+      '/score/' + group_id + '/' + form_id,
+      function(evt){
+        var xhr = evt.target;
+        var data = xhr.getResponseJson();
+        element.value = data.score;
+      }, 'GET', null, {
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest'
+      });
 };
 
 

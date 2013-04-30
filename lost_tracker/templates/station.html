@@ -30,6 +30,8 @@
                 </div>
                 <div>
                   <select name="form_id">
+                    <option selected="selected"
+                        disabled="disabled">Frobou</option>
                     {% for quest in questionnaires %}
                       <option value="{{quest.id}}">
                         {{quest.id}}: {{quest.name}} (0-{{quest.max_score}})
