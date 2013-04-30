@@ -8,14 +8,6 @@ STATE_UNKNOWN = 0
 STATE_ARRIVED = 1
 STATE_FINISHED = 2
 
-group_station_state = Table(
-    'group_station_state',
-    Base.metadata,
-    Column('group_id', Integer, ForeignKey('group.id')),
-    Column('station_id', Integer, ForeignKey('station.id')),
-    Column('state', Integer, default=STATE_UNKNOWN),
-    PrimaryKeyConstraint('group_id', 'station_id'))
-
 station_scores = Table(
     'station_scores',
     Base.metadata,
@@ -35,7 +27,7 @@ form_scores = Table(
 
 
 def get_station_score(group_id, station_id):
-    s = select([score],
+    s = select(["score"],
                and_(
                    station_scores.c.group_id == group_id,
                    station_scores.c.station_id == station_id))
@@ -111,16 +103,16 @@ def get_state(group_id, station_id):
     :return: The state
     :rtype: int
     """
-    s = select(['state'], and_(
-        group_station_state.c.group_id == group_id,
-        group_station_state.c.station_id == station_id))
-    result = s.execute().first()
+    q = GroupStation.query.filter(and_(
+        GroupStation.group_id == group_id,
+        GroupStation.station_id == station_id))
+    result = q.first()
 
     if not result:
         return STATE_UNKNOWN
 
     else:
-        return result[0]
+        return result.state
 
 
 def set_station_score(group_id, station_id, score):
@@ -240,6 +232,7 @@ class Group(Base):
     phone = Column(Unicode(20))
     direction = Column(Boolean)
     start_time = Column(Unicode(5))
+    stations = relationship('GroupStation')
 
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None):
@@ -257,10 +250,10 @@ class Station(Base):
     __tablename__ = 'station'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
-    groups = relationship('Group', secondary=group_station_state)
     order = Column(Integer)
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
+    groups = relationship('GroupStation')
 
     def __init__(self, name=None, contact=None, phone=None):
         self.name = name
@@ -285,3 +278,11 @@ class Form(Base):
         return '<Form %r>' % (self.name)
 
 
+class GroupStation(Base):
+    __tablename__ = 'group_station_state'
+
+    group_id = Column(Integer, ForeignKey('group.id'), primary_key=True)
+    station_id = Column(Integer, ForeignKey('station.id'), primary_key=True)
+    state = Column(Integer, default=STATE_UNKNOWN)
+    group = relationship("Group")
+    station = relationship("Station")

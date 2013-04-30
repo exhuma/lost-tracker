@@ -10,7 +10,8 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
-                                 set_station_score as save_station_score)
+                                 set_station_score as save_station_score,
+                                 get_station_score)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -77,15 +78,25 @@ def station(name):
         return abort(404)
 
     groups = get_grps()
-    group_state_row = namedtuple('group_state_row',
-                                 'group, state')
+    GroupStateRow = namedtuple('GroupStateRow',
+                               'group, '
+                               'state, '
+                               'station_score')
+    group_states = []
+    for grp in groups:
+        state = get_state(grp.id, station.id)
+        score = get_station_score(grp.id, station.id)
+        group_states.append(
+            GroupStateRow(grp, state, score))
+
     questionnaires = get_forms()
+
     return render_template(
         'station.html',
         station=station,
-        questionnaires=questionnaires,
-        group_states=[group_state_row(grp, get_state(grp.id, station.id))
-                      for grp in groups])
+        groups=groups,
+        group_states=group_states,
+        questionnaires=questionnaires)
 
 
 @app.route('/group')
