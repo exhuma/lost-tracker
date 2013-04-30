@@ -8,14 +8,6 @@ STATE_UNKNOWN = 0
 STATE_ARRIVED = 1
 STATE_FINISHED = 2
 
-station_scores = Table(
-    'station_scores',
-    Base.metadata,
-    Column('group_id', Integer, ForeignKey('group.id')),
-    Column('station_id', Integer, ForeignKey('station.id')),
-    Column('score', Integer, default=0),
-    PrimaryKeyConstraint('group_id', 'station_id'))
-
 form_scores = Table(
     'form_scores',
     Base.metadata,
@@ -24,65 +16,6 @@ form_scores = Table(
     Column('form_id', Integer, ForeignKey('form.id')),
     Column('score', Integer, default=0),
     PrimaryKeyConstraint('group_id', 'form_id'))
-
-
-def get_station_score(group_id, station_id):
-    s = select(["score"],
-               and_(
-                   station_scores.c.group_id == group_id,
-                   station_scores.c.station_id == station_id))
-    return s.execute().first()
-
-
-def get_station_score_by_station(station_id):
-    s = select(
-        [group_id, score],
-        and_(
-            station_scores.c.station_id == station_id
-        )).order_by(station_scores.c.group_id)
-    return s.execute()
-
-
-def get_station_score_by_group(group_id):
-    s = select(
-        [station_id, score],
-        and_(
-            station_scores.c.group_id == group_id
-        )).order_by(station_scores.c.station_id)
-    return s.execute()
-
-
-def get_station_score_full():
-    s = select([station_scores]).order_by(station_scores.c.station_id)
-    return s.execute()
-
-
-def get_form_score(group_id, form_id):
-    s = select(
-        [score],
-        and_(
-            form_scores.c.group_id == group_id,
-            form_scores.c.form_id == form_id
-        ))
-    return s.execute().first()
-
-
-def get_form_score_by_group(group_id):
-    s = select(
-        [form_id, score],
-        and_(
-            form_scores.c.group_id == group_id,
-        )).order_by(form_scores.c.form_id)
-    return s.execute()
-
-
-def get_form_score_by_form(form_id):
-    s = select(
-        [group_id, score],
-        and_(
-            form_scores.c.form_id == form_id
-        )).order_by(form_scores.c.group_id)
-    return s.execute()
 
 
 def get_form_score_full():
@@ -113,41 +46,6 @@ def get_state(group_id, station_id):
 
     else:
         return result.state
-
-
-def set_station_score(group_id, station_id, score):
-    s = select(
-        [station_scores],
-        and_(
-            station_scores.c.group_id == group_id,
-            station_scores.c.station_id == station_id
-        ))
-    row = s.execute().first()
-
-    if not row:
-        i = insert_station_score(group_id, station_id, score)
-        i.execute()
-    else:
-        u = update_station_score(group_id, station_id, score)
-        u.execute()
-
-
-def insert_station_score(group_id, station_id, score):
-    i = station_scores.insert().values(
-        group_id=group_id,
-        station_id=station_id,
-        score=score)
-    return i
-
-
-def update_station_score(group_id, station_id, score):
-    u = station_scores.update().where(
-        and_(
-            station_scores.c.group_id == group_id,
-            station_scores.c.station_id == station_id)
-    ).values(
-        score = score)
-    return u
 
 
 def set_form_score(group_id, form_id, score):
@@ -186,40 +84,24 @@ def update_form_score(group_id, form_id, score):
 
 
 def advance(group_id, station_id):
-    s = select(
-        ['state'],
-        and_(
-            group_station_state.c.group_id == group_id,
-            group_station_state.c.station_id == station_id
-        ))
-    db_row = s.execute().first()
+    state = GroupStation.get(group_id, station_id)
 
     # The first state to set - if there is nothing yet - is "ARRIVED"
-    if not db_row:
-        i = group_station_state.insert().values(
-            group_id=group_id,
-            station_id=station_id,
-            state=STATE_ARRIVED)
-        i.execute()
+    if not state:
+        state = GroupStation(group_id, station_id)
+        state.state = STATE_ARRIVED
         return STATE_ARRIVED
 
-    the_state = db_row[0]
-    if the_state == STATE_UNKNOWN:
-        new_state = STATE_ARRIVED
-    elif the_state == STATE_ARRIVED:
-        new_state = STATE_FINISHED
-    elif the_state == STATE_FINISHED:
-        new_state = STATE_UNKNOWN
+    if state.state == STATE_UNKNOWN:
+        state.state = STATE_ARRIVED
+    elif state.state == STATE_ARRIVED:
+        state.state = STATE_FINISHED
+    elif state.state == STATE_FINISHED:
+        state.state = STATE_UNKNOWN
     else:
-        raise ValueError('%r is not a valid state!' % the_state)
-    upd = group_station_state.update().where(
-        and_(
-            group_station_state.c.group_id == group_id,
-            group_station_state.c.station_id == station_id)
-    ).values(
-        state=new_state)
-    upd.execute()
-    return new_state
+        raise ValueError('%r is not a valid state!' % state.state)
+
+    return state.state
 
 
 class Group(Base):
@@ -284,5 +166,29 @@ class GroupStation(Base):
     group_id = Column(Integer, ForeignKey('group.id'), primary_key=True)
     station_id = Column(Integer, ForeignKey('station.id'), primary_key=True)
     state = Column(Integer, default=STATE_UNKNOWN)
+    score = Column(Integer, nullable=True, default=None)
     group = relationship("Group")
     station = relationship("Station")
+
+    def __init__(self, group_id, station_id):
+        self.group_id = group_id
+        self.station_id = station_id
+
+    @staticmethod
+    def get(group_id, station_id):
+        return GroupStation.query.filter(and_(
+            GroupStation.group_id == group_id,
+            GroupStation.station_id == station_id)).first()
+
+    @staticmethod
+    def set_score(session, group_id, station_id, score):
+        query = GroupStation.query.filter(and_(
+            GroupStation.group_id == group_id,
+            GroupStation.station_id == station_id))
+        row = query.first()
+        if not row:
+            gs = GroupStation(group_id, station_id)
+            gs.score = score
+            session.add(gs)
+        else:
+            row.score = score

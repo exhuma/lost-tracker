@@ -10,8 +10,7 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
-                                 set_station_score as save_station_score,
-                                 get_station_score)
+                                 GroupStation)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -80,14 +79,12 @@ def station(name):
     groups = get_grps()
     GroupStateRow = namedtuple('GroupStateRow',
                                'group, '
-                               'state, '
-                               'station_score')
+                               'state')
     group_states = []
     for grp in groups:
         state = get_state(grp.id, station.id)
-        score = get_station_score(grp.id, station.id)
         group_states.append(
-            GroupStateRow(grp, state, score))
+            GroupStateRow(grp, state))
 
     questionnaires = get_forms()
 
@@ -161,7 +158,10 @@ def score(group_id):
     form_score = request.form['form_score']
 
     if station_score:
-        save_station_score(group_id, station_id, int(station_score))
+        GroupStation.set_score(g.session,
+                               group_id,
+                               station_id,
+                               int(station_score))
 
     if form_score:
         set_form_score(group_id, form_id, int(form_score))
@@ -179,7 +179,7 @@ def set_station_score():
     score = request.form['score']
 
     if group_id:
-        save_station_score(group_id, station_id, score)
+        GroupStation.set_score(group_id, station_id, score)
 
     if request.is_xhr:
         return jsonify(status='ok')
