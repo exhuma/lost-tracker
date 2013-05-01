@@ -12,7 +12,6 @@ form_scores = Table(
     'form_scores',
     Base.metadata,
     Column('group_id', Integer, ForeignKey('group.id')),
-    Column('station_id', Integer, ForeignKey('station.id')),
     Column('form_id', Integer, ForeignKey('form.id')),
     Column('score', Integer, default=0),
     PrimaryKeyConstraint('group_id', 'form_id'))
