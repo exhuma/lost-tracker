@@ -31,31 +31,6 @@ def get_form_score(group_id, form_id):
     return result.score
 
 
-def get_state(group_id, station_id):
-    """
-    Given a group and station ID this will return the  state of the given
-    group at the given station. If no the group does not have a state at that
-    station, the default state (STATE_UNKNOWN) is returned.
-
-    :param group_id: The group ID
-    :type group_id: int
-    :param station_id: The station ID
-    :type station_id: int
-    :return: The state
-    :rtype: int
-    """
-    q = GroupStation.query.filter(and_(
-        GroupStation.group_id == group_id,
-        GroupStation.station_id == station_id))
-    result = q.first()
-
-    if not result:
-        return STATE_UNKNOWN
-
-    else:
-        return result.state
-
-
 def set_form_score(group_id, form_id, score):
     s = select(
         [form_scores],
@@ -89,6 +64,31 @@ def update_form_score(group_id, form_id, score):
         ).values(
         score = score)
     return u
+
+
+def get_state(group_id, station_id):
+    """
+    Given a group and station ID this will return the  state of the given
+    group at the given station. If no the group does not have a state at that
+    station, the default state (STATE_UNKNOWN) is returned.
+
+    :param group_id: The group ID
+    :type group_id: int
+    :param station_id: The station ID
+    :type station_id: int
+    :return: The state
+    :rtype: int
+    """
+    q = GroupStation.query.filter(and_(
+        GroupStation.group_id == group_id,
+        GroupStation.station_id == station_id))
+    result = q.first()
+
+    if not result:
+        return STATE_UNKNOWN
+
+    else:
+        return result.state
 
 
 def advance(group_id, station_id):
