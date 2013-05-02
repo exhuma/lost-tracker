@@ -41,8 +41,8 @@
       <tr class="{{row[0].cancelled and 'cancelled' or ''}}">
           <td class="group">{{row[0].name}}</td>
           {% for col in row[1:] %}
-            {% set icon_file = 'icons/%s.png' % col %}
-            <td class="state state{{col}}"><img
+            {% set icon_file = 'icons/%s.png' % (col and col.state or '0') %}
+            <td class="state state{{col.state|default('0')}}"><img
               src="{{url_for('static', filename=icon_file)}}"
               width="16"
               height="16" /></td>
