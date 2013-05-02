@@ -44,11 +44,15 @@ def get_state_sum(state_matrix):
         sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
         for row in state_matrix:
             for i, state in enumerate(row[1:]):
-                if not state or state == STATE_UNKNOWN:
+                if not state:
                     sums[i][STATE_UNKNOWN] += 1
-                elif state == STATE_ARRIVED:
+                    continue
+
+                if state.state == STATE_UNKNOWN:
+                    sums[i][STATE_UNKNOWN] += 1
+                elif state.state == STATE_ARRIVED:
                     sums[i][STATE_ARRIVED] += 1
-                elif state == STATE_FINISHED:
+                elif state.state == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
     return sums
 
