@@ -49,14 +49,14 @@ lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
 lost_tracker.app.attachEvents = function(stationId) {
   goog.array.forEach(goog.dom.getElementsByTagNameAndClass('div', 'group'),
       function(element) {
-    var form = goog.dom.getElementsByTagNameAndClass('form', null, element);
-    var initialFormData = goog.dom.forms.getFormDataMap(form[0]);
-    var submit_buttons = goog.array.filter(form[0], function(felement) {
-      return felement.type == 'submit';
-    });
-    goog.events.listen(submit_buttons[0], goog.events.EventType.CLICK, function(evt) {
-      var formData = goog.dom.forms.getFormDataMap(evt.target.form);
-      var formString = goog.dom.forms.getFormDataString(evt.target.form);
+    var form = goog.dom.getElementsByTagNameAndClass('form', null, element)[0];
+    var fields = form.elements;
+    var initialFormData = goog.dom.forms.getFormDataMap(form);
+
+    goog.events.listen(fields['submit'], goog.events.EventType.CLICK, function(evt) {
+      evt.preventDefault();
+      var formData = goog.dom.forms.getFormDataMap(form);
+      var formString = goog.dom.forms.getFormDataString(form);
       goog.net.XhrIo.send(
           '/score/' + formData.get('group_id'),
           function(evt){
@@ -66,7 +66,6 @@ lost_tracker.app.attachEvents = function(stationId) {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
           });
-      evt.preventDefault();
     });
 
     // Handle clicks on the icon
@@ -77,25 +76,13 @@ lost_tracker.app.attachEvents = function(stationId) {
                                     initialFormData.get('station_id')[0]);
     });
 
-    // Retrieve the form score when the form changes.
-    var selects = goog.dom.getElementsByTagNameAndClass('select', null, element);
-    var form_id_selects = goog.array.filter(selects, function(felement) {
-      return felement.name == 'form_id';
-    });
-    var form_selector = form_id_selects[0];
-
-    var inputs = goog.dom.getElementsByTagNameAndClass('input', null, element);
-    var form_score_fields = goog.array.filter(inputs, function(felement) {
-      return felement.name == 'form_score';
-    });
-    var form_score_field = form_score_fields[0];
-
-    goog.events.listen(form_selector, goog.events.EventType.CHANGE, function(evt) {
+    // Handle the selection of a new form.
+    goog.events.listen(fields['form_id'], goog.events.EventType.CHANGE, function(evt) {
       var formData = goog.dom.forms.getFormDataMap(evt.target.form);
       lost_tracker.app.getFormScore(
         formData.get('group_id'),
         formData.get('form_id'),
-        form_score_field);
+        fields['form_score']);
     });
   });
 
