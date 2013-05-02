@@ -82,7 +82,11 @@ def station(name):
                                'state')
     group_states = []
     for grp in groups:
-        state = get_state(grp.id, station.id)
+        group_station = get_state(grp.id, station.id)
+        if not group_station:
+            state = None
+        else:
+            state = group_station
         group_states.append(
             GroupStateRow(grp, state))
 

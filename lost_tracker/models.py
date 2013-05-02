@@ -83,13 +83,7 @@ def get_state(group_id, station_id):
     q = GroupStation.query.filter(and_(
         GroupStation.group_id == group_id,
         GroupStation.station_id == station_id))
-    result = q.first()
-
-    if not result:
-        return STATE_UNKNOWN
-
-    else:
-        return result.state
+    return q.first()
 
 
 def advance(group_id, station_id):
