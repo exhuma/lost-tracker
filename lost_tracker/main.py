@@ -28,13 +28,19 @@ else:
 Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
 
 
+def get_session():
+    """
+    This import is deferred as it triggers the DB engine constructor on
+    first import! As it may not yet be configured at global import time this
+    would fail if imported globally.
+    """
+    from lost_tracker.database import db_session as session
+    return session
+
+
 @app.before_request
 def before_request():
-    # This import is deferred as it triggers the DB engine constructor on
-    # first import! As it may not yet be configured at global import time this
-    # would fail if imported globally.
-    from lost_tracker.database import db_session as session
-    g.session = session
+    g.session = get_session()
 
 
 @app.teardown_request
