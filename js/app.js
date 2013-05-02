@@ -52,16 +52,30 @@ lost_tracker.app.attachEvents = function(stationId) {
     var form = goog.dom.getElementsByTagNameAndClass('form', null, element)[0];
     var fields = form.elements;
     var initialFormData = goog.dom.forms.getFormDataMap(form);
+    var icons = goog.dom.getElementsByTagNameAndClass('img', 'icon', element);
 
     goog.events.listen(fields['submit'], goog.events.EventType.CLICK, function(evt) {
       evt.preventDefault();
       var formData = goog.dom.forms.getFormDataMap(form);
       var formString = goog.dom.forms.getFormDataString(form);
+      fields['station_score'].value = 0;
+      fields['form_score'].value = 0;
+      fields['station_score'].disabled = true;
+      fields['form_score'].disabled = true;
+      fields['submit'].disabled = true;
+      var old_icon_source = icons[0].src;
+      icons[0].src = '/static/icons/loading.gif';
       goog.net.XhrIo.send(
           '/score/' + formData.get('group_id'),
           function(evt){
             var xhr = evt.target;
             var data = xhr.getResponseJson();
+            fields['station_score'].value = data.station_score;
+            fields['form_score'].value = data.form_score;
+            fields['station_score'].disabled = false;
+            fields['form_score'].disabled = false;
+            fields['submit'].disabled = false;
+            icons[0].src = old_icon_source;
           }, 'POST', formString, {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
@@ -69,7 +83,6 @@ lost_tracker.app.attachEvents = function(stationId) {
     });
 
     // Handle clicks on the icon
-    var icons = goog.dom.getElementsByTagNameAndClass('img', 'icon', element);
     goog.events.listen(icons[0], goog.events.EventType.CLICK, function(evt) {
       lost_tracker.app.advanceState(evt.target,
                                     initialFormData.get('group_id')[0],

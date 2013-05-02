@@ -164,20 +164,33 @@ def group_form_score(group_id, form_id):
 def score(group_id):
     station_id = int(request.form['station_id'])
     station_score = request.form['station_score']
-    form_id = int(request.form['form_id'])
-    form_score = request.form['form_score']
+
+    try:
+        form_id = int(request.form['form_id'])
+        form_score = request.form['form_score']
+    except:
+        form_id = None
+        form_score = 0
 
     if station_score:
-        GroupStation.set_score(g.session,
-                               group_id,
-                               station_id,
-                               int(station_score))
+        group_station = GroupStation.get(
+            group_id,
+            station_id)
+        if not group_station:
+            group_station = GroupStation(
+                group_id,
+                station_id)
+            g.session.add(group_station)
+        group_station.score = int(station_score)
 
-    if form_score:
+    if form_id is not None:
         set_form_score(group_id, form_id, int(form_score))
 
     if request.is_xhr:
-        return jsonify(status='ok')
+        return jsonify(
+            station_score=station_score,
+            form_score=form_score,
+            status='ok')
 
     return redirect(url_for("/"))  # TODO: redirect to station page
 
