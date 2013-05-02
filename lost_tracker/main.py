@@ -163,11 +163,11 @@ def group_form_score(group_id, form_id):
 @app.route('/score/<int:group_id>', methods=['POST'])
 def score(group_id):
     station_id = int(request.form['station_id'])
-    station_score = request.form['station_score']
+    station_score = int(request.form['station_score'])
 
     try:
         form_id = int(request.form['form_id'])
-        form_score = request.form['form_score']
+        form_score = int(request.form['form_score'])
     except:
         form_id = None
         form_score = 0
