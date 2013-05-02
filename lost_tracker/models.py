@@ -86,13 +86,14 @@ def get_state(group_id, station_id):
     return q.first()
 
 
-def advance(group_id, station_id):
+def advance(session, group_id, station_id):
     state = GroupStation.get(group_id, station_id)
 
     # The first state to set - if there is nothing yet - is "ARRIVED"
     if not state:
         state = GroupStation(group_id, station_id)
         state.state = STATE_ARRIVED
+        session.add(state)
         return STATE_ARRIVED
 
     if state.state == STATE_UNKNOWN:

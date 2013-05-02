@@ -63,7 +63,7 @@ def index():
 
 @app.route('/advance/<groupId>/<station_id>')
 def advance(groupId, station_id):
-    new_state = db_advance(groupId, station_id)
+    new_state = db_advance(g.session, groupId, station_id)
     return jsonify(
         group_id=groupId,
         station_id=station_id,
