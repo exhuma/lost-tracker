@@ -27,6 +27,8 @@ def get_form_score(group_id, form_id):
     s = s.where(form_scores.c.group_id == group_id)
     s = s.where(form_scores.c.form_id == form_id)
     result = s.execute().fetchone()
+    if not result:
+        return 0
     return result.score
 
 
