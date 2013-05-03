@@ -5,7 +5,9 @@ from lost_tracker.models import (
     get_state,
     STATE_FINISHED,
     STATE_UNKNOWN,
-    STATE_ARRIVED)
+    STATE_ARRIVED,
+    DIR_A,
+    DIR_B)
 
 
 def get_matrix(stations, groups):
@@ -71,10 +73,11 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
     """
     Creates a new group in the database.
     """
-    if direction is "1":  # TODO: "1" = magic string!
-        color = "Giel"
-    else:
-        color = "Roud"
+
+    if direction not in (DIR_A, DIR_B):
+        raise ValueError('{0!r} is not among the supported values '
+                         'for "direction" which are: {1!r}, {2!r}'.format(
+                             DIR_A, DIR_B))
 
     new_grp = Group(grp_name, contact, phone, direction, start_time)
     session.add(new_grp)
@@ -84,7 +87,7 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
                 contact,
                 phone,
                 start_time,
-                color))
+                direction))
 
 
 def get_stations():

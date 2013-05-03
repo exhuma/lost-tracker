@@ -8,6 +8,10 @@ STATE_UNKNOWN = 0
 STATE_ARRIVED = 1
 STATE_FINISHED = 2
 
+DIR_A = u'Giel'
+DIR_B = u'Roud'
+
+
 form_scores = Table(
     'form_scores',
     Base.metadata,
@@ -116,7 +120,7 @@ class Group(Base):
     cancelled = Column(Boolean)
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
-    direction = Column(Boolean)
+    direction = Column(Unicode)
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
 

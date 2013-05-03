@@ -10,7 +10,8 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
-                                 GroupStation, get_form_score)
+                                 GroupStation, get_form_score,
+                                 DIR_A, DIR_B)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -107,7 +108,11 @@ def station(name):
 def init_grp_form():
     message = ""
     grps = get_grps()
-    return render_template('add_group.html', message=message, groups=grps)
+    return render_template('add_group.html',
+                           message=message,
+                           groups=grps,
+                           DIR_A=DIR_A,
+                           DIR_B=DIR_B)
 
 
 @app.route('/group', methods=['POST'])
