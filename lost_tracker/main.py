@@ -25,7 +25,10 @@ else:
                        'config file using the LOST_TRACKER_SETTINGS '
                        'environment variable!')
 
-Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
+
+@app.before_first_request
+def bind_metadata():
+    Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
 
 
 @app.before_request

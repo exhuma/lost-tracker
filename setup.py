@@ -8,6 +8,7 @@ setup(
         'Flask-SQLAlchemy==0.16',
         'SQLAlchemy==0.8.0b2',
         'psycopg2==2.4.6',
+        'alembic',
       ],
    package_data={'lost_tracker': [
        'templates/*.html',
