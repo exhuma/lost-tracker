@@ -160,7 +160,7 @@ class Form(Base):
     name = Column(Unicode(20))
     max_score = Column(Integer)
 
-    def __init__(self, id=0, name=None, max_score=100):
+    def __init__(self, id, name=None, max_score=100):
         self.name = name
         self.max_score = max_score
 
