@@ -47,8 +47,7 @@ def teardown_request(exc):
         g.session.commit()
     except IntegrityError:
         g.session.rollback()
-        message = "SQL ERROR: {0}".format(exc)
-        flash(message)
+        app.logger.exception(exc)
 
 
 @app.route('/')
