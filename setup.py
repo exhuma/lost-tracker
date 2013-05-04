@@ -10,11 +10,7 @@ setup(
         'psycopg2==2.4.6',
         'alembic',
       ],
-   package_data={'lost_tracker': [
-       'templates/*.html',
-       'static/icons/*.png',
-       'static/js/*.js'
-       ]},
+   include_package_data=True,
    author="Michel Albert",
    author_email="michel@albert.lu",
    description="Tracker for Lost in the Darkness",

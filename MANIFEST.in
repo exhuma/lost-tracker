@@ -1,2 +1,2 @@
 recursive-include lost_tracker/templates *.html
-recursive-include lost_tracker/static *.png *.js
+recursive-include lost_tracker/static *.png *.js *.css *.gif
