@@ -11,6 +11,9 @@
     {% endblock %}
 </head>
 <body>
+    <script type="text/javascript">
+      $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+    </script>
     <div id="contact">Contact info</div>
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
