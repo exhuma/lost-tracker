@@ -1,5 +1,4 @@
-"""
-Group Direction Type
+"""Group Direction Type
 
 Revision ID: 23097c06462d
 Revises: c6fc54f7c06

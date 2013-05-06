@@ -1,5 +1,4 @@
-"""
-Remove text restrictions
+"""Remove text restrictions
 
 Revision ID: 58cc830105a5
 Revises: 23097c06462d
