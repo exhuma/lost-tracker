@@ -10,6 +10,10 @@ goog.require('goog.net.XhrIo');
 goog.require('goog.style');
 
 
+// This has to be set by flask template!
+var $SCRIPT_ROOT;
+
+
 /**
  * @constructor
  */
@@ -21,11 +25,11 @@ lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
   var container = event_source.parentNode;
   var elem = goog.dom.getElement(
     'icon_' + stationId + '_' + groupId);
-  elem.src = '/static/icons/loading.gif';
+  elem.src = $SCRIPT_ROOT + '/static/icons/loading.gif';
   goog.dom.classlist.removeAll(
       container, ['state_0', 'state_1', 'state_2']);
   goog.net.XhrIo.send(
-      '/advance/' + groupId + '/' + stationId,
+      $SCRIPT_ROOT + '/advance/' + groupId + '/' + stationId,
       function(evt){
         var xhr = evt.target;
         if (xhr.isSuccess()){
@@ -34,10 +38,10 @@ lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
             return;
           }
 
-          elem.src = '/static/icons/' + data.new_state + '.png';
+          elem.src = $SCRIPT_ROOT + '/static/icons/' + data.new_state + '.png';
           goog.dom.classlist.add(container, 'state_' + data.new_state);
         } else {
-          elem.src = '/static/icons/status-warning.png';
+          elem.src = $SCRIPT_ROOT + '/static/icons/status-warning.png';
         }
       });
 };
@@ -52,16 +56,30 @@ lost_tracker.app.attachEvents = function(stationId) {
     var form = goog.dom.getElementsByTagNameAndClass('form', null, element)[0];
     var fields = form.elements;
     var initialFormData = goog.dom.forms.getFormDataMap(form);
+    var icons = goog.dom.getElementsByTagNameAndClass('img', 'icon', element);
 
     goog.events.listen(fields['submit'], goog.events.EventType.CLICK, function(evt) {
       evt.preventDefault();
       var formData = goog.dom.forms.getFormDataMap(form);
       var formString = goog.dom.forms.getFormDataString(form);
+      fields['station_score'].value = 0;
+      fields['form_score'].value = 0;
+      fields['station_score'].disabled = true;
+      fields['form_score'].disabled = true;
+      fields['submit'].disabled = true;
+      var old_icon_source = icons[0].src;
+      icons[0].src = $SCRIPT_ROOT + '/static/icons/loading.gif';
       goog.net.XhrIo.send(
-          '/score/' + formData.get('group_id'),
+          $SCRIPT_ROOT + '/score/' + formData.get('group_id'),
           function(evt){
             var xhr = evt.target;
             var data = xhr.getResponseJson();
+            fields['station_score'].value = data.station_score;
+            fields['form_score'].value = data.form_score;
+            fields['station_score'].disabled = false;
+            fields['form_score'].disabled = false;
+            fields['submit'].disabled = false;
+            icons[0].src = old_icon_source;
           }, 'POST', formString, {
             'Accept': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
@@ -69,7 +87,6 @@ lost_tracker.app.attachEvents = function(stationId) {
     });
 
     // Handle clicks on the icon
-    var icons = goog.dom.getElementsByTagNameAndClass('img', 'icon', element);
     goog.events.listen(icons[0], goog.events.EventType.CLICK, function(evt) {
       lost_tracker.app.advanceState(evt.target,
                                     initialFormData.get('group_id')[0],
@@ -99,7 +116,7 @@ lost_tracker.app.attachEvents = function(stationId) {
  */
 lost_tracker.app.getFormScore = function(group_id, form_id, element) {
   goog.net.XhrIo.send(
-      '/score/' + group_id + '/' + form_id,
+      $SCRIPT_ROOT + '/score/' + group_id + '/' + form_id,
       function(evt){
         var xhr = evt.target;
         var data = xhr.getResponseJson();

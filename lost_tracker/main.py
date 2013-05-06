@@ -10,7 +10,8 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
-                                 GroupStation, get_form_score)
+                                 GroupStation, get_form_score,
+                                 DIR_A, DIR_B)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -25,7 +26,10 @@ else:
                        'config file using the LOST_TRACKER_SETTINGS '
                        'environment variable!')
 
-Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
+
+@app.before_first_request
+def bind_metadata():
+    Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
 
 
 def get_session():
@@ -49,8 +53,7 @@ def teardown_request(exc):
         g.session.commit()
     except IntegrityError:
         g.session.rollback()
-        message = "SQL ERROR: {0}".format(exc)
-        flash(message)
+        app.logger.exception(exc)
 
 
 @app.route('/')
@@ -69,7 +72,7 @@ def index():
 
 @app.route('/advance/<groupId>/<station_id>')
 def advance(groupId, station_id):
-    new_state = db_advance(groupId, station_id)
+    new_state = db_advance(g.session, groupId, station_id)
     return jsonify(
         group_id=groupId,
         station_id=station_id,
@@ -88,7 +91,11 @@ def station(name):
                                'state')
     group_states = []
     for grp in groups:
-        state = get_state(grp.id, station.id)
+        group_station = get_state(grp.id, station.id)
+        if not group_station:
+            state = None
+        else:
+            state = group_station
         group_states.append(
             GroupStateRow(grp, state))
 
@@ -106,7 +113,11 @@ def station(name):
 def init_grp_form():
     message = ""
     grps = get_grps()
-    return render_template('add_group.html', message=message, groups=grps)
+    return render_template('add_group.html',
+                           message=message,
+                           groups=grps,
+                           DIR_A=DIR_A,
+                           DIR_B=DIR_B)
 
 
 @app.route('/group', methods=['POST'])
@@ -165,21 +176,34 @@ def group_form_score(group_id, form_id):
 @app.route('/score/<int:group_id>', methods=['POST'])
 def score(group_id):
     station_id = int(request.form['station_id'])
-    station_score = request.form['station_score']
-    form_id = int(request.form['form_id'])
-    form_score = request.form['form_score']
+    station_score = int(request.form['station_score'])
+
+    try:
+        form_id = int(request.form['form_id'])
+        form_score = int(request.form['form_score'])
+    except:
+        form_id = None
+        form_score = 0
 
     if station_score:
-        GroupStation.set_score(g.session,
-                               group_id,
-                               station_id,
-                               int(station_score))
+        group_station = GroupStation.get(
+            group_id,
+            station_id)
+        if not group_station:
+            group_station = GroupStation(
+                group_id,
+                station_id)
+            g.session.add(group_station)
+        group_station.score = int(station_score)
 
-    if form_score:
+    if form_id is not None:
         set_form_score(group_id, form_id, int(form_score))
 
     if request.is_xhr:
-        return jsonify(status='ok')
+        return jsonify(
+            station_score=station_score,
+            form_score=form_score,
+            status='ok')
 
     return redirect(url_for("/"))  # TODO: redirect to station page
 

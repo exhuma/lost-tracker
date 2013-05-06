@@ -5,7 +5,9 @@ from lost_tracker.models import (
     get_state,
     STATE_FINISHED,
     STATE_UNKNOWN,
-    STATE_ARRIVED)
+    STATE_ARRIVED,
+    DIR_A,
+    DIR_B)
 
 
 def get_matrix(stations, groups):
@@ -44,11 +46,15 @@ def get_state_sum(state_matrix):
         sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
         for row in state_matrix:
             for i, state in enumerate(row[1:]):
-                if not state or state == STATE_UNKNOWN:
+                if not state:
                     sums[i][STATE_UNKNOWN] += 1
-                elif state == STATE_ARRIVED:
+                    continue
+
+                if state.state == STATE_UNKNOWN:
+                    sums[i][STATE_UNKNOWN] += 1
+                elif state.state == STATE_ARRIVED:
                     sums[i][STATE_ARRIVED] += 1
-                elif state == STATE_FINISHED:
+                elif state.state == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
     return sums
 
@@ -67,10 +73,11 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
     """
     Creates a new group in the database.
     """
-    if direction is "1":  # TODO: "1" = magic string!
-        color = "Giel"
-    else:
-        color = "Roud"
+
+    if direction not in (DIR_A, DIR_B):
+        raise ValueError('{0!r} is not among the supported values '
+                         'for "direction" which are: {1!r}, {2!r}'.format(
+                             DIR_A, DIR_B))
 
     new_grp = Group(grp_name, contact, phone, direction, start_time)
     session.add(new_grp)
@@ -80,7 +87,7 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
                 contact,
                 phone,
                 start_time,
-                color))
+                direction))
 
 
 def get_stations():
