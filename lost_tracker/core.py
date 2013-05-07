@@ -3,6 +3,8 @@ from lost_tracker.models import (
     Station,
     Form,
     get_state,
+    GroupStation,
+    get_form_score_by_group,
     STATE_FINISHED,
     STATE_UNKNOWN,
     STATE_ARRIVED,
@@ -134,6 +136,7 @@ def add_form_db(form_id, name, max_score, session):
         return "Form added: {0} - {1} - max: {2}".format(
             form_id, name, max_score)
 
+
 def get_forms():
     """
     Returns all forms from the database as :py:class`Form` instances.
@@ -143,6 +146,7 @@ def get_forms():
     forms = forms.all()
     return forms
 
+
 def get_form_by_id(id):
     """
     Returns a :py:class:`Form` by class id.
@@ -151,3 +155,15 @@ def get_form_by_id(id):
     qry = qry.filter_by(id=id)
     qry = qry.first()
     return qry
+
+def get_score_by_group(group_id):
+    """
+    Returns the actual score for a group.
+    """
+    qry = GroupStation.query
+    qry = qry.filter_by(group_id=group_id)
+    station_score = qry.all()
+
+    form_score = get_form_score_by_group(group_id)
+
+

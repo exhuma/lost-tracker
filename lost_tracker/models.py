@@ -35,6 +35,13 @@ def get_form_score(group_id, form_id):
         return 0
     return result.score
 
+def get_form_score_by_group(group_id):
+    s = select([form_scores])
+    s = s.where(form_scores.c.group_id == group_id)
+    result = s.execute()
+    if not result:
+        return 0
+    return result.score
 
 def set_form_score(group_id, form_id, score):
     s = select(
