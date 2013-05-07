@@ -1,5 +1,6 @@
 import os
 from collections import namedtuple
+from operator import attrgetter
 
 from sqlalchemy import create_engine
 from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
@@ -11,7 +12,7 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
                                  GroupStation, get_form_score,
-                                 DIR_A, DIR_B)
+                                 DIR_A, DIR_B, score_totals)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -259,6 +260,14 @@ def add_form():
     message = add_form_db(form_id, name, max_score, g.session)
     flash(message)
     return redirect(url_for("init_add_form"))
+
+
+@app.route('/test')
+def test():
+    result = sorted(score_totals(), key=attrgetter('score_sum'), reverse=True)
+    for bla in result:
+        print bla.score_sum
+    return jsonify(result=repr(result))
 
 
 if __name__ == '__main__':

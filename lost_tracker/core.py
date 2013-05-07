@@ -165,5 +165,3 @@ def get_score_by_group(group_id):
     station_score = qry.all()
 
     form_score = get_form_score_by_group(group_id)
-
-
