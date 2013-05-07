@@ -70,6 +70,14 @@ def get_grps():
     groups = groups.all()
     return groups
 
+def get_grps_by_id(group_id):
+    """
+    Returns a group from the database as :py:class:`Group` instance by his id.
+    """
+    group = Group.query
+    group = group.filter_by(id=group_id)
+    group = group.first()
+    return group
 
 def add_grp(grp_name, contact, phone, direction, start_time, session):
     """

@@ -5,7 +5,7 @@ from operator import attrgetter
 from sqlalchemy import create_engine
 from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
                                get_stations, add_station, get_stat_by_name,
-                               add_form_db, get_forms)
+                               add_form_db, get_forms, get_grps_by_id)
 from flask import (Flask, render_template, abort, jsonify, g, request, flash,
                    url_for, redirect)
 
@@ -262,12 +262,16 @@ def add_form():
     return redirect(url_for("init_add_form"))
 
 
-@app.route('/test')
-def test():
+@app.route('/scoreboard')
+def scoreboard():
     result = sorted(score_totals(), key=attrgetter('score_sum'), reverse=True)
-    for bla in result:
-        print bla.score_sum
-    return jsonify(result=repr(result))
+    output = []
+    pos = 1
+    for row in result:
+        group = get_grps_by_id(row.group_id)
+        output.append([pos, group.name, row.score_sum])
+        pos+=1
+    return render_template('scoreboard.html', scores=output)
 
 
 if __name__ == '__main__':
