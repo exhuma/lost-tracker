@@ -1,5 +1,6 @@
 BODY{
     margin: 0;
+    font-family: Helvetica, Tahoma, Arial, sans-serif;
 }
 
 DIV.group{
@@ -30,10 +31,17 @@ DIV.group .icon {
 
 DIV.group .details {
     overflow: auto;
+    border-left: 1px solid black;
+    padding-left: 0.5em;
 }
 
 DIV.group .name{
     font-size: 1.2em;
+    padding: 0 0.5em;
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    margin-left: -0.5em;
+    margin-bottom: 0.5em;
 }
 
 DIV.group .form_icon {
