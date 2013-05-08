@@ -292,6 +292,11 @@ def scoreboard():
     return render_template('scoreboard.html', scores=output)
 
 
+@app.route('/guide')
+def guide():
+    return render_template('guide.html')
+
+
 if __name__ == '__main__':
     app.run(debug=app.config.get('DEBUG', False),
             host=app.config.get('LISTEN'),
