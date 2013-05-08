@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 setup(
    name="lost-tracker",
-   version="1.2",
+   version="1.2.1",
    packages=find_packages(),
    install_requires=[
         'Flask==0.9',
