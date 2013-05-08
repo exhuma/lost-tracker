@@ -189,7 +189,7 @@ def group_form_score(group_id, form_id):
 @app.route('/score/<int:group_id>', methods=['POST'])
 def score(group_id):
     station_id = int(request.form['station_id'])
-    station_score = int(request.form['station_score'])
+    station_score = request.form['station_score']
 
     try:
         form_id = int(request.form['form_id'])
@@ -199,6 +199,7 @@ def score(group_id):
         form_score = 0
 
     if station_score:
+        station_score = int(station_score)
         group_station = GroupStation.get(
             group_id,
             station_id)
