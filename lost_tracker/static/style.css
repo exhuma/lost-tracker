@@ -13,6 +13,7 @@ DIV.group{
 DIV.group INPUT {
     width: 3em;
     font-size: 2em;
+    vertical-align: middle;
 }
 
 DIV.group INPUT[type="submit"],
@@ -33,6 +34,11 @@ DIV.group .details {
 
 DIV.group .name{
     font-size: 1.2em;
+}
+
+DIV.group .form_icon {
+    height: 2.5em;
+    vertical-align: middle;
 }
 
 .state_0,
