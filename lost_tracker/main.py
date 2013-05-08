@@ -12,7 +12,8 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
                                  GroupStation, get_form_score,
-                                 DIR_A, DIR_B, score_totals)
+                                 DIR_A, DIR_B, score_totals, STATE_UNKNOWN,
+                                 STATE_FINISHED, STATE_ARRIVED)
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 
@@ -80,6 +81,22 @@ def station(name):
     if not station:
         return abort(404)
 
+    def stategetter(element):
+        """
+        Custom sorting for group states. Make "arrived" groups come first,
+        then all "unknowns". Make "finished" groups come last.
+        """
+        if element is None or element.state is None:
+            return STATE_UNKNOWN
+        elif element.state.state == STATE_ARRIVED:
+            return 0
+        elif element.state.state == STATE_UNKNOWN:
+            return 1
+        elif element.state.state == STATE_FINISHED:
+            return 2
+        else:
+            return 99
+
     groups = get_grps()
     GroupStateRow = namedtuple('GroupStateRow',
                                'group, '
@@ -93,6 +110,7 @@ def station(name):
             state = group_station
         group_states.append(
             GroupStateRow(grp, state))
+    group_states.sort(key=stategetter)
 
     questionnaires = get_forms()
 

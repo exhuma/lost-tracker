@@ -19,13 +19,11 @@
                     value="{{row.group.id}}" /></p>
                 <div>
                   <img src="{{url_for('static', filename='icons/game.png')}}"
-                    height="64"
-                    style="vertical-align: middle;" /><input
+                    class="form_icon"/><input
                       type="number"
                       placeholder="#"
                       min="0"
                       max="100"
-                      step="10"
                       value="{{row.state.score|default('0')}}"
                       name="station_score" />
                 </div>
@@ -41,8 +39,7 @@
                   </select>
                   <br />
                   <img src="{{url_for('static', filename='icons/questionnaire.png')}}"
-                    height="64"
-                    style="vertical-align: middle;" />
+                    class="form_icon"/>
                   <input
                     type="number"
                     placeholder="#"
