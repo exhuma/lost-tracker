@@ -39,6 +39,8 @@ def score_totals():
     union_select = select([big_from.c.group_id, func.sum(big_from.c.score)],
         from_obj=big_from)
     union_select = union_select.group_by(union_select.c.group_id)
+    union_select = union_select.having(
+        func.sum(big_from.c.score) != None)
     union_select.bind = Base.metadata.bind
 
     output = []
