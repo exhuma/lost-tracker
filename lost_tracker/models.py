@@ -35,17 +35,23 @@ def score_totals():
         form_scores.c.group_id,
         form_scores.c.score])
 
-    big_from = station_select.union(form_select).alias('subs')
-    union_select = select([big_from.c.group_id, func.sum(big_from.c.score)],
-        from_obj=big_from)
-    union_select = union_select.group_by(union_select.c.group_id)
-    union_select = union_select.having(
-        func.sum(big_from.c.score) != None)
-    union_select.bind = Base.metadata.bind
+    group_scores = {}
+    for gid, score in form_select.execute():
+        if score is None:
+            continue
+        group_scores.setdefault(gid, 0)
+        group_scores[gid] += score
+
+    for gid, score in station_select.execute():
+        if score is None:
+            continue
+        group_scores.setdefault(gid, 0)
+        group_scores[gid] += score
 
     output = []
-    for row in union_select.execute():
-        output.append(score_result(*row))
+    for gid in group_scores:
+        output.append(score_result(gid, group_scores[gid]))
+
     return output
 
 
