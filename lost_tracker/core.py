@@ -11,6 +11,10 @@ from lost_tracker.models import (
     DIR_A,
     DIR_B)
 
+from sqlalchemy.exc import IntegrityError
+import logging
+
+LOG = logging.getLogger(__name__)
 
 def get_matrix(stations, groups):
     """
