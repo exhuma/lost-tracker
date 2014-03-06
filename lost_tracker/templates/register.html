@@ -1,0 +1,35 @@
+{% extends "public_master.html" %}
+{% block content %}
+    <h1>Umellung - 2014</h1>
+
+    <div id="logo">
+      <img src="{{url_for('static', filename='images/Lostinthedarkness1.jpg')}}" />
+    </div>
+
+    <form id="registration_form">
+      <fieldset>
+        <legend>Perséinlech Informatiounen</legend>
+        <dl>
+          <dt>Gruppennumm</dt>
+          <dd><input type="text" name="group_name" /></dd>
+          <dt>Kontaktpersoun</dt>
+          <dd><input type="text" name="contact_name" /></dd>
+          <dt>e-mail</dt>
+          <dd><input type="email" name="email" /></dd>
+          <dt>Tel. Nummer</dt>
+          <dd><input type="text" name="tel" /></dd>
+          <dt>Gewënschten Startzäit</dt>
+          <dd><input type="text" name="time" /></dd>
+          <dt>Soss nach eppes?</dt>
+          <dd>
+            <textarea name="comments" rows="8" cols="40"></textarea>
+          </dd>
+        </dl>
+      </fieldset>
+      <input type="button" value="Aschreiwen" />
+    </form>
+    <script type="text/javascript" charset="utf-8">
+      new lost_tracker.RegistrationForm("registration_form");
+    </script>
+
+{% endblock %}

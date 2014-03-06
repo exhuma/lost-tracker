@@ -1,0 +1,10 @@
+BODY {
+    background-color: #000;
+    color: #ffb;
+    max-width: 30em;
+    margin: 0 auto;
+}
+
+#logo {
+    text-align: center;
+}

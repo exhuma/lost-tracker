@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Lost Tracker {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='style_dark.css')}}" />
+    <script type="text/javascript" src="{{url_for('static',
+      filename='js/lost_tracker.js')}}"></script>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    <script type="text/javascript">
+      $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+    </script>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+        <div id="flashes">
+            {% for category, message in messages %}
+                <div class="{{category}}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
+
+{# vim: set filetype=jinja : #}

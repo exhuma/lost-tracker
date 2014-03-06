@@ -304,6 +304,11 @@ def guide():
     return render_template('guide.html')
 
 
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+
 if __name__ == '__main__':
     app.run(debug=app.localconf.get('devserver', 'debug', default=False),
             host=app.localconf.get('devserver', 'listen'),
