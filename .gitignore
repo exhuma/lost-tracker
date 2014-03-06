@@ -1,6 +1,7 @@
+/.mamerwiselen
+/PKG-INFO
 /build
 /dist
 /env
 /lost_tracker.egg-info
-/PKG-INFO
 plovr-config.js

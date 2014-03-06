@@ -14,9 +14,9 @@
     <script type="text/javascript">
       $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
     </script>
-    {% if config.get('HELPDESK', '') %}
+    {% if localconf.get('app', 'helpdesk', default='') %}
       <div id="contact"><a
-        href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{config.get('HELPDESK', '')}}</div>
+        href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</div>
     {% endif %}
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}

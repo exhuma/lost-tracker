@@ -1,7 +1,7 @@
-import os
 from collections import namedtuple
 from operator import attrgetter
 
+from config_resolver import Config
 from sqlalchemy import create_engine
 from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
                                get_stations, add_station, get_stat_by_name,
@@ -15,23 +15,25 @@ from lost_tracker.models import (get_state, advance as db_advance,
                                  DIR_A, DIR_B, score_totals, STATE_UNKNOWN,
                                  STATE_FINISHED, STATE_ARRIVED)
 from lost_tracker.database import Base
+from lost_tracker import __version__
 from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
-app.config.from_object('lost_tracker.default_settings')
+app.localconf = Config('mamerwiselen', 'lost-tracker',
+                       version='1.0', require_load=True)
 app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
 
-if 'LOST_TRACKER_SETTINGS' in os.environ:
-    app.config.from_envvar('LOST_TRACKER_SETTINGS')
-else:
-    app.logger.warning('Running with default settings! Specify your own '
-                       'config file using the LOST_TRACKER_SETTINGS '
-                       'environment variable!')
+
+@app.context_processor
+def inject_context():
+    return dict(
+        localconf=app.localconf,
+        __version__=__version__)
 
 
 @app.before_first_request
 def bind_metadata():
-    Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
+    Base.metadata.bind = create_engine(app.localconf.get('db', 'dsn'))
 
 
 @app.before_request
@@ -303,6 +305,6 @@ def guide():
 
 
 if __name__ == '__main__':
-    app.run(debug=app.config.get('DEBUG', False),
-            host=app.config.get('LISTEN'),
-            port=app.config.get('PORT'))
+    app.run(debug=app.localconf.get('devserver', 'debug', default=False),
+            host=app.localconf.get('devserver', 'listen'),
+            port=int(app.localconf.get('devserver', 'port')))
