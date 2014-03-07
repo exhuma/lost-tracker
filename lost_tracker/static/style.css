@@ -170,3 +170,7 @@ TD.state {
     background: linear-gradient(to bottom,  hsl(9,32%,63%) 0%,hsl(9,26%,59%) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf8c83', endColorstr='#b2847c',GradientType=0 ); /* IE6-9 */
 }
+
+INPUT[type="submit"] {
+    width: 100%;
+}
