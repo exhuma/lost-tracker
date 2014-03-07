@@ -12,6 +12,7 @@ from flask import (Flask, render_template, abort, jsonify, g, request, flash,
 from lost_tracker.models import (get_state, advance as db_advance,
                                  get_form_score_full, set_form_score,
                                  GroupStation, get_form_score,
+                                 store_registration, confirm_registration as do_confirm_registration,
                                  DIR_A, DIR_B, score_totals, STATE_UNKNOWN,
                                  STATE_FINISHED, STATE_ARRIVED)
 from lost_tracker.database import Base
@@ -304,9 +305,27 @@ def guide():
     return render_template('guide.html')
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        data = {
+            "group_name": request.form.get('group_name'),
+            "contact_name": request.form.get('contact_name'),
+            "email": request.form.get('email'),
+            "tel": request.form.get('tel'),
+            "time": request.form.get('time'),
+            "comments": request.form.get('comments'),
+        }
+        store_registration(data)
+        return "Thank you!"  # TODO!!
+
     return render_template('register.html')
+
+
+@app.route('/confirm_registration/<key>')
+def confirm_registration(key):
+    do_confirm_registration(key)
+    return "Your registration has been accepted!"  # TODO!!
 
 
 if __name__ == '__main__':
