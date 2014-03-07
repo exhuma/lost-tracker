@@ -325,7 +325,7 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/confirm_registration/<key>')
+@app.route('/confirm/<key>')
 def confirm_registration(key):
     loco.confirm_registration(key)
     return "Your registration has been accepted!"  # TODO!!
