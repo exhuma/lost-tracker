@@ -319,7 +319,7 @@ def register():
             "time": request.form.get('time'),
             "comments": request.form.get('comments'),
         }
-        mdl.store_registration(data)
+        loco.store_registration(data)
         return "Thank you!"  # TODO!!
 
     return render_template('register.html')
@@ -327,7 +327,7 @@ def register():
 
 @app.route('/confirm_registration/<key>')
 def confirm_registration(key):
-    mdl.confirm_registration(key)
+    loco.confirm_registration(key)
     return "Your registration has been accepted!"  # TODO!!
 
 
