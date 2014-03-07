@@ -173,3 +173,9 @@ def get_score_by_group(group_id):
     station_score = qry.all()
 
     form_score = get_form_score_by_group(group_id)
+
+def store_registration(data):
+    raise NotImplementedError
+
+def confirm_registration(key):
+    raise NotImplementedError
