@@ -9,7 +9,7 @@ from flask import (
     flash,
     g,
     jsonify,
-    redirect
+    redirect,
     render_template,
     request,
     url_for,
