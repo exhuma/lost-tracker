@@ -15,7 +15,8 @@
       $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
     </script>
     {% if config.get('HELPDESK', '') %}
-        <div id="contact">{{config.get('HELPDESK', '')}}</div>
+      <div id="contact"><a
+        href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{config.get('HELPDESK', '')}}</div>
     {% endif %}
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}

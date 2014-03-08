@@ -192,7 +192,12 @@ def group_form_score(group_id, form_id):
 @app.route('/score/<int:group_id>', methods=['POST'])
 def score(group_id):
     station_id = int(request.form['station_id'])
-    station_score = int(request.form['station_score'])
+
+    try:
+        station_score = int(request.form['station_score'])
+    except ValueError as exc:
+        app.logger.exception(exc)
+        station_score = None
 
     try:
         form_id = int(request.form['form_id'])
@@ -201,7 +206,7 @@ def score(group_id):
         form_id = None
         form_score = 0
 
-    if station_score:
+    if station_score is not None:
         group_station = GroupStation.get(
             group_id,
             station_id)
@@ -293,6 +298,11 @@ def scoreboard():
         output.append([pos, group.name, row.score_sum])
         pos+=1
     return render_template('scoreboard.html', scores=output)
+
+
+@app.route('/guide')
+def guide():
+    return render_template('guide.html')
 
 
 if __name__ == '__main__':
