@@ -174,8 +174,55 @@ def get_score_by_group(group_id):
 
     form_score = get_form_score_by_group(group_id)
 
-def store_registration(data):
+
+def store_registration(data, needs_confirmation=True):
+    """
+    Stores a registration to the database.
+
+    The *data* dictionary contains the following items (all strings):
+
+        * group_name
+        * contact_name
+        * email
+        * tel
+        * time
+        * comments
+
+    If *needs_confirmation* is true (the default), this method will store the
+    reservation as "not yet confirmed". An e-mail will be sent out to the
+    address specified in the *email* field. The e-mail will contain a link to
+    ``/confirm/<key>`` where ``<key`` is a randomly generated string.
+
+    @franky: implement
+    @franky: urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
+    @franky: See ``_external`` at
+             http://flask.pocoo.org/docs/api/#flask.url_for
+    @franky: The "key" should be unique in the DB. Generate new keys as long as
+             duplicates are found in the DB.
+    """
     raise NotImplementedError
 
+
 def confirm_registration(key):
+    """
+    If a user received a confirmation e-mail, this method will be called if the
+    user clicks the confirmation key. The registration is put into 'pending'
+    state and e-mails will be sent to the people who manage the event
+    registrations. This e-mail will contain an "accept" link with the same
+    key. Managers need to verify all the data (start time, available time
+    slots, user comments).
+
+    @franky: implement
+    """
+    raise NotImplementedError
+
+
+def accept_registration(key):
+    """
+    This method is called if a manager clicked the "accept" link, an e-mail is
+    sent out to the reservation contact telling them all is done. The
+    registration is marked as 'finalized'.
+
+    @franky: implement
+    """
     raise NotImplementedError

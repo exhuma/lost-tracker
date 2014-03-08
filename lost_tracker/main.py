@@ -328,6 +328,12 @@ def register():
 @app.route('/confirm/<key>')
 def confirm_registration(key):
     status = loco.confirm_registration(key)
+    return "Your registration has been confirmed: {}!".format(status)  # TODO!!
+
+
+@app.route('/accept/<key>')
+def accept_registration(key):
+    status = loco.accept_registration(key)
     return "Your registration has been accepted: {}!".format(status)  # TODO!!
 
 
