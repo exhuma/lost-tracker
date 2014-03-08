@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Lost Tracker {% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='style_dark.css')}}" />
+    {%- if config.get('DEBUG', False) %}
+    <script type="text/javascript" src="http://localhost:9810/compile?id=dev&amp;mode=raw"></script>
+    {% else %}
     <script type="text/javascript" src="{{url_for('static',
       filename='js/lost_tracker.js')}}"></script>
+    {% endif -%}
     {% block head %}
     {% endblock %}
 </head>
@@ -14,15 +19,6 @@
     <script type="text/javascript">
       $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
     </script>
-    {% if current_user.is_authenticated() %}
-      Logged in as {{current_user.name}} | <a href="{{url_for('logout')}}">Logout</a>
-    {% else %}
-      <a href="{{url_for('login')}}">Login</a>
-    {% endif %}
-    {% if localconf.get('app', 'helpdesk', default='') %}
-      <div id="contact"><a
-        href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</div>
-    {% endif %}
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
         <div id="flashes">

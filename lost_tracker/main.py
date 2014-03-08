@@ -1,37 +1,57 @@
-import os
 from collections import namedtuple
 from operator import attrgetter
 
+from config_resolver import Config
+from flask.ext.login import (
+    LoginManager,
+    login_required,
+    login_user,
+    logout_user,
+)
 from sqlalchemy import create_engine
-from lost_tracker.core import (get_matrix, get_state_sum, get_grps, add_grp,
-                               get_stations, add_station, get_stat_by_name,
-                               add_form_db, get_forms, get_grps_by_id)
-from flask import (Flask, render_template, abort, jsonify, g, request, flash,
-                   url_for, redirect)
+from flask import (
+    Flask,
+    abort,
+    flash,
+    g,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 
-from lost_tracker.models import (get_state, advance as db_advance,
-                                 get_form_score_full, set_form_score,
-                                 GroupStation, get_form_score,
-                                 DIR_A, DIR_B, score_totals, STATE_UNKNOWN,
-                                 STATE_FINISHED, STATE_ARRIVED)
+from lost_tracker import __version__
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
+import lost_tracker.core as loco
+import lost_tracker.models as mdl
 
 app = Flask(__name__)
-app.config.from_object('lost_tracker.default_settings')
+app.localconf = Config('mamerwiselen', 'lost-tracker',
+                       version='1.0', require_load=True)
 app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
 
-if 'LOST_TRACKER_SETTINGS' in os.environ:
-    app.config.from_envvar('LOST_TRACKER_SETTINGS')
-else:
-    app.logger.warning('Running with default settings! Specify your own '
-                       'config file using the LOST_TRACKER_SETTINGS '
-                       'environment variable!')
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(userid):
+    return loco.get_user(userid)
+
+
+@app.context_processor
+def inject_context():
+    return dict(
+        localconf=app.localconf,
+        __version__=__version__)
 
 
 @app.before_first_request
 def bind_metadata():
-    Base.metadata.bind = create_engine(app.config.get('DB_DSN'))
+    Base.metadata.bind = create_engine(app.localconf.get('db', 'dsn'))
 
 
 @app.before_request
@@ -54,11 +74,11 @@ def teardown_request(exc):
 
 @app.route('/')
 def index():
-    stations = get_stations()
-    groups = get_grps()
+    stations = loco.get_stations()
+    groups = loco.get_grps()
 
-    state_matrix = get_matrix(stations, groups)
-    sums = get_state_sum(state_matrix)
+    state_matrix = loco.get_matrix(stations, groups)
+    sums = loco.get_state_sum(state_matrix)
 
     return render_template('matrix.html',
                            matrix=state_matrix,
@@ -68,7 +88,7 @@ def index():
 
 @app.route('/advance/<groupId>/<station_id>')
 def advance(groupId, station_id):
-    new_state = db_advance(g.session, groupId, station_id)
+    new_state = mdl.advance(g.session, groupId, station_id)
     return jsonify(
         group_id=groupId,
         station_id=station_id,
@@ -77,7 +97,7 @@ def advance(groupId, station_id):
 
 @app.route('/station/<path:name>')
 def station(name):
-    station = get_stat_by_name(name)
+    station = loco.get_stat_by_name(name)
     if not station:
         return abort(404)
 
@@ -87,23 +107,23 @@ def station(name):
         then all "unknowns". Make "finished" groups come last.
         """
         if element is None or element.state is None:
-            return STATE_UNKNOWN
-        elif element.state.state == STATE_ARRIVED:
+            return mdl.STATE_UNKNOWN
+        elif element.state.state == mdl.STATE_ARRIVED:
             return 0
-        elif element.state.state == STATE_UNKNOWN:
+        elif element.state.state == mdl.STATE_UNKNOWN:
             return 1
-        elif element.state.state == STATE_FINISHED:
+        elif element.state.state == mdl.STATE_FINISHED:
             return 2
         else:
             return 99
 
-    groups = get_grps()
+    groups = loco.get_grps()
     GroupStateRow = namedtuple('GroupStateRow',
                                'group, '
                                'state')
     group_states = []
     for grp in groups:
-        group_station = get_state(grp.id, station.id)
+        group_station = mdl.get_state(grp.id, station.id)
         if not group_station:
             state = None
         else:
@@ -112,7 +132,7 @@ def station(name):
             GroupStateRow(grp, state))
     group_states.sort(key=stategetter)
 
-    questionnaires = get_forms()
+    questionnaires = loco.get_forms()
 
     return render_template(
         'station.html',
@@ -125,12 +145,12 @@ def station(name):
 @app.route('/group')
 def init_grp_form():
     message = ""
-    grps = get_grps()
+    grps = loco.get_grps()
     return render_template('add_group.html',
                            message=message,
                            groups=grps,
-                           DIR_A=DIR_A,
-                           DIR_B=DIR_B)
+                           DIR_A=mdl.DIR_A,
+                           DIR_B=mdl.DIR_B)
 
 
 @app.route('/group', methods=['POST'])
@@ -142,7 +162,7 @@ def grp_form():
     grp_start = request.form['grp_start']
 
     try:
-        message = add_grp(
+        message = loco.add_grp(
             grp_name,
             grp_contact,
             grp_tel,
@@ -168,15 +188,15 @@ def stat_form():
     contact = request.form['stat_contact']
     phone = request.form['stat_phone']
 
-    message = add_station(name, contact, phone, g.session)
+    message = loco.add_station(name, contact, phone, g.session)
     flash(message)
     return redirect(url_for("init_stat_form"))
 
 
 @app.route('/form_score')
 def init_form_score():
-    grps = get_grps()
-    form_scores = get_form_score_full()
+    grps = loco.get_grps()
+    form_scores = mdl.get_form_score_full()
     return render_template(
         'form_score.html',
         form_scores=form_scores,
@@ -186,7 +206,7 @@ def init_form_score():
 @app.route('/score/<int:group_id>/<int:form_id>')
 def group_form_score(group_id, form_id):
     return jsonify(
-        score=get_form_score(group_id, form_id))
+        score=mdl.get_form_score(group_id, form_id))
 
 
 @app.route('/score/<int:group_id>', methods=['POST'])
@@ -207,18 +227,18 @@ def score(group_id):
         form_score = 0
 
     if station_score is not None:
-        group_station = GroupStation.get(
+        group_station = mdl.GroupStation.get(
             group_id,
             station_id)
         if not group_station:
-            group_station = GroupStation(
+            group_station = mdl.GroupStation(
                 group_id,
                 station_id)
             g.session.add(group_station)
         group_station.score = int(station_score)
 
     if form_id is not None:
-        set_form_score(group_id, form_id, int(form_score))
+        mdl.set_form_score(group_id, form_id, int(form_score))
 
     if request.is_xhr:
         return jsonify(
@@ -236,7 +256,7 @@ def set_station_score():
     score = request.form['score']
 
     if group_id:
-        GroupStation.set_score(group_id, station_id, score)
+        mdl.GroupStation.set_score(group_id, station_id, score)
 
     if request.is_xhr:
         return jsonify(status='ok')
@@ -263,7 +283,7 @@ def form_score():
         abort(409, str(exc))
 
     if group_id:
-        set_form_score(group_id, form_id, score)
+        mdl.set_form_score(group_id, form_id, score)
 
     if request.is_xhr:
         return jsonify(status='ok')
@@ -272,29 +292,32 @@ def form_score():
 
 
 @app.route('/add_form')
+@login_required
 def init_add_form():
     message = ""
-    forms = get_forms()
+    forms = loco.get_forms()
     return render_template('add_form.html', message=message, forms=forms)
 
 
 @app.route('/add_form', methods=['POST'])
+@login_required
 def add_form():
     form_id = int(request.form['form_id'])
     name = request.form['name']
     max_score = int(request.form['max_score'])
-    message = add_form_db(form_id, name, max_score, g.session)
+    message = loco.add_form_db(form_id, name, max_score, g.session)
     flash(message)
     return redirect(url_for("init_add_form"))
 
 
 @app.route('/scoreboard')
 def scoreboard():
-    result = sorted(score_totals(), key=attrgetter('score_sum'), reverse=True)
+    result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
+                    reverse=True)
     output = []
     pos = 1
     for row in result:
-        group = get_grps_by_id(row.group_id)
+        group = loco.get_grps_by_id(row.group_id)
         output.append([pos, group.name, row.score_sum])
         pos+=1
     return render_template('scoreboard.html', scores=output)
@@ -305,7 +328,61 @@ def guide():
     return render_template('guide.html')
 
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        data = {
+            "group_name": request.form.get('group_name'),
+            "contact_name": request.form.get('contact_name'),
+            "email": request.form.get('email'),
+            "tel": request.form.get('tel'),
+            "time": request.form.get('time'),
+            "comments": request.form.get('comments'),
+        }
+        loco.store_registration(data)
+        return "Thank you!"  # TODO!!
+
+    return render_template('register.html')
+
+
+@app.route('/confirm/<key>')
+def confirm_registration(key):
+    status = loco.confirm_registration(key)
+    return "Your registration has been confirmed: {}!".format(status)  # TODO!!
+
+
+@app.route('/accept/<key>')
+@login_required
+def accept_registration(key):
+    flash('Accepted registration with key {}'.format(key))
+    #status = loco.accept_registration(key)
+    return redirect(url_for('index'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        authed = loco.auth(request.form['login'], request.form['password'])
+        user = loco.get_user(request.form['login'])
+        if authed:
+            login_user(user, remember=True)
+            flash('Logged in successfully')
+            return redirect(request.values.get('next') or url_for('index'))
+        else:
+            flash("Invalid credentials!")
+            return render_template('login.html')
+    else:
+        return render_template('login.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
 if __name__ == '__main__':
-    app.run(debug=app.config.get('DEBUG', False),
-            host=app.config.get('LISTEN'),
-            port=app.config.get('PORT'))
+    app.run(debug=app.localconf.get('devserver', 'debug', default=False),
+            host=app.localconf.get('devserver', 'listen'),
+            port=int(app.localconf.get('devserver', 'port')))

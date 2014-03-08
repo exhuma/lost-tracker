@@ -153,9 +153,4 @@ lost_tracker.app.drawSums = function(stationId) {
 
 };
 
-
-goog.exportSymbol('lost_tracker.app.attachEvents',
-    lost_tracker.app.attachEvents);
-
-goog.exportSymbol('lost_tracker.app.drawSums',
-    lost_tracker.app.drawSums);
+// vim: set ft=closure.javascript :

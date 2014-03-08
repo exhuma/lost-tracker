@@ -1,0 +1,18 @@
+[meta]
+version=1.0
+
+[db]
+; Database connection string
+dsn=postgresql://postgres@/lost_tracker
+
+[app]
+; Value to be shown on the bottom right
+helpdesk = "contact info"
+
+[devserver]
+; Dev server listens on device ...
+listen=0.0.0.0
+; ... and port
+port=5000
+; Enable/Disable debugging mode.
+debug=True

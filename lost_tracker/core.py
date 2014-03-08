@@ -16,6 +16,36 @@ import logging
 
 LOG = logging.getLogger(__name__)
 
+class User:
+    """
+    A user class for flask-login.
+
+    See https://flask-login.readthedocs.org/en/latest/#your-user-class
+
+    Additional requirements for lost-tracker:
+
+        * Must have a ``name`` attribute. It is displayed in the web interface.
+
+    @fanky: implement
+    """
+
+    def __init__(self, login):
+        self.login = login
+        self.name = login
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.login
+
+
 def get_matrix(stations, groups):
     """
     Returns a 2-dimensional array containing an entry for each group.
@@ -74,6 +104,7 @@ def get_grps():
     groups = groups.all()
     return groups
 
+
 def get_grps_by_id(group_id):
     """
     Returns a group from the database as :py:class:`Group` instance by his id.
@@ -82,6 +113,7 @@ def get_grps_by_id(group_id):
     group = group.filter_by(id=group_id)
     group = group.first()
     return group
+
 
 def add_grp(grp_name, contact, phone, direction, start_time, session):
     """
@@ -177,6 +209,7 @@ def get_form_by_id(id):
     qry = qry.first()
     return qry
 
+
 def get_score_by_group(group_id):
     """
     Returns the actual score for a group.
@@ -184,5 +217,76 @@ def get_score_by_group(group_id):
     qry = GroupStation.query
     qry = qry.filter_by(group_id=group_id)
     station_score = qry.all()
-
     form_score = get_form_score_by_group(group_id)
+
+
+def store_registration(data, needs_confirmation=True):
+    """
+    Stores a registration to the database.
+
+    The *data* dictionary contains the following items (all strings):
+
+        * group_name
+        * contact_name
+        * email
+        * tel
+        * time
+        * comments
+
+    If *needs_confirmation* is true (the default), this method will store the
+    reservation as "not yet confirmed". An e-mail will be sent out to the
+    address specified in the *email* field. The e-mail will contain a link to
+    ``/confirm/<key>`` where ``<key`` is a randomly generated string.
+
+    @franky: implement
+    @franky: urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
+    @franky: See ``_external`` at
+             http://flask.pocoo.org/docs/api/#flask.url_for
+    @franky: The "key" should be unique in the DB. Generate new keys as long as
+             duplicates are found in the DB.
+    """
+    raise NotImplementedError
+
+
+def confirm_registration(key):
+    """
+    If a user received a confirmation e-mail, this method will be called if the
+    user clicks the confirmation key. The registration is put into 'pending'
+    state and e-mails will be sent to the people who manage the event
+    registrations. This e-mail will contain an "accept" link with the same
+    key. Managers need to verify all the data (start time, available time
+    slots, user comments).
+
+    @franky: implement
+    """
+    raise NotImplementedError
+
+
+def accept_registration(key):
+    """
+    This method is called if a manager clicked the "accept" link, an e-mail is
+    sent out to the reservation contact telling them all is done. The
+    registration is marked as 'finalized'.
+
+    @franky: implement
+    """
+    raise NotImplementedError
+
+
+def auth(login, password):
+    if login == password:
+        # @franky: implement
+        return True
+    else:
+        return False
+
+
+def get_user(login):
+    """
+    Returns a "User" instance (can be anything). It should never raise an
+    exception. If the user-id is invalid/not know it should return ``None``.
+
+    The returnes User instance needs to only follow the prerequisites mentioned
+    at https://flask-login.readthedocs.org/en/latest/#your-user-class
+    """
+    return User(login)
