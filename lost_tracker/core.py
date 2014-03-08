@@ -12,6 +12,36 @@ from lost_tracker.models import (
     DIR_B)
 
 
+class User:
+    """
+    A user class for flask-login.
+
+    See https://flask-login.readthedocs.org/en/latest/#your-user-class
+
+    Additional requirements for lost-tracker:
+
+        * Must have a ``name`` attribute. It is displayed in the web interface.
+
+    @fanky: implement
+    """
+
+    def __init__(self, login):
+        self.login = login
+        self.name = login
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.login
+
+
 def get_matrix(stations, groups):
     """
     Returns a 2-dimensional array containing an entry for each group.
@@ -228,3 +258,22 @@ def accept_registration(key):
     @franky: implement
     """
     raise NotImplementedError
+
+
+def auth(login, password):
+    if login == password:
+        # @franky: implement
+        return True
+    else:
+        return False
+
+
+def get_user(login):
+    """
+    Returns a "User" instance (can be anything). It should never raise an
+    exception. If the user-id is invalid/not know it should return ``None``.
+
+    The returnes User instance needs to only follow the prerequisites mentioned
+    at https://flask-login.readthedocs.org/en/latest/#your-user-class
+    """
+    return User(login)

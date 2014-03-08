@@ -2,6 +2,12 @@ from collections import namedtuple
 from operator import attrgetter
 
 from config_resolver import Config
+from flask.ext.login import (
+    LoginManager,
+    login_required,
+    login_user,
+    logout_user,
+)
 from sqlalchemy import create_engine
 from flask import (
     Flask,
@@ -25,6 +31,15 @@ app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
                        version='1.0', require_load=True)
 app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(userid):
+    return loco.get_user(userid)
 
 
 @app.context_processor
@@ -274,6 +289,7 @@ def form_score():
 
 
 @app.route('/add_form')
+@login_required
 def init_add_form():
     message = ""
     forms = loco.get_forms()
@@ -281,6 +297,7 @@ def init_add_form():
 
 
 @app.route('/add_form', methods=['POST'])
+@login_required
 def add_form():
     form_id = int(request.form['form_id'])
     name = request.form['name']
@@ -332,9 +349,34 @@ def confirm_registration(key):
 
 
 @app.route('/accept/<key>')
+@login_required
 def accept_registration(key):
-    status = loco.accept_registration(key)
-    return "Your registration has been accepted: {}!".format(status)  # TODO!!
+    flash('Accepted registration with key {}'.format(key))
+    #status = loco.accept_registration(key)
+    return redirect(url_for('index'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        authed = loco.auth(request.form['login'], request.form['password'])
+        user = loco.get_user(request.form['login'])
+        if authed:
+            login_user(user, remember=True)
+            flash('Logged in successfully')
+            return redirect(request.values.get('next') or url_for('index'))
+        else:
+            flash("Invalid credentials!")
+            return render_template('login.html')
+    else:
+        return render_template('login.html')
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
