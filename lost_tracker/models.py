@@ -3,7 +3,7 @@ from collections import namedtuple
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
                         Boolean, PrimaryKeyConstraint)
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import select, func
+from sqlalchemy.sql import select
 from lost_tracker.database import Base
 
 STATE_UNKNOWN = 0
@@ -25,7 +25,7 @@ form_scores = Table(
 
 def score_totals():
     score_result = namedtuple('ScoreResult',
-        'group_id, score_sum')
+                              'group_id, score_sum')
 
     station_select = select([
         GroupStation.__table__.c.group_id,
@@ -69,6 +69,7 @@ def get_form_score(group_id, form_id):
         return 0
     return result.score
 
+
 def get_form_score_by_group(group_id):
     s = select([form_scores])
     s = s.where(form_scores.c.group_id == group_id)
@@ -76,6 +77,7 @@ def get_form_score_by_group(group_id):
     if not result:
         return 0
     return result.score
+
 
 def set_form_score(group_id, form_id, score):
     s = select(
@@ -107,8 +109,8 @@ def update_form_score(group_id, form_id, score):
         and_(
             form_scores.c.group_id == group_id,
             form_scores.c.form_id == form_id)
-        ).values(
-        score = score)
+    ).values(
+        score=score)
     return u
 
 
@@ -247,21 +249,21 @@ class GroupStation(Base):
 # station_select = select([
 #     GroupStation.__table__.c.group_id,
 #     GroupStation.__table__.c.score])
-# 
+#
 # form_select = select([
 #     form_scores.c.group_id,
 #     form_scores.c.score])
-# 
+#
 # big_from = station_select.union(form_select).alias('subs')
 # union_select = select([big_from.c.group_id,
 #     func.sum(big_from.c.score)],
 #     from_obj=big_from)
 # union_select = union_select.group_by(union_select.c.group_id).alias("resultq")
-# 
-# 
+#
+#
 # class Results(Base):
 #     __table__ = union_select
-# 
+#
 #     def __repr__(self):
 #         return "<Results group_id={0}, score={1}>".format(
 #                 self.group_id, 10)
