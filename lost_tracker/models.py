@@ -1,4 +1,5 @@
 from collections import namedtuple
+from datetime import datetime
 
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
                         Boolean, PrimaryKeyConstraint)
@@ -167,6 +168,9 @@ class Group(Base):
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
 
+    # @franky: this is a relationship to TimeSlot
+    slot = None
+
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None):
         self.name = name
@@ -177,7 +181,6 @@ class Group(Base):
 
     def __repr__(self):
         return '<Group %r>' % (self.name)
-
 
 class Station(Base):
     __tablename__ = 'station'
@@ -244,6 +247,15 @@ class GroupStation(Base):
             session.add(gs)
         else:
             row.score = score
+
+
+class TimeSlot(object):
+    """
+    @franky: change this into a DB object.
+    """
+
+    def __init__(self, time):
+        self.time = datetime.strptime(time, '%H:%M')
 
 
 # station_select = select([

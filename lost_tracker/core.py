@@ -207,6 +207,24 @@ def get_score_by_group(group_id):
     form_score = get_form_score_by_group(group_id)
 
 
+def slots():
+    """
+    @franky retrieve list of slots
+    """
+
+    from collections import namedtuple
+    from datetime import datetime
+    FakeSlot = namedtuple('FakeSlot', 'time')
+    return [
+        FakeSlot(datetime.strptime('19:00', '%H:%M')),
+        FakeSlot(datetime.strptime('19:30', '%H:%M')),
+        FakeSlot(datetime.strptime('20:00', '%H:%M')),
+        FakeSlot(datetime.strptime('20:30', '%H:%M')),
+        FakeSlot(datetime.strptime('21:00', '%H:%M')),
+        FakeSlot(datetime.strptime('21:30', '%H:%M')),
+    ]
+
+
 def store_registration(data, needs_confirmation=True):
     """
     Stores a registration to the database.
