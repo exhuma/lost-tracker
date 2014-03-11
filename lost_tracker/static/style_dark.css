@@ -8,3 +8,45 @@ BODY {
 #logo {
     text-align: center;
 }
+
+TABLE {
+    border: 1px solid #880000;
+    max-width: 400px;
+    margin: 0 auto;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+TABLE TH {
+    color: #ff8800;
+}
+
+TABLE TD, TABLE TH {
+    padding: 0.5em 2em;
+    border: 1px solid #770000;
+}
+A {
+    color: #ffff00;
+}
+
+A:visited {
+    color: #ff9900;
+}
+
+A:active {
+    color: #ffff55;
+}
+
+H1,
+H2,
+H3,
+H4,
+H5,
+H6 {
+    color: hsl(30, 100%, 50%);
+}
+
+TD:focus {
+    background-color: #060606;
+}
+
