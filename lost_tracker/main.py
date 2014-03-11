@@ -380,6 +380,7 @@ def logout():
 
 
 @app.route('/manage')
+@login_required
 def manage():
     groups = loco.get_grps()
     slots = loco.slots()
