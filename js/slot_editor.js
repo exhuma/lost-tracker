@@ -76,7 +76,7 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
       goog.dom.createDom('td', null, groupName))
   var inserted = goog.array.some(rows, function(row) {
     var cols = goog.dom.getElementsByTagNameAndClass('td', null, row);
-    var cellName = cols[0].innerHTML;
+    var cellName = goog.dom.getTextContent(cols[0]);
     if (cellName == groupName) {
       lost_tracker.SlotEditor.LOG.severe(groupName +
         ' already exists in reserve table!');
@@ -99,14 +99,14 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
  * @param groupName {object} TODO: doc
  */
 lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
-  lost_tracker.SlotEditor.LOG.fine('Removing ' + groupName + ' from reserve');
+  lost_tracker.SlotEditor.LOG.fine('Removing "' + groupName + '" from reserve');
   var self = this;
   var header = goog.dom.getFirstElementChild(this.noSlotsTable);
   var body = goog.dom.getNextElementSibling(header);
   var rows = goog.dom.getElementsByTagNameAndClass('tr', null, body);
   goog.array.some(rows, function(row) {
     var cols = goog.dom.getElementsByTagNameAndClass('td', null, row);
-    var cellName = cols[0].innerHTML;
+    var cellName = goog.dom.getTextContent(cols[0]);
     if (cellName == groupName) {
       goog.dom.removeNode(row);
       return true;
@@ -120,6 +120,8 @@ lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
  * @param  {object} TODO: doc
  */
 lost_tracker.SlotEditor.prototype.init = function() {
+  var nodeText = goog.dom.getTextContent;
+  var trim = goog.string.trim;
   var self = this;
   var header = goog.dom.getFirstElementChild(this.slotsTable);
   var body = goog.dom.getNextElementSibling(header);
@@ -129,15 +131,15 @@ lost_tracker.SlotEditor.prototype.init = function() {
     var timeSlot = cols[0];
     var dirA = cols[1];
     var dirB = cols[2];
-    var oldValueA = dirA.innerHTML;
-    var oldValueB = dirB.innerHTML;
+    var oldValueA = trim(nodeText(dirA));
+    var oldValueB = trim(nodeText(dirB));
     goog.events.listen(dirA, goog.events.EventType.BLUR, function(evt) {
-      self.startsAt(evt.target.innerHTML, timeSlot.innerHTML, oldValueA);
-      oldValueA = evt.target.innerHTML;
+      self.startsAt(trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueA);
+      oldValueA = trim(nodeText(evt.target));
     });
     goog.events.listen(dirB, goog.events.EventType.BLUR, function(evt) {
-      self.startsAt(evt.target.innerHTML, timeSlot.innerHTML, oldValueB);
-      oldValueB = evt.target.innerHTML;
+      self.startsAt(trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueB);
+      oldValueB = trim(nodeText(evt.target));
     });
   });
 };
