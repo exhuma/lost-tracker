@@ -13,7 +13,7 @@
   <tbody>
     {% for slot in slots %}
     <tr>
-      <td>{{ slot.time }}</td>
+      <td>{{ slot.time.strftime('%H:%M') }}</td>
       <td contenteditable="true">{{ groups_a[slot] }}</td>
       <td contenteditable="true">{{ groups_b[slot] }}</td>
     </tr>
