@@ -19,6 +19,13 @@
     <script type="text/javascript">
       $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
     </script>
+    <div id="status_header">
+    {% if current_user.is_authenticated() %}
+      Logged in as {{current_user.name}} | <a href="{{url_for('logout')}}">Logout</a>
+    {% else %}
+      <a href="{{url_for('login')}}">Login</a>
+    {% endif %}
+    </div>
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
         <div id="flashes">

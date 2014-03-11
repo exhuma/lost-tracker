@@ -174,3 +174,8 @@ TD.state {
 INPUT[type="submit"] {
     width: 100%;
 }
+
+#status_header {
+    font-size: 75%;
+    text-align: right;
+}
