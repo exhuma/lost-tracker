@@ -397,6 +397,12 @@ def manage():
                            groups_b=groups_b,
                            groups_none=groups_none)
 
+
+@app.route('/timeslot/<time>/<group_name>')
+def set_time_slot(time, group_name):
+    return 'OK'  # TODO
+
+
 if __name__ == '__main__':
     app.run(debug=app.localconf.get('devserver', 'debug', default=False),
             host=app.localconf.get('devserver', 'listen'),
