@@ -384,12 +384,10 @@ def logout():
 def manage():
     groups = loco.get_grps()
     slots = loco.slots()
-    groups_a = sorted({_.slot: _ for _ in groups
-                       if _.slot and _.direction == mdl.DIR_A},
-                      key=lambda x: x.slot)
-    groups_b = sorted({_.slot: _ for _ in groups
-                       if _.slot and _.direction == mdl.DIR_B},
-                      key=lambda x: x.slot)
+    groups_a = {_.slot: _ for _ in groups
+                if _.slot and _.direction == mdl.DIR_A}
+    groups_b = {_.slot: _ for _ in groups
+                if _.slot and _.direction == mdl.DIR_B}
     groups_none = sorted([_ for _ in groups if not _.slot],
                          key=lambda x: x.name)
     return render_template('manage.html',
