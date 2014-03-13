@@ -5,6 +5,8 @@ goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.string');
+goog.require('goog.ui.AdvancedTooltip');
+goog.require('goog.ui.PopupBase.EventType');
 
 /**
  * @param slotsTableId {object} TODO: doc
@@ -72,8 +74,9 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
   var header = goog.dom.getFirstElementChild(this.noSlotsTable);
   var body = goog.dom.getNextElementSibling(header);
   var rows = goog.dom.getElementsByTagNameAndClass('tr', null, body);
-  var newRow = goog.dom.createDom('tr', null,
-      goog.dom.createDom('td', null, groupName))
+  var newCell = goog.dom.createDom('td', null, groupName);
+  this.attachToolTip(newCell);
+  var newRow = goog.dom.createDom('tr', null, newCell)
   var inserted = goog.array.some(rows, function(row) {
     var cols = goog.dom.getElementsByTagNameAndClass('td', null, row);
     var cellName = goog.dom.getTextContent(cols[0]);
@@ -117,6 +120,34 @@ lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
 
 /**
  * 
+ * @param node {object} TODO: doc
+ */
+lost_tracker.SlotEditor.prototype.attachToolTip = function(node) {
+  var tooltip = new goog.ui.AdvancedTooltip(node);
+  var nodeText = goog.dom.getTextContent;
+  var trim = goog.string.trim;
+  goog.events.listen(tooltip, goog.ui.PopupBase.EventType.BEFORE_SHOW, function(evt) {
+    // TODO
+    var groupName = trim(nodeText(node));
+    if (goog.string.isEmptySafe(groupName)) {
+      return false;
+    }
+    tooltip.setHtml(
+      '<h1>' + groupName + '</h1>' +
+      'Contact: <br />' +
+      'Send e-mail: <a href="mailto:#"><img valign="middle" src="/static/icons/email.png" /></a><br />' +
+      '', true);
+  });
+  tooltip.className = 'tooltip';
+  tooltip.setHotSpotPadding(new goog.math.Box(5, 5, 5, 5));
+  tooltip.setCursorTracking(true);
+  tooltip.setMargin(new goog.math.Box(0, 0, 0, 0));
+  tooltip.setHideDelayMs(250);
+};
+
+
+/**
+ * 
  * @param  {object} TODO: doc
  */
 lost_tracker.SlotEditor.prototype.init = function() {
@@ -133,6 +164,8 @@ lost_tracker.SlotEditor.prototype.init = function() {
     var dirB = cols[2];
     var oldValueA = trim(nodeText(dirA));
     var oldValueB = trim(nodeText(dirB));
+    self.attachToolTip(dirA);
+    self.attachToolTip(dirB);
     goog.events.listen(dirA, goog.events.EventType.BLUR, function(evt) {
       self.startsAt(trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueA);
       oldValueA = trim(nodeText(evt.target));
@@ -141,6 +174,14 @@ lost_tracker.SlotEditor.prototype.init = function() {
       self.startsAt(trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueB);
       oldValueB = trim(nodeText(evt.target));
     });
+  });
+
+  var nsHeader = goog.dom.getFirstElementChild(this.noSlotsTable);
+  var nsBody = goog.dom.getNextElementSibling(nsHeader);
+  var nsRows = goog.dom.getElementsByTagNameAndClass('tr', null, nsBody);
+  goog.array.forEach(nsRows, function(element) {
+    var cols = goog.dom.getElementsByTagNameAndClass('td', null, element);
+    self.attachToolTip(cols[0]);
   });
 };
 

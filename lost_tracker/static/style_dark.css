@@ -50,3 +50,12 @@ TD:focus {
     background-color: #060606;
 }
 
+
+.tooltip {
+    border: 1px solid hsl(0, 100%, 40%);
+    background: hsla(0, 0%, 3%, 0.95);
+}
+
+.tooltip H1 {
+    border-bottom: 1px solid hsl(30, 100%, 80%);
+}
