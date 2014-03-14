@@ -3,6 +3,7 @@ from lost_tracker.models import (
     Station,
     Form,
     get_state,
+    TimeSlot,
     GroupStation,
     get_form_score_by_group,
     STATE_FINISHED,
@@ -212,16 +213,13 @@ def slots():
     @franky retrieve list of slots
     """
 
-    from collections import namedtuple
-    from datetime import datetime
-    FakeSlot = namedtuple('FakeSlot', 'time')
     return [
-        FakeSlot(datetime.strptime('19:00', '%H:%M')),
-        FakeSlot(datetime.strptime('19:30', '%H:%M')),
-        FakeSlot(datetime.strptime('20:00', '%H:%M')),
-        FakeSlot(datetime.strptime('20:30', '%H:%M')),
-        FakeSlot(datetime.strptime('21:00', '%H:%M')),
-        FakeSlot(datetime.strptime('21:30', '%H:%M')),
+        TimeSlot('19:00'),
+        TimeSlot('19:30'),
+        TimeSlot('20:00'),
+        TimeSlot('20:30'),
+        TimeSlot('21:00'),
+        TimeSlot('21:30'),
     ]
 
 

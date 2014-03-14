@@ -388,6 +388,12 @@ def manage():
                 if _.slot and _.direction == mdl.DIR_A}
     groups_b = {_.slot: _ for _ in groups
                 if _.slot and _.direction == mdl.DIR_B}
+
+    # TODO: remove this examle group!
+    groups_b[mdl.TimeSlot('19:30')] = mdl.Group(
+        name='test group', contact='John Doe',
+        phone='+352 12345', direction=mdl.DIR_B,
+        start_time='19:30')
     groups_none = sorted([_ for _ in groups if not _.slot],
                          key=lambda x: x.name)
     return render_template('manage.html',
