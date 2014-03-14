@@ -183,8 +183,8 @@ INPUT[type="submit"] {
 .tooltip {
     padding: 0.2em 0.5em;
     font-size: 75%;
-    width: 300px;
-    height: 200px;
+    width: 150px;
+    height: 80px;
 }
 
 .tooltip H1 {
