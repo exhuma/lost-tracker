@@ -182,6 +182,9 @@ class Group(Base):
     def __repr__(self):
         return '<Group %r>' % (self.name)
 
+    def __str__(self):
+        return self.name
+
 class Station(Base):
     __tablename__ = 'station'
     id = Column(Integer, primary_key=True)
@@ -256,6 +259,12 @@ class TimeSlot(object):
 
     def __init__(self, time):
         self.time = datetime.strptime(time, '%H:%M')
+
+    def __eq__(self, other):
+        return isinstance(other, TimeSlot) and other.time == self.time
+
+    def __hash__(self):
+        return hash(self.time)
 
 
 # station_select = select([
