@@ -3,6 +3,9 @@ goog.provide('lost_tracker.SlotEditor');
 goog.require('goog.array');
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.fx.AbstractDragDrop.EventType');
+goog.require('goog.fx.DragDrop');
+goog.require('goog.fx.DragDropGroup');
 goog.require('goog.json');
 goog.require('goog.log');
 goog.require('goog.net.XhrIo');
@@ -21,8 +24,22 @@ goog.require('goog.ui.PopupBase.EventType');
  * @constructor
  */
 lost_tracker.SlotEditor = function(slotsTableId, noSlotsTableId) {
+  var nodeText = goog.dom.getTextContent;
+  var trim = goog.string.trim;
   this.slotsTable = goog.dom.getElement(slotsTableId);
   this.noSlotsTable = goog.dom.getElement(noSlotsTableId);
+  this.dropTarget = new goog.fx.DragDropGroup();
+  goog.events.listen(this.dropTarget, goog.fx.AbstractDragDrop.EventType.DRAGOVER, function(evt) {
+    goog.dom.classes.add(evt.dropTargetElement, 'active_drag_target')
+  });
+  goog.events.listen(this.dropTarget, goog.fx.AbstractDragDrop.EventType.DRAGOUT, function(evt) {
+    goog.dom.classes.remove(evt.dropTargetElement, 'active_drag_target');
+  });
+  goog.events.listen(this.dropTarget, goog.fx.AbstractDragDrop.EventType.DROP, function(evt) {
+    evt.dropTargetElement.innerHTML = trim(nodeText(evt.dragSourceItem.element));
+    goog.dom.classes.remove(evt.dropTargetElement, 'active_drag_target');
+    this.removeReserve(trim(nodeText(evt.dragSourceItem.element)));
+  }, false, this);
   this.init();
 };
 
@@ -119,6 +136,7 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
   var rows = goog.dom.getElementsByTagNameAndClass('tr', null, body);
   var newCell = goog.dom.createDom('td', null, groupName);
   this.attachToolTip(newCell);
+  this.decorateReserve(newCell);
   var newRow = goog.dom.createDom('tr', null, newCell)
   var inserted = goog.array.some(rows, function(row) {
     var cols = goog.dom.getElementsByTagNameAndClass('td', null, row);
@@ -193,7 +211,35 @@ lost_tracker.SlotEditor.prototype.attachToolTip = function(node) {
 
 
 /**
+ *
+ * @param element {object} TODO: doc
+ */
+lost_tracker.SlotEditor.prototype.decorateTimeSlot = function(element) {
+  var self = this;
+  var nodeText = goog.dom.getTextContent;
+  var trim = goog.string.trim;
+  this.dropTarget.addItem(element);
+  var oldValueA = trim(nodeText(element));
+  this.attachToolTip(element);
+};
+
+
+/**
+ *
+ * @param node {object} TODO: doc
+ */
+lost_tracker.SlotEditor.prototype.decorateReserve = function(node) {
+    this.attachToolTip(node);
+    var dragSrc = new goog.fx.DragDrop(node, {});
+    dragSrc.addTarget(this.dropTarget);
+    dragSrc.init();
+};
+
+
+/**
  * Initialises the slot editor.
+ *
+ * @param  {object} TODO: doc
  */
 lost_tracker.SlotEditor.prototype.init = function() {
   var nodeText = goog.dom.getTextContent;
@@ -209,8 +255,8 @@ lost_tracker.SlotEditor.prototype.init = function() {
     var dirB = cols[2];
     var oldValueA = trim(nodeText(dirA));
     var oldValueB = trim(nodeText(dirB));
-    self.attachToolTip(dirA);
-    self.attachToolTip(dirB);
+    self.decorateTimeSlot(dirA);
+    self.decorateTimeSlot(dirB);
     goog.events.listen(dirA, goog.events.EventType.BLUR, function(evt) {
       self.slotTextChanged(dirA,
                            trim(nodeText(evt.target)),
@@ -232,8 +278,9 @@ lost_tracker.SlotEditor.prototype.init = function() {
   var nsRows = goog.dom.getElementsByTagNameAndClass('tr', null, nsBody);
   goog.array.forEach(nsRows, function(element) {
     var cols = goog.dom.getElementsByTagNameAndClass('td', null, element);
-    self.attachToolTip(cols[0]);
+    self.decorateReserve(cols[0]);
   });
+  this.dropTarget.init();
 };
 
 

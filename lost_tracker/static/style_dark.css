@@ -220,4 +220,8 @@ BLOCKQUOTE {
     font-style: italic;
 }
 
+.active_drag_target {
+    background-color: #ff0;
+}
+
 /* vim: set fdm=marker : */
