@@ -12,6 +12,10 @@ from lost_tracker.models import (
     DIR_A,
     DIR_B)
 
+from sqlalchemy.exc import IntegrityError
+import logging
+
+LOG = logging.getLogger(__name__)
 
 class User:
     """
@@ -120,10 +124,19 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
     if direction not in (DIR_A, DIR_B):
         raise ValueError('{0!r} is not among the supported values '
                          'for "direction" which are: {1!r}, {2!r}'.format(
-                             DIR_A, DIR_B))
+                             direction, DIR_A, DIR_B))
 
     new_grp = Group(grp_name, contact, phone, direction, start_time)
     session.add(new_grp)
+    try:
+        session.flush()
+    except IntegrityError:
+        session.rollback()
+        LOG.exception('Error while adding the new group {0}'.format(
+            grp_name))
+        raise ValueError('Error while adding the new group {0}'.format(
+            grp_name))
+
     return ("Group {0} with Contact {1} / {2} was successfully added into the "
             "DB. The given start-time is {3} and the direction is {4}".format(
                 grp_name,

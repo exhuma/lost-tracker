@@ -161,13 +161,16 @@ def grp_form():
     grp_direction = request.form['grp_direction']
     grp_start = request.form['grp_start']
 
-    message = loco.add_grp(
-        grp_name,
-        grp_contact,
-        grp_tel,
-        grp_direction,
-        grp_start,
-        g.session)
+    try:
+        message = loco.add_grp(
+            grp_name,
+            grp_contact,
+            grp_tel,
+            grp_direction,
+            grp_start,
+            g.session)
+    except ValueError as exc:
+        message = exc
 
     flash(message)
     return redirect(url_for("init_grp_form"))
