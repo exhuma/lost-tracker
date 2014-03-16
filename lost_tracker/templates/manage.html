@@ -31,7 +31,7 @@
   <tbody>
     {% for group in groups_none %}
     <tr>
-      <td>{{ group.name }}</td>
+      <td data-group_id="{{group and group.id}}">{{ group.name }}</td>
     </tr>
     {% endfor %}
   </tbody>

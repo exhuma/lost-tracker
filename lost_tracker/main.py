@@ -408,8 +408,10 @@ def manage():
                            groups_none=groups_none)
 
 
-@app.route('/timeslot/<time>/<group_name>')
-def set_time_slot(time, group_name):
+@app.route('/group/<group_name>/timeslot', methods=['PUT'])
+def set_time_slot(group_name):
+    data = request.json
+    print(data)  # TODO: data is not yet handled!
     group = loco.get_grp_by_name(group_name)
     if not group:
         return '"Group not found"', 404

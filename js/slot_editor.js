@@ -4,6 +4,7 @@ goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.json');
 goog.require('goog.net.XhrIo');
 goog.require('goog.string');
 goog.require('goog.ui.AdvancedTooltip');
@@ -55,37 +56,43 @@ lost_tracker.SlotEditor.LOG = goog.debug.Logger.getLogger(
 lost_tracker.SlotEditor.prototype.slotTextChanged = function(node, groupName, time, oldValue) {
   var empty = goog.string.isEmptySafe;
   var self = this;
+  var url;
+  var newValue;
+  var callback;
+
   if (empty(groupName) && !empty(oldValue)) {
-    url = '/timeslot/none/' + oldValue;
-    goog.net.XhrIo.send(url, function(evt) {
-      var xhr = evt.target;
-      if (xhr.isSuccess()) {
-        var response = xhr.getResponseJson();
+    url = '/group/' + oldValue + '/timeslot';
+    newValue = null;
+    callback = function(response) {
         var reserveNode = self.addReserve(oldValue);
         node.setAttribute('data-group_id', '');
         reserveNode.setAttribute('data-group_id', response.group_id);
-      } else {
-        // TODO: show error
-        lost_tracker.SlotEditor.LOG.severe('XHR failed!');
-      }
-    });
+    };
   } else if (!empty(groupName)) {
-    url = '/timeslot/' + time + '/' + groupName;
-    goog.net.XhrIo.send(url, function(evt) {
-      var xhr = evt.target;
-      if (xhr.isSuccess()) {
-        var response = xhr.getResponseJson();
+    url = '/group/' + groupName + '/timeslot';
+    newValue = time;
+    callback = function(response) {
         node.setAttribute('data-group_id', response.group_id);
         self.removeReserve(groupName);
-      } else {
-        // TODO: show error
-        lost_tracker.SlotEditor.LOG.severe('XHR failed!');
-      }
-    });
+    };
   } else {
     lost_tracker.SlotEditor.LOG.fine('Unexpected input! new_value: ' +
         groupName + ' oldValue: ' + oldValue);
+    return;
   }
+
+  goog.net.XhrIo.send(url, function(evt) {
+    var xhr = evt.target;
+    if (xhr.isSuccess()) {
+      var response = xhr.getResponseJson();
+      callback(response);
+    } else {
+      // TODO: show error
+      lost_tracker.SlotEditor.LOG.severe('XHR failed!');
+    }
+  }, 'PUT', goog.json.serialize({"new_slot": newValue}),
+  {'Content-Type': 'application/json'});
+
 };
 
 
