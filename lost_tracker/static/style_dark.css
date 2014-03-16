@@ -1,8 +1,9 @@
 BODY {
     background-color: #000;
-    color: #ffb;
+    color: hsl(30, 50%, 50%);
     max-width: 30em;
     margin: 0 auto;
+    background: url('/static/images/stressed_linen.png');
 }
 
 #logo {
@@ -19,6 +20,7 @@ TABLE {
 
 TABLE TH {
     color: #ff8800;
+    background-color: hsla(0, 0%, 0%, 0.6);
 }
 
 TABLE TD, TABLE TH {
@@ -47,7 +49,11 @@ H6 {
 }
 
 TD:focus {
-    background-color: #060606;
+    background-color: hsla(0, 0%, 0%, 0.4);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    outline: none;
 }
 
 
@@ -61,4 +67,58 @@ TD:focus {
 
 .tooltip H1 {
     border-bottom: 1px solid hsl(30, 100%, 80%);
+}
+
+INPUT[type='text'],
+INPUT[type='email'],
+TEXTAREA {
+    background: hsla(0, 0%, 0%, 0.4);
+    border: 1px solid hsl(30, 100%, 10%);
+    color: hsl(30, 100%, 70%);
+    padding: 0.2em 0.5em;
+    width: 80%;
+}
+
+INPUT[type='text']:focus,
+INPUT[type='email']:focus,
+TEXTAREA:focus {
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+}
+
+INPUT:focus,
+TEXTAREA:focus {
+    outline: none;
+}
+
+FIELDSET {
+    border: 1px solid hsl(30, 100%, 30%);
+}
+
+INPUT[type='submit'] {
+    padding: 1em;
+    background: hsl(30, 100%, 20%);
+    border: 1px solid hsl(30, 100%, 30%);
+    color: hsl(30, 100%, 70%);
+}
+
+INPUT[type='submit']:hover,
+INPUT[type='submit']:focus {
+    background: hsl(30, 100%, 30%);
+    border: 1px solid hsl(30, 100%, 70%);
+    color: hsl(30, 100%, 90%);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+}
+
+INPUT[type='submit']:active {
+    background: hsl(30, 100%, 34%);
+    border: 1px solid hsl(30, 100%, 80%);
+    color: hsl(30, 100%, 100%);
+}
+
+DT {
+    margin-top: 0.5em;
 }
