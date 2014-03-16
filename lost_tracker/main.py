@@ -393,10 +393,12 @@ def manage():
                 if _.slot and _.direction == mdl.DIR_B}
 
     # TODO: remove this examle group!
-    groups_b[mdl.TimeSlot('19:30')] = mdl.Group(
+    tmp = mdl.Group(
         name='test group', contact='John Doe',
         phone='+352 12345', direction=mdl.DIR_B,
         start_time='19:30')
+    tmp.id = 999
+    groups_b[mdl.TimeSlot('19:30')] = tmp
     groups_none = sorted([_ for _ in groups if not _.slot],
                          key=lambda x: x.name)
     return render_template('manage.html',
@@ -408,7 +410,18 @@ def manage():
 
 @app.route('/timeslot/<time>/<group_name>')
 def set_time_slot(time, group_name):
-    return 'OK'  # TODO
+    group = loco.get_grp_by_name(group_name)
+    if not group:
+        return '"Group not found"', 404
+    return '{{"is_success": true, "group_id": {}}}'.format(group.id)  # TODO
+
+
+@app.route('/js-fragment/group-tooltip/<int:group_id>')
+def group_tooltip(group_id):
+    group = loco.get_grps_by_id(group_id)
+    print(group)
+    return render_template('group-tooltip.html',
+                           group=group)
 
 
 if __name__ == '__main__':

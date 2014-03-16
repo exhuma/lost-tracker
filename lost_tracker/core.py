@@ -116,6 +116,17 @@ def get_grps_by_id(group_id):
     return group
 
 
+def get_grp_by_name(name):
+    """
+    Returns a group from the database as :py:class:`Group` instance by his
+    name.
+    """
+    group = Group.query
+    group = group.filter_by(name=name)
+    group = group.first()
+    return group
+
+
 def add_grp(grp_name, contact, phone, direction, start_time, session):
     """
     Creates a new group in the database.

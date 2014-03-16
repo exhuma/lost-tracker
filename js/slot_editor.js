@@ -4,6 +4,7 @@ goog.require('goog.array');
 goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.events');
+goog.require('goog.net.XhrIo');
 goog.require('goog.string');
 goog.require('goog.ui.AdvancedTooltip');
 goog.require('goog.ui.PopupBase.EventType');
@@ -19,6 +20,25 @@ lost_tracker.SlotEditor = function(slotsTableId, noSlotsTableId) {
   this.init();
 };
 
+/**
+ * 
+ * @param group_name {object} TODO: doc
+ * @param tooltip {object} TODO: doc
+ */
+lost_tracker.SlotEditor.prototype.updateTooltip = function(groupName, tooltip) {
+  tooltip.setHtml('');  // TODO: spinner
+  var url = '/js-fragment/group-tooltip/' + groupName;
+  goog.net.XhrIo.send(url, function(evt) {
+    var xhr = evt.target;
+    if (xhr.isSuccess()) {
+      tooltip.setHtml(xhr.getResponseText());
+    } else {
+      // TODO: show error
+    }
+    // TODO: end spinner.
+  });
+};
+
 
 /**
  * The class logger
@@ -32,7 +52,7 @@ lost_tracker.SlotEditor.LOG = goog.debug.Logger.getLogger(
  * @param time {object} TODO: doc
  * @param oldValue {object} TODO: doc
  */
-lost_tracker.SlotEditor.prototype.startsAt = function(groupName, time, oldValue) {
+lost_tracker.SlotEditor.prototype.slotTextChanged = function(node, groupName, time, oldValue) {
   var empty = goog.string.isEmptySafe;
   var self = this;
   if (empty(groupName) && !empty(oldValue)) {
@@ -40,7 +60,10 @@ lost_tracker.SlotEditor.prototype.startsAt = function(groupName, time, oldValue)
     goog.net.XhrIo.send(url, function(evt) {
       var xhr = evt.target;
       if (xhr.isSuccess()) {
-        self.addReserve(oldValue);
+        var response = xhr.getResponseJson();
+        var reserveNode = self.addReserve(oldValue);
+        node.setAttribute('data-group_id', '');
+        reserveNode.setAttribute('data-group_id', response.group_id);
       } else {
         // TODO: show error
         lost_tracker.SlotEditor.LOG.severe('XHR failed!');
@@ -51,6 +74,8 @@ lost_tracker.SlotEditor.prototype.startsAt = function(groupName, time, oldValue)
     goog.net.XhrIo.send(url, function(evt) {
       var xhr = evt.target;
       if (xhr.isSuccess()) {
+        var response = xhr.getResponseJson();
+        node.setAttribute('data-group_id', response.group_id);
         self.removeReserve(groupName);
       } else {
         // TODO: show error
@@ -94,6 +119,7 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
     lost_tracker.SlotEditor.LOG.info('Not inserted. Appending now!');
     body.appendChild(newRow);
   }
+  return newCell;
 };
 
 
@@ -123,20 +149,14 @@ lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
  * @param node {object} TODO: doc
  */
 lost_tracker.SlotEditor.prototype.attachToolTip = function(node) {
+  var self = this;
   var tooltip = new goog.ui.AdvancedTooltip(node);
-  var nodeText = goog.dom.getTextContent;
-  var trim = goog.string.trim;
   goog.events.listen(tooltip, goog.ui.PopupBase.EventType.BEFORE_SHOW, function(evt) {
-    // TODO
-    var groupName = trim(nodeText(node));
-    if (goog.string.isEmptySafe(groupName)) {
+    var groupId = node.getAttribute('data-group_id');
+    if (goog.string.isEmptySafe(groupId)) {
       return false;
     }
-    tooltip.setHtml(
-      '<h1>' + groupName + '</h1>' +
-      'Contact: <br />' +
-      'Send e-mail: <a href="mailto:#"><img valign="middle" src="/static/icons/email.png" /></a><br />' +
-      '', true);
+    self.updateTooltip(groupId, tooltip);
   });
   tooltip.className = 'tooltip';
   tooltip.setHotSpotPadding(new goog.math.Box(5, 5, 5, 5));
@@ -167,11 +187,11 @@ lost_tracker.SlotEditor.prototype.init = function() {
     self.attachToolTip(dirA);
     self.attachToolTip(dirB);
     goog.events.listen(dirA, goog.events.EventType.BLUR, function(evt) {
-      self.startsAt(trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueA);
+      self.slotTextChanged(dirA, trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueA);
       oldValueA = trim(nodeText(evt.target));
     });
     goog.events.listen(dirB, goog.events.EventType.BLUR, function(evt) {
-      self.startsAt(trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueB);
+      self.slotTextChanged(dirB, trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueB);
       oldValueB = trim(nodeText(evt.target));
     });
   });

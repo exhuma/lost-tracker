@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
                         Boolean, PrimaryKeyConstraint)
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, deferred
 from sqlalchemy.sql import select
 from lost_tracker.database import Base
 
@@ -156,6 +156,8 @@ def advance(session, group_id, station_id):
     return state.state
 
 class Groupregistration(Base):
+    # @franky: This class does not make sense. It duplicates pretty much
+    # everything in "Group". Simply add the missing fields to "Group"
     __tablename__ = 'group_registration'
     id = Column(Integer, primary_key=True)
     group_name = Column(Unicode(50), unique=True)
@@ -193,6 +195,7 @@ class Group(Base):
     direction = Column(Unicode)
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
+    email = deferred(Column(Unicode))
 
     # @franky: this is a relationship to TimeSlot
     slot = None
