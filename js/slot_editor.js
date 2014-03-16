@@ -27,16 +27,15 @@ lost_tracker.SlotEditor = function(slotsTableId, noSlotsTableId) {
  * @param tooltip {object} TODO: doc
  */
 lost_tracker.SlotEditor.prototype.updateTooltip = function(groupName, tooltip) {
-  tooltip.setHtml('');  // TODO: spinner
+  tooltip.setHtml('Loading... <img valign="middle" src="/static/images/ajax-loader.gif" />');
   var url = '/js-fragment/group-tooltip/' + groupName;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
     if (xhr.isSuccess()) {
       tooltip.setHtml(xhr.getResponseText());
     } else {
-      // TODO: show error
+      tooltip.setHtml('Server error!');
     }
-    // TODO: end spinner.
   });
 };
 
