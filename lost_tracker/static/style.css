@@ -2,7 +2,7 @@
 
 BODY{
     margin: 0;
-    font-family: 'Sofadi One', cursive;
+    font-family: 'Sofadi One', Helvetica, sans-serif;
 }
 
 DIV.group{
@@ -83,7 +83,7 @@ DIV.group .form_icon {
 
 H1, H2 {
     text-align: center;
-    font-family: 'Metal Mania', cursive;
+    font-family: 'Metal Mania', Helvetica, sans-serif;
 }
 
 #contact {
