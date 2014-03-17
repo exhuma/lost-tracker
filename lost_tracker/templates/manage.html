@@ -1,4 +1,4 @@
-{% extends "public_master.html" %}
+{% extends "master_narrow.html" %}
 
 {% block content %}
 <h1 id="time_slots">Time Slots</h1>
@@ -14,8 +14,8 @@
     {% for slot in slots %}
     <tr>
       <td>{{ slot.time.strftime('%H:%M') }}</td>
-      <td data-group_id="{{groups_a[slot] and groups_a[slot].id}}" contenteditable="true">{{ groups_a[slot] }}</td>
-      <td data-group_id="{{groups_b[slot] and groups_b[slot].id}}" contenteditable="true">{{ groups_b[slot] }}</td>
+      <td data-group_id="{{groups_a[slot] and groups_a[slot].id}}"><div contenteditable="true">{{ groups_a[slot] }}</div></td>
+      <td data-group_id="{{groups_b[slot] and groups_b[slot].id}}"><div contenteditable="true">{{ groups_b[slot] }}</div></td>
     </tr>
     {% endfor %}
   </tbody>

@@ -1,8 +1,6 @@
 BODY {
     background-color: #000;
     color: hsl(30, 50%, 50%);
-    max-width: 30em;
-    margin: 0 auto;
     background: url('/static/images/stressed_linen.png');
 }
 
