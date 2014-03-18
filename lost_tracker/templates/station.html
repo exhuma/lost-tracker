@@ -6,12 +6,12 @@
 <h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
 
 {% for row in group_states %}
-<div class="group group state_{{row.state.state|default('0')}} {{row.group.cancelled and 'cancelled' or ''}}">
+<div class="group state_{{row.state.state|default('0')}} {{row.group.cancelled and 'cancelled' or ''}}">
     {% set icon_file = 'icons/%s.png' % (row.state and row.state.state or '0') %}
     <img class="icon" id="icon_{{station.id}}_{{row.group.id}}" src="{{url_for('static', filename=icon_file)}}" />
     <div class="details">
         <div class="name">{{row.group.name}}</div>
-        <div>
+        <div class="score_card">
             <form action="{{url_for('set_station_score')}}" method="POST">
                 <p style="display: none;"><input type="hidden" name="station_id"
                     value="{{station.id}}" /></p>

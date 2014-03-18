@@ -88,6 +88,53 @@ DIV.group .form_icon {
     color: hsl(120, 100%, 75%);
 }
 
+.group.state_0,
+.group.unknown {
+    background: hsla(0, 100%, 10%, 0.5);
+    color: hsl(0, 100%, 75%);
+}
+
+.group.state_1,
+.group.arrived {
+    background: hsla(60, 100%, 10%, 0.5);
+    color: hsl(60, 100%, 75%);
+}
+
+.group.state_2,
+.group.finished {
+    background: hsla(120, 100%, 10%, 0.5);
+    color: hsl(120, 100%, 75%);
+}
+
+.group INPUT[type="submit"] {
+    width: 100%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: hsla(0, 0%, 0%, 0.5);
+    border: 1px solid hsla(0, 100%, 0%, 0.5);
+}
+
+.group INPUT[type='submit']:hover,
+.group INPUT[type='submit']:focus {
+    background: hsla(0, 0%, 0%, 0.2);
+    border: 1px solid hsla(30, 100%, 70%, 0.5);
+    color: hsl(30, 100%, 90%);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+}
+
+.score_card IMG {
+    vertical-align: middle;
+}
+
+.score_card INPUT[type='number'] {
+    background: hsla(0, 0%, 0%, 0.2);
+    border: 1px solid hsla(30, 100%, 70%, 0.5);
+    width: 80%;
+}
+
 H1, H2 {
     text-align: center;
     font-family: 'Metal Mania', Helvetica, sans-serif;
