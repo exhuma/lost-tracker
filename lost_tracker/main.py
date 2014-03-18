@@ -387,20 +387,14 @@ def logout():
 def manage():
     groups = loco.get_grps()
     slots = loco.slots()
-    groups_a = {_.slot: _ for _ in groups
-                if _.slot and _.direction == mdl.DIR_A}
-    groups_b = {_.slot: _ for _ in groups
-                if _.slot and _.direction == mdl.DIR_B}
 
-    # TODO: remove this examle group!
-    tmp = mdl.Group(
-        name='test group', contact='John Doe',
-        phone='+352 12345', direction=mdl.DIR_B,
-        start_time='19:30')
-    tmp.id = 999
-    groups_b[mdl.TimeSlot('19:30')] = tmp
-    groups_none = sorted([_ for _ in groups if not _.slot],
+    groups_a = {mdl.TimeSlot(_.start_time): _ for _ in groups
+                if _.start_time and _.direction == mdl.DIR_A}
+    groups_b = {mdl.TimeSlot(_.start_time): _ for _ in groups
+                if _.start_time and _.direction == mdl.DIR_B}
+    groups_none = sorted([_ for _ in groups if not _.start_time],
                          key=lambda x: x.name)
+
     return render_template('manage.html',
                            slots=slots,
                            groups_a=groups_a,
