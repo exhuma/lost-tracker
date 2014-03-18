@@ -421,7 +421,6 @@ def set_time_slot(group_name):
 @app.route('/js-fragment/group-tooltip/<int:group_id>')
 def group_tooltip(group_id):
     group = loco.get_grps_by_id(group_id)
-    print(group)
     return render_template('group-tooltip.html',
                            group=group)
 
