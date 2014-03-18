@@ -408,6 +408,7 @@ def set_time_slot(group_name):
     print(data)  # TODO: data is not yet handled!
     group = loco.get_grp_by_name(group_name)
     if not group:
+        # TODO: If the group is not found, add it to the DB.
         return '"Group not found"', 404
     return '{{"is_success": true, "group_id": {}}}'.format(group.id)  # TODO
 
