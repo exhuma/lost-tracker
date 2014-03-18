@@ -239,10 +239,20 @@ def slots():
 
     return [
         TimeSlot('19:00'),
+        TimeSlot('19:10'),
+        TimeSlot('19:20'),
         TimeSlot('19:30'),
+        TimeSlot('19:40'),
+        TimeSlot('19:50'),
         TimeSlot('20:00'),
+        TimeSlot('20:10'),
+        TimeSlot('20:20'),
         TimeSlot('20:30'),
+        TimeSlot('20:40'),
+        TimeSlot('20:50'),
         TimeSlot('21:00'),
+        TimeSlot('21:10'),
+        TimeSlot('21:20'),
         TimeSlot('21:30'),
     ]
 
