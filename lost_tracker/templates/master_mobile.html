@@ -1,0 +1,13 @@
+{% extends "master.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{url_for('static', filename='style_mobile.css')}}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{% endblock %}
+
+{% block content_wrapper %}
+  <div id="content-mobile">
+    {% block content %}
+    {% endblock %}
+  </div>
+{% endblock %}
