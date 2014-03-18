@@ -287,7 +287,7 @@ class TimeSlot(object):
     """
 
     def __init__(self, time):
-        self.time = datetime.strptime(time, '%H:%M')
+        self.time = datetime.strptime(time, '%Hh%M')
 
     def __eq__(self, other):
         return isinstance(other, TimeSlot) and other.time == self.time
