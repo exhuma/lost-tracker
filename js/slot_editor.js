@@ -10,9 +10,21 @@ goog.require('goog.string');
 goog.require('goog.ui.AdvancedTooltip');
 goog.require('goog.ui.PopupBase.EventType');
 
+
 /**
- * @param slotsTableId {object} TODO: doc
- * @param noSlotsTableId {object} TODO: doc
+ * The class logger
+ */
+lost_tracker.SlotEditor.LOG = goog.debug.Logger.getLogger(
+  'lost_tracker.SlotEditor');
+
+
+/**
+ * Creates a new SlotEditor.
+ *
+ * @param {string} slotsTableId The SGML ID of the table which contains the
+ *     time-slots.
+ * @param {string} noSlotsTableId The ID of the table containing unassigned
+ *     groups.
  * @constructor
  */
 lost_tracker.SlotEditor = function(slotsTableId, noSlotsTableId) {
@@ -21,13 +33,19 @@ lost_tracker.SlotEditor = function(slotsTableId, noSlotsTableId) {
   this.init();
 };
 
+
 /**
- * 
- * @param group_name {object} TODO: doc
- * @param tooltip {object} TODO: doc
+ * Updates a tooltip with the HTML content from a remote call.
+ *
+ * @param {string} group_name The name of the group. This name is used to
+ *     look-up the data on the remote-server.
+ * @param {goog.ui.AdvancedTooltip} tooltip The tooltip which is going to be
+ *     updated.
  */
-lost_tracker.SlotEditor.prototype.updateTooltip = function(groupName, tooltip) {
-  tooltip.setHtml('Loading... <img valign="middle" src="/static/images/ajax-loader.gif" />');
+lost_tracker.SlotEditor.prototype.updateTooltip = function(
+    groupName, tooltip) {
+  tooltip.setHtml('Loading... <img valign="middle" ' +
+                  'src="/static/images/ajax-loader.gif" />');
   var url = '/js-fragment/group-tooltip/' + groupName;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
@@ -41,18 +59,15 @@ lost_tracker.SlotEditor.prototype.updateTooltip = function(groupName, tooltip) {
 
 
 /**
- * The class logger
+ * Callback which is executed when the text of a slot changed.
+ *
+ * @param {string} groupName The name of the group (the new value of the cell).
+ * @param {string} time {object} The start-time (time-slot) as HH:MM.
+ * @param {string} oldValue {object} The value of the cell *before* the change
+ *     (the group-name which was in the cell before the change, or empty).
  */
-lost_tracker.SlotEditor.LOG = goog.debug.Logger.getLogger(
-  'lost_tracker.SlotEditor');
-
-/**
- * 
- * @param groupName {object} TODO: doc
- * @param time {object} TODO: doc
- * @param oldValue {object} TODO: doc
- */
-lost_tracker.SlotEditor.prototype.slotTextChanged = function(node, groupName, time, oldValue) {
+lost_tracker.SlotEditor.prototype.slotTextChanged = function(node, groupName,
+    time, oldValue) {
   var empty = goog.string.isEmptySafe;
   var self = this;
   var url;
@@ -96,8 +111,9 @@ lost_tracker.SlotEditor.prototype.slotTextChanged = function(node, groupName, ti
 
 
 /**
- * 
- * @param groupName {object} TODO: doc
+ * Adds the group to the "reserve" table (unassigned groups).
+ *
+ * @param {sring} groupName The group name.
  */
 lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
   lost_tracker.SlotEditor.LOG.fine('Putting ' + groupName + ' on reserve');
@@ -130,11 +146,13 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
 
 
 /**
- * 
- * @param groupName {object} TODO: doc
+ * Removes the group from the "reserve" table (unassigned groups).
+ *
+ * @param {sring} groupName The group name.
  */
 lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
-  lost_tracker.SlotEditor.LOG.fine('Removing "' + groupName + '" from reserve');
+  lost_tracker.SlotEditor.LOG.fine('Removing "' + groupName +
+      '" from reserve');
   var self = this;
   var header = goog.dom.getFirstElementChild(this.noSlotsTable);
   var body = goog.dom.getNextElementSibling(header);
@@ -151,13 +169,17 @@ lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
 
 
 /**
- * 
- * @param node {object} TODO: doc
+ * Attaches a tooltip to a HTML node. The tooltip contains additional data for
+ * groups. The node must contain the data attribite `data-group_id` containing
+ * the ID of the group.
+ *
+ * @param {Node} node The node to which the tooltip should be attached.
  */
 lost_tracker.SlotEditor.prototype.attachToolTip = function(node) {
   var self = this;
   var tooltip = new goog.ui.AdvancedTooltip(node);
-  goog.events.listen(tooltip, goog.ui.PopupBase.EventType.BEFORE_SHOW, function(evt) {
+  goog.events.listen(tooltip, goog.ui.PopupBase.EventType.BEFORE_SHOW,
+      function(evt) {
     var groupId = node.getAttribute('data-group_id');
     if (goog.string.isEmptySafe(groupId)) {
       return false;
@@ -173,8 +195,7 @@ lost_tracker.SlotEditor.prototype.attachToolTip = function(node) {
 
 
 /**
- * 
- * @param  {object} TODO: doc
+ * Initialises the slot editor.
  */
 lost_tracker.SlotEditor.prototype.init = function() {
   var nodeText = goog.dom.getTextContent;
@@ -193,11 +214,17 @@ lost_tracker.SlotEditor.prototype.init = function() {
     self.attachToolTip(dirA);
     self.attachToolTip(dirB);
     goog.events.listen(dirA, goog.events.EventType.BLUR, function(evt) {
-      self.slotTextChanged(dirA, trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueA);
+      self.slotTextChanged(dirA,
+                           trim(nodeText(evt.target)),
+                           trim(nodeText(timeSlot)),
+                           oldValueA);
       oldValueA = trim(nodeText(evt.target));
     });
     goog.events.listen(dirB, goog.events.EventType.BLUR, function(evt) {
-      self.slotTextChanged(dirB, trim(nodeText(evt.target)), trim(nodeText(timeSlot)), oldValueB);
+      self.slotTextChanged(dirB,
+                           trim(nodeText(evt.target)),
+                           trim(nodeText(timeSlot)),
+                           oldValueB);
       oldValueB = trim(nodeText(evt.target));
     });
   });
