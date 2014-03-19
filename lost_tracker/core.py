@@ -17,35 +17,6 @@ import logging
 
 LOG = logging.getLogger(__name__)
 
-class User:
-    """
-    A user class for flask-login.
-
-    See https://flask-login.readthedocs.org/en/latest/#your-user-class
-
-    Additional requirements for lost-tracker:
-
-        * Must have a ``name`` attribute. It is displayed in the web interface.
-
-    @fanky: implement
-    """
-
-    def __init__(self, login):
-        self.login = login
-        self.name = login
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.login
-
 
 def get_matrix(stations, groups):
     """

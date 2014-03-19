@@ -294,6 +294,41 @@ class TimeSlot(object):
     def __hash__(self):
         return hash(self.time)
 
+class User(Base):
+    """
+    A user class for flask-login.
+
+    See https://flask-login.readthedocs.org/en/latest/#your-user-class
+
+    Additional requirements for lost-tracker:
+
+        * Must have a ``name`` attribute. It is displayed in the web interface.
+
+    @fanky: implement
+    """
+    __tablename__ = 'user'
+
+    login = Column(Unicode(20), primary_key=True)
+    name = Column(Unicode(20))
+    password = Column(Unicode(20))
+    email = Column(Unicode(200))
+
+    def __init__(self, login):
+        self.login = login
+        self.name = login
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.login
+
 
 # station_select = select([
 #     GroupStation.__table__.c.group_id,
