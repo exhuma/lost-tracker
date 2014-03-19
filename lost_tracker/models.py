@@ -155,36 +155,6 @@ def advance(session, group_id, station_id):
 
     return state.state
 
-class Groupregistration(Base):
-    # @franky: This class does not make sense. It duplicates pretty much
-    # everything in "Group". Simply add the missing fields to "Group"
-    __tablename__ = 'group_registration'
-    id = Column(Integer, primary_key=True)
-    group_name = Column(Unicode(50), unique=True)
-    contact_name = Column(Unicode(50))
-    email = Column(Unicode(50))
-    phone = Column(Unicode(20))
-    start_time = Column(Unicode(5))
-    comments = Column(Unicode(160))
-    confirmation = Column(Boolean)
-    confirmation_key = Column(Unicode(20), unique=True)
-
-    def __init__(self, group_name=None, contact_name=None, email=None,
-                 phone=None, start_time=None, comments=None,
-                 confirmation=None, confirmation_key=None):
-        self.group_name = group_name
-        self.confirmation_key = contact_name
-        self.email = email
-        self.phone = phone
-        self.start_time = start_time
-        self.comments = comments
-        self.contact_name = confirmation
-        self.confirmation_key = confirmation_key
-
-    def __rep__(self):
-        return '<Groupregistration %r>' % (self.group_name)
-
-
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
