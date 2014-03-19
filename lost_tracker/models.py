@@ -167,14 +167,20 @@ class Group(Base):
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
     email = deferred(Column(Unicode))
+    comments = Column(Unicode(160))
+    confirmation = Column(Boolean)
+    confirmation_key = Column(Unicode(20), unique=True)
 
     def __init__(self, name=None, contact=None,
-                 phone=None, direction=None, start_time=None):
+                 phone=None, direction=None, start_time=None,
+                 email=None, comments=None):
         self.name = name
         self.contact = contact
         self.phone = phone
         self.direction = direction
         self.start_time = start_time
+        self.email = email
+        self.comments = comments
 
     def __repr__(self):
         return '<Group %r>' % (self.name)
