@@ -20,6 +20,7 @@
     </script>
 
     <div id="menu">
+      <a href="{{url_for('index')}}">Index</a> |
       {% if localconf.get('app', 'helpdesk', default='') %}
         <span id="contact"><a
           href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
