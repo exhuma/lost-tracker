@@ -129,10 +129,26 @@ DIV.group .form_icon {
     vertical-align: middle;
 }
 
-.score_card INPUT[type='number'] {
+.score_card INPUT[type='number'],
+.score_card SELECT {
     background: hsla(0, 0%, 0%, 0.2);
+    color: hsl(30, 100%, 90%);
     border: 1px solid hsla(30, 100%, 70%, 0.5);
-    width: 80%;
+    width: 100%;
+    padding: 0 0.2em;
+}
+
+.score_card OPTION {
+    background: hsl(0, 0%, 0%);
+}
+
+.score_card TD {
+    border: 0;
+}
+
+.score_card TABLE {
+    max-width: 100%;
+    border: 0;
 }
 
 H1, H2 {

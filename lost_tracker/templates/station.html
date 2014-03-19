@@ -17,35 +17,55 @@
                     value="{{station.id}}" /></p>
                 <p style="display: none;"><input type="hidden" name="group_id"
                     value="{{row.group.id}}" /></p>
-                <div>
-                  <img src="{{url_for('static', filename='icons/game.png')}}"
-                    class="form_icon"/><input
-                      type="number"
-                      placeholder="#"
-                      min="0"
-                      max="100"
-                      value="{{row.state.score|default('0')}}"
-                      name="station_score" />
-                </div>
-                <div>
-                  <select name="form_id">
-                    <option selected="selected"
-                        disabled="disabled">Frobou</option>
-                    {% for quest in questionnaires %}
-                      <option value="{{quest.id}}">
-                        {{quest.id}}: {{quest.name}}
-                      </option>
-                    {% endfor %}
-                  </select>
-                  <br />
-                  <img src="{{url_for('static', filename='icons/questionnaire.png')}}"
-                    class="form_icon"/>
-                  <input
-                    type="number"
-                    placeholder="#"
-                    name="form_score" />
-                </div>
-                <input name="submit" type="submit" value="OK" />
+                <table>
+                  <tr>
+                    <td>
+                      <img
+                        src="{{url_for('static', filename='icons/game.png')}}"
+                        class="cell form_icon"/>
+                    </td>
+                    <td colspan="2">
+                      <input
+                        class="cell"
+                        type="number"
+                        placeholder="#"
+                        min="0"
+                        max="100"
+                        value="{{row.state.score|default('0')}}"
+                        name="station_score" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img
+                        src="{{url_for('static', filename='icons/questionnaire.png')}}"
+                        class="cell form_icon"/>
+                    </td>
+                    <td>
+                      <select class="cell" name="form_id">
+                        <option selected="selected"
+                            disabled="disabled">Frobou</option>
+                        {% for quest in questionnaires %}
+                          <option value="{{quest.id}}">
+                            {{quest.id}}: {{quest.name}}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        class="cell"
+                        type="number"
+                        placeholder="#"
+                        name="form_score" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="3">
+                      <input name="submit" type="submit" value="OK" />
+                    </td>
+                  </tr>
+                </table>
             </form>
         </div>
     </div>
