@@ -184,6 +184,7 @@ class Groupregistration(Base):
     def __rep__(self):
         return '<Groupregistration %r>' % (self.group_name)
 
+
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
@@ -196,9 +197,6 @@ class Group(Base):
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
     email = deferred(Column(Unicode))
-
-    # @franky: this is a relationship to TimeSlot
-    slot = None
 
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None):
@@ -213,6 +211,7 @@ class Group(Base):
 
     def __str__(self):
         return self.name
+
 
 class Station(Base):
     __tablename__ = 'station'
@@ -287,7 +286,7 @@ class TimeSlot(object):
     """
 
     def __init__(self, time):
-        self.time = datetime.strptime(time, '%H:%M')
+        self.time = datetime.strptime(time, '%Hh%M')
 
     def __eq__(self, other):
         return isinstance(other, TimeSlot) and other.time == self.time

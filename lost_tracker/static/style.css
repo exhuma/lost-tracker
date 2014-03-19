@@ -2,7 +2,16 @@
 
 BODY{
     margin: 0;
-    font-family: 'Sofadi One', cursive;
+    font-family: 'Sofadi One', Helvetica, sans-serif;
+}
+
+#content-wide {
+    margin: 0;
+}
+
+#content-narrow {
+    max-width: 30em;
+    margin: 0 auto;
 }
 
 DIV.group{
@@ -51,53 +60,115 @@ DIV.group .form_icon {
     vertical-align: middle;
 }
 
+.arrived,
+.finished,
+.state_0,
+.state_1,
+.state_2,
+.unknown {
+    padding: 0 0.4em;
+    cursor: default;
+}
+
 .state_0,
 .unknown {
-    background: hsl(0, 100%, 100%);
+    background: hsl(0, 100%, 20%);
+    color: hsl(0, 100%, 75%);
 }
 
 .state_1,
 .arrived {
-    background: hsl(60, 100%, 90%);
+    background: hsl(60, 100%, 20%);
+    color: hsl(60, 100%, 75%);
 }
 
 .state_2,
 .finished {
-    background: hsl(120, 100%, 90%);
+    background: hsl(120, 100%, 20%);
+    color: hsl(120, 100%, 75%);
 }
 
-.state_0:hover,
-.unknown:hover {
-    background: hsl(0, 0%, 90%);
+.group.state_0,
+.group.unknown {
+    background: hsla(0, 100%, 10%, 0.5);
+    color: hsl(0, 100%, 75%);
 }
 
-.state_1:hover,
-.arrived:hover {
-    background: hsl(60, 100%, 70%);
+.group.state_1,
+.group.arrived {
+    background: hsla(60, 100%, 10%, 0.5);
+    color: hsl(60, 100%, 75%);
 }
 
-.state_2:hover,
-.finished:hover {
-    background: hsl(120, 100%, 70%);
+.group.state_2,
+.group.finished {
+    background: hsla(120, 100%, 10%, 0.5);
+    color: hsl(120, 100%, 75%);
+}
+
+.group INPUT[type="submit"] {
+    width: 100%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: hsla(0, 0%, 0%, 0.5);
+    border: 1px solid hsla(0, 100%, 0%, 0.5);
+}
+
+.group INPUT[type='submit']:hover,
+.group INPUT[type='submit']:focus {
+    background: hsla(0, 0%, 0%, 0.2);
+    border: 1px solid hsla(30, 100%, 70%, 0.5);
+    color: hsl(30, 100%, 90%);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+}
+
+.score_card IMG {
+    vertical-align: middle;
+}
+
+.score_card INPUT[type='number'],
+.score_card SELECT {
+    background: hsla(0, 0%, 0%, 0.2);
+    color: hsl(30, 100%, 90%);
+    border: 1px solid hsla(30, 100%, 70%, 0.5);
+    width: 100%;
+    padding: 0 0.2em;
+}
+
+.score_card OPTION {
+    background: hsl(0, 0%, 0%);
+}
+
+.score_card TD {
+    border: 0;
+}
+
+.score_card TABLE {
+    max-width: 100%;
+    border: 0;
 }
 
 H1, H2 {
     text-align: center;
-    font-family: 'Metal Mania', cursive;
+    font-family: 'Metal Mania', Helvetica, sans-serif;
 }
 
-#contact {
-    font-size: x-small;
-    text-align: center;
-    position: fixed;
-    background: #fff;
-    bottom: 0;
-    right: 0;
-    width: 20em;
-    height: 3em;
-    border-top: 0.1em solid black;
-    border-left: 0.1em solid black;
-    border-right: 0.1em solid black;
+#menu {
+    padding: 0.2em;
+    font-size: 80%;
+    margin-bottom: 0.9em;
+    border-bottom: 1px solid black;
+    background-color: hsla(0, 0%, 0%, 0.7);
+    -webkit-box-shadow: 0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
+    -moz-box-shadow:    0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
+    box-shadow:         0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
+}
+
+#auth {
+    float: right;
 }
 
 .cancelled {
@@ -108,26 +179,33 @@ H1, H2 {
 #Matrix {
   border-spacing: 0;
   border-collapse: collapse;
+  font-size: 80%;
 }
 
-#Matrix TD {
-  line-height: 2em;
+#Matrix TR {
+    overflow: auto;
 }
 
+
 #Matrix TD {
-    border: 0.1em solid #ccc;
-    width: 100%;
+    border: 1px solid hsl(0, 100%, 5%);
     vertical-align: middle;
+    max-height: 1em;
 }
 
 #Matrix THEAD TR.sum TD {
   padding-bottom: 0.5em;
-  border-bottom: 3px double #ccf;
+  border-bottom: 1px solid hsl(0, 100%, 5%);
+}
+
+#Matrix THEAD TR.sum TD,
+#Matrix TFOOT TR.sum TD {
+  background-color: hsla(0, 0%, 0%, 0.8);
 }
 
 #Matrix TFOOT TR.sum TD {
   padding-top: 0.5em;
-  border-top: 3px double #ccf;
+  border-top: 1px solid hsl(0, 100%, 5%);
 }
 
 #Matrix THEAD TH,
@@ -137,7 +215,11 @@ H1, H2 {
 }
 
 #Matrix TBODY TR:hover TD {
-  background-color: #eee;
+  background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+#Matrix TBODY TR TD.group {
+    background-color: hsla(0, 0%, 0%, 0.6);
 }
 
 TD.state {
@@ -189,11 +271,16 @@ INPUT[type="submit"] {
 .tooltip {
     padding: 0.2em 0.5em;
     font-size: 75%;
-    width: 200px;
 }
 
 .tooltip H1 {
     font-size: 150%;
     margin: 0.1em 0em;
     border-bottom: 1px solid #000;
+}
+
+TD > DIV[contenteditable="true"] {
+    border: 1px dashed blue;
+    min-height: 1em;
+    width: 100%;
 }

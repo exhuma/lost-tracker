@@ -387,20 +387,14 @@ def logout():
 def manage():
     groups = loco.get_grps()
     slots = loco.slots()
-    groups_a = {_.slot: _ for _ in groups
-                if _.slot and _.direction == mdl.DIR_A}
-    groups_b = {_.slot: _ for _ in groups
-                if _.slot and _.direction == mdl.DIR_B}
 
-    # TODO: remove this examle group!
-    tmp = mdl.Group(
-        name='test group', contact='John Doe',
-        phone='+352 12345', direction=mdl.DIR_B,
-        start_time='19:30')
-    tmp.id = 999
-    groups_b[mdl.TimeSlot('19:30')] = tmp
-    groups_none = sorted([_ for _ in groups if not _.slot],
+    groups_a = {mdl.TimeSlot(_.start_time): _ for _ in groups
+                if _.start_time and _.direction == mdl.DIR_A}
+    groups_b = {mdl.TimeSlot(_.start_time): _ for _ in groups
+                if _.start_time and _.direction == mdl.DIR_B}
+    groups_none = sorted([_ for _ in groups if not _.start_time],
                          key=lambda x: x.name)
+
     return render_template('manage.html',
                            slots=slots,
                            groups_a=groups_a,
@@ -414,6 +408,7 @@ def set_time_slot(group_name):
     print(data)  # TODO: data is not yet handled!
     group = loco.get_grp_by_name(group_name)
     if not group:
+        # TODO: If the group is not found, add it to the DB.
         return '"Group not found"', 404
     return '{{"is_success": true, "group_id": {}}}'.format(group.id)  # TODO
 
@@ -421,7 +416,6 @@ def set_time_slot(group_name):
 @app.route('/js-fragment/group-tooltip/<int:group_id>')
 def group_tooltip(group_id):
     group = loco.get_grps_by_id(group_id)
-    print(group)
     return render_template('group-tooltip.html',
                            group=group)
 
