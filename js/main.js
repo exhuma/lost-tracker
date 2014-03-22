@@ -17,7 +17,7 @@ goog.exportSymbol('lost_tracker.SlotEditor',
 
 
 if (goog.DEBUG) {
-  debugConsole = new goog.debug.Console;
+  var debugConsole = new goog.debug.Console;
   debugConsole.setCapturing(true);
   var logger = goog.debug.Logger.getLogger('lost_tracker');
   logger.setLevel(goog.debug.Logger.Level.ALL);

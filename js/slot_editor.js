@@ -12,13 +12,6 @@ goog.require('goog.ui.PopupBase.EventType');
 
 
 /**
- * The class logger
- */
-lost_tracker.SlotEditor.LOG = goog.debug.Logger.getLogger(
-  'lost_tracker.SlotEditor');
-
-
-/**
  * Creates a new SlotEditor.
  *
  * @param {string} slotsTableId The SGML ID of the table which contains the
@@ -237,6 +230,14 @@ lost_tracker.SlotEditor.prototype.init = function() {
     self.attachToolTip(cols[0]);
   });
 };
+
+
+/**
+ * The class logger
+ */
+lost_tracker.SlotEditor.LOG = goog.debug.Logger.getLogger(
+  'lost_tracker.SlotEditor');
+
 
 
 // vim: set ft=closure.javascript :
