@@ -5,7 +5,7 @@ goog.require('goog.dom');
 
 /**
  * 
- * @param form_id {object} TODO: doc
+ * @param {string} form_id  TODO: doc
  * @constructor
  */
 lost_tracker.RegistrationForm = function(form_id) {

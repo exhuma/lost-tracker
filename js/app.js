@@ -49,6 +49,8 @@ lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
 
 /**
  * Attach events to the form elements.
+ *
+ * @param {string} stationId
  */
 lost_tracker.app.attachEvents = function(stationId) {
   goog.array.forEach(goog.dom.getElementsByTagNameAndClass('div', 'group'),
@@ -130,6 +132,8 @@ lost_tracker.app.getFormScore = function(group_id, form_id, element) {
 
 /**
  * Replace the "sum" elements by grpahs.
+ *
+ * @param {string} stationId
  */
 lost_tracker.app.drawSums = function(stationId) {
   var table = goog.dom.getElement('Matrix');

@@ -1,10 +1,10 @@
 goog.provide('lost_tracker.SlotEditor');
 
 goog.require('goog.array');
-goog.require('goog.debug.Logger');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.json');
+goog.require('goog.log');
 goog.require('goog.net.XhrIo');
 goog.require('goog.string');
 goog.require('goog.ui.AdvancedTooltip');
@@ -30,7 +30,7 @@ lost_tracker.SlotEditor = function(slotsTableId, noSlotsTableId) {
 /**
  * Updates a tooltip with the HTML content from a remote call.
  *
- * @param {string} group_name The name of the group. This name is used to
+ * @param {string} groupName The name of the group. This name is used to
  *     look-up the data on the remote-server.
  * @param {goog.ui.AdvancedTooltip} tooltip The tooltip which is going to be
  *     updated.
@@ -106,7 +106,7 @@ lost_tracker.SlotEditor.prototype.slotTextChanged = function(node, groupName,
 /**
  * Adds the group to the "reserve" table (unassigned groups).
  *
- * @param {sring} groupName The group name.
+ * @param {string} groupName The group name.
  */
 lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
   lost_tracker.SlotEditor.LOG.fine('Putting ' + groupName + ' on reserve');
@@ -129,6 +129,7 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
       body.insertBefore(newRow, row);
       return true;
     }
+    return false;
   });
   if (!inserted) {
     lost_tracker.SlotEditor.LOG.info('Not inserted. Appending now!');
@@ -141,7 +142,7 @@ lost_tracker.SlotEditor.prototype.addReserve = function(groupName) {
 /**
  * Removes the group from the "reserve" table (unassigned groups).
  *
- * @param {sring} groupName The group name.
+ * @param {string} groupName The group name.
  */
 lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
   lost_tracker.SlotEditor.LOG.fine('Removing "' + groupName +
@@ -157,6 +158,7 @@ lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
       goog.dom.removeNode(row);
       return true;
     }
+    return false;
   });
 };
 
@@ -166,7 +168,7 @@ lost_tracker.SlotEditor.prototype.removeReserve = function(groupName) {
  * groups. The node must contain the data attribite `data-group_id` containing
  * the ID of the group.
  *
- * @param {Node} node The node to which the tooltip should be attached.
+ * @param {Element} node The node to which the tooltip should be attached.
  */
 lost_tracker.SlotEditor.prototype.attachToolTip = function(node) {
   var self = this;
@@ -235,7 +237,7 @@ lost_tracker.SlotEditor.prototype.init = function() {
 /**
  * The class logger
  */
-lost_tracker.SlotEditor.LOG = goog.debug.Logger.getLogger(
+lost_tracker.SlotEditor.LOG = goog.log.getLogger(
   'lost_tracker.SlotEditor');
 
 
