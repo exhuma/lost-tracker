@@ -155,36 +155,6 @@ def advance(session, group_id, station_id):
 
     return state.state
 
-class Groupregistration(Base):
-    # @franky: This class does not make sense. It duplicates pretty much
-    # everything in "Group". Simply add the missing fields to "Group"
-    __tablename__ = 'group_registration'
-    id = Column(Integer, primary_key=True)
-    group_name = Column(Unicode(50), unique=True)
-    contact_name = Column(Unicode(50))
-    email = Column(Unicode(50))
-    phone = Column(Unicode(20))
-    start_time = Column(Unicode(5))
-    comments = Column(Unicode(160))
-    confirmation = Column(Boolean)
-    confirmation_key = Column(Unicode(20), unique=True)
-
-    def __init__(self, group_name=None, contact_name=None, email=None,
-                 phone=None, start_time=None, comments=None,
-                 confirmation=None, confirmation_key=None):
-        self.group_name = group_name
-        self.confirmation_key = contact_name
-        self.email = email
-        self.phone = phone
-        self.start_time = start_time
-        self.comments = comments
-        self.contact_name = confirmation
-        self.confirmation_key = confirmation_key
-
-    def __rep__(self):
-        return '<Groupregistration %r>' % (self.group_name)
-
-
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
@@ -197,14 +167,20 @@ class Group(Base):
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
     email = deferred(Column(Unicode))
+    comments = Column(Unicode(160))
+    confirmation = Column(Boolean)
+    confirmation_key = Column(Unicode(20), unique=True)
 
     def __init__(self, name=None, contact=None,
-                 phone=None, direction=None, start_time=None):
+                 phone=None, direction=None, start_time=None,
+                 email=None, comments=None):
         self.name = name
         self.contact = contact
         self.phone = phone
         self.direction = direction
         self.start_time = start_time
+        self.email = email
+        self.comments = comments
 
     def __repr__(self):
         return '<Group %r>' % (self.name)
@@ -293,6 +269,41 @@ class TimeSlot(object):
 
     def __hash__(self):
         return hash(self.time)
+
+class User(Base):
+    """
+    A user class for flask-login.
+
+    See https://flask-login.readthedocs.org/en/latest/#your-user-class
+
+    Additional requirements for lost-tracker:
+
+        * Must have a ``name`` attribute. It is displayed in the web interface.
+
+    @fanky: implement
+    """
+    __tablename__ = 'user'
+
+    login = Column(Unicode(20), primary_key=True)
+    name = Column(Unicode(20))
+    password = Column(Unicode(20))
+    email = Column(Unicode(200))
+
+    def __init__(self, login):
+        self.login = login
+        self.name = login
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.login
 
 
 # station_select = select([
