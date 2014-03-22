@@ -75,3 +75,11 @@ def develop():
         print(clr.white('=== Kept old config file from '
                         '.mamerwiselen/lost-tracker/app.ini', bold=True))
     print(clr.green('Done!'))
+
+
+@fab.task
+def build():
+    """
+    Compile JS sources.
+    """
+    fab.local('java -jar __libs__/plovr-81ed862.jar build plovr-config.js')
