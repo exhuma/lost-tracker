@@ -10,6 +10,7 @@ fab.env.roledefs['prod'] = ['dozer.foobar.lu']
 @fab.task
 @fab.roles('prod')
 def deploy():
+    fab.execute(build)
     fab.local('python setup.py sdist')
     name = fab.local('python setup.py --fullname', capture=True)
     with fab.cd('/var/www/lost.lu/tracker'):
