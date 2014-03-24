@@ -167,8 +167,8 @@ class Group(Base):
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
     email = deferred(Column(Unicode))
-    comments = Column(Unicode(160))
-    confirmation = Column(Boolean)
+    comments = Column(Unicode)
+    is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
 
     def __init__(self, name=None, contact=None,
@@ -284,10 +284,10 @@ class User(Base):
     """
     __tablename__ = 'user'
 
-    login = Column(Unicode(20), primary_key=True)
-    name = Column(Unicode(20))
-    password = Column(Unicode(20))
-    email = Column(Unicode(200))
+    login = Column(Unicode(100), primary_key=True)
+    name = Column(Unicode(100))
+    password = Column(Unicode(100))
+    email = Column(Unicode(100))
 
     def __init__(self, login):
         self.login = login

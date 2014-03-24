@@ -1,4 +1,5 @@
 from lost_tracker.models import (
+    User,
     Group,
     Station,
     Form,
