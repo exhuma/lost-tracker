@@ -67,6 +67,7 @@ TD:focus {
     border-bottom: 1px solid hsl(30, 100%, 80%);
 }
 
+INPUT[type='password'],
 INPUT[type='text'],
 INPUT[type='email'],
 TEXTAREA {
