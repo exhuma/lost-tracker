@@ -155,6 +155,7 @@ def advance(session, group_id, station_id):
 
     return state.state
 
+
 class Group(Base):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
@@ -166,7 +167,7 @@ class Group(Base):
     direction = Column(Unicode)
     start_time = Column(Unicode(5))
     stations = relationship('GroupStation')
-    email = deferred(Column(Unicode))
+    email = Column(Unicode)
     comments = Column(Unicode)
     is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
