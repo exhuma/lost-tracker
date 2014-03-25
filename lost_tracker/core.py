@@ -310,5 +310,5 @@ def get_user(login):
     """
     query = User.query.filter(
             User.login == login)
-    db_user = query.first()
-    return User(login,db_user.password, db_user.email)
+    user = query.first()
+    return user
