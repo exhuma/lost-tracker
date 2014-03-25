@@ -289,9 +289,11 @@ class User(Base):
     password = Column(Unicode(100))
     email = Column(Unicode(100))
 
-    def __init__(self, login):
+    def __init__(self, login, password, email):
         self.login = login
         self.name = login
+        self.password = password
+        self.email = email
 
     def is_authenticated(self):
         return True
