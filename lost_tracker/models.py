@@ -257,9 +257,6 @@ class GroupStation(Base):
 
 
 class TimeSlot(object):
-    """
-    @franky: change this into a DB object.
-    """
 
     def __init__(self, time):
         self.time = datetime.strptime(time, '%Hh%M')

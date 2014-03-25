@@ -207,7 +207,7 @@ def get_score_by_group(group_id):
 
 def slots():
     """
-    @franky retrieve list of slots
+    maybe put this in a config file
     """
 
     return [
@@ -259,6 +259,7 @@ def store_registration(data, needs_confirmation=True):
              http://flask.pocoo.org/docs/api/#flask.url_for
     @franky: The "key" should be unique in the DB. Generate new keys as long as
              duplicates are found in the DB.
+    mailing with python: https://pypi.python.org/pypi/Envelopes/0.4
     """
     raise NotImplementedError
 
