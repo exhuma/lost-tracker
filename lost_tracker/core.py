@@ -6,6 +6,7 @@ from lost_tracker.models import (
     get_state,
     TimeSlot,
     GroupStation,
+    User,
     get_form_score_by_group,
     STATE_FINISHED,
     STATE_UNKNOWN,
@@ -288,8 +289,11 @@ def accept_registration(key):
 
 
 def auth(login, password):
-    if login == password:
-        # @franky: implement
+    query = User.query.filter(and_(
+        User.login == login,
+        User.password == password))
+    user = query.first()
+    if user:
         return True
     else:
         return False
@@ -303,4 +307,7 @@ def get_user(login):
     The returnes User instance needs to only follow the prerequisites mentioned
     at https://flask-login.readthedocs.org/en/latest/#your-user-class
     """
-    return User(login)
+    query = User.query.filter(
+            User.login == login)
+    db_user = query.first()
+    return User(login,db_user.password, db_user.email)
