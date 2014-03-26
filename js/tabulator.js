@@ -61,10 +61,10 @@ lost_tracker.Tabulator.prototype.attachCellEvents = function(element) {
       element,
       row.id,
       element.getAttribute('data-cell-name'),
-      evt.target.innerHTML,
+      goog.dom.getTextContent(evt.target),
       element.getAttribute('data-current-value'),
       function(oldval) {
-        element.innerHTML = oldval;
+        goog.dom.setText(element, oldval);
       });
   });
 };
