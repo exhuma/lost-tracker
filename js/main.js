@@ -2,6 +2,7 @@ goog.require('goog.debug.Console');
 goog.require('goog.log');
 goog.require('lost_tracker.RegistrationForm');
 goog.require('lost_tracker.SlotEditor');
+goog.require('lost_tracker.Tabulator');
 goog.require('lost_tracker.app');
 
 goog.exportSymbol('lost_tracker.app.attachEvents',
@@ -15,6 +16,9 @@ goog.exportSymbol('lost_tracker.RegistrationForm',
 
 goog.exportSymbol('lost_tracker.SlotEditor',
   lost_tracker.SlotEditor);
+
+goog.exportSymbol('lost_tracker.Tabulator',
+  lost_tracker.Tabulator);
 
 
 if (goog.DEBUG) {

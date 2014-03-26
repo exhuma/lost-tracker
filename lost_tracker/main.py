@@ -8,7 +8,7 @@ from flask.ext.login import (
     login_user,
     logout_user,
 )
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_, or_
 from flask import (
     Flask,
     abort,
@@ -400,6 +400,58 @@ def manage():
                            groups_a=groups_a,
                            groups_b=groups_b,
                            groups_none=groups_none)
+
+
+@app.route('/manage/table/<table>')
+@login_required
+def tabularadmin(table):
+
+    if table == 'group':
+        columns = [_ for _ in mdl.Group.__table__.columns
+                   if _.name not in ('id', 'confirmation_key')]
+        keys = [_ for _ in mdl.Group.__table__.columns if _.primary_key]
+        data = g.session.query(mdl.Group)
+        data = data.order_by(mdl.Group.order)
+    else:
+        return 'Unknown table: {}'.format(table), 400
+
+    # prepare data for the template
+    Row = namedtuple('Row', 'key, data')
+    Column = namedtuple('Column', 'name, type, value')
+    rows = []
+    for row in data:
+        pk = {_.name: getattr(row, _.name) for _ in keys}
+        rowdata = [Column(_.name,
+                          _.type.__class__.__name__.lower(),
+                          getattr(row, _.name)) for _ in columns]
+        rows.append(Row(pk, rowdata))
+
+    return render_template('tabular.html',
+                           clsname=table,
+                           columns=columns,
+                           data=rows)
+
+
+@app.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
+@login_required
+def update_cell_value(cls, key, datum):
+    data = request.json
+    table = mdl.Base.metadata.tables[cls]
+    if data['oldValue'] in ('', None):
+        cell_predicate = or_(table.c[datum] == '', table.c[datum] == None)
+    else:
+        cell_predicate = table.c[datum]==data['oldValue']
+
+    query = table.update().values(
+        **{datum: data['newValue']}).where(and_(
+            table.c.id==key,
+            cell_predicate))
+    result = g.session.execute(query)
+    if result.rowcount == 1:
+        return jsonify(success=True, new_value=data['newValue'])
+    else:
+        message = "error"
+        return jsonify(message=message), 400
 
 
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])
