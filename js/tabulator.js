@@ -17,14 +17,6 @@ lost_tracker.Tabulator = function(element) {
   this.init();
 };
 
-/**
- * 
- * @param {object} element TODO: doc
- */
-lost_tracker.Tabulator.prototype.attachCellEvents = function(element) {
-  // TODO: implement
-};
-
 
 /**
  * 
@@ -43,7 +35,7 @@ lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newVa
     if (xhr.isSuccess()) {
       lost_tracker.Tabulator.LOG.fine('Successfully updated the cell');
       var response = xhr.getResponseJson();
-      source.setAttribute('data-current-value', (response.new_value ? 'true' : 'false'));
+      source.setAttribute('data-current-value', response.new_value);
     } else {
       lost_tracker.Tabulator.LOG.warning('Error updating the cell!');
       revert(oldValue);
@@ -53,6 +45,28 @@ lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newVa
     'newValue': newValue,
     'oldValue': oldValue
   }), {'Content-Type': 'application/json'});
+};
+
+
+/**
+ * 
+ * @param {object} element TODO: doc
+ */
+lost_tracker.Tabulator.prototype.attachCellEvents = function(element) {
+  var row = goog.dom.getAncestorByTagNameAndClass(element, 'TR');
+  var self = this;
+
+  goog.events.listen(element, goog.events.EventType.BLUR, function(evt) {
+    self.updateCell(
+      element,
+      row.id,
+      element.getAttribute('data-cell-name'),
+      evt.target.innerHTML,
+      element.getAttribute('data-current-value'),
+      function(oldval) {
+        element.innerHTML = oldval;
+      });
+  });
 };
 
 
