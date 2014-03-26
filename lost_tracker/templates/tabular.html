@@ -1,0 +1,55 @@
+{% extends "master.html" %}
+
+{% macro render_cell(cell) -%}
+  {% if cell.value -%}
+    {% if cell.type == 'boolean' -%}
+      <td><input
+        class="tabularcell"
+        data-current-value="{{'true' if cell.value else 'false' }}"
+        type="checkbox" {{'checked' if cell.value else ''}} /></td>
+    {% else %}
+      <td
+        class="tabularcell"
+        data-cell-name="{{cell.name}}"
+        data-current-value="{{cell.value}}">{{cell.value}}</td>
+    {%- endif %}
+  {% else %}
+    {% if cell.type == 'boolean' -%}
+      <td><input
+        class="tabularcell"
+        data-current-value="{{'true' if cell.value else 'false' }}"
+        type="checkbox" {{'checked' if cell.value else ''}} /></td>
+    {% else %}
+      <td
+        class="tabularcell"
+        data-current-value=""></td>
+    {%- endif %}
+  {%- endif %}
+{%- endmacro %}
+
+{% block content_wrapper %}
+
+<table id="tabular">
+  <thead>
+    <tr>
+      {% for col in columns -%}
+      <th>{{col.name}}</th>
+      {%- endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, cols in data -%}
+    <tr {{key|xmlattr}}>
+      {% for cell in cols -%}
+        {{ render_cell(cell) }}
+      {%- endfor %}
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+
+<script type="text/javascript" charset="utf-8">
+  new lost_tracker.Tabulator("tabular");
+</script>
+
+{% endblock %}

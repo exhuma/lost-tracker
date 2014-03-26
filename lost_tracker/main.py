@@ -402,6 +402,35 @@ def manage():
                            groups_none=groups_none)
 
 
+@app.route('/manage/table/<table>')
+@login_required
+def tabularadmin(table):
+
+    if table == 'group':
+        columns = [_ for _ in mdl.Group.__table__.columns
+                   if _.name not in ('id', 'confirmation_key')]
+        keys = [_ for _ in mdl.Group.__table__.columns if _.primary_key]
+        data = g.session.query(mdl.Group)
+        data = data.order_by(mdl.Group.order)
+    else:
+        return 'Unknown table: {}'.format(table), 400
+
+    # prepare data for the template
+    Row = namedtuple('Row', 'key, data')
+    Column = namedtuple('Column', 'name, type, value')
+    rows = []
+    for row in data:
+        pk = {_.name: getattr(row, _.name) for _ in keys}
+        rowdata = [Column(_.name,
+                          _.type.__class__.__name__.lower(),
+                          getattr(row, _.name)) for _ in columns]
+        rows.append(Row(pk, rowdata))
+
+    return render_template('tabular.html',
+                           columns=columns,
+                           data=rows)
+
+
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])
 def set_time_slot(group_name):
     data = request.json

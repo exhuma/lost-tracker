@@ -284,3 +284,12 @@ TD > DIV[contenteditable="true"] {
     min-height: 1em;
     width: 100%;
 }
+
+#tabular {
+    font-family: 'Tahoma', Helvetica, sans-serif;
+    font-size: 80%;
+}
+
+#tabular TD {
+    padding: 0.2em 0.5em;
+}
