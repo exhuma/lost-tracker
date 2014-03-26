@@ -5,6 +5,7 @@
     {% if cell.type == 'boolean' -%}
       <td><input
         class="tabularcell"
+        data-cell-name="{{cell.name}}"
         data-current-value="{{'true' if cell.value else 'false' }}"
         type="checkbox" {{'checked' if cell.value else ''}} /></td>
     {% else %}
@@ -17,11 +18,13 @@
     {% if cell.type == 'boolean' -%}
       <td><input
         class="tabularcell"
+        data-cell-name="{{cell.name}}"
         data-current-value="{{'true' if cell.value else 'false' }}"
         type="checkbox" {{'checked' if cell.value else ''}} /></td>
     {% else %}
       <td
         class="tabularcell"
+        data-cell-name="{{cell.name}}"
         data-current-value=""></td>
     {%- endif %}
   {%- endif %}
