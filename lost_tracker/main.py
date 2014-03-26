@@ -8,7 +8,7 @@ from flask.ext.login import (
     login_user,
     logout_user,
 )
-from sqlalchemy import create_engine, and_
+from sqlalchemy import create_engine, and_, or_
 from flask import (
     Flask,
     abort,
@@ -437,16 +437,22 @@ def tabularadmin(table):
 def update_cell_value(cls, key, datum):
     data = request.json
     table = mdl.Base.metadata.tables[cls]
+    if data['oldValue'] in ('', None):
+        cell_predicate = or_(table.c[datum] == '', table.c[datum] == None)
+    else:
+        cell_predicate = table.c[datum]==data['oldValue']
+
     query = table.update().values(
         **{datum: data['newValue']}).where(and_(
             table.c.id==key,
-            table.c[datum]==data['oldValue']))
+            cell_predicate))
     result = g.session.execute(query)
     if result.rowcount == 1:
         return jsonify(success=True, new_value=data['newValue'])
     else:
         message = "error"
         return jsonify(message=message), 400
+
 
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])
 def set_time_slot(group_name):
