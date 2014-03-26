@@ -427,6 +427,7 @@ def tabularadmin(table):
         rows.append(Row(pk, rowdata))
 
     return render_template('tabular.html',
+                           clsname=table,
                            columns=columns,
                            data=rows)
 

@@ -37,7 +37,7 @@ lost_tracker.Tabulator.prototype.attachCellEvents = function(element) {
  */
 lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newValue, oldValue, revert) {
   lost_tracker.Tabulator.LOG.fine('Setting ' + datum + ' on item ' + key + ' to ' + newValue);
-  var url = '/cell/group/' + key + '/' + datum;
+  var url = '/cell/' + this.table.getAttribute('data-name') + '/' + key + '/' + datum;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
     if (xhr.isSuccess()) {
