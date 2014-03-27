@@ -311,4 +311,7 @@ def get_user(login):
     query = User.query.filter(
             User.login == login)
     user = query.first()
-    return user
+    if user:
+        return user
+    else:
+        return None
