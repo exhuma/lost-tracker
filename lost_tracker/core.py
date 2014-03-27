@@ -6,7 +6,6 @@ from lost_tracker.models import (
     get_state,
     TimeSlot,
     GroupStation,
-    User,
     get_form_score_by_group,
     STATE_FINISHED,
     STATE_UNKNOWN,
@@ -14,11 +13,12 @@ from lost_tracker.models import (
     DIR_A,
     DIR_B)
 
-from sqlalchemy.exc import IntegrityError
 from envelopes import Envelope
+from sqlalchemy import and_
+from sqlalchemy.exc import IntegrityError
 import logging
-import urllib
 import os
+import urllib
 
 LOG = logging.getLogger(__name__)
 
