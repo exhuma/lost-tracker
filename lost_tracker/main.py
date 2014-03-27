@@ -411,7 +411,7 @@ def tabularadmin(table):
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Group.__table__.columns if _.primary_key]
         data = g.session.query(mdl.Group)
-        data = data.order_by(mdl.Group.order)
+        data = data.order_by(mdl.Group.cancelled, mdl.Group.order)
     else:
         return 'Unknown table: {}'.format(table), 400
 
