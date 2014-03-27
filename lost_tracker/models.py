@@ -175,7 +175,7 @@ class Group(Base):
 
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None,
-                 email=None, comments=None):
+                 email=None, comments=None, confirmation_key=None):
         self.name = name
         self.contact = contact
         self.phone = phone
