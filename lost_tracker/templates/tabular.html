@@ -42,6 +42,7 @@
 <table id="tabular" data-name="{{clsname}}">
   <thead>
     <tr>
+      <th>Ops</th>
       {% for col in columns -%}
       <th>{{col.name}}</th>
       {%- endfor %}
@@ -50,6 +51,7 @@
   <tbody>
     {% for key, cols in data -%}
     <tr {{key|xmlattr}}>
+      <td>&nbsp;</td>
       {% for cell in cols -%}
         {{ render_cell(cell) }}
       {%- endfor %}
