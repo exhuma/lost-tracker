@@ -171,6 +171,7 @@ class Group(Base):
     comments = Column(Unicode)
     is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
+    finalized = Column(Boolean, server_default='false', default=False)
 
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None,
