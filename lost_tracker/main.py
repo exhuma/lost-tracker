@@ -341,7 +341,10 @@ def register():
         }
         confirmation_link = url_for('confirm_registration',
                                     _external=True)
-        loco.store_registration(g.session, data, confirmation_link)
+        try:
+            loco.store_registration(g.session, data, confirmation_link)
+        except ValueError as exc:
+            return 'Error: ' + str(exc), 400
         return "Thank you!"  # TODO!!
 
     return render_template('register.html')
