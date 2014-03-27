@@ -287,8 +287,7 @@ def accept_registration(key):
 
     @franky: implement
     """
-    query = Group.query.filter(
-            Group.confirmation_key = key)
+    query = Group.query.filter(Group.confirmation_key == key)
     grp = query.first()
     if grp:
         grp.finalized = True
