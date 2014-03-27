@@ -236,7 +236,7 @@ def slots():
     ]
 
 
-def store_registration(data, needs_confirmation=True):
+def store_registration(data, needs_confirmation=True, url):
     """
     Stores a registration to the database.
 
@@ -263,6 +263,50 @@ def store_registration(data, needs_confirmation=True):
     mailing with python: https://pypi.python.org/pypi/Envelopes/0.4
     """
     raise NotImplementedError
+    qry = Group.query.filter_by(name=data['group_name'])
+    check = qry.first()
+    if check:
+        raise ValueError('Group {} already registered'.format(
+            data['group_name'])
+    else:
+        key = urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
+        qry = Group.query.filter_by(confirmation_key=key)
+        check_key = qry.first()
+        while check_key:
+            key = urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
+            qry = Group.query.filter_by(confirmation_key=key)
+            check_key = qry.first()
+
+        new_grp = Group(data['grp_name'],
+                        data['contact_name'],
+                        data['tel'],
+                        None,
+                        data['time'],
+                        data['email'],
+                        data['comments'],
+                        key
+                        )
+        session.add(new_grp)
+        try:
+            session.flush()
+        except IntegrityError:
+            session.rollback()
+            LOG.exception('Error while adding the new group {0}'.format(
+                grp_name))
+            raise ValueError('Error while adding the new group {0}'.format(
+                grp_name))
+
+        if needs_confirmation:
+            confirm_link = '{}/{}'.format(url,key)
+            mail = Envelope(
+                from_addr=(u'no_reply@lost.lu', u'no_reply'),
+                to_addr=(data['email'], data['contact_name']),
+                subject=u'Confirmation of your registration',
+                text_body=u'Please confirm your registration:\n\n{}'.format(
+                    confirm_link)
+            mail.send()
+            return True
+
 
 
 def confirm_registration(key):
@@ -304,8 +348,9 @@ def accept_registration(key):
                               grp.email, grp.start_time, grp.comments)
                           )
         mail.send()
+        return True
     else:
-        raise ValueError
+        raise ValueError('Given key not found in DB')
 
 
 
