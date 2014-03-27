@@ -368,21 +368,25 @@ def accept_registration(key):
     """
     query = Group.query.filter(Group.confirmation_key == key)
     grp = query.first()
+    
     if grp:
-        grp.finalized = True
-        mail = Envelope(
-                from_addr=(u'no_reply@lost.lu', u'no_reply'),
-                to_addr=(grp.email, grp.name),
-                subject=u'Welcome to Lost, your registration is completed',
-                text_body=u'Welcome to Lost in the darkness\n'
-                          '\nYour group is registrated with the following'
-                          'information:\nName:{}\nContact{}\nPhone:{}\nEmail:{}\nStrat'
-                          'time:{}\nComment:{}\nWe are waiting for YOU!'
-                          ':)'.format(grp.name, grp.contact, grp.phone,
-                              grp.email, grp.start_time, grp.comments)
-                          )
-        mail.send('localhost')
-        return True
+        if grp.finalized:
+            raise ValueError('Registration already finalized')
+        else:
+            grp.finalized = True
+            mail = Envelope(
+                    from_addr=(u'no_reply@lost.lu', u'no_reply'),
+                    to_addr=(grp.email, grp.name),
+                    subject=u'Welcome to Lost, your registration is completed',
+                    text_body=u'Welcome to Lost in the darkness\n'
+                              '\nYour group is registrated with the following'
+                              'information:\nName:{}\nContact{}\nPhone:{}\nEmail:{}\nStrat'
+                              'time:{}\nComment:{}\nWe are waiting for YOU!'
+                              ':)'.format(grp.name, grp.contact, grp.phone,
+                                  grp.email, grp.start_time, grp.comments)
+                              )
+            mail.send('localhost')
+            return True
     else:
         raise ValueError('Given key not found in DB')
 
