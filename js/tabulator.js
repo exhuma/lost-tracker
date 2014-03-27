@@ -5,6 +5,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
 goog.require('goog.log');
+goog.require('goog.ui.Dialog');
 
 
 /**
@@ -25,20 +26,25 @@ lost_tracker.Tabulator = function(element) {
  * @param {object} datum TODO: doc
  * @param {object} newValue TODO: doc
  * @param {object} oldValue TODO: doc
- * @param {object} revert TODO: doc
  */
-lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newValue, oldValue, revert) {
+lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newValue, oldValue) {
+  var self = this;
+  if (newValue == oldValue) {
+    lost_tracker.Tabulator.LOG.fine('No update needed (oldValue=newValue)');
+    return;
+  }
   lost_tracker.Tabulator.LOG.fine('Setting ' + datum + ' on item ' + key + ' to ' + newValue);
   var url = '/cell/' + this.table.getAttribute('data-name') + '/' + key + '/' + datum;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
+    var response = xhr.getResponseJson();
     if (xhr.isSuccess()) {
       lost_tracker.Tabulator.LOG.fine('Successfully updated the cell');
-      var response = xhr.getResponseJson();
       source.setAttribute('data-current-value', response.new_value);
     } else {
       lost_tracker.Tabulator.LOG.warning('Error updating the cell!');
-      revert(oldValue);
+      var resolvedValue = self.resolveConflict(newValue, oldValue, response['db_value']);
+      self.updateCell(source, key, datum, resolvedValue, response['db_value']);
       // TODO: show error
     }
   }, 'PUT', goog.json.serialize({
@@ -47,6 +53,32 @@ lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newVa
   }), {'Content-Type': 'application/json'});
 };
 
+
+/**
+ * 
+ * @param {object} newValue TODO: doc
+ * @param {object} oldValue TODO: doc
+ * @param {object} serverValue TODO: doc
+ */
+lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, serverValue) {
+  var dialog1 = new goog.ui.Dialog();
+  dialog1.setContent(
+    'Your Value: ' + newValue + '<br />' +
+    'Old Value: ' + oldValue + '<br />' +
+    'Server Value: ' + serverValue
+  );
+  dialog1.setTitle('Data Conflict');
+  dialog1.setButtonSet(goog.ui.Dialog.ButtonSet.OK_CANCEL);
+  dialog1.setVisible(true);
+  goog.events.listen(dialog1, goog.ui.Dialog.EventType.SELECT, function(e) {
+    if (e.key == 'cancel') {
+      return null;
+    } else {
+      var celem = dialog1.getContentElement();
+      return selectedValue;
+    }
+  });
+};
 
 /**
  * 
@@ -62,10 +94,7 @@ lost_tracker.Tabulator.prototype.attachCellEvents = function(element) {
       row.id,
       element.getAttribute('data-cell-name'),
       goog.dom.getTextContent(evt.target),
-      element.getAttribute('data-current-value'),
-      function(oldval) {
-        goog.dom.setText(element, oldval);
-      });
+      element.getAttribute('data-current-value'));
   });
 };
 
@@ -84,10 +113,7 @@ lost_tracker.Tabulator.prototype.attachCheckEvents = function(element) {
       row.id,
       element.getAttribute('data-cell-name'),
       evt.target.checked,
-      element.getAttribute('data-current-value').toLowerCase() == 'true',
-      function(oldval) {
-        element.checked = oldval;
-      });
+      element.getAttribute('data-current-value').toLowerCase() == 'true');
   });
 };
 

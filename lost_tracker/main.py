@@ -452,12 +452,16 @@ def update_cell_value(cls, key, datum):
         **{datum: data['newValue']}).where(and_(
             table.c.id==key,
             cell_predicate))
-    result = g.session.execute(query)
+    try:
+        result = g.session.execute(query)
+    except Exception as exc:
+        return jsonify(message='Invalid data'), 400
+
     if result.rowcount == 1:
         return jsonify(success=True, new_value=data['newValue'])
     else:
-        message = "error"
-        return jsonify(message=message), 400
+        current_entity = g.session.query(table).filter_by(id=key).one()
+        return jsonify(db_value=getattr(current_entity, datum)), 409
 
 
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])
