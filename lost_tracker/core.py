@@ -17,6 +17,8 @@ from lost_tracker.models import (
 from sqlalchemy.exc import IntegrityError
 from envelopes import Envelope
 import logging
+import urllib
+import os
 
 LOG = logging.getLogger(__name__)
 
@@ -236,7 +238,7 @@ def slots():
     ]
 
 
-def store_registration(data, needs_confirmation=True, url):
+def store_registration(session, data, url, needs_confirmation=True):
     """
     Stores a registration to the database.
 
@@ -262,22 +264,21 @@ def store_registration(data, needs_confirmation=True, url):
              duplicates are found in the DB.
     mailing with python: https://pypi.python.org/pypi/Envelopes/0.4
     """
-    raise NotImplementedError
     qry = Group.query.filter_by(name=data['group_name'])
     check = qry.first()
     if check:
         raise ValueError('Group {} already registered'.format(
-            data['group_name'])
+            data['group_name']))
     else:
-        key = urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
+        key = urllib.quote_plus(os.urandom(50).encode('base64')[0:20])
         qry = Group.query.filter_by(confirmation_key=key)
         check_key = qry.first()
         while check_key:
-            key = urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
+            key = urllib.quote_plus(os.urandom(50).encode('base64')[0:20])
             qry = Group.query.filter_by(confirmation_key=key)
             check_key = qry.first()
 
-        new_grp = Group(data['grp_name'],
+        new_grp = Group(data['group_name'],
                         data['contact_name'],
                         data['tel'],
                         None,
@@ -303,9 +304,9 @@ def store_registration(data, needs_confirmation=True, url):
                 to_addr=(data['email'], data['contact_name']),
                 subject=u'Confirmation of your registration',
                 text_body=u'Please confirm your registration:\n\n{}'.format(
-                    confirm_link)
-            mail.send()
-            return True
+                    confirm_link))
+            mail.send('localhost')
+        return True
 
 
 
@@ -346,7 +347,7 @@ def accept_registration(key):
                           ':)'.format(grp.name, grp.contact, grp.phone,
                               grp.email, grp.start_time, grp.comments)
                           )
-        mail.send()
+        mail.send('localhost')
         return True
     else:
         raise ValueError('Given key not found in DB')

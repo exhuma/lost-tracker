@@ -183,6 +183,7 @@ class Group(Base):
         self.start_time = start_time
         self.email = email
         self.comments = comments
+        self.confirmation_key = confirmation_key
 
     def __repr__(self):
         return '<Group %r>' % (self.name)

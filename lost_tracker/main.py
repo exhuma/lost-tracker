@@ -339,12 +339,15 @@ def register():
             "time": request.form.get('time'),
             "comments": request.form.get('comments'),
         }
-        loco.store_registration(data)
+        confirmation_link = url_for('confirm_registration',
+                                    _external=True)
+        loco.store_registration(g.session, data, confirmation_link)
         return "Thank you!"  # TODO!!
 
     return render_template('register.html')
 
 
+@app.route('/confirm')
 @app.route('/confirm/<key>')
 def confirm_registration(key):
     status = loco.confirm_registration(key)
