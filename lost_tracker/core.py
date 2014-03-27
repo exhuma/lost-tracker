@@ -6,6 +6,7 @@ from lost_tracker.models import (
     get_state,
     TimeSlot,
     GroupStation,
+    User,
     get_form_score_by_group,
     STATE_FINISHED,
     STATE_UNKNOWN,
@@ -14,6 +15,7 @@ from lost_tracker.models import (
     DIR_B)
 
 from sqlalchemy.exc import IntegrityError
+from envelopes import Envelope
 import logging
 
 LOG = logging.getLogger(__name__)
@@ -206,7 +208,7 @@ def get_score_by_group(group_id):
 
 def slots():
     """
-    @franky retrieve list of slots
+    maybe put this in a config file
     """
 
     return [
@@ -258,6 +260,7 @@ def store_registration(data, needs_confirmation=True):
              http://flask.pocoo.org/docs/api/#flask.url_for
     @franky: The "key" should be unique in the DB. Generate new keys as long as
              duplicates are found in the DB.
+    mailing with python: https://pypi.python.org/pypi/Envelopes/0.4
     """
     raise NotImplementedError
 
@@ -284,12 +287,34 @@ def accept_registration(key):
 
     @franky: implement
     """
-    raise NotImplementedError
+    query = Group.query.filter(
+            Group.confirmation_key = key)
+    grp = query.first()
+    if grp:
+        grp.finalized = True
+        mail = Envelope(
+                from_addr=(u'no_reply@lost.lu', u'no_reply'),
+                to_addr=(grp.email, grp.name),
+                subject=u'Welcome to Lost, your registration is completed',
+                text_body=u'Welcome to Lost in the darkness\n'
+                          '\nYour group is registrated with the following'
+                          'information:\nName:{}\nContact{}\nPhone:{}\nEmail:{}\nStrat'
+                          'time:{}\nComment:{}\nWe are waiting for YOU!'
+                          ':)'.format(grp.name, grp.contact, grp.phone,
+                              grp.email, grp.start_time, grp.comments)
+                          )
+        mail.send()
+    else:
+        raise ValueError
+
 
 
 def auth(login, password):
-    if login == password:
-        # @franky: implement
+    query = User.query.filter(and_(
+        User.login == login,
+        User.password == password))
+    user = query.first()
+    if user:
         return True
     else:
         return False
@@ -303,4 +328,10 @@ def get_user(login):
     The returnes User instance needs to only follow the prerequisites mentioned
     at https://flask-login.readthedocs.org/en/latest/#your-user-class
     """
-    return User(login)
+    query = User.query.filter(
+            User.login == login)
+    user = query.first()
+    if user:
+        return user
+    else:
+        return None

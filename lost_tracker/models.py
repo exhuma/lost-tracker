@@ -171,6 +171,7 @@ class Group(Base):
     comments = Column(Unicode)
     is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
+    finalized = Column(Boolean, server_default='false', default=False)
 
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None,
@@ -258,9 +259,6 @@ class GroupStation(Base):
 
 
 class TimeSlot(object):
-    """
-    @franky: change this into a DB object.
-    """
 
     def __init__(self, time):
         self.time = datetime.strptime(time, '%Hh%M')
@@ -290,9 +288,11 @@ class User(Base):
     password = Column(Unicode(100))
     email = Column(Unicode(100))
 
-    def __init__(self, login):
+    def __init__(self, login, password, email):
         self.login = login
         self.name = login
+        self.password = password
+        self.email = email
 
     def is_authenticated(self):
         return True
