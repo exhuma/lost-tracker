@@ -309,8 +309,7 @@ def store_registration(session, data, url, needs_confirmation=True):
         return True
 
 
-
-def confirm_registration(key):
+def confirm_registration(key, url):
     """
     If a user received a confirmation e-mail, this method will be called if the
     user clicks the confirmation key. The registration is put into 'pending'
@@ -321,7 +320,42 @@ def confirm_registration(key):
 
     @franky: implement
     """
-    raise NotImplementedError
+    query = Group.query.filter(Group.confirmation_key == key)
+    grp = query.first()
+    
+    if grp:
+       grp.is_confirmed = True
+
+       query = User.query
+       user = query.all()
+       mails[]
+       for line in user:
+            mails.append(line.email)
+
+        activation_link = '{}/{}'.format(url, key)
+        mail = Envelope(
+                from_addr=(u'no_reply@lost.lu', u'no_reply'),
+                to_addr=mails,
+                subject=u'Registration check',
+                text_body=u'Please chack and confirm this registration\n\n'
+                    'Groupname: {}\n'
+                    'Contact name: {}\n'
+                    'Phone: {}\n'
+                    'Desired departure time: {}\n'
+                    'Comments: {}\n'
+                    '\n'
+                    'Use this link to activate this registration:\n'
+                    '{}'.format(
+                        grp.name,
+                        grp.contact,
+                        grp.phone,
+                        grp.start_time,
+                        grp.comments,
+                        activation_link)
+    return True
+
+    else:
+        raise ValueError('Given key not found in DB')
 
 
 def accept_registration(key):
