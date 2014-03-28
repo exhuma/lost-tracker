@@ -41,11 +41,11 @@ lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newVa
     if (xhr.isSuccess()) {
       lost_tracker.Tabulator.LOG.fine('Successfully updated the cell');
       source.setAttribute('data-current-value', response.new_value);
+      goog.dom.setTextContent(source, response.new_value);
     } else {
       lost_tracker.Tabulator.LOG.warning('Error updating the cell!');
-      var resolvedValue = self.resolveConflict(newValue, oldValue, response['db_value']);
-      self.updateCell(source, key, datum, resolvedValue, response['db_value']);
-      // TODO: show error
+      // Ask the user for a fixed value and run updateCell recursively again.
+      self.resolveConflict(newValue, oldValue, response['db_value'], source, key, datum);
     }
   }, 'PUT', goog.json.serialize({
     'newValue': newValue,
@@ -60,22 +60,38 @@ lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newVa
  * @param {object} oldValue TODO: doc
  * @param {object} serverValue TODO: doc
  */
-lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, serverValue) {
+lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, serverValue,
+    source, key, datum) {
+  var self = this;
   var dialog1 = new goog.ui.Dialog();
   dialog1.setContent(
-    'Your Value: ' + newValue + '<br />' +
-    'Old Value: ' + oldValue + '<br />' +
-    'Server Value: ' + serverValue
+    '<input type="radio" name="selected-value" value="' + newValue + '" checked /> Your Value: ' + newValue + '<br />' +
+    '<input type="radio" name="selected-value" value="' + oldValue + '" />Old Value: ' + oldValue + '<br />' +
+    '<input type="radio" name="selected-value" value="' + serverValue + '" />Server Value: ' + serverValue
   );
   dialog1.setTitle('Data Conflict');
-  dialog1.setButtonSet(goog.ui.Dialog.ButtonSet.OK_CANCEL);
+  dialog1.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
   dialog1.setVisible(true);
   goog.events.listen(dialog1, goog.ui.Dialog.EventType.SELECT, function(e) {
     if (e.key == 'cancel') {
       return null;
-    } else {
+    } else if (e.key == 'ok') {
       var celem = dialog1.getContentElement();
-      return selectedValue;
+      var inputs = goog.dom.getElementsByTagNameAndClass('INPUT', undefined, celem);
+      var selectedValue = null;
+      goog.array.some(inputs, function(element) {
+        if (element.checked) {
+          selectedValue = element.value;
+          return true;
+        }
+      });
+      if (!goog.string.isEmptySafe(selectedValue)) {
+        self.updateCell(source, key, datum, selectedValue, serverValue);
+      } else {
+        lost_tracker.Tabulator.LOG.severe('No value received for conflict resolution.');
+      }
+    } else {
+      lost_tracker.Tabulator.LOG.shout('Unsupported dialog action: ' + e.key + '!');
     }
   });
 };
