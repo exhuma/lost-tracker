@@ -86,7 +86,7 @@ lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, 
         }
       });
       if (!goog.string.isEmptySafe(selectedValue)) {
-        self.updateCell(source, key, datum, selectedValue, serverValue);
+        self.updateCell(source, key, datum, selectedValue, oldValue);
       } else {
         lost_tracker.Tabulator.LOG.severe('No value received for conflict resolution.');
       }
