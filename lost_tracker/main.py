@@ -461,6 +461,10 @@ def update_cell_value(cls, key, datum):
         return jsonify(success=True, new_value=data['newValue'])
     else:
         current_entity = g.session.query(table).filter_by(id=key).one()
+        # If the DB value is already the same as the one we try to put, we can
+        # assume it's a success.
+        if getattr(current_entity, datum) == data['newValue']:
+            return jsonify(success=True, new_value=data['newValue'])
         return jsonify(db_value=getattr(current_entity, datum)), 409
 
 
