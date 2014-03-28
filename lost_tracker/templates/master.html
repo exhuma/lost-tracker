@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Lost Tracker {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
-    <link rel="stylesheet" href="{{url_for('static', filename='style_dark.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='common.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='dialog.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='style_dark.css')}}" />
     {%- if config.get('DEBUG', False) %}
       <script type="text/javascript" src="http://{{request.host.split(':')[0]}}:9810/compile?id=dev&amp;mode=raw"></script>
     {% else %}

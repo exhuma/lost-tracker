@@ -65,9 +65,9 @@ lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, 
   var self = this;
   var dialog1 = new goog.ui.Dialog();
   dialog1.setContent(
-    '<input type="radio" name="selected-value" value="' + newValue + '" checked /> Your Value: ' + newValue + '<br />' +
-    '<input type="radio" name="selected-value" value="' + oldValue + '" />Old Value: ' + oldValue + '<br />' +
-    '<input type="radio" name="selected-value" value="' + serverValue + '" />Server Value: ' + serverValue
+    '<input type="radio" name="selected-value" value="' + newValue + '" checked /><strong>Your Value:</strong> ' + newValue + '<br />' +
+    '<input type="radio" name="selected-value" value="' + oldValue + '" /><strong>Old Value:</strong> ' + oldValue + '<br />' +
+    '<input type="radio" name="selected-value" value="' + serverValue + '" /><strong>Server Value:</strong> ' + serverValue
   );
   dialog1.setTitle('Data Conflict');
   dialog1.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
