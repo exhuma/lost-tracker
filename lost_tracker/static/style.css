@@ -294,3 +294,9 @@ TD > DIV[contenteditable="true"] {
 #tabular TD {
     padding: 0.2em 0.5em;
 }
+
+/* {{{ Modal Dialogs */
+.modal-dialog {
+    max-width: 30em;
+}
+/* }}} */
