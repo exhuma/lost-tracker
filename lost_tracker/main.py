@@ -37,6 +37,11 @@ login_manager.init_app(app)
 login_manager.login_view = "login"
 
 
+# This is intentionally not in the config. It's tightly bound to the code. And
+# adding a table without modifying the rest of the code would not make sense.
+MODIFIABLE_TABLES = ('group', 'station', 'form')
+
+
 @login_manager.user_loader
 def load_user(userid):
     return loco.get_user(userid)
@@ -412,14 +417,29 @@ def manage():
 @login_required
 def tabularadmin(table):
 
+    if table not in MODIFIABLE_TABLES:
+        return 'Access Denied', 401
+
     if table == 'group':
         columns = [_ for _ in mdl.Group.__table__.columns
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Group.__table__.columns if _.primary_key]
         data = g.session.query(mdl.Group)
         data = data.order_by(mdl.Group.cancelled, mdl.Group.order)
+    elif table == 'station':
+        columns = [_ for _ in mdl.Station.__table__.columns
+                   if _.name not in ('id', 'confirmation_key')]
+        keys = [_ for _ in mdl.Station.__table__.columns if _.primary_key]
+        data = g.session.query(mdl.Station)
+        data = data.order_by(mdl.Station.order)
+    elif table == 'form':
+        columns = [_ for _ in mdl.Form.__table__.columns
+                   if _.name not in ('id', 'confirmation_key')]
+        keys = [_ for _ in mdl.Form.__table__.columns if _.primary_key]
+        data = g.session.query(mdl.Form)
+        data = data.order_by(mdl.Form.name)
     else:
-        return 'Unknown table: {}'.format(table), 400
+        return 'Table {} not yet supported!'.format(table), 400
 
     # prepare data for the template
     Row = namedtuple('Row', 'key, data')
@@ -441,6 +461,10 @@ def tabularadmin(table):
 @app.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
 @login_required
 def update_cell_value(cls, key, datum):
+
+    if cls not in MODIFIABLE_TABLES:
+        return 'Access Denied', 401
+
     data = request.json
     table = mdl.Base.metadata.tables[cls]
     if data['oldValue'] in ('', None):
