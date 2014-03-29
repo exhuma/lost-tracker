@@ -328,7 +328,7 @@ def confirm_registration(key, url):
 
        query = User.query
        user = query.all()
-       mails[]
+       mails = []
        for line in user:
             mails.append(line.email)
 
