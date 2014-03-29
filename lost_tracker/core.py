@@ -303,9 +303,9 @@ def store_registration(session, data, url, needs_confirmation=True):
         except IntegrityError:
             session.rollback()
             LOG.exception('Error while adding the new group {0}'.format(
-                grp_name))
+                data['group_name']))
             raise ValueError('Error while adding the new group {0}'.format(
-                grp_name))
+                data['group_name']))
 
         if needs_confirmation:
             confirm_link = '{}/{}'.format(url, urllib.quote_plus(key))
