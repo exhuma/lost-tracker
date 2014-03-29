@@ -92,6 +92,7 @@ def index():
 
 
 @app.route('/advance/<groupId>/<station_id>')
+@login_required
 def advance(groupId, station_id):
     new_state = mdl.advance(g.session, groupId, station_id)
     return jsonify(
@@ -101,6 +102,7 @@ def advance(groupId, station_id):
 
 
 @app.route('/station/<path:name>')
+@login_required
 def station(name):
     station = loco.get_stat_by_name(name)
     if not station:
@@ -148,6 +150,7 @@ def station(name):
 
 
 @app.route('/group')
+@login_required
 def init_grp_form():
     message = ""
     grps = loco.get_grps()
@@ -159,6 +162,7 @@ def init_grp_form():
 
 
 @app.route('/group', methods=['POST'])
+@login_required
 def grp_form():
     grp_name = request.form['grp_name']
     grp_contact = request.form['grp_contact']
@@ -183,12 +187,14 @@ def grp_form():
 
 
 @app.route('/add_station')
+@login_required
 def init_stat_form():
     message = ""
     return render_template('add_station.html', message=message)
 
 
 @app.route('/add_station', methods=['POST'])
+@login_required
 def stat_form():
     name = request.form['stat_name']
     contact = request.form['stat_contact']
@@ -200,6 +206,7 @@ def stat_form():
 
 
 @app.route('/form_score')
+@login_required
 def init_form_score():
     grps = loco.get_grps()
     form_scores = mdl.get_form_score_full()
@@ -216,6 +223,7 @@ def group_form_score(group_id, form_id):
 
 
 @app.route('/score/<int:group_id>', methods=['POST'])
+@login_required
 def score(group_id):
     station_id = int(request.form['station_id'])
 
@@ -256,6 +264,7 @@ def score(group_id):
 
 
 @app.route('/station_score', methods=['POST'])
+@login_required
 def set_station_score():
     group_id = request.form['group_id']
     station_id = request.form['station_id']
@@ -271,6 +280,7 @@ def set_station_score():
 
 
 @app.route('/form_score', methods=['POST'])
+@login_required
 def form_score():
     """
     Saves the score for one questionnaire into the database.  It takes the
@@ -502,6 +512,7 @@ def update_cell_value(cls, key, datum):
 
 
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])
+@login_required
 def set_time_slot(group_name):
     data = request.json
     print(data)  # TODO: data is not yet handled!
