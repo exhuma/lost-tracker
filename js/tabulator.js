@@ -20,6 +20,17 @@ lost_tracker.Tabulator = function(element) {
 
 
 /**
+ * Sets the "committed" value of a cell (data attribute and text).
+ * @param {object} setCellValue TODO: doc
+ */
+lost_tracker.Tabulator.prototype.setCellValue = function(element, value) {
+  lost_tracker.Tabulator.LOG.fine('Commiting value ' + value + ' to ' + element);
+  element.setAttribute('data-current-value', value);
+  goog.dom.setTextContent(element, value);
+};
+
+
+/**
  * 
  * @param {object} source TODO: doc
  * @param {object} key TODO: doc
@@ -28,20 +39,22 @@ lost_tracker.Tabulator = function(element) {
  * @param {object} oldValue TODO: doc
  */
 lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newValue, oldValue) {
+  lost_tracker.Tabulator.LOG.fine('Setting ' + datum + ' on item ' + key +
+      ' from ' + oldValue +
+      ' to ' + newValue);
   var self = this;
   if (newValue == oldValue) {
     lost_tracker.Tabulator.LOG.fine('No update needed (oldValue=newValue)');
+    self.setCellValue(source, newValue);
     return;
   }
-  lost_tracker.Tabulator.LOG.fine('Setting ' + datum + ' on item ' + key + ' to ' + newValue);
   var url = '/cell/' + this.table.getAttribute('data-name') + '/' + key + '/' + datum;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
     var response = xhr.getResponseJson();
     if (xhr.isSuccess()) {
       lost_tracker.Tabulator.LOG.fine('Successfully updated the cell');
-      source.setAttribute('data-current-value', response.new_value);
-      goog.dom.setTextContent(source, response.new_value);
+      self.setCellValue(source, response.new_value);
     } else {
       lost_tracker.Tabulator.LOG.warning('Error updating the cell!');
       // Ask the user for a fixed value and run updateCell recursively again.
@@ -73,9 +86,7 @@ lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, 
   dialog1.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
   dialog1.setVisible(true);
   goog.events.listen(dialog1, goog.ui.Dialog.EventType.SELECT, function(e) {
-    if (e.key == 'cancel') {
-      return null;
-    } else if (e.key == 'ok') {
+    if (e.key == 'ok') {
       var celem = dialog1.getContentElement();
       var inputs = goog.dom.getElementsByTagNameAndClass('INPUT', undefined, celem);
       var selectedValue = null;
@@ -86,7 +97,7 @@ lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, 
         }
       });
       if (!goog.string.isEmptySafe(selectedValue)) {
-        self.updateCell(source, key, datum, selectedValue, oldValue);
+        self.updateCell(source, key, datum, selectedValue, serverValue);
       } else {
         lost_tracker.Tabulator.LOG.severe('No value received for conflict resolution.');
       }
