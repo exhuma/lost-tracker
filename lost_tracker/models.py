@@ -161,7 +161,7 @@ class Group(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
     order = Column(Integer)
-    cancelled = Column(Boolean)
+    cancelled = Column(Boolean, default=False, server_default='false')
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
     direction = Column(Unicode)

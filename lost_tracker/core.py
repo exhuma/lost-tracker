@@ -1,3 +1,5 @@
+import re
+
 from lost_tracker.models import (
     User,
     Group,
@@ -287,6 +289,14 @@ def store_registration(session, data, url, needs_confirmation=True):
                         data['comments'],
                         key
                         )
+        try:
+            # Tries to put something sensical into the "order" field.
+            # If unsuccessful, leave it empty. Can be edited later.
+            new_grp.order = int(re.sub(r'[^0-9]', '', data['time']))
+        except ValueError as exc:
+            LOG.warning('Unable to parse {!r} into a number ({})'.format(
+                data['time'], exc))
+
         session.add(new_grp)
         try:
             session.flush()
