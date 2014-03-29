@@ -270,11 +270,11 @@ def store_registration(session, data, url, needs_confirmation=True):
         raise ValueError('Group {} already registered'.format(
             data['group_name']))
     else:
-        key = urllib.quote_plus(os.urandom(50).encode('base64')[0:20])
+        key = os.urandom(50).encode('base64')[0:20]
         qry = Group.query.filter_by(confirmation_key=key)
         check_key = qry.first()
         while check_key:
-            key = urllib.quote_plus(os.urandom(50).encode('base64')[0:20])
+            key = os.urandom(50).encode('base64')[0:20]
             qry = Group.query.filter_by(confirmation_key=key)
             check_key = qry.first()
 
@@ -298,7 +298,7 @@ def store_registration(session, data, url, needs_confirmation=True):
                 grp_name))
 
         if needs_confirmation:
-            confirm_link = '{}/{}'.format(url,key)
+            confirm_link = '{}/{}'.format(url, urllib.quote_plus(key))
             mail = Envelope(
                 from_addr=(u'no_reply@lost.lu', u'no_reply'),
                 to_addr=(data['email'], data['contact_name']),
@@ -309,7 +309,7 @@ def store_registration(session, data, url, needs_confirmation=True):
         return True
 
 
-def confirm_registration(key, url):
+def confirm_registration(key, activation_url):
     """
     If a user received a confirmation e-mail, this method will be called if the
     user clicks the confirmation key. The registration is put into 'pending'
@@ -317,8 +317,6 @@ def confirm_registration(key, url):
     registrations. This e-mail will contain an "accept" link with the same
     key. Managers need to verify all the data (start time, available time
     slots, user comments).
-
-    @franky: implement
     """
     query = Group.query.filter(Group.confirmation_key == key)
     grp = query.first()
@@ -332,26 +330,23 @@ def confirm_registration(key, url):
         for line in user:
              mails.append(line.email)
 
-        activation_link = '{}/{}'.format(url, key)
         mail = Envelope(
                 from_addr=(u'no_reply@lost.lu', u'no_reply'),
                 to_addr=mails,
                 subject=u'Registration check',
-                text_body=u'Please chack and confirm this registration\n\n'
-                    'Groupname: {}\n'
-                    'Contact name: {}\n'
-                    'Phone: {}\n'
-                    'Desired departure time: {}\n'
-                    'Comments: {}\n'
+                text_body=u'Please check and confirm this registration\n\n'
+                    'Groupname: {0.name}\n'
+                    'Contact name: {0.contact}\n'
+                    'Contact e-mail: {0.email}\n'
+                    'Phone: {0.phone}\n'
+                    'Desired departure time: {0.start_time}\n'
+                    'Comments: {0.comments}\n'
                     '\n'
                     'Use this link to activate this registration:\n'
-                    '{}'.format(
-                        grp.name,
-                        grp.contact,
-                        grp.phone,
-                        grp.start_time,
-                        grp.comments,
-                        activation_link))
+                    '{1}'.format(
+                        grp,
+                        activation_url))
+        mail.send('localhost')
         return True
 
     else:

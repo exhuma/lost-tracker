@@ -358,7 +358,11 @@ def register():
 @app.route('/confirm')
 @app.route('/confirm/<key>')
 def confirm_registration(key):
-    status = loco.confirm_registration(key)
+    status = loco.confirm_registration(
+        key,
+        activation_url=url_for('accept_registration',
+                               key=key,
+                               _external=True))
     return "Your registration has been confirmed: {}!".format(status)  # TODO!!
 
 
@@ -366,7 +370,7 @@ def confirm_registration(key):
 @login_required
 def accept_registration(key):
     flash('Accepted registration with key {}'.format(key))
-    #status = loco.accept_registration(key)
+    status = loco.accept_registration(key)
     return redirect(url_for('index'))
 
 
