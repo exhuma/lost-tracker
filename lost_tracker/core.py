@@ -272,11 +272,11 @@ def store_registration(session, data, url, needs_confirmation=True):
         raise ValueError('Group {} already registered'.format(
             data['group_name']))
     else:
-        key = os.urandom(50).encode('base64')[0:20]
+        key = os.urandom(50).encode('base64').replace('/', '')[0:20]
         qry = Group.query.filter_by(confirmation_key=key)
         check_key = qry.first()
         while check_key:
-            key = os.urandom(50).encode('base64')[0:20]
+            key = os.urandom(50).encode('base64').replace('/', '')[0:20]
             qry = Group.query.filter_by(confirmation_key=key)
             check_key = qry.first()
 
