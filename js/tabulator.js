@@ -78,11 +78,13 @@ lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, 
   var self = this;
   var dialog1 = new goog.ui.Dialog();
   dialog1.setContent(
-    '<input type="radio" name="selected-value" value="' + newValue + '" checked /><strong>Your Value:</strong> ' + newValue + '<br />' +
-    '<input type="radio" name="selected-value" value="' + oldValue + '" /><strong>Old Value:</strong> ' + oldValue + '<br />' +
-    '<input type="radio" name="selected-value" value="' + serverValue + '" /><strong>Server Value:</strong> ' + serverValue
+    'Seit dem letzten Seitenaufruf wurden die Daten auf dem Server ver&auml;ndert! ' +
+    'Bitte w&auml;hlen Sie einen der folgenden Werte aus, welcher gespeichert werden soll:<br /><br />' +
+    '<input type="radio" name="selected-value" value="' + newValue + '" checked /><strong>Ihr eben eingegebener Wert:</strong> ' + newValue + '<br />' +
+    '<input type="radio" name="selected-value" value="' + oldValue + '" /><strong>Vorheriger Wert vom Server:</strong> ' + oldValue + '<br />' +
+    '<input type="radio" name="selected-value" value="' + serverValue + '" /><strong>Jetziger Wert auf dem Server:</strong> ' + serverValue
   );
-  dialog1.setTitle('Data Conflict');
+  dialog1.setTitle('Datenkonflikt');
   dialog1.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
   dialog1.setVisible(true);
   goog.events.listen(dialog1, goog.ui.Dialog.EventType.SELECT, function(e) {
