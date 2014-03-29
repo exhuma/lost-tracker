@@ -6,16 +6,16 @@
   <thead>
     <tr>
       <th>Slot</th>
-      <th>Direction A</th>
-      <th>Direction B</th>
+      <th>{{dir_a}}</th>
+      <th>{{dir_b}}</th>
     </tr>
   </thead>
   <tbody>
     {% for slot in slots %}
     <tr>
-      <td>{{ slot.time.strftime('%H:%M') }}</td>
-      <td data-group_id="{{groups_a[slot] and groups_a[slot].id}}" contenteditable="true">{{ groups_a[slot] }}</td>
-      <td data-group_id="{{groups_b[slot] and groups_b[slot].id}}" contenteditable="true">{{ groups_b[slot] }}</td>
+      <td>{{ slot.time.strftime('%Hh%M') }}</td>
+      <td data-group_id="{{groups_a[slot] and groups_a[slot].id}}" data-direction="{{dir_a}}" contenteditable="true">{{ groups_a[slot] }}</td>
+      <td data-group_id="{{groups_b[slot] and groups_b[slot].id}}" data-direction="{{dir_b}}" contenteditable="true">{{ groups_b[slot] }}</td>
     </tr>
     {% endfor %}
   </tbody>

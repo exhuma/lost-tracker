@@ -55,7 +55,7 @@ lost_tracker.SlotEditor.prototype.updateTooltip = function(
  * Callback which is executed when the text of a slot changed.
  *
  * @param {string} groupName The name of the group (the new value of the cell).
- * @param {string} time {object} The start-time (time-slot) as HH:MM.
+ * @param {string} time {object} The start-time (time-slot) as HHhMM.
  * @param {string} oldValue {object} The value of the cell *before* the change
  *     (the group-name which was in the cell before the change, or empty).
  */
@@ -97,7 +97,10 @@ lost_tracker.SlotEditor.prototype.slotTextChanged = function(node, groupName,
       // TODO: show error
       lost_tracker.SlotEditor.LOG.severe('XHR failed!');
     }
-  }, 'PUT', goog.json.serialize({"new_slot": newValue}),
+  }, 'PUT', goog.json.serialize({
+    'new_slot': newValue,
+    'direction': node.getAttribute('data-direction')
+  }),
   {'Content-Type': 'application/json'});
 
 };

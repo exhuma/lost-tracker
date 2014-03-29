@@ -427,6 +427,8 @@ def manage():
 
     return render_template('manage.html',
                            slots=slots,
+                           dir_a=mdl.DIR_A,
+                           dir_b=mdl.DIR_B,
                            groups_a=groups_a,
                            groups_b=groups_b,
                            groups_none=groups_none)
@@ -515,12 +517,17 @@ def update_cell_value(cls, key, datum):
 @login_required
 def set_time_slot(group_name):
     data = request.json
-    print(data)  # TODO: data is not yet handled!
+    if data['direction'] not in (mdl.DIR_A, mdl.DIR_B):
+        return jsonify(
+            message="Incorrect value for direction: {!r}".format(
+                data['direction'])), 400
     group = loco.get_grp_by_name(group_name)
     if not group:
-        # TODO: If the group is not found, add it to the DB.
-        return '"Group not found"', 404
-    return '{{"is_success": true, "group_id": {}}}'.format(group.id)  # TODO
+        group = mdl.Group(name=group_name, start_time=data['new_slot'])
+        g.session.add(group)
+    group.start_time = data['new_slot']
+    group.direction = data['direction']
+    return '{{"is_success": true, "group_id": {}}}'.format(group.id)
 
 
 @app.route('/js-fragment/group-tooltip/<int:group_id>')

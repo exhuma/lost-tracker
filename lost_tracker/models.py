@@ -6,6 +6,7 @@ from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
 from sqlalchemy.orm import relationship, deferred
 from sqlalchemy.sql import select
 from lost_tracker.database import Base
+from lost_tracker.util import start_time_to_order
 
 STATE_UNKNOWN = 0
 STATE_ARRIVED = 1
@@ -165,7 +166,7 @@ class Group(Base):
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
     direction = Column(Unicode)
-    start_time = Column(Unicode(5))
+    _start_time = Column(Unicode(5), name="start_time")
     stations = relationship('GroupStation')
     email = Column(Unicode)
     comments = Column(Unicode)
@@ -191,6 +192,14 @@ class Group(Base):
     def __str__(self):
         return self.name
 
+    @property
+    def start_time(self):
+        return self._start_time
+
+    @start_time.setter
+    def start_time(self, value):
+        self._start_time = value
+        self.order = start_time_to_order(value)
 
 class Station(Base):
     __tablename__ = 'station'
