@@ -127,6 +127,26 @@ DT {
     margin-top: 0.5em;
 }
 
+/* {{{ Flashes */
+
+#flashes {
+    line-height: 2;
+}
+
+#flashes DIV.info {
+    background: hsl(230, 40%, 10%);
+    border: 1px solid hsl(230, 50%, 20%);
+    color: hsl(230, 20%, 50%);
+}
+
+#flashes DIV.error {
+    background: hsl(20, 40%, 10%);
+    border: 1px solid hsl(20, 50%, 20%);
+    color: hsl(20, 70%, 50%);
+}
+
+/* }}} */
+
 /* {{{ Modal Dialogs */
 .modal-dialog {
   background: #000000;

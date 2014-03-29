@@ -174,10 +174,11 @@ def grp_form():
             grp_direction,
             grp_start,
             g.session)
+        flash(message, 'info')
     except ValueError as exc:
         message = exc
+        flash(message, 'error')
 
-    flash(message)
     return redirect(url_for("init_grp_form"))
 
 
@@ -194,7 +195,7 @@ def stat_form():
     phone = request.form['stat_phone']
 
     message = loco.add_station(name, contact, phone, g.session)
-    flash(message)
+    flash(message, 'info')
     return redirect(url_for("init_stat_form"))
 
 
@@ -311,7 +312,7 @@ def add_form():
     name = request.form['name']
     max_score = int(request.form['max_score'])
     message = loco.add_form_db(form_id, name, max_score, g.session)
-    flash(message)
+    flash(message, 'info')
     return redirect(url_for("init_add_form"))
 
 
@@ -369,8 +370,12 @@ def confirm_registration(key):
 @app.route('/accept/<key>')
 @login_required
 def accept_registration(key):
-    flash('Accepted registration with key {}'.format(key))
-    status = loco.accept_registration(key)
+    try:
+        loco.accept_registration(key)
+        flash('Accepted registration with key {}'.format(key), 'info')
+    except ValueError as exc:
+        flash('Registration was already accepted!', 'info')
+        app.logger.debug(exc)
     return redirect(url_for('index'))
 
 
@@ -381,10 +386,10 @@ def login():
         user = loco.get_user(request.form['login'])
         if authed:
             login_user(user, remember=True)
-            flash('Logged in successfully')
+            flash('Logged in successfully', 'info')
             return redirect(request.values.get('next') or url_for('index'))
         else:
-            flash("Invalid credentials!")
+            flash("Invalid credentials!", 'error')
             return render_template('login.html')
     else:
         return render_template('login.html')

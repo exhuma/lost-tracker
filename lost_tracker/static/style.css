@@ -237,14 +237,14 @@ TD.state {
 }
 
 #flashes DIV {
-    max-width: 10em;
+    max-width: 30em;
     text-align: center;
     font-weight: bold;
     border: 0.1em solid black;
     margin: 0.2em auto;
 }
 
-#flashes DIV.message {
+#flashes DIV.info {
     background: #bfb682; /* Old browsers */
     background: -moz-linear-gradient(top,  hsl(51,32%,63%) 0%, hsl(51,26%,59%) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,hsl(51,32%,63%)), color-stop(100%,hsl(51,26%,59%))); /* Chrome,Safari4+ */
