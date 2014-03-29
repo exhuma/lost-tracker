@@ -37,6 +37,11 @@
       </span>
     </div>
 
+    <div id="submenu">
+      {% block submenu %}
+      {% endblock %}
+    </div>
+
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
         <div id="flashes">
