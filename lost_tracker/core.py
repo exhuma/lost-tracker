@@ -322,15 +322,15 @@ def confirm_registration(key, url):
     """
     query = Group.query.filter(Group.confirmation_key == key)
     grp = query.first()
-    
-    if grp:
-       grp.is_confirmed = True
 
-       query = User.query
-       user = query.all()
-       mails = []
-       for line in user:
-            mails.append(line.email)
+    if grp:
+        grp.is_confirmed = True
+
+        query = User.query
+        user = query.all()
+        mails = []
+        for line in user:
+             mails.append(line.email)
 
         activation_link = '{}/{}'.format(url, key)
         mail = Envelope(
@@ -351,8 +351,8 @@ def confirm_registration(key, url):
                         grp.phone,
                         grp.start_time,
                         grp.comments,
-                        activation_link)
-    return True
+                        activation_link))
+        return True
 
     else:
         raise ValueError('Given key not found in DB')
@@ -368,7 +368,7 @@ def accept_registration(key):
     """
     query = Group.query.filter(Group.confirmation_key == key)
     grp = query.first()
-    
+
     if grp:
         if grp.finalized:
             raise ValueError('Registration already finalized')
