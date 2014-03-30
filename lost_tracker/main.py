@@ -1,6 +1,8 @@
 from collections import namedtuple
 from operator import attrgetter
 
+from sqlalchemy.orm.exc import NoResultFound
+
 from config_resolver import Config
 from flask.ext.login import (
     LoginManager,
@@ -58,6 +60,10 @@ def inject_context():
 def bind_metadata():
     Base.metadata.bind = create_engine(app.localconf.get('db', 'dsn'))
 
+
+@app.errorhandler(NoResultFound)
+def error_handler(request):
+    return 'No such entity!', 404
 
 @app.before_request
 def before_request():
@@ -361,7 +367,11 @@ def register():
             loco.store_registration(g.session, data, confirmation_link)
         except ValueError as exc:
             return 'Error: ' + str(exc), 400
-        return "Thank you!"  # TODO!!
+        return render_template('notice.html',
+                               message='Registration accepted. You will '
+                               'receive a confirmation e-mail any second now. '
+                               'You need to confirm this e-mail before the '
+                               'registration will be processed!')
 
     return render_template('register.html')
 
@@ -374,19 +384,45 @@ def confirm_registration(key):
         activation_url=url_for('accept_registration',
                                key=key,
                                _external=True))
-    return "Your registration has been confirmed: {}!".format(status)  # TODO!!
+    return render_template('notice.html',
+                           message='Thank you. Your registration has been '
+                           'confirmed and the lost-team has been notified '
+                           'about your entry. Once everything is confirmed '
+                           'you will recieve another e-mail with additional '
+                           'details.')
 
 
 @app.route('/accept/<key>')
 @login_required
 def accept_registration(key):
-    try:
-        loco.accept_registration(key)
-        flash('Accepted registration with key {}'.format(key), 'info')
-    except ValueError as exc:
-        flash('Registration was already accepted!', 'info')
-        app.logger.debug(exc)
-    return redirect(url_for('index'))
+    group = loco.get_grp_by_registration_key(key)
+
+    if group.finalized:
+        flash('This group has already been accepted!', 'info')
+
+    return render_template('edit_group.html',
+                           group=group,
+                           dir_a=mdl.DIR_A,
+                           dir_b=mdl.DIR_B)
+
+
+@app.route('/group/<id>', methods=['POST'])
+@login_required
+def save_group_info(id):
+    group = loco.get_grps_by_id(id)
+    if not group.finalized:
+        loco.accept_registration(group.confirmation_key, request.form)
+        flash('Accepted registration for group {}'.format(group.name), 'info')
+        return redirect(url_for('index'))
+    else:
+        loco.update_group(id,
+                          request.form,
+                          request.form['send_email'] == 'true')
+        flash('Group {} successfully updated!'.format(request.form['name']),
+              'info')
+        if request.form['send_email'] == 'true':
+            flash('E-Mail sent successfully!', 'info')
+            return redirect(url_for('tabularadmin', table='group'))
 
 
 @app.route('/login', methods=['GET', 'POST'])

@@ -1,0 +1,11 @@
+{% extends "master_narrow.html" %}
+
+{% block content %}
+    <div id="logo">
+      <img src="{{url_for('static', filename='images/logo2014.png')}}" />
+    </div>
+
+    <h1>Notice</h1>
+
+    <div class="note">{{message}}</div>
+{% endblock %}
