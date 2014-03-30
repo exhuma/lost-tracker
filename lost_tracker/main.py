@@ -167,31 +167,6 @@ def init_grp_form():
                            DIR_B=mdl.DIR_B)
 
 
-@app.route('/group', methods=['POST'])
-@login_required
-def grp_form():
-    grp_name = request.form['grp_name']
-    grp_contact = request.form['grp_contact']
-    grp_tel = request.form['grp_tel']
-    grp_direction = request.form['grp_direction']
-    grp_start = request.form['grp_start']
-
-    try:
-        message = loco.add_grp(
-            grp_name,
-            grp_contact,
-            grp_tel,
-            grp_direction,
-            grp_start,
-            g.session)
-        flash(message, 'info')
-    except ValueError as exc:
-        message = exc
-        flash(message, 'error')
-
-    return redirect(url_for("init_grp_form"))
-
-
 @app.route('/add_station')
 @login_required
 def init_stat_form():
@@ -319,17 +294,6 @@ def init_add_form():
     message = ""
     forms = loco.get_forms()
     return render_template('add_form.html', message=message, forms=forms)
-
-
-@app.route('/add_form', methods=['POST'])
-@login_required
-def add_form():
-    form_id = int(request.form['form_id'])
-    name = request.form['name']
-    max_score = int(request.form['max_score'])
-    message = loco.add_form_db(form_id, name, max_score, g.session)
-    flash(message, 'info')
-    return redirect(url_for("init_add_form"))
 
 
 @app.route('/scoreboard')
@@ -571,6 +535,74 @@ def group_tooltip(group_id):
     group = loco.get_grps_by_id(group_id)
     return render_template('group-tooltip.html',
                            group=group)
+
+
+@app.route('/station', methods=['POST'])
+@login_required
+def add_new_station():
+    data = request.json
+    message = loco.add_station(
+        data['name'],
+        data['contact'],
+        data['phone'],
+        g.session)
+    return jsonify(message=message)
+
+
+@app.route('/form', methods=['POST'])
+@login_required
+def add_new_form():
+    data = request.json
+    name = data['name']
+    max_score = int(data['max_score'])
+    form = loco.add_form(g.session, name, max_score)
+    try:
+        g.session.commit()
+        return jsonify(message='Added {}'.format(form))
+    except Exception as exc:
+        g.session.rollback()
+        return jsonify(message='Error: {}'.format(exc)), 400
+
+
+@app.route('/group', methods=['POST'])
+@login_required
+def add_new_group():
+    data = request.json
+    grp_name = data['name']
+    grp_contact = data['contact']
+    grp_tel = data['phone']
+    grp_direction = data['direction']
+    grp_start = data['start_time']
+
+    message = loco.add_grp(
+        grp_name,
+        grp_contact,
+        grp_tel,
+        grp_direction,
+        grp_start,
+        g.session)
+    return jsonify(message=message)
+
+
+@app.route('/group/<int:id>', methods=['DELETE'])
+@login_required
+def delete_group(id):
+    loco.delete_group(id)
+    return jsonify(status='ok')
+
+
+@app.route('/station/<int:id>', methods=['DELETE'])
+@login_required
+def delete_station(id):
+    loco.delete_station(id)
+    return jsonify(status='ok')
+
+
+@app.route('/form/<int:id>', methods=['DELETE'])
+@login_required
+def delete_form(id):
+    loco.delete_form(id)
+    return jsonify(status='ok')
 
 
 if __name__ == '__main__':

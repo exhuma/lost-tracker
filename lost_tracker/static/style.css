@@ -23,6 +23,10 @@ H6 {
     margin: 0 auto;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 DIV.group{
     border-bottom: 0.1em solid rgba(0, 0, 0, 0.3);
     line-height: 2em;
