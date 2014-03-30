@@ -1,5 +1,20 @@
 {% extends "master.html" %}
 
+{% macro render_empty_cell(col) -%}
+  {% if col.type.__class__.__name__ == 'Boolean' -%}
+    <td><input
+      class="tabularcell"
+      data-cell-name="{{col.name}}"
+      data-current-value="false"
+      type="checkbox" /></td>
+  {% else %}
+    <td
+      class="tabularcell"
+      data-cell-name="{{col.name}}"
+      data-current-value=""></td>
+  {%- endif %}
+{%- endmacro %}
+
 {% macro render_cell(cell) -%}
   {% if cell.value -%}
     {% if cell.type == 'boolean' -%}
@@ -58,6 +73,14 @@
     </tr>
     {%- endfor %}
   </tbody>
+  <tfoot>
+    <tr>
+      <td><img class="save_icon clickable" src="{{url_for('static', filename='icons/save.png')}}" /></td>
+      {% for col in columns -%}
+        {{ render_empty_cell(col) }}
+      {%- endfor %}
+    </tr>
+  </tfoot>
 </table>
 
 <script type="text/javascript" charset="utf-8">

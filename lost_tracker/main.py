@@ -167,31 +167,6 @@ def init_grp_form():
                            DIR_B=mdl.DIR_B)
 
 
-@app.route('/group', methods=['POST'])
-@login_required
-def grp_form():
-    grp_name = request.form['grp_name']
-    grp_contact = request.form['grp_contact']
-    grp_tel = request.form['grp_tel']
-    grp_direction = request.form['grp_direction']
-    grp_start = request.form['grp_start']
-
-    try:
-        message = loco.add_grp(
-            grp_name,
-            grp_contact,
-            grp_tel,
-            grp_direction,
-            grp_start,
-            g.session)
-        flash(message, 'info')
-    except ValueError as exc:
-        message = exc
-        flash(message, 'error')
-
-    return redirect(url_for("init_grp_form"))
-
-
 @app.route('/add_station')
 @login_required
 def init_stat_form():
@@ -571,6 +546,49 @@ def group_tooltip(group_id):
     group = loco.get_grps_by_id(group_id)
     return render_template('group-tooltip.html',
                            group=group)
+
+
+@app.route('/station', methods=['POST'])
+@login_required
+def add_new_station():
+    data = request.json
+    message = loco.add_station(
+        data['name'],
+        data['contact'],
+        data['phone'],
+        g.session)
+    return jsonify(message=message)
+
+
+@app.route('/form', methods=['POST'])
+@login_required
+def add_new_form():
+    raise NotImplementedError  # Forms have no SERIAL field!
+    data = request.json
+    name = data['name']
+    max_score = int(data['max_score'])
+    message = loco.add_form_db(name, max_score, g.session)
+    return jsonify(message=message)
+
+
+@app.route('/group', methods=['POST'])
+@login_required
+def add_new_group():
+    data = request.json
+    grp_name = data['name']
+    grp_contact = data['contact']
+    grp_tel = data['phone']
+    grp_direction = data['direction']
+    grp_start = data['start_time']
+
+    message = loco.add_grp(
+        grp_name,
+        grp_contact,
+        grp_tel,
+        grp_direction,
+        grp_start,
+        g.session)
+    return jsonify(message=message)
 
 
 @app.route('/group/<int:id>', methods=['DELETE'])
