@@ -176,18 +176,10 @@ def add_station(stat_name, contact, phone, session):
         stat_name, contact, phone)
 
 
-def add_form_db(form_id, name, max_score, session):
-    tmp_form = get_form_by_id(form_id)
-    if tmp_form:
-        tmp_form.name = name
-        tmp_form.max_score = max_score
-        return "Form {0} updated: {1} - max: {2}".format(
-            form_id, name, max_score)
-    else:
-        new_form = Form(form_id, name, max_score)
-        session.add(new_form)
-        return "Form added: {0} - {1} - max: {2}".format(
-            form_id, name, max_score)
+def add_form(session, name, max_score):
+    new_form = Form(name, max_score)
+    session.add(new_form)
+    return new_form
 
 
 def get_forms():

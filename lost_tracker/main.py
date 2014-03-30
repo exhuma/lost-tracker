@@ -296,17 +296,6 @@ def init_add_form():
     return render_template('add_form.html', message=message, forms=forms)
 
 
-@app.route('/add_form', methods=['POST'])
-@login_required
-def add_form():
-    form_id = int(request.form['form_id'])
-    name = request.form['name']
-    max_score = int(request.form['max_score'])
-    message = loco.add_form_db(form_id, name, max_score, g.session)
-    flash(message, 'info')
-    return redirect(url_for("init_add_form"))
-
-
 @app.route('/scoreboard')
 def scoreboard():
     result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
@@ -563,12 +552,16 @@ def add_new_station():
 @app.route('/form', methods=['POST'])
 @login_required
 def add_new_form():
-    raise NotImplementedError  # Forms have no SERIAL field!
     data = request.json
     name = data['name']
     max_score = int(data['max_score'])
-    message = loco.add_form_db(name, max_score, g.session)
-    return jsonify(message=message)
+    form = loco.add_form(g.session, name, max_score)
+    try:
+        g.session.commit()
+        return jsonify(message='Added {}'.format(form))
+    except Exception as exc:
+        g.session.rollback()
+        return jsonify(message='Error: {}'.format(exc)), 400
 
 
 @app.route('/group', methods=['POST'])
