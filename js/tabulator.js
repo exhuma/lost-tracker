@@ -198,10 +198,13 @@ lost_tracker.Tabulator.prototype.showError= function(message) {
  */
 lost_tracker.Tabulator.prototype.deleteRow = function(node) {
   var self = this;
+  var loaderUrl = '/static/icons/loading.gif';
+  var defaultImage = node.src;
   var row = goog.dom.getAncestorByTagNameAndClass(node, 'TR');
   var table = goog.dom.getAncestorByTagNameAndClass(node, 'TABLE');
   var id = row.getAttribute('id');
   var table = table.getAttribute('data-name');
+  node.src = loaderUrl;
   var confirmationDialog = new goog.ui.Dialog();
   confirmationDialog.setContent(
     'Sind Sie sicher dass sie die Zeile ' + id + ' l&ouml;schen wollen?'
@@ -221,6 +224,7 @@ lost_tracker.Tabulator.prototype.deleteRow = function(node) {
         }
       }, 'DELETE');
     }
+    node.src = defaultImage;;
   });
 };
 
@@ -232,11 +236,14 @@ lost_tracker.Tabulator.prototype.deleteRow = function(node) {
  */
 lost_tracker.Tabulator.prototype.saveNewRow = function(node) {
   var self = this;
+  var loaderUrl = '/static/icons/loading.gif';
+  var defaultImage = node.src;
   var row = goog.dom.getAncestorByTagNameAndClass(node, 'TR');
   var table = goog.dom.getAncestorByTagNameAndClass(node, 'TABLE');
   var data = row.getAttribute('data-values');
   var table = table.getAttribute('data-name');
   var url = '/' + table;
+  node.src = loaderUrl;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
     if (xhr.isSuccess()) {
@@ -249,6 +256,7 @@ lost_tracker.Tabulator.prototype.saveNewRow = function(node) {
     } else {
       self.showError('Daten wurden nicht gespeichert :(');
     }
+    node.src = defaultImage;;
   }, 'POST', data, {'Content-Type': 'application/json'});
 };
 
@@ -266,11 +274,9 @@ lost_tracker.Tabulator.prototype.decorate = function() {
     });
   });
 
-  var elems = goog.dom.getElementsByClass('save_icon');
-  goog.array.forEach(elems, function(elmnt) {
-    goog.events.listen(elmnt, goog.events.EventType.CLICK, function(evt) {
-      self.saveNewRow(elmnt);
-    });
+  var saveIcon = goog.dom.getElementsByClass('save_icon')[0];
+  goog.events.listen(saveIcon, goog.events.EventType.CLICK, function(evt) {
+    self.saveNewRow(saveIcon);
   });
 
   var body = goog.dom.getElementsByTagNameAndClass('TBODY', undefined, this.table)[0];
