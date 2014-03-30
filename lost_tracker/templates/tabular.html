@@ -51,7 +51,7 @@
   <tbody>
     {% for key, cols in data -%}
     <tr {{key|xmlattr}}>
-      <td>&nbsp;</td>
+      <td><img class="delete_icon clickable" src="{{url_for('static', filename='icons/delete.png')}}" /></td>
       {% for cell in cols -%}
         {{ render_cell(cell) }}
       {%- endfor %}

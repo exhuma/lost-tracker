@@ -462,3 +462,15 @@ def get_user(login):
         return user
     else:
         return None
+
+
+def delete_group(id):
+    Group.query.filter(Group.id == id).delete()
+
+
+def delete_station(id):
+    Station.query.filter(Station.id == id).delete()
+
+
+def delete_form(id):
+    Form.query.filter(Form.id == id).delete()

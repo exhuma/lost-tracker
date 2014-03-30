@@ -573,6 +573,27 @@ def group_tooltip(group_id):
                            group=group)
 
 
+@app.route('/group/<int:id>', methods=['DELETE'])
+@login_required
+def delete_group(id):
+    loco.delete_group(id)
+    return jsonify(status='ok')
+
+
+@app.route('/station/<int:id>', methods=['DELETE'])
+@login_required
+def delete_station(id):
+    loco.delete_station(id)
+    return jsonify(status='ok')
+
+
+@app.route('/form/<int:id>', methods=['DELETE'])
+@login_required
+def delete_form(id):
+    loco.delete_form(id)
+    return jsonify(status='ok')
+
+
 if __name__ == '__main__':
     app.run(debug=app.localconf.get('devserver', 'debug', default=False),
             host=app.localconf.get('devserver', 'listen'),

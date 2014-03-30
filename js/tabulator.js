@@ -148,11 +148,66 @@ lost_tracker.Tabulator.prototype.attachCheckEvents = function(element) {
 
 
 /**
+ * Displays an error dialog
+ * 
+ * @param {string} message The message shown to the user.
+ */
+lost_tracker.Tabulator.prototype.showError= function(message) {
+  var confirmationDialog = new goog.ui.Dialog();
+  confirmationDialog.setContent(message);
+  confirmationDialog.setTitle('Es trat ein Fehler auf dem Server auf!');
+  confirmationDialog.setButtonSet(goog.ui.Dialog.ButtonSet.OK);
+  confirmationDialog.setVisible(true);
+};
+
+
+/**
+ * Delete a row containing a given cell.
+ * 
+ * @param {node} node: The HTML node contained in the row.
+ */
+lost_tracker.Tabulator.prototype.deleteRow = function(node) {
+  var self = this;
+  var row = goog.dom.getAncestorByTagNameAndClass(node, 'TR');
+  var table = goog.dom.getAncestorByTagNameAndClass(node, 'TABLE');
+  var id = row.getAttribute('id');
+  var table = table.getAttribute('data-name');
+  var confirmationDialog = new goog.ui.Dialog();
+  confirmationDialog.setContent(
+    'Sind Sie sicher dass sie die Zeile ' + id + ' l&ouml;schen wollen?'
+  );
+  confirmationDialog.setTitle('Sind Sie sicher?');
+  confirmationDialog.setButtonSet(goog.ui.Dialog.ButtonSet.YES_NO);
+  confirmationDialog.setVisible(true);
+  goog.events.listen(confirmationDialog, goog.ui.Dialog.EventType.SELECT, function(e) {
+    if (e.key == 'yes') {
+      var url = '/' + table + '/' + id;
+      goog.net.XhrIo.send(url, function(evt) {
+        var xhr = evt.target;
+        if (xhr.isSuccess()) {
+          goog.dom.removeNode(row);
+        } else {
+          self.showError('Dies kann auftreten wenn die Datenbank aus Sicherheitsgr&uuml;nden das L&ouml;schen verhindert!');
+        }
+      }, 'DELETE');
+    }
+  });
+};
+
+
+/**
  * 
  * @param {object}  TODO: doc
  */
 lost_tracker.Tabulator.prototype.decorate = function() {
   var self = this;
+  var elems = goog.dom.getElementsByClass('delete_icon');
+  goog.array.forEach(elems, function(elmnt) {
+    goog.events.listen(elmnt, goog.events.EventType.CLICK, function(evt) {
+      self.deleteRow(elmnt);
+    });
+  });
+
   var elems = goog.dom.getElementsByClass('tabularcell');
   goog.array.forEach(elems, function(elmnt) {
     if (elmnt.tagName == 'TD') {
