@@ -5,3 +5,5 @@
 /dist
 /env
 /lost_tracker.egg-info
+*.mo
+/messages.pot

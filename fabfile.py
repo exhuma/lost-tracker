@@ -84,3 +84,26 @@ def build():
     Compile JS sources.
     """
     fab.local('java -jar __libs__/plovr-81ed862.jar build plovr-config.js')
+
+
+@fab.task
+def extract_pot():
+    fab.local('./env/bin/pybabel extract '
+              '-F babel.cfg -o messages.pot lost_tracker')
+
+
+@fab.task
+def init_babel(locale):
+    fab.local('./env/bin/pybabel init '
+              '-i messages.pot -d translations -l {}'.format(locale))
+
+
+@fab.task
+def compile_babel():
+    fab.local('./env/bin/pybabel compile -d translations')
+
+
+@fab.task
+def update_babel():
+    fab.execute(extract_pot)
+    fab.local('./env/bin/pybabel update -i messages.pot -d translations')

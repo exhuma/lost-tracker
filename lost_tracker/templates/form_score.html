@@ -13,8 +13,8 @@
 
 {% block content %}
 
-<h1>Froebou Punkten</h1>
-<h2><a href="{{url_for('matrix')}}">Zeréck op d'Haaptsäit</a></h2>
+<h1>{{_('Questionnaire Score')}}</h1>
+<h2><a href="{{url_for('index')}}">{{_('Back to the home-page')}}</a></h2>
 <br>
 <br>
 
@@ -24,7 +24,7 @@
 <form action="{{url_for('form_score')}}" method="post">
     <table border="0" cellpadding="0" cellspacing="4">
         <tr>
-            <td align="right">Gruppennumm:</td>
+            <td align="right">{{_('Group Name')}}:</td>
                 <td>
                 <select name="group_id">
                     <option value="">--</option>
@@ -35,11 +35,11 @@
             </td>
         </tr>
         <tr>
-            <td align="right">Form_id:</td>
+            <td align="right">{{_('Form Number')}}:</td>
             <td><input name="form_id" type="text" size="2" maxlength="2"></td>
         </tr>
         <tr>
-            <td align="right">Score:</td>
+            <td align="right">{{_('Score')}}:</td>
             <td><input name="score" type="text" size="3" maxlength="3"></td>
         </tr>
     </table>
@@ -48,9 +48,9 @@
 
 <table border=1">
     <tr>
-        <th>Gruppenid</th>
-        <th>Froebou</th>
-        <th>Punkten</th>
+        <th>{{_('Group ID')}}</th>
+        <th>{{_('Questionnaire')}}</th>
+        <th>{{_('Score')}}</th>
     </tr>
 {% for row in form_scores %}
     <tr>
