@@ -1,0 +1,14 @@
+Your registration has been updated!
+===================================
+
+Your new information is:
+
+Group Name:     {{group.name}}
+Contact Name:   {{group.contact}}
+Contact e-mail: {{group.email}}
+Phone #:        {{group.phone}}
+Departure Time: {{group.start_time}}
+
+Comments:
+{{group.comments}}
+
