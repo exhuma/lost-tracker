@@ -39,27 +39,26 @@ lost_tracker.Tabulator.prototype.setCellValue = function(element, value) {
  * @param {object} newValue TODO: doc
  * @param {object} oldValue TODO: doc
  */
-lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newValue, oldValue) {
+lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newValue, oldValue, this_obj) {
   lost_tracker.Tabulator.LOG.fine('Setting ' + datum + ' on item ' + key +
       ' from ' + oldValue +
       ' to ' + newValue);
-  var self = this;
   if (newValue == oldValue) {
     lost_tracker.Tabulator.LOG.fine('No update needed (oldValue=newValue)');
-    self.setCellValue(source, newValue);
+    this_obj.setCellValue(source, newValue);
     return;
   }
-  var url = '/cell/' + this.table.getAttribute('data-name') + '/' + key + '/' + datum;
+  var url = '/cell/' + this_obj.table.getAttribute('data-name') + '/' + key + '/' + datum;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
     var response = xhr.getResponseJson();
     if (xhr.isSuccess()) {
       lost_tracker.Tabulator.LOG.fine('Successfully updated the cell');
-      self.setCellValue(source, response.new_value);
+      this_obj.setCellValue(source, response.new_value);
     } else {
       lost_tracker.Tabulator.LOG.warning('Error updating the cell!');
       // Ask the user for a fixed value and run updateCell recursively again.
-      self.resolveConflict(newValue, oldValue, response['db_value'], source, key, datum);
+      this_obj.resolveConflict(newValue, oldValue, response['db_value'], source, key, datum);
     }
   }, 'PUT', goog.json.serialize({
     'newValue': newValue,
@@ -100,7 +99,7 @@ lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, 
         }
       });
       if (!goog.string.isEmptySafe(selectedValue)) {
-        self.updateCell(source, key, datum, selectedValue, serverValue);
+        self.updateCell(source, key, datum, selectedValue, serverValue, self);
       } else {
         lost_tracker.Tabulator.LOG.severe('No value received for conflict resolution.');
       }
@@ -116,7 +115,7 @@ lost_tracker.Tabulator.prototype.resolveConflict = function(newValue, oldValue, 
  * the user clicks a "save" button.
  * @param {object}  TODO: doc
  */
-lost_tracker.Tabulator.prototype.prepareCellForCreation = function(source, key, datum, newValue, oldValue) {
+lost_tracker.Tabulator.prototype.prepareCellForCreation = function(source, key, datum, newValue, oldValue, this_obj) {
   var row = goog.dom.getAncestorByTagNameAndClass(source, 'TR');
   var preparedEntity = row.getAttribute('data-values');
   if (goog.isNull(preparedEntity)) {
@@ -135,6 +134,7 @@ lost_tracker.Tabulator.prototype.prepareCellForCreation = function(source, key, 
 lost_tracker.Tabulator.prototype.attachCellEvents = function(element, hasDbEntity) {
   var row = goog.dom.getAncestorByTagNameAndClass(element, 'TR');
   var self = this;
+  var actionFunc;
 
   if (hasDbEntity) {
     actionFunc = self.updateCell;
@@ -147,7 +147,8 @@ lost_tracker.Tabulator.prototype.attachCellEvents = function(element, hasDbEntit
       row.id,
       element.getAttribute('data-cell-name'),
       goog.dom.getTextContent(evt.target),
-      element.getAttribute('data-current-value'));
+      element.getAttribute('data-current-value'),
+      self);
   });
 };
 
@@ -159,6 +160,7 @@ lost_tracker.Tabulator.prototype.attachCellEvents = function(element, hasDbEntit
 lost_tracker.Tabulator.prototype.attachCheckEvents = function(element, hasDbEntity) {
   var row = goog.dom.getAncestorByTagNameAndClass(element, 'TR');
   var self = this;
+  var actionFunc;
 
   if (hasDbEntity) {
     actionFunc = self.updateCell;
@@ -172,7 +174,8 @@ lost_tracker.Tabulator.prototype.attachCheckEvents = function(element, hasDbEnti
       row.id,
       element.getAttribute('data-cell-name'),
       evt.target.checked,
-      element.getAttribute('data-current-value').toLowerCase() == 'true');
+      element.getAttribute('data-current-value').toLowerCase() == 'true',
+      self);
   });
 };
 
