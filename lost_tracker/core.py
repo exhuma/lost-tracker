@@ -7,8 +7,6 @@ from lost_tracker.models import (
     Form,
     get_state,
     TimeSlot,
-    GroupStation,
-    get_form_score_by_group,
     STATE_FINISHED,
     STATE_UNKNOWN,
     STATE_ARRIVED,
@@ -202,16 +200,6 @@ def get_form_by_id(id):
     return qry
 
 
-def get_score_by_group(group_id):
-    """
-    Returns the actual score for a group.
-    """
-    qry = GroupStation.query
-    qry = qry.filter_by(group_id=group_id)
-    station_score = qry.all()
-    form_score = get_form_score_by_group(group_id)
-
-
 def slots():
     """
     maybe put this in a config file
@@ -332,7 +320,7 @@ def confirm_registration(key, activation_url):
         user = query.all()
         mails = []
         for line in user:
-             mails.append(line.email)
+            mails.append(line.email)
 
         send('registration_check',
              to=mails,
@@ -420,7 +408,7 @@ def get_user(login):
     at https://flask-login.readthedocs.org/en/latest/#your-user-class
     """
     query = User.query.filter(
-            User.login == login)
+        User.login == login)
     user = query.first()
     if user:
         return user

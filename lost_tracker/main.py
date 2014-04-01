@@ -304,7 +304,7 @@ def register():
 @app.route('/confirm')
 @app.route('/confirm/<key>')
 def confirm_registration(key):
-    status = loco.confirm_registration(
+    loco.confirm_registration(
         key,
         activation_url=url_for('accept_registration',
                                key=key,
@@ -450,17 +450,18 @@ def update_cell_value(cls, key, datum):
     data = request.json
     table = mdl.Base.metadata.tables[cls]
     if data['oldValue'] in ('', None):
-        cell_predicate = or_(table.c[datum] == '', table.c[datum] == None)
+        cell_predicate = or_(table.c[datum] == '',
+                             table.c[datum] == None)  # NOQA
     else:
-        cell_predicate = table.c[datum]==data['oldValue']
+        cell_predicate = table.c[datum] == data['oldValue']
 
-    query = table.update().values(
-        **{datum: data['newValue']}).where(and_(
-            table.c.id==key,
-            cell_predicate))
+    query = table.update().values(**{datum: data['newValue']}).where(
+        and_(table.c.id == key, cell_predicate))
+
     try:
         result = g.session.execute(query)
     except Exception as exc:
+        app.logger.debug(exc)
         return jsonify(message='Invalid data'), 400
 
     if result.rowcount == 1:
