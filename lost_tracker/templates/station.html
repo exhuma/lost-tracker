@@ -3,7 +3,7 @@
 {% block content %}
 
 <h1>{{station.name}}</h1>
-<h2><a href="{{url_for('index')}}">Zeréck op d'Haaptsäit</a></h2>
+<h2><a href="{{url_for('matrix')}}">Zeréck op d'Haaptsäit</a></h2>
 
 {% for row in group_states %}
 <div class="group state_{{row.state.state|default('0')}} {{row.group.cancelled and 'cancelled' or ''}}">

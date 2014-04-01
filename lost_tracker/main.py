@@ -44,6 +44,23 @@ login_manager.login_view = "login"
 MODIFIABLE_TABLES = ('group', 'station', 'form')
 
 
+def _stategetter(element):
+    """
+    Custom sorting for group states. Make "arrived" groups come first,
+    then all "unknowns". Make "finished" groups come last.
+    """
+    if element is None or element.state is None:
+        return mdl.STATE_UNKNOWN
+    elif element.state.state == mdl.STATE_ARRIVED:
+        return 0
+    elif element.state.state == mdl.STATE_UNKNOWN:
+        return 1
+    elif element.state.state == mdl.STATE_FINISHED:
+        return 2
+    else:
+        return 99
+
+
 @login_manager.user_loader
 def load_user(userid):
     return loco.get_user(userid)
@@ -65,6 +82,7 @@ def bind_metadata():
 def error_handler(request):
     return 'No such entity!', 404
 
+
 @app.before_request
 def before_request():
     # This import is deferred as it triggers the DB engine constructor on
@@ -84,7 +102,7 @@ def teardown_request(exc):
 
 
 @app.route('/')
-def index():
+def matrix():
     stations = loco.get_stations()
     groups = loco.get_grps()
 
@@ -110,32 +128,14 @@ def advance(groupId, station_id):
 @app.route('/station/<path:name>')
 @login_required
 def station(name):
-    station = loco.get_stat_by_name(name)
+    station = loco.get_stat_by_name(name)  # TODO: rename function
     if not station:
         return abort(404)
 
-    def stategetter(element):
-        """
-        Custom sorting for group states. Make "arrived" groups come first,
-        then all "unknowns". Make "finished" groups come last.
-        """
-        if element is None or element.state is None:
-            return mdl.STATE_UNKNOWN
-        elif element.state.state == mdl.STATE_ARRIVED:
-            return 0
-        elif element.state.state == mdl.STATE_UNKNOWN:
-            return 1
-        elif element.state.state == mdl.STATE_FINISHED:
-            return 2
-        else:
-            return 99
-
-    groups = loco.get_grps()
-    GroupStateRow = namedtuple('GroupStateRow',
-                               'group, '
-                               'state')
+    groups = loco.get_grps()  # TODO: rename function
+    GroupStateRow = namedtuple('GroupStateRow', 'group, ' 'state')
     group_states = []
-    for grp in groups:
+    for grp in groups:  # TODO: rename variable
         group_station = mdl.get_state(grp.id, station.id)
         if not group_station:
             state = None
@@ -143,7 +143,7 @@ def station(name):
             state = group_station
         group_states.append(
             GroupStateRow(grp, state))
-    group_states.sort(key=stategetter)
+    group_states.sort(key=_stategetter)
 
     questionnaires = loco.get_forms()
 
@@ -155,42 +155,11 @@ def station(name):
         questionnaires=questionnaires)
 
 
-@app.route('/group')
-@login_required
-def init_grp_form():
-    message = ""
-    grps = loco.get_grps()
-    return render_template('add_group.html',
-                           message=message,
-                           groups=grps,
-                           DIR_A=mdl.DIR_A,
-                           DIR_B=mdl.DIR_B)
-
-
-@app.route('/add_station')
-@login_required
-def init_stat_form():
-    message = ""
-    return render_template('add_station.html', message=message)
-
-
-@app.route('/add_station', methods=['POST'])
-@login_required
-def stat_form():
-    name = request.form['stat_name']
-    contact = request.form['stat_contact']
-    phone = request.form['stat_phone']
-
-    message = loco.add_station(name, contact, phone, g.session)
-    flash(message, 'info')
-    return redirect(url_for("init_stat_form"))
-
-
 @app.route('/form_score')
 @login_required
 def init_form_score():
-    grps = loco.get_grps()
-    form_scores = mdl.get_form_score_full()
+    grps = loco.get_grps()  # TODO: rename function
+    form_scores = mdl.get_form_score_full()  # TODO: rename function
     return render_template(
         'form_score.html',
         form_scores=form_scores,
@@ -288,14 +257,6 @@ def form_score():
     return redirect(url_for("init_form_score"))
 
 
-@app.route('/add_form')
-@login_required
-def init_add_form():
-    message = ""
-    forms = loco.get_forms()
-    return render_template('add_form.html', message=message, forms=forms)
-
-
 @app.route('/scoreboard')
 def scoreboard():
     result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
@@ -305,7 +266,7 @@ def scoreboard():
     for row in result:
         group = loco.get_grps_by_id(row.group_id)
         output.append([pos, group.name, row.score_sum])
-        pos+=1
+        pos += 1
     return render_template('scoreboard.html', scores=output)
 
 
@@ -377,7 +338,7 @@ def save_group_info(id):
     if not group.finalized:
         loco.accept_registration(group.confirmation_key, request.form)
         flash('Accepted registration for group {}'.format(group.name), 'info')
-        return redirect(url_for('index'))
+        return redirect(url_for('matrix'))
     else:
         loco.update_group(id,
                           request.form,
@@ -397,7 +358,7 @@ def login():
         if authed:
             login_user(user, remember=True)
             flash('Logged in successfully', 'info')
-            return redirect(request.values.get('next') or url_for('index'))
+            return redirect(request.values.get('next') or url_for('matrix'))
         else:
             flash("Invalid credentials!", 'error')
             return render_template('login.html')
@@ -409,7 +370,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('matrix'))
 
 
 @app.route('/manage')
