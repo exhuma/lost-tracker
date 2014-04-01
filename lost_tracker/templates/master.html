@@ -22,11 +22,11 @@
     </script>
 
     <div id="menu">
-      <a href="{{url_for('matrix')}}">Matrix</a> |
-      {% if current_user.is_authenticated() -%}
-        <a href="{{url_for('manage')}}">Slot Editor</a> |
-        <a href="{{url_for('tabularadmin', table='group')}}">Manager</a> |
-      {%- endif %}
+      <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
+      <a href="{{url_for('where')}}">Wou ass dat?</a> |
+      <a href="{{url_for('register')}}">Umellen?</a> |
+      <a href="{{url_for('photo_gallery')}}">Photoën</a> |
+      <a href="{{url_for('misc')}}">Soss nach?</a> |
       {% if localconf.get('app', 'helpdesk', default='') %}
         <span id="contact"><a
           href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
@@ -34,7 +34,11 @@
 
       <span id="auth">
         {% if current_user.is_authenticated() %}
-          Logged in as {{current_user.name}} | <a href="{{url_for('logout')}}">Logout</a>
+        Logged in as {{current_user.name}} |
+          <a href="{{url_for('matrix')}}">Matrix</a> |
+          <a href="{{url_for('manage')}}">Slot Editor</a> |
+          <a href="{{url_for('tabularadmin', table='group')}}">Manager</a>
+          &mdash; <a href="{{url_for('logout')}}">Logout</a>
         {% else %}
           <a href="{{url_for('login')}}">Login</a>
         {% endif %}
