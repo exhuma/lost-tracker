@@ -1,0 +1,3 @@
+Please confirm your registration:
+
+{{confirmation_link}}

@@ -1,4 +1,5 @@
 from lost_tracker.util import start_time_to_order
+from lost_tracker.emails import send
 from lost_tracker.models import (
     User,
     Group,
@@ -14,7 +15,6 @@ from lost_tracker.models import (
     DIR_A,
     DIR_B)
 
-from envelopes import Envelope
 from sqlalchemy import and_
 from sqlalchemy.exc import IntegrityError
 import logging
@@ -305,13 +305,11 @@ def store_registration(session, data, url, needs_confirmation=True):
 
         if needs_confirmation:
             confirm_link = '{}/{}'.format(url, urllib.quote_plus(key))
-            mail = Envelope(
-                from_addr=(u'no_reply@lost.lu', u'lost.lu registration'),
-                to_addr=(data['email'], data['contact_name']),
-                subject=u'Confirmation of your registration',
-                text_body=u'Please confirm your registration:\n\n{}'.format(
-                    confirm_link))
-            mail.send('localhost')
+            send('confirm',
+                 to=(data['email'], data['contact_name']),
+                 data={
+                     'confirmation_link': confirm_link
+                 })
         return True
 
 
@@ -336,23 +334,12 @@ def confirm_registration(key, activation_url):
         for line in user:
              mails.append(line.email)
 
-        mail = Envelope(
-                from_addr=(u'no_reply@lost.lu', u'lost.lu registration'),
-                to_addr=mails,
-                subject=u'registration check',
-                text_body=u'please check and confirm this registration\n\n'
-                    'groupname: {0.name}\n'
-                    'contact name: {0.contact}\n'
-                    'contact e-mail: {0.email}\n'
-                    'phone: {0.phone}\n'
-                    'desired departure time: {0.start_time}\n'
-                    'comments: {0.comments}\n'
-                    '\n'
-                    'use this link to activate this registration:\n'
-                    '{1}'.format(
-                        grp,
-                        activation_url))
-        mail.send('localhost')
+        send('registration_check',
+             to=mails,
+             data={
+                 'group': grp,
+                 'activation_url': activation_url
+             })
         return True
 
     else:
@@ -382,18 +369,11 @@ def accept_registration(key, data):
             grp.comments = data['comments']
             grp.contact = data['contact']
             grp.email = data['email']
-            mail = Envelope(
-                    from_addr=(u'no_reply@lost.lu', u'lost.lu registration'),
-                    to_addr=(grp.email, grp.name),
-                    subject=u'Welcome to Lost, your registration is completed',
-                    text_body=u'Welcome to Lost in the darkness\n'
-                              '\nYour group is registrated with the following'
-                              'information:\nName:{}\nContact{}\nPhone:{}\nEmail:{}\nStrat'
-                              'time:{}\nComment:{}\nWe are waiting for YOU!'
-                              ':)'.format(grp.name, grp.contact, grp.phone,
-                                  grp.email, grp.start_time, grp.comments)
-                              )
-            mail.send('localhost')
+            send('welcome',
+                 to=(grp.email, grp.name),
+                 data={
+                     'group': grp
+                 })
             return True
     else:
         raise ValueError('Given key not found in DB')
@@ -413,19 +393,11 @@ def update_group(id, data, send_email=True):
     group.email = data['email']
 
     if send_email:
-        mail = Envelope(
-            from_addr=(u'no_reply@lost.lu', u'lost.lu registration'),
-            to_addr=(data['email'], data['contact']),
-            subject=u'Lost Registration Change',
-            text_body=u'Your registration has been updated. '
-            u'Your new information is:\n\n'
-            u'groupname: {0.name}\n'
-            u'contact name: {0.contact}\n'
-            u'contact e-mail: {0.email}\n'
-            u'phone: {0.phone}\n'
-            u'departure time: {0.start_time}\n'
-            u'comments: {0.comments}\n'.format(group))
-        mail.send('localhost')
+        send('registration_update',
+             to=(data['email'], data['contact']),
+             data={
+                 'group': group
+             })
 
 
 def auth(login, password):
