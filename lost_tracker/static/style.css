@@ -24,6 +24,18 @@ H6 {
     margin: 0 auto;
 }
 
+#content-wide IFRAME,
+#content-narrow IFRAME,
+#content-wide IMG,
+#content-narrow IMG {
+    max-width: inherit;
+}
+
+#combilogo {
+    max-width: 100%;
+    margin-top: 3em;
+}
+
 .clickable {
   cursor: pointer;
 }
