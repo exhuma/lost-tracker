@@ -37,7 +37,11 @@ H6 {
 #location_map,
 #content-wide IMG,
 #content-narrow IMG {
-    max-width: inherit;
+    max-width: 100%;
+}
+
+#logo {
+    max-width: 100%;
 }
 
 #combilogo {
@@ -47,6 +51,10 @@ H6 {
 
 .clickable {
   cursor: pointer;
+}
+
+DD {
+    margin: 0;
 }
 
 DIV.group{
@@ -362,9 +370,39 @@ TD > DIV[contenteditable="true"] {
     }
 }
 
+@media screen and (max-width: 640px) {
+    #content-narrow {
+        padding: 1em 0.5em 0.5em 0.5em;
+    }
+
+    #auth {
+        float: none;
+    }
+
+    #auth:before {
+        content: "| ";
+    }
+
+    #menu {
+        font-size: 120%;
+        text-align: center;
+    }
+
+    #location_map {
+        height: 200px;
+    }
+
+    #logo {
+        width: 50%;
+        margin: 1em auto 1em auto;
+    }
+
+}
 
 /* {{{ Modal Dialogs */
 .modal-dialog {
     max-width: 30em;
 }
 /* }}} */
+
+/* vim: set fdm=marker : */
