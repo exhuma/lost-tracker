@@ -270,7 +270,17 @@ class GroupStation(Base):
 class TimeSlot(object):
 
     def __init__(self, time):
-        self.time = datetime.strptime(time, '%Hh%M')
+        supported_formats = ['%Hh%M', '%H:%M']
+        self.time = None
+        for fmt in supported_formats:
+            try:
+                self.time = datetime.strptime(time, fmt)
+            except:
+                pass
+
+        if time and not self.time:
+            raise ValueError('time data {!r} does not match any known '
+                             'formats {!r}'.format(time, supported_formats))
 
     def __eq__(self, other):
         return isinstance(other, TimeSlot) and other.time == self.time
