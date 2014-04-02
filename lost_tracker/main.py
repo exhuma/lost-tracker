@@ -24,6 +24,7 @@ from flask import (
 )
 
 from lost_tracker import __version__
+from lost_tracker.flickr import get_photos
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 import lost_tracker.core as loco
@@ -579,7 +580,8 @@ def where():
 
 @app.route('/gallery')
 def photo_gallery():
-    return render_template('gallery.html')
+    photos = get_photos(app.localconf)
+    return render_template('gallery.html', photos=photos)
 
 
 @app.route('/misc')
