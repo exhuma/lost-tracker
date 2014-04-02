@@ -3,7 +3,7 @@ from datetime import datetime
 
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
                         Boolean, PrimaryKeyConstraint)
-from sqlalchemy.orm import relationship, deferred
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
 from lost_tracker.database import Base
 from lost_tracker.util import start_time_to_order
