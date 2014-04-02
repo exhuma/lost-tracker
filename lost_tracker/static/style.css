@@ -3,6 +3,7 @@
 BODY{
     margin: 0;
     font-family: 'Sofadi One', Helvetica, sans-serif;
+    text-align: center;
 }
 
 H1,
@@ -187,6 +188,10 @@ H1, H2 {
     border-bottom: 1px solid black;
     background-color: hsla(0, 0%, 0%, 0.7);
     text-align: center;
+}
+
+#menu {
+    text-align: left;
 }
 
 #auth {

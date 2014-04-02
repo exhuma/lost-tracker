@@ -23,15 +23,17 @@
     </script>
 
     <div id="menu">
-      <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
-      <a href="{{url_for('where')}}">Wou ass dat?</a> |
-      <a href="{{url_for('register')}}">Umellen?</a> |
-      <a href="{{url_for('photo_gallery')}}">Photoën</a> |
-      <a href="{{url_for('misc')}}">Soss nach?</a> |
-      {% if localconf.get('app', 'helpdesk', default='') %}
-        <span id="contact"><a
-          href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
-      {% endif %}
+      <span id="#mainmenu">
+        <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
+        <a href="{{url_for('where')}}">Wou ass dat?</a> |
+        <a href="{{url_for('register')}}">Umellen?</a> |
+        <a href="{{url_for('photo_gallery')}}">Photoën</a> |
+        <a href="{{url_for('misc')}}">Soss nach?</a> |
+        {% if localconf.get('app', 'helpdesk', default='') %}
+          <span id="contact"><a
+            href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
+        {% endif %}
+      </span>
 
       <span id="auth">
         {% if current_user.is_authenticated() %}
