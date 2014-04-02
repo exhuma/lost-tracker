@@ -1,4 +1,4 @@
-{% extends "master.html" %}
+{% extends "master_wide.html" %}
 
 {% macro render_empty_cell(col) -%}
   {% if col.type.__class__.__name__ == 'Boolean' -%}
@@ -54,7 +54,7 @@
   </div>
 {%- endblock %}
 
-{% block content_wrapper %}
+{% block content %}
 
 <table id="tabular" data-name="{{clsname}}">
   <thead>

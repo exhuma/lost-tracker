@@ -50,22 +50,26 @@
 
     {% block submenu %}{% endblock %}
 
-    <div id="logo">
-      <img src="{{url_for('static', filename='images/logo2014.png')}}" />
-    </div>
+    <div id="{% block wrapperid %}{% endblock %}">
 
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-        <div id="flashes">
-            {% for category, message in messages %}
-                <div class="{{category}}">{{ message }}</div>
-            {% endfor %}
-        </div>
-        {% endif %}
-    {% endwith %}
-    {% block content_wrapper %}
-    {% endblock %}
-    <img id="combilogo" src="{{url_for('static', filename="images/combilogo.jpg")}}" />
+      <div id="logo">
+        <img src="{{url_for('static', filename='images/logo2014.png')}}" />
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+          <div id="flashes">
+              {% for category, message in messages %}
+                  <div class="{{category}}">{{ message }}</div>
+              {% endfor %}
+          </div>
+          {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+
+      <img id="combilogo" src="{{url_for('static', filename="images/combilogo.jpg")}}" />
+    </div>
 </body>
 </html>
 
