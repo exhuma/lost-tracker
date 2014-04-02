@@ -7,6 +7,9 @@ LOG = logging.getLogger(__name__)
 def start_time_to_order(value):
     # Tries to put something sensical into the "order" field.
     # If unsuccessful, return 0. Can be edited later.
+    if not value:
+        return 0
+
     try:
         return int(re.sub(r'[^0-9]', '', value))
     except ValueError as exc:

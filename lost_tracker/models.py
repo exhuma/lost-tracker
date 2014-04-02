@@ -199,7 +199,10 @@ class Group(Base):
     @start_time.setter
     def start_time(self, value):
         self._start_time = value
-        self.order = start_time_to_order(value)
+        if value:
+            self.order = start_time_to_order(value)
+        else:
+            self.order = 0
 
 class Station(Base):
     __tablename__ = 'station'
