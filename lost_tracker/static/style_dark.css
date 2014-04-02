@@ -59,12 +59,6 @@ TD:focus {
     outline: none;
 }
 
-INPUT[type="checkbox"]:focus{
-    -webkit-box-shadow: 0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
-    -moz-box-shadow:    0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
-    box-shadow:         0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
-}
-
 .tooltip {
     border: 1px solid hsl(0, 100%, 40%);
     background: hsla(0, 0%, 3%, 0.95);
@@ -75,6 +69,14 @@ INPUT[type="checkbox"]:focus{
 
 .tooltip H1 {
     border-bottom: 1px solid hsl(30, 100%, 80%);
+}
+
+/* form elements {{{ */
+
+INPUT[type="checkbox"]:focus{
+    -webkit-box-shadow: 0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
+    -moz-box-shadow:    0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
+    box-shadow:         0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
 }
 
 INPUT[type='password'],
@@ -127,6 +129,8 @@ INPUT[type='submit']:active {
     border: 1px solid hsl(30, 100%, 80%);
     color: hsl(30, 100%, 100%);
 }
+
+/* }}} */
 
 DT {
     margin-top: 0.5em;
@@ -192,3 +196,6 @@ DT {
   border-right: 1px solid hsl(230, 50%, 20%);
 }
 /* }}} */
+
+
+/* vim: set fdm=marker : */
