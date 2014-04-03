@@ -409,7 +409,6 @@ def manage():
 @login_required
 def tabularadmin(table):
 
-    print(gettext('Stations'))
     if table not in MODIFIABLE_TABLES:
         return gettext('Access Denied'), 401
 

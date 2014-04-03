@@ -93,17 +93,29 @@ def extract_pot():
 
 
 @fab.task
-def init_babel(locale):
+def babel_init(locale):
+    """
+    Initialise support for a new locale.
+    """
     fab.local('./env/bin/pybabel init '
-              '-i messages.pot -d translations -l {}'.format(locale))
+              '-i messages.pot -d lost_tracker/translations -l {}'.format(
+                  locale))
 
 
 @fab.task
-def compile_babel():
-    fab.local('./env/bin/pybabel compile -d translations')
+def babel_compile():
+    """
+    Compile all translations into the application.
+    """
+    fab.local('./env/bin/pybabel compile -d lost_tracker/translations')
 
 
 @fab.task
-def update_babel():
+def babel_update():
+    """
+    Extracts translations and updates the pot template.
+    """
     fab.execute(extract_pot)
-    fab.local('./env/bin/pybabel update -i messages.pot -d translations')
+    fab.local('./env/bin/pybabel update '
+              '-i messages.pot '
+              '-d lost_tracker/translations')
