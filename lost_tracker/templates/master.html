@@ -1,8 +1,11 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
     <title>Lost Tracker {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='normalize.min.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='common.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='dialog.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
@@ -17,46 +20,62 @@
     {% endblock %}
 </head>
 <body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
     <script type="text/javascript">
       $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
     </script>
 
     <div id="menu">
-      <a href="{{url_for('matrix')}}">Matrix</a> |
-      {% if current_user.is_authenticated() -%}
-        <a href="{{url_for('manage')}}">Slot Editor</a> |
-        <a href="{{url_for('tabularadmin', table='group')}}">Manager</a> |
-      {%- endif %}
-      {% if localconf.get('app', 'helpdesk', default='') %}
-        <span id="contact"><a
-          href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
-      {% endif %}
+      <span id="#mainmenu">
+        <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
+        <a href="{{url_for('where')}}">Wou ass dat?</a> |
+        <a href="{{url_for('register')}}">Umellen?</a> |
+        <a href="{{url_for('photo_gallery')}}">Photoën</a> |
+        <a href="{{url_for('misc')}}">Soss nach?</a> |
+        {% if localconf.get('app', 'helpdesk', default='') %}
+          <span id="contact"><a
+            href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
+        {% endif %}
+      </span>
 
       <span id="auth">
         {% if current_user.is_authenticated() %}
-          Logged in as {{current_user.name}} | <a href="{{url_for('logout')}}">Logout</a>
+        Logged in as {{current_user.name}} |
+          <a href="{{url_for('matrix')}}">Matrix</a> |
+          <a href="{{url_for('manage')}}">Slot Editor</a> |
+          <a href="{{url_for('tabularadmin', table='group')}}">Manager</a>
+          &mdash; <a href="{{url_for('logout')}}">Logout</a>
         {% else %}
           <a href="{{url_for('login')}}">Login</a>
         {% endif %}
       </span>
     </div>
 
-    <div id="submenu">
-      {% block submenu %}
-      {% endblock %}
-    </div>
+    {% block submenu %}{% endblock %}
 
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-        <div id="flashes">
-            {% for category, message in messages %}
-                <div class="{{category}}">{{ message }}</div>
-            {% endfor %}
-        </div>
-        {% endif %}
-    {% endwith %}
-    {% block content_wrapper %}
-    {% endblock %}
+    <div id="{% block wrapperid %}{% endblock %}">
+
+      <div id="logo">
+        <img src="{{url_for('static', filename='images/logo2014.png')}}" />
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+          <div id="flashes">
+              {% for category, message in messages %}
+                  <div class="{{category}}">{{ message }}</div>
+              {% endfor %}
+          </div>
+          {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+
+      <img id="combilogo" src="{{url_for('static', filename="images/combilogo.jpg")}}" />
+    </div>
 </body>
 </html>
 

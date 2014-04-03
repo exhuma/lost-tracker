@@ -1,4 +1,4 @@
-{% extends "master.html" %}
+{% extends "master_wide.html" %}
 
 {% macro render_empty_cell(col) -%}
   {% if col.type.__class__.__name__ == 'Boolean' -%}
@@ -45,14 +45,16 @@
   {%- endif %}
 {%- endmacro %}
 
+
 {% block submenu -%}
-  <a href="{{url_for('tabularadmin', table='group')}}">Groups</a>&nbsp;|&nbsp;
-  <a href="{{url_for('tabularadmin', table='station')}}">Stations</a>&nbsp;|&nbsp;
-  <a href="{{url_for('tabularadmin', table='form')}}">Forms</a>
+  <div id="submenu">
+    <a href="{{url_for('tabularadmin', table='group')}}">Groups</a>&nbsp;|&nbsp;
+    <a href="{{url_for('tabularadmin', table='station')}}">Stations</a>&nbsp;|&nbsp;
+    <a href="{{url_for('tabularadmin', table='form')}}">Forms</a>
+  </div>
 {%- endblock %}
 
-
-{% block content_wrapper %}
+{% block content %}
 
 <table id="tabular" data-name="{{clsname}}">
   <thead>

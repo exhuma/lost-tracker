@@ -9,6 +9,9 @@ dsn=postgresql://postgres@/lost_tracker
 ; Value to be shown on the bottom right
 helpdesk = "contact info"
 
+[flickr]
+api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
 [devserver]
 ; Dev server listens on device ...
 listen=0.0.0.0

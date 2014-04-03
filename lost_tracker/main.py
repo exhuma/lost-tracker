@@ -24,6 +24,7 @@ from flask import (
 )
 
 from lost_tracker import __version__
+from lost_tracker.flickr import get_photos
 from lost_tracker.database import Base
 from sqlalchemy.exc import IntegrityError
 import lost_tracker.core as loco
@@ -101,7 +102,7 @@ def teardown_request(exc):
         app.logger.exception(exc)
 
 
-@app.route('/')
+@app.route('/matrix')
 def matrix():
     stations = loco.get_stations()
     groups = loco.get_grps()
@@ -565,6 +566,27 @@ def delete_station(id):
 def delete_form(id):
     loco.delete_form(id)
     return jsonify(status='ok')
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/where')
+def where():
+    return render_template('where.html')
+
+
+@app.route('/gallery')
+def photo_gallery():
+    photos = get_photos(app.localconf)
+    return render_template('gallery.html', photos=photos)
+
+
+@app.route('/misc')
+def misc():
+    return render_template('misc.html')
 
 
 if __name__ == '__main__':

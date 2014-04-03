@@ -3,6 +3,7 @@
 BODY{
     margin: 0;
     font-family: 'Sofadi One', Helvetica, sans-serif;
+    text-align: center;
 }
 
 H1,
@@ -14,17 +15,46 @@ H6 {
     text-align: center;
 }
 
+#content-wide,
+#content-narrow {
+    padding-top: 1em;
+}
+
 #content-wide {
     margin: 0;
 }
 
 #content-narrow {
-    max-width: 30em;
+    max-width: 40em;
     margin: 0 auto;
+    padding: 1em 3em 0.5em 3em;
+    background: hsla(0, 0%, 0%, 0.5);
+    -webkit-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.3);
+    box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.3);
+}
+
+#location_map,
+#content-wide IMG,
+#content-narrow IMG {
+    max-width: 100%;
+}
+
+#logo {
+    max-width: 100%;
+}
+
+#combilogo {
+    max-width: 100%;
+    margin-top: 3em;
 }
 
 .clickable {
   cursor: pointer;
+}
+
+DD {
+    margin: 0;
 }
 
 DIV.group{
@@ -170,14 +200,18 @@ H1, H2 {
 }
 
 #menu {
+    text-align: left;
     padding: 0.2em;
     font-size: 80%;
-    margin-bottom: 0.9em;
     border-bottom: 1px solid black;
     background-color: hsla(0, 0%, 0%, 0.7);
     -webkit-box-shadow: 0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
     -moz-box-shadow:    0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
     box-shadow:         0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
+}
+
+#menu STRONG{
+    font-size: 130%;
 }
 
 #submenu {
@@ -187,6 +221,10 @@ H1, H2 {
     border-bottom: 1px solid black;
     background-color: hsla(0, 0%, 0%, 0.7);
     text-align: center;
+}
+
+#contentwrapper {
+    padding-top: 1em;
 }
 
 #auth {
@@ -316,8 +354,55 @@ TD > DIV[contenteditable="true"] {
     padding: 0.2em 0.5em;
 }
 
+.col-group > div {
+    text-align: center;
+    padding: 0;
+    margin-bottom: 1em;  
+}
+
+@media screen and (min-width: 44em) {
+    .col-group {
+        overflow: hidden;
+    }
+    .col-group > div {
+        float: left;
+        width: 49%;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    #content-narrow {
+        padding: 1em 0.5em 0.5em 0.5em;
+    }
+
+    #auth {
+        float: none;
+    }
+
+    #auth:before {
+        content: "| ";
+    }
+
+    #menu {
+        font-size: 120%;
+        text-align: center;
+    }
+
+    #location_map {
+        height: 200px;
+    }
+
+    #logo {
+        width: 50%;
+        margin: 1em auto 1em auto;
+    }
+
+}
+
 /* {{{ Modal Dialogs */
 .modal-dialog {
     max-width: 30em;
 }
 /* }}} */
+
+/* vim: set fdm=marker : */
