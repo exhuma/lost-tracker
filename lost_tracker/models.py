@@ -275,6 +275,9 @@ class TimeSlot(object):
     def __init__(self, time):
         supported_formats = ['%Hh%M', '%H:%M']
         self.time = None
+        if not time or time == 'None':
+            return
+
         for fmt in supported_formats:
             try:
                 self.time = datetime.strptime(time, fmt)
