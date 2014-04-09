@@ -170,7 +170,7 @@ def add_station(stat_name, contact, phone, session):
     """
     new_station = Station(stat_name, contact, phone)
     session.add(new_station)
-    return "Station {0} added. Contact: {1} / {2}".format(
+    return u"Station {0} added. Contact: {1} / {2}".format(
         stat_name, contact, phone)
 
 
