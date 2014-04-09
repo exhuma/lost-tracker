@@ -5,3 +5,4 @@
 /dist
 /env
 /lost_tracker.egg-info
+/lost_tracker/static/js/lost_tracker.js
