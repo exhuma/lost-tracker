@@ -27,6 +27,14 @@ def deploy():
 
 @fab.task
 @fab.roles('prod')
+def redeploy():
+    with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
+        fab.run('env/bin/pip uninstall lost_tracker')
+    fab.execute(deploy)
+
+
+@fab.task
+@fab.roles('prod')
 def bootstrap():
     deploy()
     with fab.cd('/var/www/lost.lu/tracker'):

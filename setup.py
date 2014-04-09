@@ -10,9 +10,10 @@ setup(
         'SQLAlchemy==0.9.3',
         'alembic==0.6.3',
         'config-resolver >= 4.2, <5.0',
+        'envelopes==0.4',
         'mock==1.0.1',
         'psycopg2==2.5.2',
-        'envelopes==0.4',
+        'requests==2.2.1'
     ],
     include_package_data=True,
     author="Michel Albert",
