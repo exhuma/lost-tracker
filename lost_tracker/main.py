@@ -469,6 +469,7 @@ def update_cell_value(cls, key, datum):
     else:
         cell_predicate = table.c[datum] == data['oldValue']
 
+    data['newValue'] = data['newValue'].strip()
     query = table.update().values(**{datum: data['newValue']}).where(
         and_(table.c.id == key, cell_predicate))
 
