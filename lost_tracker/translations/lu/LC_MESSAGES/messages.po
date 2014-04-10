@@ -1,0 +1,411 @@
+# Luba-Katanga translations for PROJECT.
+# Copyright (C) 2014 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-04-10 18:23+0200\n"
+"PO-Revision-Date: 2014-04-10 21:23+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: lu <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#: lost_tracker/main.py:92
+msgid "No such entity!"
+msgstr ""
+
+#: lost_tracker/main.py:306
+msgid ""
+"The registration has been recorded. However it is not yet activated.  You"
+" will receive a confirmation e-mail any second now. You must click on the"
+" link in that e-mail to activate the registrtion! Once this step is done,"
+" the registration will be processed by the lost team, and you will "
+"receive another e-mail with the final confirmation once that is done."
+msgstr ""
+
+#: lost_tracker/main.py:326
+msgid ""
+"Thank you. Your registration has been activated and the lost-team has "
+"been notified about your entry. Once everything is processed you will "
+"recieve another e-mail with the final details."
+msgstr ""
+
+#: lost_tracker/main.py:338
+msgid "This group has already been accepted!"
+msgstr ""
+
+#: lost_tracker/main.py:352
+msgid "Accepted registration for group {}"
+msgstr ""
+
+#: lost_tracker/main.py:359
+msgid "Group {name} successfully updated!"
+msgstr ""
+
+#: lost_tracker/main.py:362
+msgid "E-Mail sent successfully!"
+msgstr ""
+
+#: lost_tracker/main.py:373
+msgid "Logged in successfully"
+msgstr ""
+
+#: lost_tracker/main.py:376
+msgid "Invalid credentials!"
+msgstr ""
+
+#: lost_tracker/main.py:416 lost_tracker/main.py:462
+msgid "Access Denied"
+msgstr ""
+
+#: lost_tracker/main.py:437
+msgid "Table {name} not yet supported!"
+msgstr ""
+
+#: lost_tracker/main.py:498
+msgid "Incorrect value for direction: {!r}"
+msgstr ""
+
+#: lost_tracker/main.py:537
+msgid "Added {form}"
+msgstr ""
+
+#: lost_tracker/main.py:540
+msgid "Error: {message}"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:6
+msgid "Group Infos"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:9
+#: lost_tracker/templates/register.html:10
+msgid "Name"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:11
+#: lost_tracker/templates/group-tooltip.html:6
+msgid "Contact"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:13
+#: lost_tracker/templates/group-tooltip.html:7
+msgid "Phone"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:15
+#: lost_tracker/templates/edit_group.html:18
+#: lost_tracker/templates/group-tooltip.html:8
+msgid "Direction"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:23
+#: lost_tracker/templates/group-tooltip.html:9
+msgid "Starting Time"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:25
+#: lost_tracker/templates/register.html:14
+msgid "e-mail"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:27
+msgid "Comments"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:29
+msgid "Options"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:30
+msgid "Send e-mail to the group about the changes."
+msgstr ""
+
+#: lost_tracker/templates/form_score.html:16
+msgid "Questionnaire Score"
+msgstr ""
+
+#: lost_tracker/templates/form_score.html:17
+#: lost_tracker/templates/station.html:6
+msgid "Back to the home-page"
+msgstr ""
+
+#: lost_tracker/templates/form_score.html:27
+#: lost_tracker/templates/manage.html:28
+msgid "Group Name"
+msgstr ""
+
+#: lost_tracker/templates/form_score.html:38
+msgid "Form Number"
+msgstr ""
+
+#: lost_tracker/templates/form_score.html:42
+#: lost_tracker/templates/form_score.html:53
+#: lost_tracker/templates/guide.html:11
+#: lost_tracker/templates/scoreboard.html:19
+msgid "Score"
+msgstr ""
+
+#: lost_tracker/templates/form_score.html:51
+msgid "Group ID"
+msgstr ""
+
+#: lost_tracker/templates/form_score.html:52
+msgid "Questionnaire"
+msgstr ""
+
+#: lost_tracker/templates/gallery.html:11
+msgid "Nothing here yet"
+msgstr ""
+
+#: lost_tracker/templates/group-tooltip.html:10
+msgid "Status"
+msgstr ""
+
+#: lost_tracker/templates/group-tooltip.html:10
+msgid "Cancelled"
+msgstr ""
+
+#: lost_tracker/templates/group-tooltip.html:10
+msgid "Active"
+msgstr ""
+
+#: lost_tracker/templates/guide.html:3
+msgid "How does this work?"
+msgstr ""
+
+#: lost_tracker/templates/guide.html:4
+msgid "Has the team already arrived? Did they finish finished?"
+msgstr ""
+
+#: lost_tracker/templates/guide.html:5
+msgid "Click the image on the left to change this."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:7
+msgid "Grey circle: Team has not yet arrived."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:8
+msgid "Clock: The team has arrived."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:9
+msgid "Green circle: The team has finished."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:12
+msgid ""
+"There are two fields to enter scores: For the game and for the "
+"questionnaire. You can select a different questionnaire if necessary."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:15
+msgid "Hint"
+msgstr ""
+
+#: lost_tracker/templates/guide.html:16
+msgid "Teams are ordered like this:"
+msgstr ""
+
+#: lost_tracker/templates/guide.html:18
+msgid "Teams that have arrived (clock symbol) are shown first."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:19
+msgid "Next are the teams that have not yet arrived at the station."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:20
+msgid "Lastly, there are the teams that have finished this station."
+msgstr ""
+
+#: lost_tracker/templates/guide.html:23
+msgid "To re-order the list, refresh the page."
+msgstr ""
+
+#: lost_tracker/templates/index.html:4
+msgid "What is this?"
+msgstr ""
+
+#: lost_tracker/templates/index.html:8
+msgid ""
+"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br "
+"/>Riddles.<br /> Impossible tasks.<br /> Not to be missed."
+msgstr ""
+
+#: lost_tracker/templates/index.html:13
+msgid ""
+"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br "
+"/> Scouten a Guiden vun der FNEL"
+msgstr ""
+
+#: lost_tracker/templates/index.html:19
+msgid ""
+"Everybody who likes to spend a night outside, who's fairly well on foot "
+"and who does not mind getting home 3 hours late because they got lost may"
+" join :)"
+msgstr ""
+
+#: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:10
+#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:52
+msgid "Login"
+msgstr ""
+
+#: lost_tracker/templates/login.html:7
+msgid "Login Info"
+msgstr ""
+
+#: lost_tracker/templates/login.html:12
+msgid "Password"
+msgstr ""
+
+#: lost_tracker/templates/manage.html:4
+msgid "Time Slots"
+msgstr ""
+
+#: lost_tracker/templates/manage.html:8
+msgid "Slot"
+msgstr ""
+
+#: lost_tracker/templates/manage.html:24
+msgid "Unassigned Groups"
+msgstr ""
+
+#: lost_tracker/templates/master.html:34 lost_tracker/templates/where.html:4
+msgid "Where is this?"
+msgstr ""
+
+#: lost_tracker/templates/master.html:35
+#: lost_tracker/templates/register.html:23
+msgid "Register"
+msgstr ""
+
+#: lost_tracker/templates/master.html:36
+msgid "Pictures"
+msgstr ""
+
+#: lost_tracker/templates/master.html:37 lost_tracker/templates/misc.html:4
+msgid "Anything else?"
+msgstr ""
+
+#: lost_tracker/templates/master.html:40
+msgid "Help"
+msgstr ""
+
+#: lost_tracker/templates/master.html:46
+msgid "Logged in as:"
+msgstr ""
+
+#: lost_tracker/templates/master.html:47
+msgid "Matrix"
+msgstr ""
+
+#: lost_tracker/templates/master.html:48
+msgid "Slot Editor"
+msgstr ""
+
+#: lost_tracker/templates/master.html:49
+msgid "Manager"
+msgstr ""
+
+#: lost_tracker/templates/master.html:50
+msgid "Logout"
+msgstr ""
+
+#: lost_tracker/templates/matrix.html:17
+msgid "SUM"
+msgstr ""
+
+#: lost_tracker/templates/misc.html:6
+msgid "Entry fees are about €7 to €9 per person."
+msgstr ""
+
+#: lost_tracker/templates/misc.html:8
+msgid "Food and beverages are available at the start and on the trail."
+msgstr ""
+
+#: lost_tracker/templates/misc.html:11
+msgid ""
+"We do this because we like it. Tell us wat you think and visit us on "
+"Facebook:"
+msgstr ""
+
+#: lost_tracker/templates/misc.html:12
+msgid "Lost in the Darkness on Facebook"
+msgstr ""
+
+#: lost_tracker/templates/misc.html:16
+msgid "Everything penny we earn is donated to ONGD FNEL!"
+msgstr ""
+
+#: lost_tracker/templates/misc.html:18
+msgid ""
+"In the year 2012 we raised €2324. <br /> (and <a href='{link}'>the "
+"municipality of Mamer even added €1000!</a>)"
+msgstr ""
+
+#: lost_tracker/templates/notice.html:8
+msgid "Notice"
+msgstr ""
+
+#: lost_tracker/templates/register.html:4
+msgid "Registration"
+msgstr ""
+
+#: lost_tracker/templates/register.html:8
+msgid "Information about your group"
+msgstr ""
+
+#: lost_tracker/templates/register.html:12
+msgid "Contact Name"
+msgstr ""
+
+#: lost_tracker/templates/register.html:16
+msgid "Phone Number"
+msgstr ""
+
+#: lost_tracker/templates/register.html:18
+msgid "Anything Else?"
+msgstr ""
+
+#: lost_tracker/templates/scoreboard.html:11
+msgid "Scoreboard"
+msgstr ""
+
+#: lost_tracker/templates/scoreboard.html:12
+msgid "Current score"
+msgstr ""
+
+#: lost_tracker/templates/scoreboard.html:17
+msgid "Position"
+msgstr ""
+
+#: lost_tracker/templates/scoreboard.html:18
+msgid "Group"
+msgstr ""
+
+#: lost_tracker/templates/tabular.html:51
+msgid "Groups"
+msgstr ""
+
+#: lost_tracker/templates/tabular.html:52
+msgid "Stations"
+msgstr ""
+
+#: lost_tracker/templates/tabular.html:53
+msgid "Forms"
+msgstr ""
+
+#: lost_tracker/templates/where.html:6
+msgid "We will depart at the Scout's Home in Mamer (109, rte. d’Arlon)."
+msgstr ""
+
