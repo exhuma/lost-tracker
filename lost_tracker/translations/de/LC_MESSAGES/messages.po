@@ -52,7 +52,7 @@ msgstr "Anmeldung erfolgreich."
 
 #: lost_tracker/main.py:376
 msgid "Invalid credentials!"
-msgstr "UngÃ¼ltige Zugangsdaten!"
+msgstr "Ungültige Zugangsdaten!"
 
 #: lost_tracker/main.py:416
 #: lost_tracker/main.py:462
@@ -65,7 +65,7 @@ msgstr "Tabelle {name} ist noch nicht unterstützt."
 
 #: lost_tracker/main.py:498
 msgid "Incorrect value for direction: {!r}"
-msgstr "{!r} ist ein ungÃ¼ltiger Wert fÃ¼r dir Richtung."
+msgstr "{!r} ist ein ungültiger Wert für dir Richtung."
 
 #: lost_tracker/main.py:537
 msgid "Added {form}"
@@ -120,7 +120,7 @@ msgstr "Optionen"
 
 #: lost_tracker/templates/edit_group.html:30
 msgid "Send e-mail to the group about the changes."
-msgstr "e-mail mit den Ãnderungen an die Gruppe senden. "
+msgstr "e-mail mit den Änderungen an die Gruppe senden. "
 
 #: lost_tracker/templates/form_score.html:16
 msgid "Questionnaire Score"
@@ -129,7 +129,7 @@ msgstr "Punkte auf dem Fragebogen"
 #: lost_tracker/templates/form_score.html:17
 #: lost_tracker/templates/station.html:6
 msgid "Back to the home-page"
-msgstr "ZurÃ¼ck zur Startseite"
+msgstr "Zurück zur Startseite"
 
 #: lost_tracker/templates/form_score.html:27
 #: lost_tracker/templates/manage.html:28
@@ -181,7 +181,7 @@ msgstr "Ist die Gruppe bereits eingetroffen? Sind sie fertig?"
 
 #: lost_tracker/templates/guide.html:5
 msgid "Click the image on the left to change this."
-msgstr "Klick auf das linke Bild um dies zu Ã¤ndern."
+msgstr "Klick auf das linke Bild um dies zu ändern."
 
 #: lost_tracker/templates/guide.html:7
 msgid "Grey circle: Team has not yet arrived."
@@ -193,7 +193,7 @@ msgstr "Uhr: Die Gruppe ist eingetroffen."
 
 #: lost_tracker/templates/guide.html:9
 msgid "Green circle: The team has finished."
-msgstr "GrÃ¼ner Kreis: Dir Gruppe ist fertig."
+msgstr "Grüner Kreis: Dir Gruppe ist fertig."
 
 #: lost_tracker/templates/guide.html:12
 msgid "There are two fields to enter scores: For the game and for the questionnaire. You can select a different questionnaire if necessary."
@@ -221,7 +221,7 @@ msgstr "Als letztes kommen die Grupen die fertig sind."
 
 #: lost_tracker/templates/guide.html:23
 msgid "To re-order the list, refresh the page."
-msgstr "Um die Sortierung auszufÃ¼hren muss die Seite neu aufgerufen werden."
+msgstr "Um die Sortierung auszuführen muss die Seite neu aufgerufen werden."
 
 #: lost_tracker/templates/index.html:4
 msgid "What is this?"
@@ -387,7 +387,7 @@ msgstr "Stationen"
 
 #: lost_tracker/templates/tabular.html:53
 msgid "Forms"
-msgstr "FragebÃ¶gen"
+msgstr "Fragebögen"
 
 #: lost_tracker/templates/where.html:6
 msgid "We will depart at the Scout's Home in Mamer (109, rte. d’Arlon)."
