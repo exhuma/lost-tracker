@@ -1,6 +1,7 @@
 from collections import namedtuple
 from operator import attrgetter
 
+from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
@@ -463,13 +464,24 @@ def update_cell_value(cls, key, datum):
 
     data = request.json
     table = mdl.Base.metadata.tables[cls]
-    if data['oldValue'] in ('', None):
+
+    if table.columns[datum].type.__class__ == Unicode:
+        coerce_ = unicode.strip
+    elif table.columns[datum].type.__class__ == Integer:
+        coerce_ = int
+    else:
+        coerce_ = lambda x: x
+
+    if data['oldValue'] in ('', None) and coerce_ == unicode.strip:
         cell_predicate = or_(table.c[datum] == '',
                              table.c[datum] == None)  # NOQA
+    elif data['oldValue'] in ('', None):
+        cell_predicate = table.c[datum] == None  # NOQA
     else:
         cell_predicate = table.c[datum] == data['oldValue']
 
-    data['newValue'] = data['newValue'].strip()
+    data['newValue'] = coerce_(data['newValue'])
+    print(data)
     query = table.update().values(**{datum: data['newValue']}).where(
         and_(table.c.id == key, cell_predicate))
 
