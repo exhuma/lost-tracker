@@ -68,7 +68,9 @@ def _stategetter(element):
 
 @babel.localeselector
 def get_locale():
-    return 'de'
+    locale = flask_session.get('lang', 'lu')
+    app.logger.debug('Using locale {}'.format(locale))
+    return locale
 
 
 @login_manager.user_loader
@@ -99,6 +101,13 @@ def before_request():
     # first import! As it may not yet be configured at global import time this
     # would fail if imported globally.
     from lost_tracker.database import db_session as session
+
+    # Only set this if the argument is present (which means the user wants to
+    # change the language)
+    if 'lang' in request.args:
+        app.logger.debug('Changing locale to {}'.format(request.args['lang']))
+        flask_session['lang'] = request.args['lang']
+
     g.session = session
 
 

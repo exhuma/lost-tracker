@@ -41,6 +41,12 @@
         {% endif %}
       </span>
 
+      <span id="flags">
+        <a href="{{request.path}}?lang=en"><img src="{{url_for('static', filename='flags/gb.png')}}" /></a>&nbsp;
+        <a href="{{request.path}}?lang=de"><img src="{{url_for('static', filename='flags/de.png')}}" /></a>&nbsp;
+        <a href="{{request.path}}?lang=lu"><img src="{{url_for('static', filename='flags/lu.png')}}" /></a>
+      </span>
+
       <span id="auth">
         {% if current_user.is_authenticated() %}
           {{_('Logged in as:')}} {{current_user.name}} |

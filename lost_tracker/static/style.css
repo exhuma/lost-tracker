@@ -227,8 +227,15 @@ H1, H2 {
     padding-top: 1em;
 }
 
-#auth {
+#auth,
+#flags {
     float: right;
+}
+
+#flags {
+    margin-left: 1em;
+    vertical-align: middle;
+    line-height: 1.7;
 }
 
 .cancelled {
