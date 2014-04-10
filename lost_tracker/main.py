@@ -92,7 +92,6 @@ def error_handler(request):
     return gettext('No such entity!'), 404
 
 
-
 @app.before_request
 def before_request():
     # This import is deferred as it triggers the DB engine constructor on
@@ -302,12 +301,16 @@ def register():
             loco.store_registration(g.session, data, confirmation_link)
         except ValueError as exc:
             return 'Error: ' + str(exc), 400
-        return render_template('notice.html',
-                               message=gettext(
-                                   'Registration accepted. You will receive a '
-                                   'confirmation e-mail any second now. You '
-                                   'need to confirm this e-mail before the '
-                                   'registration will be processed!'))
+        return render_template(
+            'notice.html',
+            message=gettext(
+                'The registration has been recorded. However it is not yet '
+                'activated.  You will receive a confirmation e-mail any '
+                'second now. You must click on the link in that e-mail to '
+                'activate the registrtion! Once this step is done, the '
+                'registration will be processed by the lost team, and you '
+                'will receive another e-mail with the final confirmation once '
+                'that is done.'))
 
     return render_template('register.html')
 
@@ -321,9 +324,9 @@ def confirm_registration(key):
                                key=key,
                                _external=True))
     return render_template('notice.html', message=gettext(
-        'Thank you. Your registration has been confirmed and the lost-team '
-        'has been notified about your entry. Once everything is confirmed you '
-        'will recieve another e-mail with additional details.'))
+        'Thank you. Your registration has been activated and the lost-team '
+        'has been notified about your entry. Once everything is processed you '
+        'will recieve another e-mail with the final details.'))
 
 
 @app.route('/accept/<key>')
@@ -353,8 +356,8 @@ def save_group_info(id):
         loco.update_group(id,
                           request.form,
                           request.form['send_email'] == 'true')
-        flash(gettext('Group {} successfully updated!').format(
-            request.form['name']), 'info')
+        flash(gettext('Group {name} successfully updated!').format(
+            name=request.form['name']), 'info')
         if request.form['send_email'] == 'true':
             flash(gettext('E-Mail sent successfully!'), 'info')
             return redirect(url_for('tabularadmin', table='group'))
@@ -431,7 +434,8 @@ def tabularadmin(table):
         data = g.session.query(mdl.Form)
         data = data.order_by(mdl.Form.name)
     else:
-        return gettext('Table {} not yet supported!').format(table), 400
+        return gettext('Table {name} not yet supported!').format(
+            name=table), 400
 
     # prepare data for the template
     Row = namedtuple('Row', 'key, data')
@@ -530,10 +534,11 @@ def add_new_form():
     form = loco.add_form(g.session, name, max_score)
     try:
         g.session.commit()
-        return jsonify(message=gettext('Added {}').format(form))
+        return jsonify(message=gettext('Added {form}').format(form=form))
     except Exception as exc:
         g.session.rollback()
-        return jsonify(message=gettext('Error: {}').format(exc)), 400
+        return jsonify(message=gettext('Error: {message}').format(
+            message=exc)), 400
 
 
 @app.route('/group', methods=['POST'])

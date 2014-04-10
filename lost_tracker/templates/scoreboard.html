@@ -8,15 +8,15 @@
 <div id="logo">
   <img src="{{url_for('static', filename='images/logo2014.png')}}" />
 </div>
-<h1>Ranglescht</h1>
-<h3>(Momentanen Stand)</h3>
+<h1>{{_("Scoreboard")}}</h1>
+<h3>({{_("Current score")}})</h3>
 
 <br>
 <table border="0" width="100%">
     <tr>
-        <th align="left">Pos.</th>
-        <th align="left">Gruppennumm</th>
-        <th align="left">Punkten</th>
+      <th align="left">{{_("Position")}}</th>
+      <th align="left">{{_("Group")}}</th>
+      <th align="left">{{_("Score")}}</th>
     </tr>
     {% for row in scores %}
     <tr>

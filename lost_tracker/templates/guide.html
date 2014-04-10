@@ -1,26 +1,24 @@
 {% extends "master_narrow.html" %}
 {% block content %}
-    <h1>Wéi geht dat hei?!?</h1>
-    <h2>Ass d'Grupp ukomm? Schonns färdeg?</h2>
-    Mat dem Bild op der lénker Säit kann een wiesslen.
+    <h1>{{_("How does this work?")}}</h1>
+    <h2>{{_("Has the team already arrived? Did they finish finished?")}}</h2>
+    {{_("Click the image on the left to change this.")}}
     <ul>
-        <li>Gro: d'Grupp ass nach net ukomm</li>
-        <li>Giel (Auer): d'Grupp ass ukomm</li>
-        <li>Gréng: d'Grupp ass färdeg.</li>
+      <li>{{_("Grey circle: Team has not yet arrived.")}}</li>
+      <li>{{_("Clock: The team has arrived.")}}</li>
+      <li>{{_("Green circle: The team has finished.")}}</li>
     </ul>
-    <h2>Punkten</h2>
-    D'Punkten vum Posten sin duergestallt mat dem Pärd. D'Punkten vum Frobou
-    mat Blat an Bläistëft. Fir d'Punkten anzedron, muss een als éischt den
-    Frobou auswielen, duerno d'Punkten aschreiwen an OK drécken.
+    <h2>{{_("Score")}}</h2>
+    {{_("There are two fields to enter scores: For the game and for the "
+    "questionnaire. You can select a different questionnaire if necessary.")}}
 
-    <h2>Tip</h2>
-    Gruppen sin esou zortéiert:
+    <h2>{{_("Hint")}}</h2>
+    {{_("Teams are ordered like this:")}}
     <ul>
-        <li>Gruppen déi ukomm sin (giel Auer) gin als éischt ugewisen.</li>
-        <li>Duerno kommen d'Gruppen déi nach nët um Posten ukomm sin</li>
-        <li>Als lescht kommen d'Gruppen déi färdeg an fort sin.</li>
+      <li>{{_("Teams that have arrived (clock symbol) are shown first.")}}</li>
+      <li>{{_("Next are the teams that have not yet arrived at the station.")}}</li>
+      <li>{{_("Lastly, there are the teams that have finished this station.")}}</li>
     </ul>
 
-    Leider get déi Zortéirung just nei lafen gelos, wann een en "refresh" vun
-    der Säit mecht.
+    {{_("To re-order the list, refresh the page.")}}
 {% endblock %}
