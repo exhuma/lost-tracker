@@ -1,30 +1,23 @@
 {% extends "master_narrow.html" %}
 
 {% block content %}
-<h1>Wat ass dat?</h1>
+<h1>{{_("What is this?")}}</h1>
 
 <div class="col-group">
   <div>
-    E Nuetsrallye.<br />
-    Dobaussen an der Däischtert.<br />
-    Spiller.<br />
-    Rätselen.<br />
-    Onméiglech Aufgaben.<br />
-    Net ze verpassen.
+    {{_("A 'Night Rallye'.<br /> Outside in the darkness<br /> Games."
+    "<br />Riddles.<br /> Impossible tasks.<br /> Not to be missed.")}}
   </div>
 
   <div>
-    Organiséiert vun de <br />
-    Caper Piwitschen <br />
-    a <br />
-    Mamer Wiselen<br />
-    Scouten a Guiden vun der FNEL
+    {{_("Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer "
+    "Wiselen<br /> Scouten a Guiden vun der FNEL")}}
   </div>
 </div>
 
 <p>
-Et ass fir jiddereen, dee Loscht huet an der Nuecht dobaussen ze sinn, deen 
-einegermoossen gudd zefouss ass a keng Angscht huet, mol eng Kéier 3 Stonnen ze 
-spéit heemzekommen, well en sech verlaf huet ;)
+{{_("Everybody who likes to spend a night outside, who's fairly well on foot "
+"and who does not mind getting home 3 hours late because they got lost may join "
+":)")}}
 </p>
 {% endblock %}

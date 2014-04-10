@@ -312,6 +312,7 @@ class User(Base):
     name = Column(Unicode(100))
     password = Column(Unicode(100))
     email = Column(Unicode(100))
+    locale = Column(Unicode(2))
 
     def __init__(self, login, password, email):
         self.login = login

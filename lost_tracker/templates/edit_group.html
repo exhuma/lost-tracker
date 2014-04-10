@@ -3,31 +3,31 @@
 <h1>{{group.name}}</h1>
 <form id="group_edit" action="{{url_for('save_group_info', id=group.id)}}" method="POST">
   <fieldset>
-    <legend>Group Infos</legend>
+    <legend>{{_('Group Infos')}}</legend>
     <input type="hidden" name="id" value="{{group.id}}" />
     <dl>
-      <dt>Name</dt>
+      <dt>{{_('Name')}}</dt>
       <dd><input type="text" name="name" value="{{group.name}}" /></dd>
-      <dt>Contact</dt>
+      <dt>{{_('Contact')}}</dt>
       <dd><input type="text" name="contact" value="{{group.contact}}" /></dd>
-      <dt>Phone</dt>
+      <dt>{{_('Phone')}}</dt>
       <dd><input type="text" name="phone" value="{{group.phone}}" /></dd>
-      <dt>Direction</dt>
+      <dt>{{_('Direction')}}</dt>
       <dd>
         <select name="direction">
-          <option value="{{dir_a}}" disabled {{'selected' if group.direction not in (dir_a, dir_b)}}>Direction</option>
+          <option value="{{dir_a}}" disabled {{'selected' if group.direction not in (dir_a, dir_b)}}>{{_('Direction')}}</option>
           <option value="{{dir_a}}" {{'selected' if group.direction == dir_a}}>{{dir_a}}</option>
           <option value="{{dir_b}}" {{'selected' if group.direction == dir_b}}>{{dir_b}}</option>
         </select>
       </dd>
-      <dt>Start Time</dt>
+      <dt>{{_('Starting Time')}}</dt>
       <dd><input type="text" name="start_time" value="{{group.start_time}}"/></dd>
-      <dt>e-mail</dt>
+      <dt>{{_('e-mail')}}</dt>
       <dd><input type="email" name="email" value="{{group.email}}" /></dd>
-      <dt>Comments</dt>
+      <dt>{{_('Comments')}}</dt>
       <dd><textarea name="comments" rows="10">{{group.comments}}</textarea></dd>
-      <dt>Options</dt>
-      <dd><input type="checkbox" checked id="send_email" name="send_email" value="true" /><label for="send_email">Send e-mail to the group about the changes.</label></dd>
+      <dt>{{_('Options')}}</dt>
+      <dd><input type="checkbox" checked id="send_email" name="send_email" value="true" /><label for="send_email">{{_('Send e-mail to the group about the changes.')}}</label></dd>
     </dl>
     <input type="submit" value="Save" />
   </fieldset>

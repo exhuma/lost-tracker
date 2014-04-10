@@ -31,25 +31,25 @@
     <div id="menu">
       <span id="#mainmenu">
         <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
-        <a href="{{url_for('where')}}">Wou ass dat?</a> |
-        <a href="{{url_for('register')}}">Umellen?</a> |
-        <a href="{{url_for('photo_gallery')}}">Photoën</a> |
-        <a href="{{url_for('misc')}}">Soss nach?</a> |
+        <a href="{{url_for('where')}}">{{_('Where is this?')}}</a> |
+        <a href="{{url_for('register')}}">{{_('Register')}}</a> |
+        <a href="{{url_for('photo_gallery')}}">{{_('Pictures')}}</a> |
+        <a href="{{url_for('misc')}}">{{_('Anything else?')}}</a> |
         {% if localconf.get('app', 'helpdesk', default='') %}
           <span id="contact"><a
-            href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
+            href="{{url_for('guide')}}">{{_('Help')}}</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
         {% endif %}
       </span>
 
       <span id="auth">
         {% if current_user.is_authenticated() %}
-        Logged in as {{current_user.name}} |
-          <a href="{{url_for('matrix')}}">Matrix</a> |
-          <a href="{{url_for('manage')}}">Slot Editor</a> |
-          <a href="{{url_for('tabularadmin', table='group')}}">Manager</a>
-          &mdash; <a href="{{url_for('logout')}}">Logout</a>
+          {{_('Logged in as:')}} {{current_user.name}} |
+          <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
+          <a href="{{url_for('manage')}}">{{_('Slot Editor')}}</a> |
+          <a href="{{url_for('tabularadmin', table='group')}}">{{_('Manager')}}</a> |
+          <a href="{{url_for('logout')}}">{{_('Logout')}}</a>
         {% else %}
-          <a href="{{url_for('login')}}">Login</a>
+          <a href="{{url_for('login')}}">{{_('Login')}}</a>
         {% endif %}
       </span>
     </div>

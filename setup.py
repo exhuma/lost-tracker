@@ -11,6 +11,8 @@ setup(
         'alembic==0.6.3',
         'config-resolver >= 4.2, <5.0',
         'envelopes==0.4',
+        'envelopes==0.4',
+        'flask-babel==0.9',
         'mock==1.0.1',
         'psycopg2==2.5.2',
         'requests==2.2.1'

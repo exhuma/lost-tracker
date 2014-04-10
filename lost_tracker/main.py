@@ -10,6 +10,7 @@ from flask.ext.login import (
     login_user,
     logout_user,
 )
+from flask.ext.babel import gettext, Babel
 from sqlalchemy import create_engine, and_, or_
 from flask import (
     Flask,
@@ -34,6 +35,8 @@ app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
                        version='1.0', require_load=True)
 app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
+
+babel = Babel(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -62,6 +65,11 @@ def _stategetter(element):
         return 99
 
 
+@babel.localeselector
+def get_locale():
+    return 'de'
+
+
 @login_manager.user_loader
 def load_user(userid):
     return loco.get_user(userid)
@@ -81,7 +89,7 @@ def bind_metadata():
 
 @app.errorhandler(NoResultFound)
 def error_handler(request):
-    return 'No such entity!', 404
+    return gettext('No such entity!'), 404
 
 
 @app.before_request
@@ -293,11 +301,16 @@ def register():
             loco.store_registration(g.session, data, confirmation_link)
         except ValueError as exc:
             return 'Error: ' + str(exc), 400
-        return render_template('notice.html',
-                               message='Registration accepted. You will '
-                               'receive a confirmation e-mail any second now. '
-                               'You need to confirm this e-mail before the '
-                               'registration will be processed!')
+        return render_template(
+            'notice.html',
+            message=gettext(
+                'The registration has been recorded. However it is not yet '
+                'activated.  You will receive a confirmation e-mail any '
+                'second now. You must click on the link in that e-mail to '
+                'activate the registrtion! Once this step is done, the '
+                'registration will be processed by the lost team, and you '
+                'will receive another e-mail with the final confirmation once '
+                'that is done.'))
 
     return render_template('register.html')
 
@@ -310,12 +323,10 @@ def confirm_registration(key):
         activation_url=url_for('accept_registration',
                                key=key,
                                _external=True))
-    return render_template('notice.html',
-                           message='Thank you. Your registration has been '
-                           'confirmed and the lost-team has been notified '
-                           'about your entry. Once everything is confirmed '
-                           'you will recieve another e-mail with additional '
-                           'details.')
+    return render_template('notice.html', message=gettext(
+        'Thank you. Your registration has been activated and the lost-team '
+        'has been notified about your entry. Once everything is processed you '
+        'will recieve another e-mail with the final details.'))
 
 
 @app.route('/accept/<key>')
@@ -324,7 +335,7 @@ def accept_registration(key):
     group = loco.get_grp_by_registration_key(key)
 
     if group.finalized:
-        flash('This group has already been accepted!', 'info')
+        flash(gettext('This group has already been accepted!'), 'info')
 
     return render_template('edit_group.html',
                            group=group,
@@ -338,16 +349,17 @@ def save_group_info(id):
     group = loco.get_grps_by_id(id)
     if not group.finalized:
         loco.accept_registration(group.confirmation_key, request.form)
-        flash('Accepted registration for group {}'.format(group.name), 'info')
-        return redirect(url_for('matrix'))
+        flash(gettext('Accepted registration for group {}').format(group.name),
+              'info')
+        return redirect(url_for('index'))
     else:
         loco.update_group(id,
                           request.form,
                           request.form['send_email'] == 'true')
-        flash('Group {} successfully updated!'.format(request.form['name']),
-              'info')
+        flash(gettext('Group {name} successfully updated!').format(
+            name=request.form['name']), 'info')
         if request.form['send_email'] == 'true':
-            flash('E-Mail sent successfully!', 'info')
+            flash(gettext('E-Mail sent successfully!'), 'info')
             return redirect(url_for('tabularadmin', table='group'))
 
 
@@ -358,10 +370,10 @@ def login():
         user = loco.get_user(request.form['login'])
         if authed:
             login_user(user, remember=True)
-            flash('Logged in successfully', 'info')
-            return redirect(request.values.get('next') or url_for('matrix'))
+            flash(gettext('Logged in successfully'), 'info')
+            return redirect(request.values.get('next') or url_for('index'))
         else:
-            flash("Invalid credentials!", 'error')
+            flash(gettext('Invalid credentials!'), 'error')
             return render_template('login.html')
     else:
         return render_template('login.html')
@@ -401,7 +413,7 @@ def manage():
 def tabularadmin(table):
 
     if table not in MODIFIABLE_TABLES:
-        return 'Access Denied', 401
+        return gettext('Access Denied'), 401
 
     if table == 'group':
         columns = [_ for _ in mdl.Group.__table__.columns
@@ -422,7 +434,8 @@ def tabularadmin(table):
         data = g.session.query(mdl.Form)
         data = data.order_by(mdl.Form.name)
     else:
-        return 'Table {} not yet supported!'.format(table), 400
+        return gettext('Table {name} not yet supported!').format(
+            name=table), 400
 
     # prepare data for the template
     Row = namedtuple('Row', 'key, data')
@@ -446,7 +459,7 @@ def tabularadmin(table):
 def update_cell_value(cls, key, datum):
 
     if cls not in MODIFIABLE_TABLES:
-        return 'Access Denied', 401
+        return gettext('Access Denied'), 401
 
     data = request.json
     table = mdl.Base.metadata.tables[cls]
@@ -482,7 +495,7 @@ def set_time_slot(group_name):
     data = request.json
     if data['direction'] not in (mdl.DIR_A, mdl.DIR_B):
         return jsonify(
-            message="Incorrect value for direction: {!r}".format(
+            message=gettext('Incorrect value for direction: {!r}').format(
                 data['direction'])), 400
     group = loco.get_grp_by_name(group_name)
     if not group:
@@ -521,10 +534,11 @@ def add_new_form():
     form = loco.add_form(g.session, name, max_score)
     try:
         g.session.commit()
-        return jsonify(message='Added {}'.format(form))
+        return jsonify(message=gettext('Added {form}').format(form=form))
     except Exception as exc:
         g.session.rollback()
-        return jsonify(message='Error: {}'.format(exc)), 400
+        return jsonify(message=gettext('Error: {message}').format(
+            message=exc)), 400
 
 
 @app.route('/group', methods=['POST'])

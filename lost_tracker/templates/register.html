@@ -1,26 +1,26 @@
 {% extends "master_narrow.html" %}
 
 {% block content %}
-    <h1>Umellung - 2014</h1>
+    <h1>{{_("Registration")}} - 2014</h1>
 
     <form id="registration_form" action="{{url_for('register')}}" method="POST">
       <fieldset>
-        <legend>Perséinlech Informatiounen</legend>
+        <legend>{{_("Information about your group")}}</legend>
         <dl>
-          <dt>Gruppennumm</dt>
+          <dt>{{_("Name")}}</dt>
           <dd><input type="text" name="group_name" /></dd>
-          <dt>Kontaktpersoun</dt>
+          <dt>{{_("Contact Name")}}</dt>
           <dd><input type="text" name="contact_name" /></dd>
-          <dt>e-mail</dt>
+          <dt>{{_("e-mail")}}</dt>
           <dd><input type="email" name="email" /></dd>
-          <dt>Tel. Nummer</dt>
+          <dt>{{_("Phone Number")}}</dt>
           <dd><input type="text" name="tel" /></dd>
-          <dt>Soss nach eppes?</dt>
+          <dt>{{_("Anything Else?")}}</dt>
           <dd>
             <textarea name="comments" rows="8" cols="40"></textarea>
           </dd>
         </dl>
-        <input type="submit" value="Aschreiwen" />
+        <input type="submit" value="{{_("Register")}}" />
       </fieldset>
     </form>
     <script type="text/javascript" charset="utf-8">

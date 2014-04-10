@@ -1,3 +1,4 @@
+*.mo
 /.mamerwiselen
 /PKG-INFO
 /__libs__
@@ -6,3 +7,4 @@
 /env
 /lost_tracker.egg-info
 /lost_tracker/static/js/lost_tracker.js
+/messages.pot
