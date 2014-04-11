@@ -22,7 +22,7 @@ def send(template, to, data):
     tmpl = _ENV.get_template('email/{}.txt'.format(template))
     content = tmpl.render(**data)
     mail = Envelope(
-        from_addr=(u'no_reply@lost.lu', u'lost.lu registration'),
+        from_addr=(u'reservation@lost.lu', u'Lost.lu Registration Team'),
         to_addr=to,
         subject=subject,
         text_body=content)
