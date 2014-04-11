@@ -22,6 +22,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    session as flask_session,
     url_for,
 )
 
