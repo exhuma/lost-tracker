@@ -426,3 +426,14 @@ def delete_station(id):
 
 def delete_form(id):
     Form.query.filter(Form.id == id).delete()
+
+
+def stats():
+    num_groups = len(get_grps())
+    num_slots = len(slots()) * 2  # DIR_A and DIR_B
+    return {
+        'groups': num_groups,
+        'slots': num_slots,
+        'free_slots': num_slots - num_groups,
+        'load': float(num_groups) / num_slots
+    }

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-10 18:23+0200\n"
+"POT-Creation-Date: 2014-04-14 19:21+0200\n"
 "PO-Revision-Date: 2014-04-10 21:15+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: lost_tracker/main.py:92
+#: lost_tracker/main.py:96
 msgid "No such entity!"
 msgstr ""
 
-#: lost_tracker/main.py:306
+#: lost_tracker/main.py:317
 msgid ""
 "The registration has been recorded. However it is not yet activated.  You"
 " will receive a confirmation e-mail any second now. You must click on the"
@@ -31,54 +31,54 @@ msgid ""
 "receive another e-mail with the final confirmation once that is done."
 msgstr ""
 
-#: lost_tracker/main.py:326
+#: lost_tracker/main.py:337
 msgid ""
 "Thank you. Your registration has been activated and the lost-team has "
 "been notified about your entry. Once everything is processed you will "
 "recieve another e-mail with the final details."
 msgstr ""
 
-#: lost_tracker/main.py:338
+#: lost_tracker/main.py:349
 msgid "This group has already been accepted!"
 msgstr ""
 
-#: lost_tracker/main.py:352
+#: lost_tracker/main.py:363
 msgid "Accepted registration for group {}"
 msgstr ""
 
-#: lost_tracker/main.py:359
+#: lost_tracker/main.py:370
 msgid "Group {name} successfully updated!"
 msgstr ""
 
-#: lost_tracker/main.py:362
+#: lost_tracker/main.py:373
 msgid "E-Mail sent successfully!"
 msgstr ""
 
-#: lost_tracker/main.py:373
+#: lost_tracker/main.py:384
 msgid "Logged in successfully"
 msgstr ""
 
-#: lost_tracker/main.py:376
+#: lost_tracker/main.py:387
 msgid "Invalid credentials!"
 msgstr ""
 
-#: lost_tracker/main.py:416 lost_tracker/main.py:462
+#: lost_tracker/main.py:430 lost_tracker/main.py:476
 msgid "Access Denied"
 msgstr ""
 
-#: lost_tracker/main.py:437
+#: lost_tracker/main.py:451
 msgid "Table {name} not yet supported!"
 msgstr ""
 
-#: lost_tracker/main.py:498
+#: lost_tracker/main.py:524
 msgid "Incorrect value for direction: {!r}"
 msgstr ""
 
-#: lost_tracker/main.py:537
+#: lost_tracker/main.py:563
 msgid "Added {form}"
 msgstr ""
 
-#: lost_tracker/main.py:540
+#: lost_tracker/main.py:566
 msgid "Error: {message}"
 msgstr ""
 
@@ -87,7 +87,7 @@ msgid "Group Infos"
 msgstr ""
 
 #: lost_tracker/templates/edit_group.html:9
-#: lost_tracker/templates/register.html:10
+#: lost_tracker/templates/register.html:15
 msgid "Name"
 msgstr ""
 
@@ -97,23 +97,23 @@ msgid "Contact"
 msgstr ""
 
 #: lost_tracker/templates/edit_group.html:13
-#: lost_tracker/templates/group-tooltip.html:7
+#: lost_tracker/templates/group-tooltip.html:8
 msgid "Phone"
 msgstr ""
 
 #: lost_tracker/templates/edit_group.html:15
 #: lost_tracker/templates/edit_group.html:18
-#: lost_tracker/templates/group-tooltip.html:8
+#: lost_tracker/templates/group-tooltip.html:9
 msgid "Direction"
 msgstr ""
 
 #: lost_tracker/templates/edit_group.html:23
-#: lost_tracker/templates/group-tooltip.html:9
+#: lost_tracker/templates/group-tooltip.html:10
 msgid "Starting Time"
 msgstr ""
 
 #: lost_tracker/templates/edit_group.html:25
-#: lost_tracker/templates/register.html:14
+#: lost_tracker/templates/register.html:19
 msgid "e-mail"
 msgstr ""
 
@@ -166,15 +166,15 @@ msgstr ""
 msgid "Nothing here yet"
 msgstr ""
 
-#: lost_tracker/templates/group-tooltip.html:10
+#: lost_tracker/templates/group-tooltip.html:11
 msgid "Status"
 msgstr ""
 
-#: lost_tracker/templates/group-tooltip.html:10
+#: lost_tracker/templates/group-tooltip.html:11
 msgid "Cancelled"
 msgstr ""
 
-#: lost_tracker/templates/group-tooltip.html:10
+#: lost_tracker/templates/group-tooltip.html:11
 msgid "Active"
 msgstr ""
 
@@ -256,7 +256,7 @@ msgid ""
 msgstr ""
 
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:10
-#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:52
+#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:58
 msgid "Login"
 msgstr ""
 
@@ -285,7 +285,7 @@ msgid "Where is this?"
 msgstr ""
 
 #: lost_tracker/templates/master.html:35
-#: lost_tracker/templates/register.html:23
+#: lost_tracker/templates/register.html:28
 msgid "Register"
 msgstr ""
 
@@ -301,23 +301,23 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: lost_tracker/templates/master.html:46
+#: lost_tracker/templates/master.html:52
 msgid "Logged in as:"
 msgstr ""
 
-#: lost_tracker/templates/master.html:47
+#: lost_tracker/templates/master.html:53
 msgid "Matrix"
 msgstr ""
 
-#: lost_tracker/templates/master.html:48
+#: lost_tracker/templates/master.html:54
 msgid "Slot Editor"
 msgstr ""
 
-#: lost_tracker/templates/master.html:49
+#: lost_tracker/templates/master.html:55
 msgid "Manager"
 msgstr ""
 
-#: lost_tracker/templates/master.html:50
+#: lost_tracker/templates/master.html:56
 msgid "Logout"
 msgstr ""
 
@@ -353,7 +353,7 @@ msgid ""
 "municipality of Mamer even added €1000!</a>)"
 msgstr ""
 
-#: lost_tracker/templates/notice.html:8
+#: lost_tracker/templates/notice.html:5
 msgid "Notice"
 msgstr ""
 
@@ -361,19 +361,29 @@ msgstr ""
 msgid "Registration"
 msgstr ""
 
+#: lost_tracker/templates/register.html:6
+msgid ""
+"We are sorry, the event is currently fully booked! You can register "
+"however. With luck we can sqeeze you in, but don't get your hopes up :("
+msgstr ""
+
 #: lost_tracker/templates/register.html:8
+msgid "Only {free_slots} registrations remain available! Hurry up!"
+msgstr ""
+
+#: lost_tracker/templates/register.html:13
 msgid "Information about your group"
 msgstr ""
 
-#: lost_tracker/templates/register.html:12
+#: lost_tracker/templates/register.html:17
 msgid "Contact Name"
 msgstr ""
 
-#: lost_tracker/templates/register.html:16
+#: lost_tracker/templates/register.html:21
 msgid "Phone Number"
 msgstr ""
 
-#: lost_tracker/templates/register.html:18
+#: lost_tracker/templates/register.html:23
 msgid "Anything Else?"
 msgstr ""
 

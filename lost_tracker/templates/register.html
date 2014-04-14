@@ -2,6 +2,11 @@
 
 {% block content %}
     <h1>{{_("Registration")}} - 2014</h1>
+    {% if stats.free_slots <= 0 %}
+      <h3>{{_("We are sorry, the event is currently fully booked! You can register however. With luck we can sqeeze you in, but don't get your hopes up :(")}}</h3>
+    {% elif stats.load >= 0.7 %}
+      <h3>{{_("Only {free_slots} registrations remain available! Hurry up!").format(free_slots=stats.free_slots)}}</h3>
+    {% endif %}
 
     <form id="registration_form" action="{{url_for('register')}}" method="POST">
       <fieldset>

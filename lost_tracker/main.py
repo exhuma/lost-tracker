@@ -323,7 +323,7 @@ def register():
                 'will receive another e-mail with the final confirmation once '
                 'that is done.'))
 
-    return render_template('register.html')
+    return render_template('register.html', stats=loco.stats())
 
 
 @app.route('/confirm')
@@ -418,7 +418,8 @@ def manage():
                            dir_b=mdl.DIR_B,
                            groups_a=groups_a,
                            groups_b=groups_b,
-                           groups_none=groups_none)
+                           groups_none=groups_none,
+                           stats=loco.stats())
 
 
 @app.route('/manage/table/<table>')
