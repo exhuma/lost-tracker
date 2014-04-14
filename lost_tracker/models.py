@@ -204,6 +204,7 @@ class Group(Base):
         else:
             self.order = 0
 
+
 class Station(Base):
     __tablename__ = 'station'
     id = Column(Integer, primary_key=True)
@@ -294,6 +295,7 @@ class TimeSlot(object):
     def __hash__(self):
         return hash(self.time)
 
+
 class User(Base):
     """
     A user class for flask-login.
@@ -331,26 +333,3 @@ class User(Base):
 
     def get_id(self):
         return self.login
-
-
-# station_select = select([
-#     GroupStation.__table__.c.group_id,
-#     GroupStation.__table__.c.score])
-#
-# form_select = select([
-#     form_scores.c.group_id,
-#     form_scores.c.score])
-#
-# big_from = station_select.union(form_select).alias('subs')
-# union_select = select([big_from.c.group_id,
-#     func.sum(big_from.c.score)],
-#     from_obj=big_from)
-# union_select = union_select.group_by(union_select.c.group_id).alias("resultq")
-#
-#
-# class Results(Base):
-#     __table__ = union_select
-#
-#     def __repr__(self):
-#         return "<Results group_id={0}, score={1}>".format(
-#                 self.group_id, 10)
