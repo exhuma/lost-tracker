@@ -290,11 +290,6 @@ def scoreboard():
     return render_template('scoreboard.html', scores=output)
 
 
-@app.route('/guide')
-def guide():
-    return render_template('guide.html')
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':

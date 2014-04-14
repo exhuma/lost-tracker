@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-14 19:21+0200\n"
+"POT-Creation-Date: 2014-04-14 19:26+0200\n"
 "PO-Revision-Date: 2014-04-11 08:03+0100\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language-Team: lu <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "No such entity!"
 msgstr ""
 
-#: lost_tracker/main.py:317
+#: lost_tracker/main.py:312
 msgid ""
 "The registration has been recorded. However it is not yet activated.  You"
 " will receive a confirmation e-mail any second now. You must click on the"
@@ -30,54 +30,54 @@ msgid ""
 "receive another e-mail with the final confirmation once that is done."
 msgstr ""
 
-#: lost_tracker/main.py:337
+#: lost_tracker/main.py:332
 msgid ""
 "Thank you. Your registration has been activated and the lost-team has "
 "been notified about your entry. Once everything is processed you will "
 "recieve another e-mail with the final details."
 msgstr ""
 
-#: lost_tracker/main.py:349
+#: lost_tracker/main.py:344
 msgid "This group has already been accepted!"
 msgstr ""
 
-#: lost_tracker/main.py:363
+#: lost_tracker/main.py:358
 msgid "Accepted registration for group {}"
 msgstr ""
 
-#: lost_tracker/main.py:370
+#: lost_tracker/main.py:365
 msgid "Group {name} successfully updated!"
 msgstr ""
 
-#: lost_tracker/main.py:373
+#: lost_tracker/main.py:368
 msgid "E-Mail sent successfully!"
 msgstr ""
 
-#: lost_tracker/main.py:384
+#: lost_tracker/main.py:379
 msgid "Logged in successfully"
 msgstr ""
 
-#: lost_tracker/main.py:387
+#: lost_tracker/main.py:382
 msgid "Invalid credentials!"
 msgstr ""
 
-#: lost_tracker/main.py:430 lost_tracker/main.py:476
+#: lost_tracker/main.py:425 lost_tracker/main.py:471
 msgid "Access Denied"
 msgstr ""
 
-#: lost_tracker/main.py:451
+#: lost_tracker/main.py:446
 msgid "Table {name} not yet supported!"
 msgstr ""
 
-#: lost_tracker/main.py:524
+#: lost_tracker/main.py:519
 msgid "Incorrect value for direction: {!r}"
 msgstr ""
 
-#: lost_tracker/main.py:563
+#: lost_tracker/main.py:558
 msgid "Added {form}"
 msgstr ""
 
-#: lost_tracker/main.py:566
+#: lost_tracker/main.py:561
 msgid "Error: {message}"
 msgstr ""
 
@@ -148,7 +148,6 @@ msgstr ""
 
 #: lost_tracker/templates/form_score.html:42
 #: lost_tracker/templates/form_score.html:53
-#: lost_tracker/templates/guide.html:11
 #: lost_tracker/templates/scoreboard.html:19
 msgid "Score"
 msgstr "Punktestand"
@@ -175,60 +174,6 @@ msgstr ""
 
 #: lost_tracker/templates/group-tooltip.html:11
 msgid "Active"
-msgstr ""
-
-#: lost_tracker/templates/guide.html:3
-msgid "How does this work?"
-msgstr ""
-
-#: lost_tracker/templates/guide.html:4
-msgid "Has the team already arrived? Did they finish finished?"
-msgstr ""
-
-#: lost_tracker/templates/guide.html:5
-msgid "Click the image on the left to change this."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:7
-msgid "Grey circle: Team has not yet arrived."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:8
-msgid "Clock: The team has arrived."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:9
-msgid "Green circle: The team has finished."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:12
-msgid ""
-"There are two fields to enter scores: For the game and for the "
-"questionnaire. You can select a different questionnaire if necessary."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:15
-msgid "Hint"
-msgstr ""
-
-#: lost_tracker/templates/guide.html:16
-msgid "Teams are ordered like this:"
-msgstr ""
-
-#: lost_tracker/templates/guide.html:18
-msgid "Teams that have arrived (clock symbol) are shown first."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:19
-msgid "Next are the teams that have not yet arrived at the station."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:20
-msgid "Lastly, there are the teams that have finished this station."
-msgstr ""
-
-#: lost_tracker/templates/guide.html:23
-msgid "To re-order the list, refresh the page."
 msgstr ""
 
 #: lost_tracker/templates/index.html:4
@@ -258,7 +203,7 @@ msgid ""
 msgstr ""
 
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:10
-#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:58
+#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:57
 msgid "Login"
 msgstr ""
 
@@ -299,27 +244,23 @@ msgstr "Biller"
 msgid "Anything else?"
 msgstr ""
 
-#: lost_tracker/templates/master.html:40
-msgid "Help"
-msgstr "Hëllef"
-
-#: lost_tracker/templates/master.html:52
+#: lost_tracker/templates/master.html:51
 msgid "Logged in as:"
 msgstr ""
 
-#: lost_tracker/templates/master.html:53
+#: lost_tracker/templates/master.html:52
 msgid "Matrix"
 msgstr ""
 
-#: lost_tracker/templates/master.html:54
+#: lost_tracker/templates/master.html:53
 msgid "Slot Editor"
 msgstr ""
 
-#: lost_tracker/templates/master.html:55
+#: lost_tracker/templates/master.html:54
 msgid "Manager"
 msgstr ""
 
-#: lost_tracker/templates/master.html:56
+#: lost_tracker/templates/master.html:55
 msgid "Logout"
 msgstr ""
 
@@ -424,4 +365,50 @@ msgstr ""
 #: lost_tracker/templates/where.html:6
 msgid "We will depart at the Scout's Home in Mamer (109, rte. d’Arlon)."
 msgstr "Et geet beim Mamer Scoutshome fort (109, route d'Arlon)."
+
+#~ msgid "How does this work?"
+#~ msgstr ""
+
+#~ msgid "Has the team already arrived? Did they finish finished?"
+#~ msgstr ""
+
+#~ msgid "Click the image on the left to change this."
+#~ msgstr ""
+
+#~ msgid "Grey circle: Team has not yet arrived."
+#~ msgstr ""
+
+#~ msgid "Clock: The team has arrived."
+#~ msgstr ""
+
+#~ msgid "Green circle: The team has finished."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "There are two fields to enter "
+#~ "scores: For the game and for the"
+#~ " questionnaire. You can select a "
+#~ "different questionnaire if necessary."
+#~ msgstr ""
+
+#~ msgid "Hint"
+#~ msgstr ""
+
+#~ msgid "Teams are ordered like this:"
+#~ msgstr ""
+
+#~ msgid "Teams that have arrived (clock symbol) are shown first."
+#~ msgstr ""
+
+#~ msgid "Next are the teams that have not yet arrived at the station."
+#~ msgstr ""
+
+#~ msgid "Lastly, there are the teams that have finished this station."
+#~ msgstr ""
+
+#~ msgid "To re-order the list, refresh the page."
+#~ msgstr ""
+
+#~ msgid "Help"
+#~ msgstr "Hëllef"
 

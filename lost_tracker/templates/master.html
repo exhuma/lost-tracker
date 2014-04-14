@@ -36,8 +36,7 @@
         <a href="{{url_for('photo_gallery')}}">{{_('Pictures')}}</a> |
         <a href="{{url_for('misc')}}">{{_('Anything else?')}}</a> |
         {% if localconf.get('app', 'helpdesk', default='') %}
-          <span id="contact"><a
-            href="{{url_for('guide')}}">{{_('Help')}}</a>&nbsp;|&nbsp;{{localconf.get('app', 'helpdesk', default='')}}</span>
+          <span id="contact">{{localconf.get('app', 'helpdesk', default='')}}</span>
         {% endif %}
       </span>
 
