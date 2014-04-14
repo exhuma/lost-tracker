@@ -407,7 +407,9 @@ def manage():
                 if _.start_time and _.direction == mdl.DIR_A}
     groups_b = {mdl.TimeSlot(_.start_time): _ for _ in groups
                 if _.start_time and _.direction == mdl.DIR_B}
-    groups_none = sorted([_ for _ in groups if not _.start_time],
+    groups_none = sorted([_ for _ in groups
+                          if not _.start_time or _.direction not in (
+                              mdl.DIR_A, mdl.DIR_B)],
                          key=lambda x: x.name)
 
     return render_template('manage.html',
