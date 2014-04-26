@@ -168,6 +168,18 @@ DIV.group .form_icon {
     box-shadow:         0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
 }
 
+TABLE {
+    border: 1px solid #880000;
+    max-width: 400px;
+    margin: 0 auto;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+TABLE TD, TABLE TH {
+    padding: 0.5em 2em;
+}
+
 .score_card IMG {
     vertical-align: middle;
 }
@@ -402,6 +414,14 @@ TD > DIV[contenteditable="true"] {
     #logo {
         width: 50%;
         margin: 1em auto 1em auto;
+    }
+
+    TABLE TD, TABLE TH {
+        padding: 0.1em 0.2em;
+    }
+
+    .score_card IMG {
+        display: none;
     }
 
 }
