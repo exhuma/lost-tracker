@@ -13,24 +13,50 @@ REMOTE_FOLDER = '/var/www/lost.lu/beta'
 @fab.roles('prod')
 def deploy():
     fab.execute(build)
+    fab.execute(upload)
+    fab.execute(install)
+    fab.execute(clean)
+
+
+@fab.task
+@fab.roles('prod')
+def upload():
     fab.local('python setup.py sdist')
     name = fab.local('python setup.py --fullname', capture=True)
     with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
         fab.put('dist/{0}.tar.gz'.format(name), '.')
-        fab.run('env/bin/pip install {0}.tar.gz'.format(name))
         fab.put('alembic.ini', '.')
         fab.put('alembic', '.')
+
+
+@fab.task
+@fab.roles('prod')
+def install():
+    name = fab.local('python setup.py --fullname', capture=True)
+    with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
+        fab.run('env/bin/pip install {0}.tar.gz'.format(name))
         fab.run('env/bin/alembic upgrade head')
         fab.run('touch wsgi/lost-tracker.wsgi')
+
+
+@fab.task
+@fab.roles('prod')
+def clean():
+    name = fab.local('python setup.py --fullname', capture=True)
+    with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
         fab.run('rm {0}.tar.gz'.format(name))
 
 
 @fab.task
 @fab.roles('prod')
 def redeploy():
+    fab.execute(build)
+    fab.execute(upload)
+    name = fab.local('python setup.py --fullname', capture=True)
     with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
         fab.run('env/bin/pip uninstall lost_tracker')
-    fab.execute(deploy)
+    fab.execute(install)
+    fab.execute(clean)
 
 
 @fab.task
