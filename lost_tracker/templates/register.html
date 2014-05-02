@@ -11,6 +11,7 @@
     <form id="registration_form" action="{{url_for('register')}}" method="POST">
       <fieldset>
         <legend>{{_("Information about your group")}}</legend>
+        <p class="admonition note">{{_('It may take a few days until your registration is accepted. Please be patient!')}}</p>
         <dl>
           <dt>{{_("Name")}}</dt>
           <dd><input type="text" name="group_name" /></dd>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-02 10:36+0200\n"
+"POT-Creation-Date: 2014-05-02 11:38+0200\n"
 "PO-Revision-Date: 2014-04-10 21:15+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -181,23 +181,29 @@ msgstr ""
 msgid "Registration is <strong>open</strong>! <a href=\"{url}\">Register now!</a>"
 msgstr ""
 
-#: lost_tracker/templates/index.html:8
+#: lost_tracker/templates/index.html:7
+msgid ""
+"It may take a few days until your registration is accepted. Please be "
+"patient!"
+msgstr ""
+
+#: lost_tracker/templates/index.html:10
 msgid "What is this?"
 msgstr ""
 
-#: lost_tracker/templates/index.html:12
+#: lost_tracker/templates/index.html:14
 msgid ""
 "A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br "
 "/>Riddles.<br /> Impossible tasks.<br /> Not to be missed."
 msgstr ""
 
-#: lost_tracker/templates/index.html:17
+#: lost_tracker/templates/index.html:19
 msgid ""
 "Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br "
 "/> Scouten a Guiden vun der FNEL"
 msgstr ""
 
-#: lost_tracker/templates/index.html:23
+#: lost_tracker/templates/index.html:25
 msgid ""
 "Everybody who likes to spend a night outside, who's fairly well on foot "
 "and who does not mind getting home 3 hours late because they got lost may"
