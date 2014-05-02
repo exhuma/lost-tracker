@@ -110,6 +110,7 @@ def develop():
     else:
         print(clr.white('=== Kept old config file from '
                         '.mamerwiselen/lost-tracker/app.ini', bold=True))
+    fab.execute(babel_compile)
     print(clr.green('Done!'))
 
 
