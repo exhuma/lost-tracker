@@ -138,13 +138,15 @@ DT {
     line-height: 2;
 }
 
-#flashes DIV.info {
+#flashes DIV.info,
+.admonition.note {
     background: hsl(230, 40%, 10%);
     border: 1px solid hsl(230, 50%, 20%);
     color: hsl(230, 20%, 50%);
 }
 
-#flashes DIV.error {
+#flashes DIV.error
+.admonition.error {
     background: hsl(20, 40%, 10%);
     border: 1px solid hsl(20, 50%, 20%);
     color: hsl(20, 70%, 50%);

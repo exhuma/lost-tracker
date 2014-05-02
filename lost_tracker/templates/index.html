@@ -1,6 +1,10 @@
 {% extends "master_narrow.html" %}
 
 {% block content %}
+<div class="admonition note">
+  {{_('Registration is <strong>open</strong>! <a href="{url}">Register now!</a>').format(url=url_for('register'))}}
+</div>
+
 <h1>{{_("What is this?")}}</h1>
 
 <div class="col-group">

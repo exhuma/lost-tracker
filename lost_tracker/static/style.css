@@ -15,6 +15,13 @@ H6 {
     text-align: center;
 }
 
+DIV.admonition,
+P.admonition {
+    margin: 0.5em auto;
+    padding: 1em;
+    max-width: 60%;
+}
+
 #content-wide,
 #content-narrow {
     padding-top: 1em;
