@@ -3,6 +3,6 @@
 {% block content %}
 
     <h1>{{_('Notice')}}</h1>
-    <div class="note">{{message}}</div>
+    <div class="note">{{message|safe}}</div>
 
 {% endblock %}

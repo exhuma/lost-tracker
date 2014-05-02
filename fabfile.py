@@ -6,7 +6,7 @@ import fabric.colors as clr
 
 fab.env.roledefs['prod'] = ['dozer.foobar.lu']
 REMOTE_USER = 'lostlu'
-REMOTE_FOLDER = '/var/www/lost.lu/beta'
+REMOTE_FOLDER = '/var/www/lost.lu/www'
 
 
 @fab.task
@@ -63,7 +63,7 @@ def redeploy():
 @fab.roles('prod')
 def bootstrap():
     deploy()
-    with fab.cd('/var/www/lost.lu/tracker'):
+    with fab.cd(REMOTE_FOLDER):
         fab.run('mkdir -p wsgi')
         fab.put('wsgi/lost-tracker.wsgi', 'wsgi')
 

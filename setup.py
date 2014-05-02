@@ -1,7 +1,8 @@
 from setuptools import setup, find_packages
+from pkg_resources import resource_string
 setup(
     name="lost-tracker",
-    version="1.2.8",
+    version=resource_string('lost_tracker', 'version.txt').strip(),
     packages=find_packages(),
     install_requires=[
         'Flask-Login==0.2.9',
