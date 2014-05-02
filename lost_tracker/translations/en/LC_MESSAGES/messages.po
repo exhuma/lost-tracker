@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-04-14 19:26+0200\n"
+"POT-Creation-Date: 2014-05-02 10:36+0200\n"
 "PO-Revision-Date: 2014-04-10 21:15+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -177,23 +177,27 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: lost_tracker/templates/index.html:4
-msgid "What is this?"
+#: lost_tracker/templates/index.html:5
+msgid "Registration is <strong>open</strong>! <a href=\"{url}\">Register now!</a>"
 msgstr ""
 
 #: lost_tracker/templates/index.html:8
+msgid "What is this?"
+msgstr ""
+
+#: lost_tracker/templates/index.html:12
 msgid ""
 "A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br "
 "/>Riddles.<br /> Impossible tasks.<br /> Not to be missed."
 msgstr ""
 
-#: lost_tracker/templates/index.html:13
+#: lost_tracker/templates/index.html:17
 msgid ""
 "Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br "
 "/> Scouten a Guiden vun der FNEL"
 msgstr ""
 
-#: lost_tracker/templates/index.html:19
+#: lost_tracker/templates/index.html:23
 msgid ""
 "Everybody who likes to spend a night outside, who's fairly well on foot "
 "and who does not mind getting home 3 hours late because they got lost may"
@@ -201,7 +205,7 @@ msgid ""
 msgstr ""
 
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:10
-#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:57
+#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:54
 msgid "Login"
 msgstr ""
 
@@ -242,24 +246,28 @@ msgstr ""
 msgid "Anything else?"
 msgstr ""
 
-#: lost_tracker/templates/master.html:51
+#: lost_tracker/templates/master.html:48
 msgid "Logged in as:"
 msgstr ""
 
-#: lost_tracker/templates/master.html:52
+#: lost_tracker/templates/master.html:49
 msgid "Matrix"
 msgstr ""
 
-#: lost_tracker/templates/master.html:53
+#: lost_tracker/templates/master.html:50
 msgid "Slot Editor"
 msgstr ""
 
-#: lost_tracker/templates/master.html:54
+#: lost_tracker/templates/master.html:51
 msgid "Manager"
 msgstr ""
 
-#: lost_tracker/templates/master.html:55
+#: lost_tracker/templates/master.html:52
 msgid "Logout"
+msgstr ""
+
+#: lost_tracker/templates/master.html:65
+msgid "May"
 msgstr ""
 
 #: lost_tracker/templates/matrix.html:17
@@ -325,7 +333,7 @@ msgid "Phone Number"
 msgstr ""
 
 #: lost_tracker/templates/register.html:23
-msgid "Anything Else?"
+msgid "Details"
 msgstr ""
 
 #: lost_tracker/templates/scoreboard.html:11
@@ -379,10 +387,6 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid ""
-#~ "There are two fields to enter "
-#~ "scores: For the game and for the"
-#~ " questionnaire. You can select a "
-#~ "different questionnaire if necessary."
 #~ msgstr ""
 
 #~ msgid "Hint"
@@ -404,5 +408,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Help"
+#~ msgstr ""
+
+#~ msgid "Anything Else?"
 #~ msgstr ""
 
