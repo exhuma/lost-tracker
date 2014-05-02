@@ -143,7 +143,7 @@ def babel_compile():
     """
     Compile all translations into the application.
     """
-    fab.local('./env/bin/pybabel compile -d lost_tracker/translations')
+    fab.local('./env/bin/pybabel compile -f -d lost_tracker/translations')
 
 
 @fab.task
