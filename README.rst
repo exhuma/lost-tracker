@@ -61,23 +61,22 @@ Database initialisation
 
 To initialise the database run the following commands::
 
-    # export LOST_TRACKER_SETTINGS="/tmp/my/conf/file.py"
+    # export MAMERWISELEN_LOST_TRACKER_PATH="/path/which/contains/app.ini"
     # ./env/bin/alembic upgrade head
+
+
+.. note::
+
+    The environment variable should point to the path *containing* ``app.ini``.
+    Not the filename itself!
 
 
 Configuration
 -------------
 
-Configuration is handled using default Python script files. Currently the only
-configuration variable is ``DB_DSN`` representing the database connection
-string.
+Configuration is handled using ``ini`` style config files. An example file is
+given in ``app.ini.dist``.
 
-An example config file could be::
+The file is looked up using config_resolver_.
 
-    DB_DSN = 'postgres://user:passwd@localhost/dbname'
-
-The file is only read by setting an environment variable called
-LOST_TRACKER_SETTINGS pointing to the file. For example::
-
-    export LOST_TRACKER_SETTINGS="/tmp/my/conf/file.py"
-    ./env/bin/python lost_tracker/main.py
+.. _config_resolver:: https://config-resolver.readthedocs.org/en/latest/

@@ -1,9 +1,9 @@
 {
     "id": "dev",
-    "inputs": "js/app.js",
+    "inputs": "js/main.js",
     "mode": "SIMPLE",
     "level": "VERBOSE",
     "output-file": "lost_tracker/static/js/lost_tracker.js",
     "paths": "js",
-    "closure-library": "/home/exhuma/work/__libs__/closure-library/closure/goog"
+    "closure-library": "__libs__/closure-library/closure/goog"
 }

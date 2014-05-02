@@ -1,39 +1,22 @@
-{% extends "master.html" %}
+{% extends "master_narrow.html" %}
 
 {% block head %}
-<style>
-    BODY{
-        max-width: 640px;
-        margin: auto;
-        margin-top: 3em;
-        background-color: #000000;
-        font-weight: bold;
-        font-family: Helvetica;
-        font-size: 1.3em;
-        color: #ffffaa;
-    }
-
-    #contact {
-        display: none;
-    }
-</style>
-
 <meta http-equiv="refresh" content="300" />
 {% endblock %}
 
 {% block content %}
-<div style="text-align: center;">
-    <img src="{{url_for('static', filename='icons/lost_aen.png')}}">
+<div id="logo">
+  <img src="{{url_for('static', filename='images/logo2014.png')}}" />
 </div>
-<h1 style="color:#FFFF00; text-shadow:red 1px 1px; margin: 0.2em 0em;" >Ranglescht</h1>
-<h3 style="color:#FFFF00; text-shadow:red 1px 1px; text-align: center; margin: 0.2em 0em;" >(Momentanen Stand)</h3>
+<h1>{{_("Scoreboard")}}</h1>
+<h3>({{_("Current score")}})</h3>
 
 <br>
 <table border="0" width="100%">
     <tr>
-        <th align="left">Pos.</th>
-        <th align="left">Gruppennumm</th>
-        <th align="left">Punkten</th>
+      <th align="left">{{_("Position")}}</th>
+      <th align="left">{{_("Group")}}</th>
+      <th align="left">{{_("Score")}}</th>
     </tr>
     {% for row in scores %}
     <tr>

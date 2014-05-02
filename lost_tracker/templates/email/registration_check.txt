@@ -1,0 +1,20 @@
+Please check and confirm this registration
+==========================================
+
+Group Name:     {{group.name}}
+Contact Name:   {{group.contact}}
+Contact e-mail: {{group.email}}
+Phone #:        {{group.phone}}
+Desired Departure Time:
+                {{group.start_time}}
+
+Comments
+-----------------------------------------
+{{group.comments}}
+
+
+Please verify your e-mail by clicking on
+the link below to activate this
+registration:
+
+{{activation_url}}

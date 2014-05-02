@@ -1,0 +1,14 @@
+{% extends "master_narrow.html" %}
+
+{% block content %}
+
+{% if photos %}
+  {% for photo in photos %}
+    <a href="http://farm{{photo.farm}}.staticflickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_b.jpg"><img
+      src="http://farm{{photo.farm}}.staticflickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_q.jpg" /></a>
+  {% endfor %}
+{% else %}
+  <p class="note">{{_('Nothing here yet')}}</p>
+{% endif %}
+
+{% endblock %}

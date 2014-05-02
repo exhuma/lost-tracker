@@ -1,0 +1,17 @@
+[meta]
+version=1.0
+
+[db]
+; Database connection string
+dsn=postgresql://postgres@/lost_tracker
+
+[flickr]
+api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+[devserver]
+; Dev server listens on device ...
+listen=0.0.0.0
+; ... and port
+port=5000
+; Enable/Disable debugging mode.
+debug=True

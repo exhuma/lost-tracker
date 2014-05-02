@@ -1,0 +1,25 @@
+{% extends "master_narrow.html" %}
+
+{% block content %}
+<h1>{{_("Anything else?")}}</h1>
+
+<p>{{_("Entry fees are about €7 to €9 per person.")}}</p>
+
+<p>{{_("Food and beverages are available at the start and on the trail.")}}</p>
+
+<p>
+{{_("We do this because we like it. Tell us wat you think and visit us on Facebook:")}} <a
+  href="https://www.facebook.com/pages/Lost-in-the-Darkness/320383008025958#">{{_("Lost "
+  "in the Darkness on Facebook")}}</a>
+</p>
+
+<p>{{_("Everything penny we earn is donated to ONGD FNEL!")}}</p>
+
+<p>{{_("In the year 2012 we raised €2324. <br /> (and <a "
+  "href='{link}'>the municipality of Mamer even added €1000!</a>)").format(
+    link="http://www.mywort.lu/mamer/25911580.html")}}</p>
+
+
+<img src="{{url_for('static', filename='images/gruppefoto.jpg')}}" />
+
+{% endblock %}

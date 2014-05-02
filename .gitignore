@@ -1,6 +1,10 @@
+*.mo
+/.mamerwiselen
+/PKG-INFO
+/__libs__
 /build
 /dist
 /env
 /lost_tracker.egg-info
-/PKG-INFO
-plovr-config.js
+/lost_tracker/static/js/lost_tracker.js
+/messages.pot

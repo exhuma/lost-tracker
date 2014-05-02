@@ -1,0 +1,29 @@
+{% extends "master_narrow.html" %}
+
+{% block content %}
+<div class="admonition note">
+  {{_('Registration is <strong>open</strong>! <a href="{url}">Register now!</a>').format(url=url_for('register'))}}
+  <hr />
+  {{_('It may take a few days until your registration is accepted. Please be patient!')}}
+</div>
+
+<h1>{{_("What is this?")}}</h1>
+
+<div class="col-group">
+  <div>
+    {{_("A 'Night Rallye'.<br /> Outside in the darkness<br /> Games."
+    "<br />Riddles.<br /> Impossible tasks.<br /> Not to be missed.")}}
+  </div>
+
+  <div>
+    {{_("Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer "
+    "Wiselen<br /> Scouten a Guiden vun der FNEL")}}
+  </div>
+</div>
+
+<p>
+{{_("Everybody who likes to spend a night outside, who's fairly well on foot "
+"and who does not mind getting home 3 hours late because they got lost may join "
+":)")}}
+</p>
+{% endblock %}

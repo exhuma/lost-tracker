@@ -1,10 +1,12 @@
 from collections import namedtuple
+from datetime import datetime
 
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
                         Boolean, PrimaryKeyConstraint)
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import select, func
+from sqlalchemy.sql import select
 from lost_tracker.database import Base
+from lost_tracker.util import start_time_to_order
 
 STATE_UNKNOWN = 0
 STATE_ARRIVED = 1
@@ -25,7 +27,7 @@ form_scores = Table(
 
 def score_totals():
     score_result = namedtuple('ScoreResult',
-        'group_id, score_sum')
+                              'group_id, score_sum')
 
     station_select = select([
         GroupStation.__table__.c.group_id,
@@ -69,6 +71,7 @@ def get_form_score(group_id, form_id):
         return 0
     return result.score
 
+
 def get_form_score_by_group(group_id):
     s = select([form_scores])
     s = s.where(form_scores.c.group_id == group_id)
@@ -76,6 +79,7 @@ def get_form_score_by_group(group_id):
     if not result:
         return 0
     return result.score
+
 
 def set_form_score(group_id, form_id, score):
     s = select(
@@ -107,8 +111,8 @@ def update_form_score(group_id, form_id, score):
         and_(
             form_scores.c.group_id == group_id,
             form_scores.c.form_id == form_id)
-        ).values(
-        score = score)
+    ).values(
+        score=score)
     return u
 
 
@@ -158,23 +162,47 @@ class Group(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
     order = Column(Integer)
-    cancelled = Column(Boolean)
+    cancelled = Column(Boolean, default=False, server_default='false')
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
     direction = Column(Unicode)
-    start_time = Column(Unicode(5))
+    _start_time = Column(Unicode(5), name="start_time")
     stations = relationship('GroupStation')
+    email = Column(Unicode)
+    comments = Column(Unicode)
+    is_confirmed = Column(Boolean, server_default='false', default=False)
+    confirmation_key = Column(Unicode(20), unique=True)
+    finalized = Column(Boolean, server_default='false', default=False)
 
     def __init__(self, name=None, contact=None,
-                 phone=None, direction=None, start_time=None):
+                 phone=None, direction=None, start_time=None,
+                 email=None, comments=None, confirmation_key=None):
         self.name = name
         self.contact = contact
         self.phone = phone
         self.direction = direction
         self.start_time = start_time
+        self.email = email
+        self.comments = comments
+        self.confirmation_key = confirmation_key
 
     def __repr__(self):
         return '<Group %r>' % (self.name)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def start_time(self):
+        return self._start_time
+
+    @start_time.setter
+    def start_time(self, value):
+        self._start_time = value
+        if value:
+            self.order = start_time_to_order(value)
+        else:
+            self.order = 0
 
 
 class Station(Base):
@@ -201,8 +229,7 @@ class Form(Base):
     name = Column(Unicode(20))
     max_score = Column(Integer)
 
-    def __init__(self, id, name=None, max_score=100):
-        self.id = id
+    def __init__(self, name=None, max_score=100):
         self.name = name
         self.max_score = max_score
 
@@ -244,24 +271,65 @@ class GroupStation(Base):
             row.score = score
 
 
-# station_select = select([
-#     GroupStation.__table__.c.group_id,
-#     GroupStation.__table__.c.score])
-# 
-# form_select = select([
-#     form_scores.c.group_id,
-#     form_scores.c.score])
-# 
-# big_from = station_select.union(form_select).alias('subs')
-# union_select = select([big_from.c.group_id,
-#     func.sum(big_from.c.score)],
-#     from_obj=big_from)
-# union_select = union_select.group_by(union_select.c.group_id).alias("resultq")
-# 
-# 
-# class Results(Base):
-#     __table__ = union_select
-# 
-#     def __repr__(self):
-#         return "<Results group_id={0}, score={1}>".format(
-#                 self.group_id, 10)
+class TimeSlot(object):
+
+    def __init__(self, time):
+        supported_formats = ['%Hh%M', '%H:%M']
+        self.time = None
+        if not time or time == 'None':
+            return
+
+        for fmt in supported_formats:
+            try:
+                self.time = datetime.strptime(time, fmt)
+            except:
+                pass
+
+        if time and not self.time:
+            raise ValueError('time data {!r} does not match any known '
+                             'formats {!r}'.format(time, supported_formats))
+
+    def __eq__(self, other):
+        return isinstance(other, TimeSlot) and other.time == self.time
+
+    def __hash__(self):
+        return hash(self.time)
+
+
+class User(Base):
+    """
+    A user class for flask-login.
+
+    See https://flask-login.readthedocs.org/en/latest/#your-user-class
+
+    Additional requirements for lost-tracker:
+
+        * Must have a ``name`` attribute. It is displayed in the web interface.
+
+    @fanky: implement
+    """
+    __tablename__ = 'user'
+
+    login = Column(Unicode(100), primary_key=True)
+    name = Column(Unicode(100))
+    password = Column(Unicode(100))
+    email = Column(Unicode(100))
+    locale = Column(Unicode(2))
+
+    def __init__(self, login, password, email):
+        self.login = login
+        self.name = login
+        self.password = password
+        self.email = email
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.login

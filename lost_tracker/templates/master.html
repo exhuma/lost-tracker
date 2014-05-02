@@ -1,34 +1,84 @@
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
     <title>Lost Tracker {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='normalize.min.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='common.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='dialog.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='style_dark.css')}}" />
+    {%- if config.get('DEBUG', False) %}
+      <script type="text/javascript" src="http://{{request.host.split(':')[0]}}:9810/compile?id=dev&amp;mode=raw"></script>
+    {% else %}
     <script type="text/javascript" src="{{url_for('static',
       filename='js/lost_tracker.js')}}"></script>
+    {% endif -%}
     {% block head %}
     {% endblock %}
 </head>
 <body>
+    <!--[if lt IE 7]>
+        <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+    <![endif]-->
+
     <script type="text/javascript">
       $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
     </script>
-    {% if config.get('HELPDESK', '') %}
-      <div id="contact"><a
-        href="{{url_for('guide')}}">Help</a>&nbsp;|&nbsp;{{config.get('HELPDESK', '')}}</div>
-    {% endif %}
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-        <div id="flashes">
-            {% for category, message in messages %}
-                <div class="{{category}}">{{ message }}</div>
-            {% endfor %}
-        </div>
+
+    <div id="menu">
+      <span id="#mainmenu">
+        <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
+        <a href="{{url_for('where')}}">{{_('Where is this?')}}</a> |
+        <a href="{{url_for('register')}}">{{_('Register')}}</a> |
+        <a href="{{url_for('photo_gallery')}}">{{_('Pictures')}}</a> |
+        <a href="{{url_for('misc')}}">{{_('Anything else?')}}</a>
+      </span>
+
+      <span id="flags">
+        <a href="{{request.path}}?lang=en"><img src="{{url_for('static', filename='flags/gb.png')}}" /></a>&nbsp;
+        <a href="{{request.path}}?lang=de"><img src="{{url_for('static', filename='flags/de.png')}}" /></a>&nbsp;
+        <a href="{{request.path}}?lang=lu"><img src="{{url_for('static', filename='flags/lu.png')}}" /></a>
+      </span>
+
+      <span id="auth">
+        {% if current_user.is_authenticated() %}
+          {{_('Logged in as:')}} {{current_user.name}} |
+          <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
+          <a href="{{url_for('manage')}}">{{_('Slot Editor')}}</a> |
+          <a href="{{url_for('tabularadmin', table='group')}}">{{_('Manager')}}</a> |
+          <a href="{{url_for('logout')}}">{{_('Logout')}}</a>
+        {% else %}
+          <a href="{{url_for('login')}}">{{_('Login')}}</a>
         {% endif %}
-    {% endwith %}
-    {% block content %}
-    {% endblock %}
+      </span>
+    </div>
+
+    {% block submenu %}{% endblock %}
+
+    <div id="{% block wrapperid %}{% endblock %}">
+
+      <div id="logo">
+        <img src="{{url_for('static', filename='images/logo2014.png')}}" />
+        <h2>28. {{_("May")}} 2014</h2>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+          <div id="flashes">
+              {% for category, message in messages %}
+                  <div class="{{category}}">{{ message }}</div>
+              {% endfor %}
+          </div>
+          {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+
+      <img id="combilogo" src="{{url_for('static', filename="images/combilogo.jpg")}}" />
+    </div>
 </body>
 </html>
 

@@ -1,0 +1,17 @@
+Welcome to Lost in the Darkness
+===============================
+
+
+Your group is registrated with the following information:
+
+Group Name:   {{group.name}}
+Contact Name: {{group.contact}}
+Phone #:      {{group.phone}}
+e-mail:       {{group.email}}
+Start Time:   {{group.start_time}}
+
+Comment:
+{{group.comments}}
+
+
+We are waiting for YOU! :)'

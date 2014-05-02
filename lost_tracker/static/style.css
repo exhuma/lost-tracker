@@ -1,6 +1,67 @@
+@import url(http://fonts.googleapis.com/css?family=Metal+Mania|Sofadi+One);
+
 BODY{
     margin: 0;
-    font-family: Helvetica, Tahoma, Arial, sans-serif;
+    font-family: 'Sofadi One', Helvetica, sans-serif;
+    text-align: center;
+}
+
+H1,
+H2,
+H3,
+H4,
+H5,
+H6 {
+    text-align: center;
+}
+
+DIV.admonition,
+P.admonition {
+    margin: 0.5em auto;
+    padding: 1em;
+    max-width: 60%;
+}
+
+#content-wide,
+#content-narrow {
+    padding-top: 1em;
+}
+
+#content-wide {
+    margin: 0;
+}
+
+#content-narrow {
+    max-width: 40em;
+    margin: 0 auto;
+    padding: 1em 3em 0.5em 3em;
+    background: hsla(0, 0%, 0%, 0.5);
+    -webkit-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.3);
+    -moz-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.3);
+    box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.3);
+}
+
+#location_map,
+#content-wide IMG,
+#content-narrow IMG {
+    max-width: 100%;
+}
+
+#logo {
+    max-width: 100%;
+}
+
+#combilogo {
+    max-width: 100%;
+    margin-top: 3em;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+DD {
+    margin: 0;
 }
 
 DIV.group{
@@ -49,52 +110,151 @@ DIV.group .form_icon {
     vertical-align: middle;
 }
 
+.arrived,
+.finished,
+.state_0,
+.state_1,
+.state_2,
+.unknown {
+    padding: 0 0.4em;
+    cursor: default;
+}
+
 .state_0,
 .unknown {
-    background: hsl(0, 100%, 100%);
+    background: hsl(0, 100%, 20%);
+    color: hsl(0, 100%, 75%);
 }
 
 .state_1,
 .arrived {
-    background: hsl(60, 100%, 90%);
+    background: hsl(60, 100%, 20%);
+    color: hsl(60, 100%, 75%);
 }
 
 .state_2,
 .finished {
-    background: hsl(120, 100%, 90%);
+    background: hsl(120, 100%, 20%);
+    color: hsl(120, 100%, 75%);
 }
 
-.state_0:hover,
-.unknown:hover {
-    background: hsl(0, 0%, 90%);
+.group.state_0,
+.group.unknown {
+    background: hsla(0, 100%, 10%, 0.5);
+    color: hsl(0, 100%, 75%);
 }
 
-.state_1:hover,
-.arrived:hover {
-    background: hsl(60, 100%, 70%);
+.group.state_1,
+.group.arrived {
+    background: hsla(60, 100%, 10%, 0.5);
+    color: hsl(60, 100%, 75%);
 }
 
-.state_2:hover,
-.finished:hover {
-    background: hsl(120, 100%, 70%);
+.group.state_2,
+.group.finished {
+    background: hsla(120, 100%, 10%, 0.5);
+    color: hsl(120, 100%, 75%);
+}
+
+.group INPUT[type="submit"] {
+    width: 100%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: hsla(0, 0%, 0%, 0.5);
+    border: 1px solid hsla(0, 100%, 0%, 0.5);
+}
+
+.group INPUT[type='submit']:hover,
+.group INPUT[type='submit']:focus {
+    background: hsla(0, 0%, 0%, 0.2);
+    border: 1px solid hsla(30, 100%, 70%, 0.5);
+    color: hsl(30, 100%, 90%);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+}
+
+TABLE {
+    border: 1px solid #880000;
+    max-width: 400px;
+    margin: 0 auto;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+TABLE TD, TABLE TH {
+    padding: 0.5em 2em;
+}
+
+.score_card IMG {
+    vertical-align: middle;
+}
+
+.score_card INPUT[type='number'],
+.score_card SELECT {
+    background: hsla(0, 0%, 0%, 0.2);
+    color: hsl(30, 100%, 90%);
+    border: 1px solid hsla(30, 100%, 70%, 0.5);
+    width: 100%;
+    padding: 0 0.2em;
+}
+
+.score_card OPTION {
+    background: hsl(0, 0%, 0%);
+}
+
+.score_card TD {
+    border: 0;
+}
+
+.score_card TABLE {
+    max-width: 100%;
+    border: 0;
 }
 
 H1, H2 {
     text-align: center;
+    font-family: 'Metal Mania', Helvetica, sans-serif;
 }
 
-#contact {
-    font-size: x-small;
+#menu {
+    text-align: left;
+    padding: 0.2em;
+    font-size: 80%;
+    border-bottom: 1px solid black;
+    background-color: hsla(0, 0%, 0%, 0.7);
+    -webkit-box-shadow: 0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
+    -moz-box-shadow:    0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
+    box-shadow:         0px 0.2em 0.5em 0px hsla(30, 100%, 50%, 0.65);
+}
+
+#menu STRONG{
+    font-size: 130%;
+}
+
+#submenu {
+    padding: 0.2em;
+    font-size: 80%;
+    margin-bottom: 0.9em;
+    border-bottom: 1px solid black;
+    background-color: hsla(0, 0%, 0%, 0.7);
     text-align: center;
-    position: fixed;
-    background: #fff;
-    bottom: 0;
-    right: 0;
-    width: 20em;
-    height: 3em;
-    border-top: 0.1em solid black;
-    border-left: 0.1em solid black;
-    border-right: 0.1em solid black;
+}
+
+#contentwrapper {
+    padding-top: 1em;
+}
+
+#auth,
+#flags {
+    float: right;
+}
+
+#flags {
+    margin-left: 1em;
+    vertical-align: middle;
+    line-height: 1.7;
 }
 
 .cancelled {
@@ -105,26 +265,33 @@ H1, H2 {
 #Matrix {
   border-spacing: 0;
   border-collapse: collapse;
+  font-size: 80%;
 }
 
-#Matrix TD {
-  line-height: 2em;
+#Matrix TR {
+    overflow: auto;
 }
 
+
 #Matrix TD {
-    border: 0.1em solid #ccc;
-    width: 100%;
+    border: 1px solid hsl(0, 100%, 5%);
     vertical-align: middle;
+    max-height: 1em;
 }
 
 #Matrix THEAD TR.sum TD {
   padding-bottom: 0.5em;
-  border-bottom: 3px double #ccf;
+  border-bottom: 1px solid hsl(0, 100%, 5%);
+}
+
+#Matrix THEAD TR.sum TD,
+#Matrix TFOOT TR.sum TD {
+  background-color: hsla(0, 0%, 0%, 0.8);
 }
 
 #Matrix TFOOT TR.sum TD {
   padding-top: 0.5em;
-  border-top: 3px double #ccf;
+  border-top: 1px solid hsl(0, 100%, 5%);
 }
 
 #Matrix THEAD TH,
@@ -134,7 +301,11 @@ H1, H2 {
 }
 
 #Matrix TBODY TR:hover TD {
-  background-color: #eee;
+  background-color: hsla(0, 0%, 0%, 0.5);
+}
+
+#Matrix TBODY TR TD.group {
+    background-color: hsla(0, 0%, 0%, 0.6);
 }
 
 TD.state {
@@ -142,14 +313,14 @@ TD.state {
 }
 
 #flashes DIV {
-    max-width: 10em;
+    max-width: 30em;
     text-align: center;
     font-weight: bold;
     border: 0.1em solid black;
     margin: 0.2em auto;
 }
 
-#flashes DIV.message {
+#flashes DIV.info {
     background: #bfb682; /* Old browsers */
     background: -moz-linear-gradient(top,  hsl(51,32%,63%) 0%, hsl(51,26%,59%) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,hsl(51,32%,63%)), color-stop(100%,hsl(51,26%,59%))); /* Chrome,Safari4+ */
@@ -170,3 +341,102 @@ TD.state {
     background: linear-gradient(to bottom,  hsl(9,32%,63%) 0%,hsl(9,26%,59%) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf8c83', endColorstr='#b2847c',GradientType=0 ); /* IE6-9 */
 }
+
+INPUT[type="submit"] {
+    width: 100%;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+#status_header {
+    font-size: 75%;
+    text-align: right;
+}
+
+.tooltip {
+    padding: 0.2em 0.5em;
+    font-size: 75%;
+}
+
+.tooltip H1 {
+    font-size: 150%;
+    margin: 0.1em 0em;
+    border-bottom: 1px solid #000;
+}
+
+TD > DIV[contenteditable="true"] {
+    border: 1px dashed blue;
+    min-height: 1em;
+    width: 100%;
+}
+
+#tabular {
+    font-family: 'Tahoma', Helvetica, sans-serif;
+    font-size: 80%;
+}
+
+#tabular TD {
+    padding: 0.2em 0.5em;
+}
+
+.col-group > div {
+    text-align: center;
+    padding: 0;
+    margin-bottom: 1em;  
+}
+
+@media screen and (min-width: 44em) {
+    .col-group {
+        overflow: hidden;
+    }
+    .col-group > div {
+        float: left;
+        width: 49%;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    #content-narrow {
+        padding: 1em 0.5em 0.5em 0.5em;
+    }
+
+    #auth {
+        float: none;
+    }
+
+    #auth:before {
+        content: "| ";
+    }
+
+    #menu {
+        font-size: 120%;
+        text-align: center;
+    }
+
+    #location_map {
+        height: 200px;
+    }
+
+    #logo {
+        width: 50%;
+        margin: 1em auto 1em auto;
+    }
+
+    TABLE TD, TABLE TH {
+        padding: 0.1em 0.2em;
+    }
+
+    .score_card IMG {
+        display: none;
+    }
+
+}
+
+/* {{{ Modal Dialogs */
+.modal-dialog {
+    max-width: 30em;
+}
+/* }}} */
+
+/* vim: set fdm=marker : */
