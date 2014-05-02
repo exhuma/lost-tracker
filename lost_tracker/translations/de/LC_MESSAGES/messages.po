@@ -403,9 +403,6 @@ msgstr "Wir werden beim Pfadfinder Home (109, rte. d’Arlon) starten."
 #~ msgid "Green circle: The team has finished."
 #~ msgstr "Grüner Kreis: Dir Gruppe ist fertig."
 
-#~ msgid ""
-#~ msgstr ""
-
 #~ msgid "Hint"
 #~ msgstr "Tip"
 
