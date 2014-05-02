@@ -314,6 +314,13 @@ def confirm_registration(key, activation_url):
     grp = query.first()
 
     if grp:
+
+        if grp.is_confirmed:
+            # Group is already confirmed. Don't process it further (no
+            # additional mails will be sent).
+            LOG.debug('Duplicate confirmation ignored.')
+            return True
+
         grp.is_confirmed = True
 
         query = User.query
