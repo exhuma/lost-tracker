@@ -5,10 +5,6 @@ version=1.0
 ; Database connection string
 dsn=postgresql://postgres@/lost_tracker
 
-[app]
-; Value to be shown on the bottom right
-helpdesk = "contact info"
-
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
