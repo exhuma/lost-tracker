@@ -1,0 +1,28 @@
+{% extends "master_wide.html" %}
+
+{% block content %}
+
+<table>
+  <thead>
+    <tr>
+      <th>{{_("Group")}}</th>
+      <th>{{_("Registration Date")}}</th>
+      <th>{{_("Start Time")}}</th>
+      <th>{{_("Direction")}}</th>
+      <th>{{_("Edit Link")}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for group in groups -%}
+    <tr>
+      <td>{{group.name}}</td>
+      <td>{{group.inserted.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+      <td>{{group.start_time|default('', true)}}</td>
+      <td>{{group.direction|default('', true)}}</td>
+      <td><a href="{{url_for('accept_registration', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

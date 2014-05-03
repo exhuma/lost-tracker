@@ -603,6 +603,14 @@ def delete_form(id):
     return jsonify(status='ok')
 
 
+@app.route('/group_list')
+@login_required
+def group_list():
+    groups = loco.get_grps()
+    groups = groups.order_by(mdl.Group.inserted.desc())
+    return render_template('group_list.html', groups=groups)
+
+
 @app.route('/')
 def index():
     return render_template('index.html')

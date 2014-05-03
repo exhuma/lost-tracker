@@ -2,7 +2,7 @@ from collections import namedtuple
 from datetime import datetime
 
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
-                        Boolean, PrimaryKeyConstraint)
+                        Boolean, PrimaryKeyConstraint, DateTime, func)
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import select
 from lost_tracker.database import Base
@@ -173,6 +173,8 @@ class Group(Base):
     is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
     finalized = Column(Boolean, server_default='false', default=False)
+    inserted = Column(DateTime, server_default=func.now(), default=func.now())
+    updated = Column(DateTime)
 
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None,
