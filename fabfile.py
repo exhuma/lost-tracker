@@ -13,6 +13,7 @@ REMOTE_FOLDER = '/var/www/lost.lu/www'
 @fab.roles('prod')
 def deploy():
     fab.execute(build)
+    fab.execute(babel_compile)
     fab.execute(upload)
     fab.execute(install)
     fab.execute(clean)
