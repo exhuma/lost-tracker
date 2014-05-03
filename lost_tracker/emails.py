@@ -9,9 +9,9 @@ LOG = logging.getLogger(__name__)
 
 def send(template, to, data):
     if template == 'registration_check':
-        subject = u'Please check and confirm this registration.'
+        subject = u'New registration for {0.name}'.format(data['group'])
     elif template == 'confirm':
-        subject = u'Confirmation of your registration'
+        subject = u'Please confirm your registration for lost.lu'
     elif template == 'registration_update':
         subject = u'Lost Registration Change'
     elif template == 'welcome':
