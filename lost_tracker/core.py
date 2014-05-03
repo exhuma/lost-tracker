@@ -77,7 +77,6 @@ def get_grps():
     """
     groups = Group.query
     groups = groups.order_by(Group.order)
-    groups = groups.all()
     return groups
 
 
@@ -436,7 +435,7 @@ def delete_form(id):
 
 
 def stats():
-    num_groups = len(get_grps())
+    num_groups = get_grps().count()
     num_slots = len(slots()) * 2  # DIR_A and DIR_B
     return {
         'groups': num_groups,
