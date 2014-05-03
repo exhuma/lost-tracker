@@ -607,7 +607,8 @@ def delete_form(id):
 @login_required
 def group_list():
     groups = loco.get_grps()
-    groups = groups.order_by(mdl.Group.inserted.desc())
+    groups = groups.order_by(None)
+    groups = groups.order_by(mdl.Group.inserted)
     return render_template('group_list.html', groups=groups)
 
 
