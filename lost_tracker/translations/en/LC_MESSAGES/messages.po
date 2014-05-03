@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-02 11:38+0200\n"
+"POT-Creation-Date: 2014-05-03 22:21+0200\n"
 "PO-Revision-Date: 2014-04-10 21:15+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -87,7 +87,6 @@ msgid "Group Infos"
 msgstr ""
 
 #: lost_tracker/templates/edit_group.html:9
-#: lost_tracker/templates/register.html:15
 msgid "Name"
 msgstr ""
 
@@ -104,6 +103,7 @@ msgstr ""
 #: lost_tracker/templates/edit_group.html:15
 #: lost_tracker/templates/edit_group.html:18
 #: lost_tracker/templates/group-tooltip.html:9
+#: lost_tracker/templates/group_list.html:11
 msgid "Direction"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgid "Starting Time"
 msgstr ""
 
 #: lost_tracker/templates/edit_group.html:25
-#: lost_tracker/templates/register.html:19
+#: lost_tracker/templates/register.html:20
 msgid "e-mail"
 msgstr ""
 
@@ -140,6 +140,7 @@ msgstr ""
 
 #: lost_tracker/templates/form_score.html:27
 #: lost_tracker/templates/manage.html:28
+#: lost_tracker/templates/register.html:16
 msgid "Group Name"
 msgstr ""
 
@@ -177,11 +178,28 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
+#: lost_tracker/templates/group_list.html:8
+#: lost_tracker/templates/scoreboard.html:18
+msgid "Group"
+msgstr ""
+
+#: lost_tracker/templates/group_list.html:9
+msgid "Registration Date"
+msgstr ""
+
+#: lost_tracker/templates/group_list.html:10
+msgid "Start Time"
+msgstr ""
+
+#: lost_tracker/templates/group_list.html:12
+msgid "Edit Link"
+msgstr ""
+
 #: lost_tracker/templates/index.html:5
 msgid "Registration is <strong>open</strong>! <a href=\"{url}\">Register now!</a>"
 msgstr ""
 
-#: lost_tracker/templates/index.html:7
+#: lost_tracker/templates/index.html:7 lost_tracker/templates/register.html:14
 msgid ""
 "It may take a few days until your registration is accepted. Please be "
 "patient!"
@@ -211,7 +229,7 @@ msgid ""
 msgstr ""
 
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:10
-#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:54
+#: lost_tracker/templates/login.html:15 lost_tracker/templates/master.html:55
 msgid "Login"
 msgstr ""
 
@@ -240,7 +258,7 @@ msgid "Where is this?"
 msgstr ""
 
 #: lost_tracker/templates/master.html:35
-#: lost_tracker/templates/register.html:28
+#: lost_tracker/templates/register.html:29
 msgid "Register"
 msgstr ""
 
@@ -257,22 +275,26 @@ msgid "Logged in as:"
 msgstr ""
 
 #: lost_tracker/templates/master.html:49
-msgid "Matrix"
+msgid "List"
 msgstr ""
 
 #: lost_tracker/templates/master.html:50
-msgid "Slot Editor"
+msgid "Matrix"
 msgstr ""
 
 #: lost_tracker/templates/master.html:51
-msgid "Manager"
+msgid "Slot Editor"
 msgstr ""
 
 #: lost_tracker/templates/master.html:52
+msgid "Manager"
+msgstr ""
+
+#: lost_tracker/templates/master.html:53
 msgid "Logout"
 msgstr ""
 
-#: lost_tracker/templates/master.html:65
+#: lost_tracker/templates/master.html:66
 msgid "May"
 msgstr ""
 
@@ -330,15 +352,15 @@ msgstr ""
 msgid "Information about your group"
 msgstr ""
 
-#: lost_tracker/templates/register.html:17
+#: lost_tracker/templates/register.html:18
 msgid "Contact Name"
 msgstr ""
 
-#: lost_tracker/templates/register.html:21
-msgid "Phone Number"
+#: lost_tracker/templates/register.html:22
+msgid "Phone Number (on the road)"
 msgstr ""
 
-#: lost_tracker/templates/register.html:23
+#: lost_tracker/templates/register.html:24
 msgid "Details"
 msgstr ""
 
@@ -352,10 +374,6 @@ msgstr ""
 
 #: lost_tracker/templates/scoreboard.html:17
 msgid "Position"
-msgstr ""
-
-#: lost_tracker/templates/scoreboard.html:18
-msgid "Group"
 msgstr ""
 
 #: lost_tracker/templates/tabular.html:51
@@ -417,5 +435,8 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "Anything Else?"
+#~ msgstr ""
+
+#~ msgid "Phone Number"
 #~ msgstr ""
 
