@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<table>
+<table id="grouplist">
   <thead>
     <tr>
       <th>{{_("Group")}}</th>
@@ -15,7 +15,9 @@
   <tbody>
     {% for group in groups -%}
     <tr>
-      <td>{{group.name}}</td>
+      <td
+        class="{{'finalized' if group.finalized else 'confirmed' if group.is_confirmed else ''}}"
+        data-group_id="{{group.id}}">{{group.name}}</td>
       <td>{{group.inserted.strftime('%Y-%m-%d %H:%M:%S')}}</td>
       <td>{{group.start_time|default('', true)}}</td>
       <td>{{group.direction|default('', true)}}</td>
@@ -24,5 +26,9 @@
     {%- endfor %}
   </tbody>
 </table>
+
+<script type="text/javascript" charset="utf-8">
+  new lost_tracker.GroupList('grouplist');
+</script>
 
 {% endblock %}

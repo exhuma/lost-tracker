@@ -67,6 +67,14 @@ TD:focus {
     border-bottom: 1px solid hsl(30, 100%, 80%);
 }
 
+TD.confirmed {
+    border: 2px dotted yellow;
+}
+
+TD.finalized {
+    border: 2px solid green;
+}
+
 /* form elements {{{ */
 
 INPUT[type="checkbox"]:focus{
