@@ -9,5 +9,6 @@ _('Group not found in DB!')
   <tr><th>{{_('Direction')}}</td><td>{{group.direction}}</td></td>
   <tr><th>{{_('Starting Time')}}</td><td>{{group.start_time}}</td></td>
   <tr><th>{{_('Status')}}</th><td>{{group.cancelled and _('Cancelled') or _('Active')}}</td></tr>
+  <tr><th>{{_('Registration Status')}}</th><td class="{{'finalized' if group.finalized else 'confirmed' if group.is_confirmed else ''}}">{{_('Accepted') if group.finalized else _('Confirmed') if group.is_confirmed else ''}}</td></tr>
 </table>
 {% endif %}
