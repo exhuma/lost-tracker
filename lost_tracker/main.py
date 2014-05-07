@@ -424,24 +424,38 @@ def tabularadmin(table):
     if table not in MODIFIABLE_TABLES:
         return gettext('Access Denied'), 401
 
+    custom_order = None
+    if 'order' in request.args:
+        custom_order = request.args['order']
+
     if table == 'group':
         columns = [_ for _ in mdl.Group.__table__.columns
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Group.__table__.columns if _.primary_key]
         data = g.session.query(mdl.Group)
-        data = data.order_by(mdl.Group.cancelled, mdl.Group.order)
+        if custom_order and custom_order in mdl.Group.__table__.columns:
+            data = data.order_by(mdl.Group.__table__.columns[custom_order])
+        else:
+            data = data.order_by(mdl.Group.cancelled, mdl.Group.order)
     elif table == 'station':
         columns = [_ for _ in mdl.Station.__table__.columns
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Station.__table__.columns if _.primary_key]
         data = g.session.query(mdl.Station)
-        data = data.order_by(mdl.Station.order)
+        if custom_order and custom_order in mdl.Station.__table__.columns:
+            data = data.order_by(mdl.Station.__table__.columns[custom_order])
+        else:
+            data = data.order_by(mdl.Station.order)
     elif table == 'form':
         columns = [_ for _ in mdl.Form.__table__.columns
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Form.__table__.columns if _.primary_key]
         data = g.session.query(mdl.Form)
         data = data.order_by(mdl.Form.name)
+        if custom_order and custom_order in mdl.Form.__table__.columns:
+            data = data.order_by(mdl.Form.__table__.columns[custom_order])
+        else:
+            data = data.order_by(mdl.Form.order)
     else:
         return gettext('Table {name} not yet supported!').format(
             name=table), 400
