@@ -205,7 +205,6 @@ def slots():
     """
 
     return [
-        TimeSlot('18h40'),
         TimeSlot('18h50'),
         TimeSlot('19h00'),
         TimeSlot('19h10'),
@@ -220,6 +219,8 @@ def slots():
         TimeSlot('20h40'),
         TimeSlot('20h50'),
         TimeSlot('21h00'),
+        TimeSlot('21h10'),
+        TimeSlot('21h20'),
     ]
 
 

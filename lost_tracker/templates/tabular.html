@@ -61,7 +61,7 @@
     <tr>
       <th>Ops</th>
       {% for col in columns -%}
-      <th>{{col.name}}</th>
+      <th><a href="{{request.path}}?order={{col.name}}">{{col.name}}</a></th>
       {%- endfor %}
     </tr>
   </thead>
