@@ -53,7 +53,7 @@ msgstr "D'{}-Grupp ass registréiert!"
 
 #: lost_tracker/main.py:365
 msgid "Group {name} successfully updated!"
-msgstr "D'Grupp {} ass upgedate!"
+msgstr "D'Grupp {name} ass upgedate!"
 
 #: lost_tracker/main.py:368
 msgid "E-Mail sent successfully!"
