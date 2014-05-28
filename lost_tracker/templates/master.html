@@ -61,10 +61,12 @@
 
     <div id="{% block wrapperid %}{% endblock %}">
 
-      <div id="logo">
-        <img src="{{url_for('static', filename='images/logo2014.png')}}" />
-        <h2>28. {{_("May")}} 2014</h2>
-      </div>
+      {% if not disable_logo %}
+        <div id="logo">
+          <img src="{{url_for('static', filename='images/logo2014.png')}}" />
+          <h2>28. {{_("May")}} 2014</h2>
+        </div>
+      {% endif %}
 
       {% with messages = get_flashed_messages(with_categories=True) %}
           {% if messages %}
