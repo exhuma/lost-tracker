@@ -7,6 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from config_resolver import Config
 from flask.ext.login import (
     LoginManager,
+    current_user,
     login_required,
     login_user,
     logout_user,
@@ -325,6 +326,8 @@ def register():
 @app.route('/confirm')
 @app.route('/confirm/<key>')
 def confirm_registration(key):
+    if not current_user.admin:
+        return "Access denied", 401
     loco.confirm_registration(
         key,
         activation_url=url_for('accept_registration',
@@ -339,6 +342,8 @@ def confirm_registration(key):
 @app.route('/accept/<key>')
 @login_required
 def accept_registration(key):
+    if not current_user.admin:
+        return "Access denied", 401
     group = loco.get_grp_by_registration_key(key)
 
     if group.finalized:
@@ -353,6 +358,8 @@ def accept_registration(key):
 @app.route('/group/<id>', methods=['POST'])
 @login_required
 def save_group_info(id):
+    if not current_user.admin:
+        return "Access denied", 401
     group = loco.get_grps_by_id(id)
     if not group.finalized:
         loco.accept_registration(group.confirmation_key, request.form)
@@ -396,6 +403,8 @@ def logout():
 @app.route('/manage')
 @login_required
 def manage():
+    if not current_user.admin:
+        return "Access denied", 401
     groups = loco.get_grps()
     slots = loco.slots()
 
@@ -421,6 +430,8 @@ def manage():
 @app.route('/manage/table/<table>')
 @login_required
 def tabularadmin(table):
+    if not current_user.admin:
+        return "Access denied", 401
 
     if table not in MODIFIABLE_TABLES:
         return gettext('Access Denied'), 401
@@ -481,6 +492,8 @@ def tabularadmin(table):
 @app.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
 @login_required
 def update_cell_value(cls, key, datum):
+    if not current_user.admin:
+        return "Access denied", 401
 
     if cls not in MODIFIABLE_TABLES:
         return gettext('Access Denied'), 401
@@ -528,6 +541,8 @@ def update_cell_value(cls, key, datum):
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])
 @login_required
 def set_time_slot(group_name):
+    if not current_user.admin:
+        return "Access denied", 401
     data = request.json
     if data['direction'] not in (mdl.DIR_A, mdl.DIR_B):
         return jsonify(
@@ -552,6 +567,8 @@ def group_tooltip(group_id):
 @app.route('/station', methods=['POST'])
 @login_required
 def add_new_station():
+    if not current_user.admin:
+        return "Access denied", 401
     data = request.json
     message = loco.add_station(
         data['name'],
@@ -564,6 +581,8 @@ def add_new_station():
 @app.route('/form', methods=['POST'])
 @login_required
 def add_new_form():
+    if not current_user.admin:
+        return "Access denied", 401
     data = request.json
     name = data['name']
     max_score = int(data['max_score'])
@@ -580,6 +599,8 @@ def add_new_form():
 @app.route('/group', methods=['POST'])
 @login_required
 def add_new_group():
+    if not current_user.admin:
+        return "Access denied", 401
     data = request.json
     grp_name = data['name']
     grp_contact = data['contact']
@@ -600,6 +621,8 @@ def add_new_group():
 @app.route('/group/<int:id>', methods=['DELETE'])
 @login_required
 def delete_group(id):
+    if not current_user.admin:
+        return "Access denied", 401
     loco.delete_group(id)
     return jsonify(status='ok')
 
@@ -607,6 +630,8 @@ def delete_group(id):
 @app.route('/station/<int:id>', methods=['DELETE'])
 @login_required
 def delete_station(id):
+    if not current_user.admin:
+        return "Access denied", 401
     loco.delete_station(id)
     return jsonify(status='ok')
 
@@ -614,6 +639,8 @@ def delete_station(id):
 @app.route('/form/<int:id>', methods=['DELETE'])
 @login_required
 def delete_form(id):
+    if not current_user.admin:
+        return "Access denied", 401
     loco.delete_form(id)
     return jsonify(status='ok')
 
