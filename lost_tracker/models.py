@@ -173,6 +173,7 @@ class Group(Base):
     is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
     finalized = Column(Boolean, server_default='false', default=False)
+    completed = Column(Boolean, server_default='false', default=False)
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
 
