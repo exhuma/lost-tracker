@@ -172,7 +172,8 @@ def station(name):
         station=station,
         groups=groups,
         group_states=group_states,
-        questionnaires=questionnaires)
+        questionnaires=questionnaires,
+        disable_logo=True)
 
 
 @app.route('/form_score')
