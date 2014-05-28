@@ -54,10 +54,12 @@ MODIFIABLE_TABLES = ('group', 'station', 'form')
 def _stategetter(element):
     """
     Custom sorting for group states. Make "arrived" groups come first,
-    then all "unknowns". Make "finished" groups come last.
+    then all "unknowns". Make "finished" and "cancelled" groups come last.
     """
     if element is None or element.state is None:
-        return mdl.STATE_UNKNOWN
+        return 1
+    elif element.group.cancelled:
+        return 80
     elif element.state.state == mdl.STATE_ARRIVED:
         return 0
     elif element.state.state == mdl.STATE_UNKNOWN:
@@ -154,7 +156,7 @@ def station(name):
         return abort(404)
 
     groups = loco.get_grps()  # TODO: rename function
-    GroupStateRow = namedtuple('GroupStateRow', 'group, ' 'state')
+    GroupStateRow = namedtuple('GroupStateRow', 'group, state')
     group_states = []
     for grp in groups:  # TODO: rename variable
         group_station = mdl.get_state(grp.id, station.id)
