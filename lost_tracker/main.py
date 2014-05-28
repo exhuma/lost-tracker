@@ -289,7 +289,7 @@ def scoreboard():
     pos = 1
     for row in result:
         group = loco.get_grps_by_id(row.group_id)
-        output.append([pos, group.name, row.score_sum])
+        output.append([pos, group.name, row.score_sum, group.completed])
         pos += 1
     return render_template('scoreboard.html', scores=output)
 
