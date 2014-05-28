@@ -391,6 +391,10 @@ TD > DIV[contenteditable="true"] {
     margin-bottom: 1em;  
 }
 
+TR.completed {
+    color: #ff0;
+}
+
 @media screen and (min-width: 44em) {
     .col-group {
         overflow: hidden;
