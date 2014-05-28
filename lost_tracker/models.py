@@ -317,6 +317,7 @@ class User(Base):
     password = Column(Unicode(100))
     email = Column(Unicode(100))
     locale = Column(Unicode(2))
+    admin = Column(Boolean, default=False, server_default='false')
 
     def __init__(self, login, password, email):
         self.login = login
