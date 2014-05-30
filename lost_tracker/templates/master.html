@@ -65,7 +65,9 @@
       {% if not disable_logo %}
         <div id="logo">
           <img src="{{url_for('static', filename='images/logo2014.png')}}" />
-          <h2>28. {{_("May")}} 2014</h2>
+          {% if localconf.get('app', 'shout', default=None) %}
+            <h2>{{localconf.get('app', 'shout')}}</h2>
+          {% endif %}
         </div>
       {% endif %}
 
