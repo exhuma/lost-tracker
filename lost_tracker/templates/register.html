@@ -1,5 +1,7 @@
 {% extends "master_narrow.html" %}
 
+{% block title %}{{_('Register')}}{% endblock %}
+
 {% block content %}
     <h1>{{_("Registration")}} - 2014</h1>
     {% if stats.free_slots <= 0 %}
