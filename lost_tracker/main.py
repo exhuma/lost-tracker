@@ -668,8 +668,8 @@ def where():
 
 @app.route('/gallery')
 def photo_gallery():
-    photos = get_photos(app.localconf)
-    return render_template('gallery.html', photos=photos)
+    data = get_photos(app.localconf)
+    return render_template('gallery.html', gallery=data)
 
 
 @app.route('/misc')
