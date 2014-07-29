@@ -5,8 +5,15 @@ version=1.0
 ; Database connection string
 dsn=postgresql://postgres@/lost_tracker
 
+[app]
+helpdesk = Message to stations
+
+; A secondary title which is visible on each page.
+shout = 28. Mee 2014
+
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+photoset_id=72157642905812775
 
 [devserver]
 ; Dev server listens on device ...

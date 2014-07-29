@@ -1,5 +1,7 @@
 {% extends "master_narrow.html" %}
 
+{% block title %}{{_('Front Page')}}{% endblock %}
+
 {% block content %}
 <div class="admonition note">
   {{_('Registration is <strong>open</strong>! <a href="{url}">Register now!</a>').format(url=url_for('register'))}}
