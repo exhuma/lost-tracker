@@ -36,7 +36,7 @@ import lost_tracker.models as mdl
 
 app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
-                       version='1.0', require_load=True)
+                       version='1.1', require_load=True)
 app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
 
 babel = Babel(app)
@@ -296,6 +296,11 @@ def scoreboard():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    is_open = app.localconf.get('app', 'registration_open', default='False')
+    is_open = str(is_open).lower()[0:1] in ('t', '1')
+    if not is_open:
+        return render_template('registration_closed.html')
+
     if request.method == 'POST':
         data = {
             "group_name": request.form.get('group_name'),

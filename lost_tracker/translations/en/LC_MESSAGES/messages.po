@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-30 12:54+0200\n"
+"POT-Creation-Date: 2014-07-29 13:43+0200\n"
 "PO-Revision-Date: 2014-04-10 21:15+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: en <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "No such entity!"
 msgstr ""
 
-#: lost_tracker/main.py:316
+#: lost_tracker/main.py:321
 msgid ""
 "The registration has been recorded. However it is not yet activated.  You"
 " will receive a confirmation e-mail any second now. You must click on the"
@@ -31,54 +31,54 @@ msgid ""
 "receive another e-mail with the final confirmation once that is done."
 msgstr ""
 
-#: lost_tracker/main.py:338
+#: lost_tracker/main.py:343
 msgid ""
 "Thank you. Your registration has been activated and the lost-team has "
 "been notified about your entry. Once everything is processed you will "
 "recieve another e-mail with the final details."
 msgstr ""
 
-#: lost_tracker/main.py:352
+#: lost_tracker/main.py:357
 msgid "This group has already been accepted!"
 msgstr ""
 
-#: lost_tracker/main.py:368
+#: lost_tracker/main.py:373
 msgid "Accepted registration for group {}"
 msgstr ""
 
-#: lost_tracker/main.py:375
+#: lost_tracker/main.py:380
 msgid "Group {name} successfully updated!"
 msgstr ""
 
-#: lost_tracker/main.py:378
+#: lost_tracker/main.py:383
 msgid "E-Mail sent successfully!"
 msgstr ""
 
-#: lost_tracker/main.py:389
+#: lost_tracker/main.py:394
 msgid "Logged in successfully"
 msgstr ""
 
-#: lost_tracker/main.py:392
+#: lost_tracker/main.py:397
 msgid "Invalid credentials!"
 msgstr ""
 
-#: lost_tracker/main.py:439 lost_tracker/main.py:501
+#: lost_tracker/main.py:444 lost_tracker/main.py:506
 msgid "Access Denied"
 msgstr ""
 
-#: lost_tracker/main.py:474
+#: lost_tracker/main.py:479
 msgid "Table {name} not yet supported!"
 msgstr ""
 
-#: lost_tracker/main.py:551
+#: lost_tracker/main.py:556
 msgid "Incorrect value for direction: {!r}"
 msgstr ""
 
-#: lost_tracker/main.py:594
+#: lost_tracker/main.py:599
 msgid "Added {form}"
 msgstr ""
 
-#: lost_tracker/main.py:597
+#: lost_tracker/main.py:602
 msgid "Error: {message}"
 msgstr ""
 
@@ -394,6 +394,15 @@ msgstr ""
 
 #: lost_tracker/templates/register.html:26
 msgid "Details"
+msgstr ""
+
+#: lost_tracker/templates/registration_closed.html:3
+#: lost_tracker/templates/registration_closed.html:6
+msgid "Registration Closed"
+msgstr ""
+
+#: lost_tracker/templates/registration_closed.html:7
+msgid "We are sorry, the registration is currently closed!"
 msgstr ""
 
 #: lost_tracker/templates/scoreboard.html:11
