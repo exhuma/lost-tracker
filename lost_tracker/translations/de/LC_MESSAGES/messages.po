@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-05-30 12:54+0200\n"
-"PO-Revision-Date: 2014-05-30 13:02+0100\n"
+"POT-Creation-Date: 2014-07-29 13:43+0200\n"
+"PO-Revision-Date: 2014-07-30 11:57+0100\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language-Team: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -16,56 +16,56 @@ msgstr ""
 msgid "No such entity!"
 msgstr "Datenbank Eintrag nicht gefunden!"
 
-#: lost_tracker/main.py:316
+#: lost_tracker/main.py:321
 msgid "The registration has been recorded. However it is not yet activated.  You will receive a confirmation e-mail any second now. You must click on the link in that e-mail to activate the registrtion! Once this step is done, the registration will be processed by the lost team, and you will receive another e-mail with the final confirmation once that is done."
 msgstr "Die Anmeldung wurde gespeichert. Allerdings ist sie noch nicht aktiv! Sei werden in Kürze eine e-mail erhalten in welcher Sie den Bestätigungslink klicken müssen um die Anmeldung zu aktivieren. Sobald Sie dies getan haben, wird das Lost Team über die Anmeldung benachrichtigt. Wenn das Team die Anmeldung verarbeited hat, werden Sie eine weitere e-mail mir Ihrer geplanen Startzeit erhalten."
 
-#: lost_tracker/main.py:338
+#: lost_tracker/main.py:343
 msgid "Thank you. Your registration has been activated and the lost-team has been notified about your entry. Once everything is processed you will recieve another e-mail with the final details."
 msgstr "Vielen Dank. Ihre Anmeldung wurde aktiviert und das Lost Team wurde über Ihren Eintrag benachrichtigt. Sobald alle Daten überprüft wurden werden Sie eine weitere e-mail erhalten. In dieser e-mail erhalten Ihre Startzeit. "
 
-#: lost_tracker/main.py:352
+#: lost_tracker/main.py:357
 msgid "This group has already been accepted!"
 msgstr "Diese Gruppe wurde bereits angenommen!"
 
-#: lost_tracker/main.py:368
+#: lost_tracker/main.py:373
 msgid "Accepted registration for group {}"
 msgstr "Anmeldung für die Gruppe {} wurde angenommen."
 
-#: lost_tracker/main.py:375
+#: lost_tracker/main.py:380
 msgid "Group {name} successfully updated!"
 msgstr "Gruppe {name} erfolgreich gespeichert!"
 
-#: lost_tracker/main.py:378
+#: lost_tracker/main.py:383
 msgid "E-Mail sent successfully!"
 msgstr "E-Mail erfolgreich versand."
 
-#: lost_tracker/main.py:389
+#: lost_tracker/main.py:394
 msgid "Logged in successfully"
 msgstr "Anmeldung erfolgreich."
 
-#: lost_tracker/main.py:392
+#: lost_tracker/main.py:397
 msgid "Invalid credentials!"
 msgstr "Ungültige Zugangsdaten!"
 
-#: lost_tracker/main.py:439
-#: lost_tracker/main.py:501
+#: lost_tracker/main.py:444
+#: lost_tracker/main.py:506
 msgid "Access Denied"
 msgstr "Zugriff Verweigert"
 
-#: lost_tracker/main.py:474
+#: lost_tracker/main.py:479
 msgid "Table {name} not yet supported!"
 msgstr "Tabelle {name} ist noch nicht unterstützt."
 
-#: lost_tracker/main.py:551
+#: lost_tracker/main.py:556
 msgid "Incorrect value for direction: {!r}"
 msgstr "{!r} ist ein ungültiger Wert für dir Richtung."
 
-#: lost_tracker/main.py:594
+#: lost_tracker/main.py:599
 msgid "Added {form}"
 msgstr "{form} hinzugefügt"
 
-#: lost_tracker/main.py:597
+#: lost_tracker/main.py:602
 msgid "Error: {message}"
 msgstr "Fehler: {message}"
 
@@ -382,6 +382,16 @@ msgstr "Tel. Nummer (Handy für unterwegs)"
 #: lost_tracker/templates/register.html:26
 msgid "Details"
 msgstr "Details"
+
+#: lost_tracker/templates/registration_closed.html:3
+#: lost_tracker/templates/registration_closed.html:6
+#, fuzzy
+msgid "Registration Closed"
+msgstr "Anmeldungsdatum"
+
+#: lost_tracker/templates/registration_closed.html:7
+msgid "We are sorry, the registration is currently closed!"
+msgstr "Leider ist die Anmeldung momentan geschlossen!"
 
 #: lost_tracker/templates/scoreboard.html:11
 msgid "Current score"
