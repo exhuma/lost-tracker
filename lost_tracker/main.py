@@ -84,8 +84,11 @@ def load_user(userid):
 
 @app.context_processor
 def inject_context():
+    registration_open = str(app.localconf.get(
+        'app', 'registration_open', default='f')).lower()[0:1] in ('t', '1')
     return dict(
         localconf=app.localconf,
+        registration_open=registration_open,
         __version__=__version__)
 
 

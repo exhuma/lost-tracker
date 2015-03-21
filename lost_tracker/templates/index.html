@@ -3,11 +3,13 @@
 {% block title %}{{_('Front Page')}}{% endblock %}
 
 {% block content %}
-<div class="admonition note">
-  {{_('Registration is <strong>open</strong>! <a href="{url}">Register now!</a>').format(url=url_for('register'))}}
-  <hr />
-  {{_('It may take a few days until your registration is accepted. Please be patient!')}}
-</div>
+{% if registration_open %}
+  <div class="admonition note">
+    {{_('Registration is <strong>open</strong>! <a href="{url}">Register now!</a>').format(url=url_for('register'))}}
+    <hr />
+    {{_('It may take a few days until your registration is accepted. Please be patient!')}}
+  </div>
+{% endif %}
 
 <h1>{{_("What is this?")}}</h1>
 
