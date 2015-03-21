@@ -16,7 +16,7 @@ setup(
         'flask-babel==0.9',
         'mock==1.0.1',
         'psycopg2==2.5.2',
-        'requests==2.2.1'
+        'requests==2.6.0'
     ],
     include_package_data=True,
     author="Michel Albert",
