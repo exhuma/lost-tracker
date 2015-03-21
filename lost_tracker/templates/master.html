@@ -32,7 +32,9 @@
       <span id="#mainmenu">
         <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
         <a href="{{url_for('where')}}">{{_('Where is this?')}}</a> |
-        <a href="{{url_for('register')}}">{{_('Register')}}</a> |
+        {% if registration_open %}
+          <a href="{{url_for('register')}}">{{_('Register')}}</a> |
+        {% endif %}
         <a href="{{url_for('photo_gallery')}}">{{_('Pictures')}}</a> |
         <a href="{{url_for('scoreboard')}}">{{_('Scoreboard')}}</a> |
         <a href="{{url_for('misc')}}">{{_('Anything else?')}}</a>
