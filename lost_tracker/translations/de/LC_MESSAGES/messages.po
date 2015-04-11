@@ -2,70 +2,88 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2014-07-29 13:43+0200\n"
-"PO-Revision-Date: 2014-07-30 11:57+0100\n"
+"POT-Creation-Date: 2015-04-11 18:00+0200\n"
+"PO-Revision-Date: 2015-04-11 18:05+0100\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language-Team: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 1.3\n"
+"X-Generator: Poedit 1.6.7\n"
 
-#: lost_tracker/main.py:99
+#: lost_tracker/main.py:102
 msgid "No such entity!"
 msgstr "Datenbank Eintrag nicht gefunden!"
 
-#: lost_tracker/main.py:321
-msgid "The registration has been recorded. However it is not yet activated.  You will receive a confirmation e-mail any second now. You must click on the link in that e-mail to activate the registrtion! Once this step is done, the registration will be processed by the lost team, and you will receive another e-mail with the final confirmation once that is done."
-msgstr "Die Anmeldung wurde gespeichert. Allerdings ist sie noch nicht aktiv! Sei werden in Kürze eine e-mail erhalten in welcher Sie den Bestätigungslink klicken müssen um die Anmeldung zu aktivieren. Sobald Sie dies getan haben, wird das Lost Team über die Anmeldung benachrichtigt. Wenn das Team die Anmeldung verarbeited hat, werden Sie eine weitere e-mail mir Ihrer geplanen Startzeit erhalten."
+#: lost_tracker/main.py:324
+msgid ""
+"The registration has been recorded. However it is not yet activated.  You "
+"will receive a confirmation e-mail any second now. You must click on the "
+"link in that e-mail to activate the registrtion! Once this step is done, the "
+"registration will be processed by the lost team, and you will receive "
+"another e-mail with the final confirmation once that is done."
+msgstr ""
+"Die Anmeldung wurde gespeichert. Allerdings ist sie noch nicht aktiv! Sei "
+"werden in Kürze eine e-mail erhalten in welcher Sie den Bestätigungslink "
+"klicken müssen um die Anmeldung zu aktivieren. Sobald Sie dies getan haben, "
+"wird das Lost Team über die Anmeldung benachrichtigt. Wenn das Team die "
+"Anmeldung verarbeited hat, werden Sie eine weitere e-mail mir Ihrer geplanen "
+"Startzeit erhalten."
 
-#: lost_tracker/main.py:343
-msgid "Thank you. Your registration has been activated and the lost-team has been notified about your entry. Once everything is processed you will recieve another e-mail with the final details."
-msgstr "Vielen Dank. Ihre Anmeldung wurde aktiviert und das Lost Team wurde über Ihren Eintrag benachrichtigt. Sobald alle Daten überprüft wurden werden Sie eine weitere e-mail erhalten. In dieser e-mail erhalten Ihre Startzeit. "
+#: lost_tracker/main.py:346
+msgid ""
+"Thank you. Your registration has been activated and the lost-team has been "
+"notified about your entry. Once everything is processed you will recieve "
+"another e-mail with the final details."
+msgstr ""
+"Vielen Dank. Ihre Anmeldung wurde aktiviert und das Lost Team wurde über "
+"Ihren Eintrag benachrichtigt. Sobald alle Daten überprüft wurden werden Sie "
+"eine weitere e-mail erhalten. In dieser e-mail erhalten Ihre Startzeit. "
 
-#: lost_tracker/main.py:357
+#: lost_tracker/main.py:360
 msgid "This group has already been accepted!"
 msgstr "Diese Gruppe wurde bereits angenommen!"
 
-#: lost_tracker/main.py:373
+#: lost_tracker/main.py:376
 msgid "Accepted registration for group {}"
 msgstr "Anmeldung für die Gruppe {} wurde angenommen."
 
-#: lost_tracker/main.py:380
+#: lost_tracker/main.py:383
 msgid "Group {name} successfully updated!"
 msgstr "Gruppe {name} erfolgreich gespeichert!"
 
-#: lost_tracker/main.py:383
+#: lost_tracker/main.py:386
 msgid "E-Mail sent successfully!"
 msgstr "E-Mail erfolgreich versand."
 
-#: lost_tracker/main.py:394
+#: lost_tracker/main.py:397
 msgid "Logged in successfully"
 msgstr "Anmeldung erfolgreich."
 
-#: lost_tracker/main.py:397
+#: lost_tracker/main.py:400
 msgid "Invalid credentials!"
 msgstr "Ungültige Zugangsdaten!"
 
-#: lost_tracker/main.py:444
-#: lost_tracker/main.py:506
+#: lost_tracker/main.py:447 lost_tracker/main.py:509
 msgid "Access Denied"
 msgstr "Zugriff Verweigert"
 
-#: lost_tracker/main.py:479
+#: lost_tracker/main.py:482
 msgid "Table {name} not yet supported!"
 msgstr "Tabelle {name} ist noch nicht unterstützt."
 
-#: lost_tracker/main.py:556
+#: lost_tracker/main.py:559
 msgid "Incorrect value for direction: {!r}"
 msgstr "{!r} ist ein ungültiger Wert für dir Richtung."
 
-#: lost_tracker/main.py:599
+#: lost_tracker/main.py:602
 msgid "Added {form}"
 msgstr "{form} hinzugefügt"
 
-#: lost_tracker/main.py:602
+#: lost_tracker/main.py:605
 msgid "Error: {message}"
 msgstr "Fehler: {message}"
 
@@ -156,8 +174,7 @@ msgstr "Gruppen ID"
 msgid "Questionnaire"
 msgstr "Fragebogen"
 
-#: lost_tracker/templates/gallery.html:3
-#: lost_tracker/templates/master.html:36
+#: lost_tracker/templates/gallery.html:3 lost_tracker/templates/master.html:38
 msgid "Pictures"
 msgstr "Bilder"
 
@@ -186,9 +203,8 @@ msgid "Accepted"
 msgstr "Angenommen"
 
 #: lost_tracker/templates/group-tooltip.html:12
-#, fuzzy
 msgid "Confirmed"
-msgstr "Bestaetigt"
+msgstr "Bestätigt"
 
 #: lost_tracker/templates/group_list.html:2
 msgid "Group List"
@@ -215,37 +231,54 @@ msgstr "Link bearbeiten"
 msgid "Front Page"
 msgstr "Startseite"
 
-#: lost_tracker/templates/index.html:7
-#, fuzzy
-msgid "Registration is <strong>open</strong>! <a href=\"{url}\">Register now!</a>"
-msgstr "Die Anmeldung ist <strong>eroeffnet</strong>! <a href=\"{url}\">Jetzt anmelden!</a>"
+#: lost_tracker/templates/index.html:8
+msgid ""
+"Registration is <strong>open</strong>! <a href=\"{url}\">Register now!</a>"
+msgstr ""
+"Die Anmeldung ist <strong>eröffnet</strong>! <a href=\"{url}\">Jetzt "
+"anmelden!</a>"
 
-#: lost_tracker/templates/index.html:9
+#: lost_tracker/templates/index.html:10
 #: lost_tracker/templates/register.html:16
-msgid "It may take a few days until your registration is accepted. Please be patient!"
-msgstr "Es kann einige Tage dauern bis Ihre Anmeldung angenommen wird. Wir bitten um etwas Geduld!"
+msgid ""
+"It may take a few days until your registration is accepted. Please be "
+"patient!"
+msgstr ""
+"Es kann einige Tage dauern bis Ihre Anmeldung angenommen wird. Wir bitten um "
+"etwas Geduld!"
 
-#: lost_tracker/templates/index.html:12
+#: lost_tracker/templates/index.html:14
 msgid "What is this?"
 msgstr "Was ist das?"
 
-#: lost_tracker/templates/index.html:16
-msgid "A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /> Impossible tasks.<br /> Not to be missed."
-msgstr "Ein \"Nachtrallye\"<br />Draussen im Dunkeln<br />Spiele<br />Rätsel<br />Unmögliche Aufgaben<br />Nicht zu verpassen."
+#: lost_tracker/templates/index.html:18
+msgid ""
+"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles."
+"<br /> Impossible tasks.<br /> Not to be missed."
+msgstr ""
+"Ein \"Nachtrallye\"<br />Draussen im Dunkeln<br />Spiele<br />Rätsel<br /"
+">Unmögliche Aufgaben<br />Nicht zu verpassen."
 
-#: lost_tracker/templates/index.html:21
-msgid "Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> Scouten a Guiden vun der FNEL"
-msgstr "Organisiert von <br />Caper Piwitschen<br />und<br />Mamer Wiselen<br />Scouten a Guiden von der FNEL"
+#: lost_tracker/templates/index.html:23
+msgid ""
+"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
+"Scouten a Guiden vun der FNEL"
+msgstr ""
+"Organisiert von <br />Caper Piwitschen<br />und<br />Mamer Wiselen<br /"
+">Scouten a Guiden von der FNEL"
 
-#: lost_tracker/templates/index.html:27
-msgid "Everybody who likes to spend a night outside, who's fairly well on foot and who does not mind getting home 3 hours late because they got lost may join :)"
-msgstr "Mitmachen kann jeder dem es Spass macht eine Nacht im Offenen zu verbringen, der gut zu Fuss unterwegs ist, und dem es nichts ausmacht mit 3 Stunden Verspätung zu Hause ankommt weil man sich verlaufen hat."
+#: lost_tracker/templates/index.html:29
+msgid ""
+"Everybody who likes to spend a night outside, who's fairly well on foot and "
+"who does not mind getting home 3 hours late because they got lost may join :)"
+msgstr ""
+"Mitmachen kann jeder dem es Spass macht eine Nacht im Offenen zu verbringen, "
+"der gut zu Fuss unterwegs ist, und dem es nichts ausmacht mit 3 Stunden "
+"Verspätung zu Hause ankommt weil man sich verlaufen hat."
 
-#: lost_tracker/templates/login.html:3
-#: lost_tracker/templates/login.html:6
-#: lost_tracker/templates/login.html:13
-#: lost_tracker/templates/login.html:18
-#: lost_tracker/templates/master.html:56
+#: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:6
+#: lost_tracker/templates/login.html:13 lost_tracker/templates/login.html:18
+#: lost_tracker/templates/master.html:58
 msgid "Login"
 msgstr "Login"
 
@@ -257,8 +290,7 @@ msgstr "Login Info"
 msgid "Password"
 msgstr "Passwort"
 
-#: lost_tracker/templates/manage.html:3
-#: lost_tracker/templates/master.html:52
+#: lost_tracker/templates/manage.html:3 lost_tracker/templates/master.html:54
 msgid "Slot Editor"
 msgstr "Zeitpunkt Editor"
 
@@ -274,49 +306,46 @@ msgstr "Zeitpunkt"
 msgid "Unassigned Groups"
 msgstr "Unzugewiesene Gruppen"
 
-#: lost_tracker/templates/master.html:34
-#: lost_tracker/templates/where.html:3
+#: lost_tracker/templates/master.html:34 lost_tracker/templates/where.html:3
 #: lost_tracker/templates/where.html:6
 msgid "Where is this?"
 msgstr "Wo ist es?"
 
-#: lost_tracker/templates/master.html:35
+#: lost_tracker/templates/master.html:36
 #: lost_tracker/templates/register.html:3
 #: lost_tracker/templates/register.html:31
 msgid "Register"
 msgstr "Anmelden"
 
-#: lost_tracker/templates/master.html:37
+#: lost_tracker/templates/master.html:39
 #: lost_tracker/templates/scoreboard.html:3
 #: lost_tracker/templates/scoreboard.html:10
 msgid "Scoreboard"
 msgstr "Punktestand"
 
-#: lost_tracker/templates/master.html:38
-#: lost_tracker/templates/misc.html:3
+#: lost_tracker/templates/master.html:40 lost_tracker/templates/misc.html:3
 #: lost_tracker/templates/misc.html:6
 msgid "Anything else?"
 msgstr "Sonst noch was?"
 
-#: lost_tracker/templates/master.html:49
+#: lost_tracker/templates/master.html:51
 msgid "Logged in as:"
 msgstr "Angemeldet als:"
 
-#: lost_tracker/templates/master.html:50
+#: lost_tracker/templates/master.html:52
 msgid "List"
 msgstr "Liste"
 
-#: lost_tracker/templates/master.html:51
-#: lost_tracker/templates/matrix.html:3
+#: lost_tracker/templates/master.html:53 lost_tracker/templates/matrix.html:3
 msgid "Matrix"
 msgstr "Matrix"
 
-#: lost_tracker/templates/master.html:53
+#: lost_tracker/templates/master.html:55
 #: lost_tracker/templates/tabular.html:48
 msgid "Manager"
 msgstr "Manager"
 
-#: lost_tracker/templates/master.html:54
+#: lost_tracker/templates/master.html:56
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -333,8 +362,12 @@ msgid "Food and beverages are available at the start and on the trail."
 msgstr "Für Essen und Trinken ist am Start und auf dem Weg gesorgt."
 
 #: lost_tracker/templates/misc.html:13
-msgid "We do this because we like it. Tell us wat you think and visit us on Facebook:"
-msgstr "Wir tun dies, weil wir es uns Spass macht. Sag uns deine Meinung un besuch uns auf Facebook:"
+msgid ""
+"We do this because we like it. Tell us wat you think and visit us on "
+"Facebook:"
+msgstr ""
+"Wir tun dies, weil wir es uns Spass macht. Sag uns deine Meinung un besuch "
+"uns auf Facebook:"
 
 #: lost_tracker/templates/misc.html:14
 msgid "Lost in the Darkness on Facebook"
@@ -345,11 +378,14 @@ msgid "Everything penny we earn is donated to ONGD FNEL!"
 msgstr "Alles was wir verdienen geht an die ONGD FNEL!"
 
 #: lost_tracker/templates/misc.html:20
-msgid "In the year 2012 we raised €2324. <br /> (and <a href='{link}'>the municipality of Mamer even added €1000!</a>)"
-msgstr "Im Jahr 2012 verdienten wir so €2324. <br /> (und <a href='{link}'>die Gemeinde von Mamer legte noch €1000 drauf!</a>)"
+msgid ""
+"In the year 2012 we raised €2324. <br /> (and <a href='{link}'>the "
+"municipality of Mamer even added €1000!</a>)"
+msgstr ""
+"Im Jahr 2012 verdienten wir so €2324. <br /> (und <a href='{link}'>die "
+"Gemeinde von Mamer legte noch €1000 drauf!</a>)"
 
-#: lost_tracker/templates/notice.html:3
-#: lost_tracker/templates/notice.html:7
+#: lost_tracker/templates/notice.html:3 lost_tracker/templates/notice.html:7
 msgid "Notice"
 msgstr "Notiz"
 
@@ -358,14 +394,16 @@ msgid "Registration"
 msgstr "Anmeldung"
 
 #: lost_tracker/templates/register.html:8
-#, fuzzy
-msgid "We are sorry, the event is currently fully booked! You can register however. With luck we can sqeeze you in, but don't get your hopes up :("
-msgstr "Eir sind leider ausgebucht! Sie koennen sich dennoch anmelden. Mit etwas Glueck koennen wir Sie spaeter noch aufnehmen."
+msgid ""
+"We are sorry, the event is currently fully booked! You can register however. "
+"With luck we can sqeeze you in, but don't get your hopes up :("
+msgstr ""
+"Eir sind leider ausgebucht! Sie können sich dennoch anmelden. Mit etwas "
+"Glück können wir Sie später noch aufnehmen."
 
 #: lost_tracker/templates/register.html:10
-#, fuzzy
 msgid "Only {free_slots} registrations remain available! Hurry up!"
-msgstr "Es bleiben nur noch {free_slots} freie Plaetze! Beeilung!"
+msgstr "Es bleiben nur noch {free_slots} freie Plätze! Beeilung!"
 
 #: lost_tracker/templates/register.html:15
 msgid "Information about your group"
@@ -385,9 +423,8 @@ msgstr "Details"
 
 #: lost_tracker/templates/registration_closed.html:3
 #: lost_tracker/templates/registration_closed.html:6
-#, fuzzy
 msgid "Registration Closed"
-msgstr "Anmeldungsdatum"
+msgstr "Anmeldung abgeschlossen"
 
 #: lost_tracker/templates/registration_closed.html:7
 msgid "We are sorry, the registration is currently closed!"
@@ -418,8 +455,8 @@ msgid "Forms"
 msgstr "Fragebögen"
 
 #: lost_tracker/templates/where.html:8
-msgid "We will depart at the Scout's Home in Mamer (109, rte. d’Arlon)."
-msgstr "Wir werden beim Pfadfinder Home (109, rte. d’Arlon) starten."
+msgid "We will depart at the Scout's Home in Capellen."
+msgstr "Wir werden beim Pfadfinder Home in Capellen starten."
 
 #~ msgid "How does this work?"
 #~ msgstr "Wie geht das?"
