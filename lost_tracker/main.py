@@ -720,9 +720,16 @@ def where():
 
 @app.route('/gallery')
 def photo_gallery():
-    flickr_data = get_photos(app.localconf)
+    galleries = []
+
     local_data = loco.get_local_photos(app.localconf, photo_url_generator)
-    galleries = [local_data, flickr_data]
+    if local_data:
+        galleries.append(local_data)
+
+    flickr_data = get_photos(app.localconf)
+    if flickr_data:
+        galleries.append(flickr_data)
+
     return render_template('gallery.html', galleries=galleries)
 
 
