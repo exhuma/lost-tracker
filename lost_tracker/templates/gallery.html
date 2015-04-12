@@ -4,14 +4,17 @@
 
 {% block content %}
 
-{% if gallery['photos'] %}
-  <h2>{{gallery['title']}}</h2>
-  {% for photo in gallery['photos'] %}
-    <a href="http://farm{{photo.farm}}.staticflickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_b.jpg"><img
-      src="http://farm{{photo.farm}}.staticflickr.com/{{photo.server}}/{{photo.id}}_{{photo.secret}}_q.jpg" /></a>
-  {% endfor %}
+{% for gallery in galleries %}
+  {% if gallery['photos'] %}
+    <h2>{{gallery['title']}}</h2>
+    {% for photo in gallery['photos'] %}
+      <a href="{{photo.fullsize_url}}"><img src="{{photo.thumbnail_url}}" /></a>
+    {% endfor %}
+  {% else %}
+    <p class="note">{{_('Nothing here yet')}}</p>
+  {% endif %}
 {% else %}
   <p class="note">{{_('Nothing here yet')}}</p>
-{% endif %}
+{% endfor %}
 
 {% endblock %}

@@ -1,5 +1,8 @@
 from collections import namedtuple
 from operator import attrgetter
+import io
+import mimetypes
+import os.path
 
 from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm.exc import NoResultFound
@@ -20,20 +23,24 @@ from flask import (
     flash,
     g,
     jsonify,
+    make_response,
     redirect,
     render_template,
     request,
     session as flask_session,
     url_for,
 )
+from PIL import Image
 
 from lost_tracker import __version__
 from lost_tracker.flickr import get_photos
 from lost_tracker.database import Base
+from lost_tracker.localtypes import Photo
 from sqlalchemy.exc import IntegrityError
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
 
+mimetypes.init()
 app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
                        version='1.1', require_load=True)
@@ -49,6 +56,11 @@ login_manager.login_view = "login"
 # This is intentionally not in the config. It's tightly bound to the code. And
 # adding a table without modifying the rest of the code would not make sense.
 MODIFIABLE_TABLES = ('group', 'station', 'form')
+
+
+def photo_url_generator(basename):
+    return Photo(url_for('thumbnail', basename=basename),
+                 url_for('photo', basename=basename))
 
 
 def _stategetter(element):
@@ -68,6 +80,39 @@ def _stategetter(element):
         return 2
     else:
         return 99
+
+
+@app.route('/photo/<basename>')
+def photo(basename):
+    basename = os.path.basename(basename)
+    root = app.localconf.get('app', 'photo_folder', default='')
+    if not root:
+        return
+
+    fullname = os.path.join(root, basename)
+    mimetype, _ = mimetypes.guess_type(fullname)
+    with open(fullname, 'rb') as fptr:
+        response = make_response(fptr.read())
+    response.headers['Content-Type'] = mimetype
+    return response
+
+
+@app.route('/thumbnail/<basename>')
+def thumbnail(basename):
+    basename = os.path.basename(basename)
+    root = app.localconf.get('app', 'photo_folder', default='')
+    if not root:
+        return
+
+    fullname = os.path.join(root, basename)
+    mimetype, _ = mimetypes.guess_type(fullname)
+    im = Image.open(fullname)
+    im.thumbnail((150, 150), Image.ANTIALIAS)
+    blob = io.BytesIO()
+    im.save(blob, 'jpeg')
+    response = make_response(blob.getvalue())
+    response.headers['Content-Type'] = mimetype
+    return response
 
 
 @babel.localeselector
@@ -676,8 +721,10 @@ def where():
 
 @app.route('/gallery')
 def photo_gallery():
-    data = get_photos(app.localconf)
-    return render_template('gallery.html', gallery=data)
+    flickr_data = get_photos(app.localconf)
+    local_data = loco.get_local_photos(app.localconf, photo_url_generator)
+    galleries = [local_data, flickr_data]
+    return render_template('gallery.html', galleries=galleries)
 
 
 @app.route('/misc')
@@ -686,6 +733,8 @@ def misc():
 
 
 if __name__ == '__main__':
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
     app.run(debug=app.localconf.get('devserver', 'debug', default=False),
             host=app.localconf.get('devserver', 'listen'),
             port=int(app.localconf.get('devserver', 'port')))

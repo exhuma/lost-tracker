@@ -9,6 +9,7 @@ setup(
         'Flask-SQLAlchemy==1.0',
         'Flask==0.10.1',
         'IMAPClient==0.12',
+        'Pillow==2.8.1',
         'SQLAlchemy==0.9.3',
         'alembic==0.6.3',
         'config-resolver >= 4.2, <5.0',
