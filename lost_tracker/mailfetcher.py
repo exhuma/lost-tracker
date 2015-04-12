@@ -1,4 +1,4 @@
-from __future__ import print_function
+from hashlib import md5
 from os import makedirs
 from os.path import exists, join
 import logging
@@ -58,6 +58,21 @@ class MailFetcher(object):
             if fetch_meta:
                 self.download(msgid, fetch_meta)
 
+    def in_index(self, md5sum):
+        indexfile = join(self.image_folder, 'index')
+        if not exists(indexfile):
+            LOG.debug('%r does not exist. Assuming first run.', indexfile)
+            return False
+        hashes = [line.strip() for line in open(indexfile)]
+        return md5sum in hashes
+
+    def add_to_index(self, md5sum):
+        if not md5sum.strip():
+            return
+        indexfile = join(self.image_folder, 'index')
+        with open(indexfile, 'a+') as fptr:
+            fptr.write(md5sum + '\n')
+
     def download(self, msgid, metadata):
         LOG.debug('Downloading images for mail #%r', msgid)
         has_error = False
@@ -71,6 +86,10 @@ class MailFetcher(object):
                 response = self.connection.fetch([msgid], [element_name])
                 item = response.values()[0]
                 bindata = item[element_name].decode(encoding)
+                md5sum = md5(bindata).hexdigest()
+                if self.in_index(md5sum):
+                    LOG.debug('Ignored duplicate file.')
+                    continue
 
                 params = dict(zip(params[0::2], params[1::2]))
                 filename = params.get('name', '')
@@ -82,6 +101,7 @@ class MailFetcher(object):
                     with open(fullname, 'wb') as fptr:
                         fptr.write(bindata)
                     LOG.info('File written to %r', fullname)
+                    self.add_to_index(md5sum)
                 else:
                     has_error = True
                     LOG.warn('%r already exists. Not downloaded!' % fullname)
