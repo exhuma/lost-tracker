@@ -3,6 +3,8 @@ from json import loads
 
 import requests
 
+from lost_tracker.localtypes import Photo
+
 LOG = logging.getLogger(__name__)
 
 
@@ -25,10 +27,15 @@ def get_photos(conf):
             key=key,
             photoset_id=photoset_id))
     data = loads(response.content[14:-1])
+    url_template = ('http://farm{0[farm]}.staticflickr.com/{0[server]}/'
+                    '{0[id]}_{0[secret]}_{1}.jpg')
     try:
+        urls = [Photo(url_template.format(photo, 'q'),
+                      url_template.format(photo, 'b'))
+                for photo in data['photoset']['photo']]
         return {
             'title': data['photoset']['title'],
-            'photos': data['photoset']['photo']
+            'photos': urls
         }
     except Exception as exc:
         LOG.error(exc)

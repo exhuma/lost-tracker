@@ -1,5 +1,7 @@
-from lost_tracker.util import start_time_to_order
+from stat import S_ISREG, ST_CTIME, ST_MODE
+
 from lost_tracker.emails import send
+from lost_tracker.util import start_time_to_order
 from lost_tracker.models import (
     User,
     Group,
@@ -14,12 +16,19 @@ from lost_tracker.models import (
     DIR_B)
 
 from sqlalchemy import and_
+from os.path import exists
 from sqlalchemy.exc import IntegrityError
 import logging
+import mimetypes
 import os
+import os.path
 import urllib
 
 LOG = logging.getLogger(__name__)
+WEB_IMAGES = {
+    'image/jpeg',
+    'image/png',
+}
 
 
 def get_matrix(stations, groups):
@@ -437,4 +446,29 @@ def stats():
         'slots': num_slots,
         'free_slots': num_slots - num_groups,
         'load': float(num_groups) / num_slots
+    }
+
+
+def get_local_photos(conf, url_generator):
+    path = conf.get('app', 'photo_folder', default='')
+    if not path or not exists(path):
+        return {}
+
+    if not mimetypes.inited:
+        mimetypes.init()
+
+    entries = (os.path.join(path, fn) for fn in os.listdir(path))
+    entries = ((os.stat(path), path) for path in entries)
+    entries = ((stat[ST_CTIME], path)
+               for stat, path in entries if S_ISREG(stat[ST_MODE]))
+
+    photos = []
+    for cdate, filename in sorted(entries, reverse=True):
+        mtype, mtype_encoding = mimetypes.guess_type(filename)
+        if mtype in WEB_IMAGES:
+            photos.append(url_generator(os.path.basename(filename)))
+
+    return {
+        'title': 'Photos',
+        'photos': photos
     }
