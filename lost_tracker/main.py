@@ -572,7 +572,6 @@ def update_cell_value(cls, key, datum):
         cell_predicate = table.c[datum] == data['oldValue']
 
     data['newValue'] = coerce_(data['newValue'])
-    print(data)
     query = table.update().values(**{datum: data['newValue']}).where(
         and_(table.c.id == key, cell_predicate))
 
