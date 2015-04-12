@@ -19,6 +19,11 @@ setup(
         'psycopg2==2.5.2',
         'requests==2.6.0',
     ],
+    entry_points={
+        'console_scripts': [
+            'fetch_photos = lost_tracker.mailfetcher:run_cli',
+        ],
+    },
     include_package_data=True,
     author="Michel Albert",
     author_email="michel@albert.lu",

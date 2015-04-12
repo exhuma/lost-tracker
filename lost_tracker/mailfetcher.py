@@ -1,3 +1,4 @@
+from __future__ import print_function
 from hashlib import md5
 from os import makedirs
 from os.path import exists, join
@@ -114,6 +115,61 @@ class MailFetcher(object):
         else:
             self.connection.add_flags([msgid], SEEN)
 
+
+def run_cli():
+    import argparse
+    import sys
+
+    parser = argparse.ArgumentParser(description='Fetch photos from IMAP.')
+    parser.add_argument('--verbose', '-v', dest='verbose',
+                        default=0, action='count',
+                        help='Prints actions on stdout.')
+    parser.add_argument('--host', dest='host',
+                        required=True,
+                        help='IMAP Hostname')
+    parser.add_argument('--login', '-l', dest='login',
+                        required=True,
+                        help='IMAP Username')
+    parser.add_argument('--password', '-p', dest='password',
+                        help='IMAP password.')
+    parser.add_argument('--destination', '-d', dest='destination',
+                        required=True,
+                        help='The folder where files will be stored')
+
+    args = parser.parse_args()
+
+    if args.verbose >= 2:
+        logging.basicConfig(level=logging.DEBUG, file=sys.stdout)
+    elif args.verbose >= 1:
+        logging.basicConfig(level=logging.INFO, file=sys.stdout)
+    else:
+        logging.basicConfig(level=logging.WARNING)
+
+    if not args.password:
+        from getpass import getpass
+        password = getpass('Password: ')
+    else:
+        password = args.password
+
+    fetcher = MailFetcher(
+        args.host,
+        args.login,
+        password,
+        True,
+        args.destination)
+    try:
+        fetcher.connect()
+    except Exception as exc:
+        print('Unable to connect: {}'.format(exc), file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        fetcher.fetch()
+    except Exception as exc:
+        print('Unable to fetch: {}'.format(exc), file=sys.stderr)
+        sys.exit(1)
+
+    sys.exit(0)
 
 if __name__ == '__main__':
     from getpass import getpass
