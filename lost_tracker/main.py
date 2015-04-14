@@ -58,6 +58,10 @@ login_manager.login_view = "login"
 MODIFIABLE_TABLES = ('group', 'station', 'form')
 
 
+def userbool(value):
+    return value.lower()[0:1] in ('t', '1')
+
+
 def photo_url_generator(basename):
     return Photo(url_for('thumbnail', basename=basename),
                  url_for('photo', basename=basename))
@@ -129,8 +133,8 @@ def load_user(userid):
 
 @app.context_processor
 def inject_context():
-    registration_open = str(app.localconf.get(
-        'app', 'registration_open', default='f')).lower()[0:1] in ('t', '1')
+    registration_open = userbool(str(app.localconf.get(
+        'app', 'registration_open', default='f')))
     return dict(
         localconf=app.localconf,
         registration_open=registration_open,
@@ -345,7 +349,7 @@ def scoreboard():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     is_open = app.localconf.get('app', 'registration_open', default='False')
-    is_open = str(is_open).lower()[0:1] in ('t', '1')
+    is_open = userbool(str(is_open))
     if not is_open:
         return render_template('registration_closed.html')
 
@@ -381,8 +385,11 @@ def register():
 @app.route('/confirm')
 @app.route('/confirm/<key>')
 def confirm_registration(key):
-    if not current_user.admin:
+    is_open = app.localconf.get('app', 'registration_open', default='False')
+    is_open = userbool(str(is_open))
+    if not is_open:
         return "Access denied", 401
+
     loco.confirm_registration(
         key,
         activation_url=url_for('accept_registration',
@@ -397,7 +404,7 @@ def confirm_registration(key):
 @app.route('/accept/<key>')
 @login_required
 def accept_registration(key):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     group = loco.get_grp_by_registration_key(key)
 
@@ -413,7 +420,7 @@ def accept_registration(key):
 @app.route('/group/<id>', methods=['POST'])
 @login_required
 def save_group_info(id):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     group = loco.get_grps_by_id(id)
     if not group.finalized:
@@ -458,7 +465,7 @@ def logout():
 @app.route('/manage')
 @login_required
 def manage():
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     groups = loco.get_grps()
     slots = loco.slots()
@@ -485,7 +492,7 @@ def manage():
 @app.route('/manage/table/<table>')
 @login_required
 def tabularadmin(table):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
 
     if table not in MODIFIABLE_TABLES:
@@ -547,7 +554,7 @@ def tabularadmin(table):
 @app.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
 @login_required
 def update_cell_value(cls, key, datum):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
 
     if cls not in MODIFIABLE_TABLES:
@@ -595,7 +602,7 @@ def update_cell_value(cls, key, datum):
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])
 @login_required
 def set_time_slot(group_name):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     data = request.json
     if data['direction'] not in (mdl.DIR_A, mdl.DIR_B):
@@ -621,7 +628,7 @@ def group_tooltip(group_id):
 @app.route('/station', methods=['POST'])
 @login_required
 def add_new_station():
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     data = request.json
     message = loco.add_station(
@@ -635,7 +642,7 @@ def add_new_station():
 @app.route('/form', methods=['POST'])
 @login_required
 def add_new_form():
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     data = request.json
     name = data['name']
@@ -653,7 +660,7 @@ def add_new_form():
 @app.route('/group', methods=['POST'])
 @login_required
 def add_new_group():
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     data = request.json
     grp_name = data['name']
@@ -675,7 +682,7 @@ def add_new_group():
 @app.route('/group/<int:id>', methods=['DELETE'])
 @login_required
 def delete_group(id):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     loco.delete_group(id)
     return jsonify(status='ok')
@@ -684,7 +691,7 @@ def delete_group(id):
 @app.route('/station/<int:id>', methods=['DELETE'])
 @login_required
 def delete_station(id):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     loco.delete_station(id)
     return jsonify(status='ok')
@@ -693,7 +700,7 @@ def delete_station(id):
 @app.route('/form/<int:id>', methods=['DELETE'])
 @login_required
 def delete_form(id):
-    if not current_user.admin:
+    if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     loco.delete_form(id)
     return jsonify(status='ok')
