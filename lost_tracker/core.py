@@ -230,6 +230,10 @@ def slots():
         TimeSlot('21h00'),
         TimeSlot('21h10'),
         TimeSlot('21h20'),
+        TimeSlot('21h30'),
+        TimeSlot('21h40'),
+        TimeSlot('21h50'),
+        TimeSlot('22h00'),
     ]
 
 
