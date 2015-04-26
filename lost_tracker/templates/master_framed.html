@@ -26,6 +26,7 @@
           <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
           <a href="{{url_for('manage')}}">{{_('Slot Editor')}}</a> |
           <a href="{{url_for('tabularadmin', table='group')}}">{{_('Manager')}}</a> |
+          <a href="{{url_for('settings')}}">{{_('Settings')}}</a> |
           <a href="{{url_for('logout')}}">{{_('Logout')}}</a>
         {% else %}
           <a href="{{url_for('login')}}">{{_('Login')}}</a>
@@ -40,11 +41,13 @@
       {% if not disable_logo %}
         <div id="logo">
           <img src="{{url_for('static', filename='images/logo2014.png')}}" />
-          {% if localconf.get('app', 'shout', default=None) %}
-            <h2>{{localconf.get('app', 'shout')}}</h2>
+          {% if Setting.get(g.session, 'shout', default=None) %}
+            <h2>{{Setting.get(g.session, 'shout')}}</h2>
           {% endif %}
         </div>
       {% endif %}
+
+      {% if date_display %}<h1>{{date_display}}</h1>{% endif %}
 
       {% with messages = get_flashed_messages(with_categories=True) %}
           {% if messages %}

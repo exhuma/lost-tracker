@@ -1,4 +1,5 @@
 from collections import namedtuple
+from datetime import datetime
 from operator import attrgetter
 import io
 import mimetypes
@@ -16,6 +17,7 @@ from flask.ext.login import (
     logout_user,
 )
 from flask.ext.babel import gettext, Babel
+from babel.dates import format_date
 from sqlalchemy import create_engine, and_, or_
 from flask import (
     Flask,
@@ -43,7 +45,7 @@ import lost_tracker.models as mdl
 mimetypes.init()
 app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
-                       version='1.1', require_load=True)
+                       version='1.2', require_load=True)
 app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
 
 babel = Babel(app)
@@ -133,11 +135,24 @@ def load_user(userid):
 
 @app.context_processor
 def inject_context():
-    registration_open = userbool(str(app.localconf.get(
-        'app', 'registration_open', default='f')))
+    registration_open = mdl.Setting.get(g.session, 'registration_open',
+                                        default=False)
+    event_date = mdl.Setting.get(g.session, 'event_date', None)
+    if event_date and event_date >= datetime.now():
+        date_locale = get_locale()
+        if date_locale == 'lu':  # bugfix?
+            date_locale = 'de'
+        date_display = format_date(event_date,
+                                   format='long',
+                                   locale=date_locale)
+    else:
+        date_display = ''
+
     return dict(
         localconf=app.localconf,
         registration_open=registration_open,
+        Setting=mdl.Setting,
+        date_display=date_display,
         __version__=__version__)
 
 
@@ -348,8 +363,7 @@ def scoreboard():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    is_open = app.localconf.get('app', 'registration_open', default='False')
-    is_open = userbool(str(is_open))
+    is_open = mdl.Setting.get(g.session, 'registration_open', default=False)
     if not is_open:
         return render_template('registration_closed.html')
 
@@ -385,8 +399,7 @@ def register():
 @app.route('/confirm')
 @app.route('/confirm/<key>')
 def confirm_registration(key):
-    is_open = app.localconf.get('app', 'registration_open', default='False')
-    is_open = userbool(str(is_open))
+    is_open = mdl.Setting.get(g.session, 'registration_open', default=False)
     if not is_open:
         return "Access denied", 401
 
@@ -744,6 +757,33 @@ def photo_gallery():
 @app.route('/misc')
 def misc():
     return render_template('misc.html')
+
+
+@app.route('/settings')
+@login_required
+def settings():
+    settings = {stng.key: stng.value for stng in mdl.Setting.all(g.session)}
+    if 'event_date' in settings and settings['event_date']:
+        settings['event_date'] = settings['event_date'].strftime(
+            mdl.DATE_FORMAT)
+    return render_template('settings.html', settings=settings)
+
+
+@app.route('/settings', methods=['POST'])
+@login_required
+def save_settings():
+    helpdesk = request.form.get('helpdesk', '')
+    registration_open = request.form.get('registration_open', '') == u'on'
+    shout = request.form.get('shout', '')
+    event_date = request.form.get('event_date', '')
+    if event_date:
+        event_date = datetime.strptime(event_date, '%Y-%m-%d')
+    mdl.Setting.put(g.session, 'helpdesk', helpdesk)
+    mdl.Setting.put(g.session, 'registration_open', registration_open)
+    mdl.Setting.put(g.session, 'shout', shout)
+    mdl.Setting.put(g.session, 'event_date', event_date)
+    flash(gettext('Settings successfully saved.'), 'info')
+    return redirect(url_for("settings"))
 
 
 if __name__ == '__main__':

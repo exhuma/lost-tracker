@@ -1,5 +1,6 @@
 from collections import namedtuple
 from datetime import datetime
+from json import loads, dumps
 
 from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
                         Boolean, PrimaryKeyConstraint, DateTime, func)
@@ -15,6 +16,7 @@ STATE_FINISHED = 2
 DIR_A = u'Giel'
 DIR_B = u'Roud'
 
+DATE_FORMAT = '%Y-%m-%d'
 
 form_scores = Table(
     'form_scores',
@@ -23,6 +25,13 @@ form_scores = Table(
     Column('form_id', Integer, ForeignKey('form.id')),
     Column('score', Integer, default=0),
     PrimaryKeyConstraint('group_id', 'form_id'))
+
+
+def custom_json_serializer(value):
+    if isinstance(value, datetime):
+        return value.strftime(DATE_FORMAT)
+    else:
+        raise TypeError('Cannot serialize {!r} to JSON'.format(value))
 
 
 def score_totals():
@@ -240,6 +249,55 @@ class Form(Base):
 
     def __repr__(self):
         return '<Form %r>' % (self.name)
+
+
+class Setting(Base):
+    __tablename__ = 'settings'
+    key = Column(Unicode(20), primary_key=True)
+    value_ = Column('value', Unicode())
+    description = Column('description', Unicode())
+
+    def __init__(self, key, value):
+        self.key = key
+        self.value_ = dumps(value, default=custom_json_serializer)
+        self.description = u''
+
+    def __repr__(self):
+        return 'Setting({!r}, {!r})'.format(self.key, self.value)
+
+    @property
+    def value(self):
+        value = loads(self.value_)
+        if isinstance(value, (str, unicode)) and '-' in value:
+            try:
+                value = datetime.strptime(loads(self.value_), DATE_FORMAT)
+            except ValueError:
+                value = 'Unknown Value'
+        return value
+
+    @value.setter
+    def value(self, new_value):
+        self.value_ = dumps(new_value, default=custom_json_serializer)
+
+    @staticmethod
+    def get(session, key, default=None):
+        query = Setting.query.filter(Setting.key == key)
+        row = query.first()
+        if not row:
+            new_row = Setting.put(session, key, default)
+            return new_row.value
+        return row.value
+
+    @staticmethod
+    def put(session, key, value):
+        row = Setting(key, value)
+        new_row = session.merge(row)
+        session.add(new_row)
+        return new_row
+
+    @staticmethod
+    def all(session):
+        return session.query(Setting)
 
 
 class GroupStation(Base):
