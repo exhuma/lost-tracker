@@ -83,7 +83,7 @@ msgstr "Falschen Wert fir Richtung: {!r}"
 
 #: lost_tracker/main.py:602
 msgid "Added {form}"
-msgstr "{fom} bäigesat"
+msgstr "{form} bäigesat"
 
 #: lost_tracker/main.py:605
 msgid "Error: {message}"

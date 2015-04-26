@@ -231,10 +231,12 @@ class Form(Base):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(20))
     max_score = Column(Integer)
+    order = Column(Integer, nullable=False, default=0)
 
-    def __init__(self, name=None, max_score=100):
+    def __init__(self, name=None, max_score=100, order=0):
         self.name = name
         self.max_score = max_score
+        self.order = order
 
     def __repr__(self):
         return '<Form %r>' % (self.name)
