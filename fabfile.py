@@ -3,14 +3,17 @@ from ConfigParser import SafeConfigParser
 import fabric.api as fab
 import fabric.colors as clr
 
+fab.env.roledefs = {
+    'prod': ['lostlu@dozer.foobar.lu'],
+    'failover': ['lost_tracker_backup@eurinfo.net'],
+}
 
-fab.env.roledefs['prod'] = ['dozer.foobar.lu']
-REMOTE_USER = 'lostlu'
+
 REMOTE_FOLDER = '/var/www/lost.lu/www'
 
 
 @fab.task
-@fab.roles('prod')
+@fab.roles('prod', 'failover')
 def deploy():
     fab.execute(build)
     fab.execute(babel_compile)
@@ -20,48 +23,43 @@ def deploy():
 
 
 @fab.task
-@fab.roles('prod')
 def upload():
     fab.local('python setup.py sdist')
     name = fab.local('python setup.py --fullname', capture=True)
-    with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
+    with fab.cd(REMOTE_FOLDER):
         fab.put('dist/{0}.tar.gz'.format(name), '.')
         fab.put('alembic.ini', '.')
         fab.put('alembic', '.')
 
 
 @fab.task
-@fab.roles('prod')
 def install():
     name = fab.local('python setup.py --fullname', capture=True)
-    with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
+    with fab.cd(REMOTE_FOLDER):
         fab.run('env/bin/pip install {0}.tar.gz'.format(name))
         fab.run('env/bin/alembic upgrade head')
         fab.run('touch wsgi/lost-tracker.wsgi')
 
 
 @fab.task
-@fab.roles('prod')
 def clean():
     name = fab.local('python setup.py --fullname', capture=True)
-    with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
+    with fab.cd(REMOTE_FOLDER):
         fab.run('rm {0}.tar.gz'.format(name))
 
 
 @fab.task
-@fab.roles('prod')
 def redeploy():
     fab.execute(build)
     fab.execute(upload)
     name = fab.local('python setup.py --fullname', capture=True)
-    with fab.settings(user=REMOTE_USER), fab.cd(REMOTE_FOLDER):
+    with fab.cd(REMOTE_FOLDER):
         fab.run('env/bin/pip uninstall lost_tracker')
     fab.execute(install)
     fab.execute(clean)
 
 
 @fab.task
-@fab.roles('prod')
 def bootstrap():
     deploy()
     with fab.cd(REMOTE_FOLDER):
