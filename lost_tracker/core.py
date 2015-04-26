@@ -182,8 +182,8 @@ def add_station(stat_name, contact, phone, session):
         stat_name, contact, phone)
 
 
-def add_form(session, name, max_score):
-    new_form = Form(name, max_score)
+def add_form(session, name, max_score, order=0):
+    new_form = Form(name, max_score, order)
     session.add(new_form)
     return new_form
 
@@ -193,7 +193,7 @@ def get_forms():
     Returns all forms from the database as :py:class`Form` instances.
     """
     forms = Form.query
-    forms = forms.order_by(Form.id)
+    forms = forms.order_by(Form.order)
     forms = forms.all()
     return forms
 
