@@ -1,0 +1,58 @@
+{% extends "master.html" %}
+
+{% block mainmenu %}
+    <div id="menu">
+      <span id="#mainmenu">
+        <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
+        <a href="{{url_for('where')}}">{{_('Where is this?')}}</a> |
+        {% if registration_open %}
+          <a href="{{url_for('register')}}">{{_('Register')}}</a> |
+        {% endif %}
+        <a href="{{url_for('photo_gallery')}}">{{_('Pictures')}}</a> |
+        <a href="{{url_for('scoreboard')}}">{{_('Scoreboard')}}</a> |
+        <a href="{{url_for('misc')}}">{{_('Anything else?')}}</a>
+      </span>
+
+      <span id="flags">
+        <a href="{{request.path}}?lang=en"><img src="{{url_for('static', filename='flags/gb.png')}}" /></a>&nbsp;
+        <a href="{{request.path}}?lang=de"><img src="{{url_for('static', filename='flags/de.png')}}" /></a>&nbsp;
+        <a href="{{request.path}}?lang=lu"><img src="{{url_for('static', filename='flags/lu.png')}}" /></a>
+      </span>
+
+      <span id="auth">
+        {% if current_user.is_authenticated() %}
+        {{_('Logged in as:')}} {{current_user.name}}{{'*' if current_user.admin else ''}} |
+          <a href="{{url_for('group_list')}}">{{_('List')}}</a> |
+          <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
+          <a href="{{url_for('manage')}}">{{_('Slot Editor')}}</a> |
+          <a href="{{url_for('tabularadmin', table='group')}}">{{_('Manager')}}</a> |
+          <a href="{{url_for('logout')}}">{{_('Logout')}}</a>
+        {% else %}
+          <a href="{{url_for('login')}}">{{_('Login')}}</a>
+        {% endif %}
+      </span>
+    </div>
+{% endblock %}
+
+{% block submenu %}{% endblock %}
+
+{% block logo %}
+      {% if not disable_logo %}
+        <div id="logo">
+          <img src="{{url_for('static', filename='images/logo2014.png')}}" />
+          {% if localconf.get('app', 'shout', default=None) %}
+            <h2>{{localconf.get('app', 'shout')}}</h2>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% with messages = get_flashed_messages(with_categories=True) %}
+          {% if messages %}
+          <div id="flashes">
+              {% for category, message in messages %}
+                  <div class="{{category}}">{{ message }}</div>
+              {% endfor %}
+          </div>
+          {% endif %}
+      {% endwith %}
+{% endblock %}

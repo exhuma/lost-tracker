@@ -442,6 +442,64 @@ TR.completed {
 
 }
 
+TABLE#scoreboard TR:nth-child(2n-1) TD {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+TABLE#scoreboard {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0;
+    border: 0;
+}
+
+TABLE#scoreboard TD {
+    border: 0;
+}
+
+.position_1 {
+    font-size: 200%;
+    line-height: 200%;
+}
+
+.position_2 {
+    font-size: 180%;
+    line-height: 180%;
+}
+
+.position_3 {
+    font-size: 160%;
+    line-height: 160%;
+}
+
+.position_4 {
+    font-size: 140%;
+    line-height: 140%;
+}
+
+.position_5 {
+    font-size: 120%;
+    line-height: 120%;
+}
+
+TABLE#scoreboard TD.position,
+TABLE#scoreboard TD.score,
+TABLE#scoreboard TD.name {
+    padding: 0.4em 20px;
+}
+
+TABLE#scoreboard TD.position {
+    text-align: left;
+}
+
+TABLE#scoreboard TD.name {
+    text-align: center;
+}
+
+TABLE#scoreboard TD.score {
+    text-align: right;
+}
+
 /* {{{ Modal Dialogs */
 .modal-dialog {
     max-width: 30em;
