@@ -61,7 +61,6 @@ def redeploy():
 
 @fab.task
 def bootstrap():
-    deploy()
     with fab.cd(REMOTE_FOLDER):
         fab.run('mkdir -p wsgi')
         fab.put('wsgi/lost-tracker.wsgi', 'wsgi')
