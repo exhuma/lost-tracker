@@ -1,17 +1,12 @@
 [meta]
-version=1.1
+version=1.2
 
 [db]
 ; Database connection string
 dsn=postgresql://postgres@/lost_tracker
 
 [app]
-helpdesk = Message to stations
-registration_open = False
 photo_folder = /path/to/folder
-
-; A secondary title which is visible on each page.
-shout = 28. Mee 2014
 
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
