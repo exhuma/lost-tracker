@@ -172,11 +172,12 @@ def get_stat_by_name(name):
     return qry
 
 
-def add_station(stat_name, contact, phone, session):
+def add_station(stat_name, contact, phone, order, session):
     """
     Creates a new :py:class:`Station` in the database.
     """
     new_station = Station(stat_name, contact, phone)
+    new_station.order = order
     session.add(new_station)
     return u"Station {0} added. Contact: {1} / {2}".format(
         stat_name, contact, phone)

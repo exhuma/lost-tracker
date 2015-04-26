@@ -632,8 +632,9 @@ def add_new_station():
     data = request.json
     message = loco.add_station(
         data['name'],
-        data['contact'],
-        data['phone'],
+        data.get('contact', 'N/A'),
+        data.get('phone', 'N/A'),
+        int(data.get('order', 0)),
         g.session)
     return jsonify(message=message)
 
