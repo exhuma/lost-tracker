@@ -16,7 +16,7 @@
 {%- endmacro %}
 
 {% macro render_cell(cell) -%}
-  {% if cell.value -%}
+  {% if cell.value is not none -%}
     {% if cell.type == 'boolean' -%}
       <td><input
         class="tabularcell"
