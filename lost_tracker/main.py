@@ -525,11 +525,10 @@ def tabularadmin(table):
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Form.__table__.columns if _.primary_key]
         data = g.session.query(mdl.Form)
-        data = data.order_by(mdl.Form.name)
         if custom_order and custom_order in mdl.Form.__table__.columns:
             data = data.order_by(mdl.Form.__table__.columns[custom_order])
         else:
-            data = data.order_by(mdl.Form.order)
+            data = data.order_by(mdl.Form.order, mdl.Form.name)
     else:
         return gettext('Table {name} not yet supported!').format(
             name=table), 400
@@ -647,7 +646,8 @@ def add_new_form():
     data = request.json
     name = data['name']
     max_score = int(data['max_score'])
-    form = loco.add_form(g.session, name, max_score)
+    order = int(data.get('order', 0))
+    form = loco.add_form(g.session, name, max_score, order)
     try:
         g.session.commit()
         return jsonify(message=gettext('Added {form}').format(form=form))
