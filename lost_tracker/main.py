@@ -789,6 +789,7 @@ def save_settings():
 if __name__ == '__main__':
     import logging
     logging.basicConfig(level=logging.DEBUG)
-    app.run(debug=app.localconf.get('devserver', 'debug', default=False),
+    app.run(debug=userbool(app.localconf.get('devserver', 'debug',
+                                             default=False)),
             host=app.localconf.get('devserver', 'listen'),
             port=int(app.localconf.get('devserver', 'port')))
