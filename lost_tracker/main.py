@@ -246,17 +246,6 @@ def station(name):
         disable_logo=True)
 
 
-@app.route('/form_score')
-@login_required
-def init_form_score():
-    grps = loco.get_grps()  # TODO: rename function
-    form_scores = mdl.get_form_score_full()  # TODO: rename function
-    return render_template(
-        'form_score.html',
-        form_scores=form_scores,
-        groups=grps)
-
-
 @app.route('/score/<int:group_id>/<int:form_id>')
 def group_form_score(group_id, form_id):
     return jsonify(
@@ -318,34 +307,6 @@ def set_station_score():
         return jsonify(status='ok')
 
     return redirect(url_for("/"))  # TODO: redirect to station page
-
-
-@app.route('/form_score', methods=['POST'])
-@login_required
-def form_score():
-    """
-    Saves the score for one questionnaire into the database.  It takes the
-    following POST parameters:
-
-    :param group_id: The group ID
-    :param form_id: The form/questionnaire ID
-    :param score: The score.
-    """
-
-    try:
-        group_id = int(request.form['group_id'])
-        form_id = int(request.form['form_id'])
-        score = int(request.form['score'])
-    except ValueError as exc:
-        abort(409, str(exc))
-
-    if group_id:
-        mdl.set_form_score(group_id, form_id, score)
-
-    if request.is_xhr:
-        return jsonify(status='ok')
-
-    return redirect(url_for("init_form_score"))
 
 
 @app.route('/scoreboard')
@@ -635,40 +596,6 @@ def group_tooltip(group_id):
     group = loco.get_grps_by_id(group_id)
     return render_template('group-tooltip.html',
                            group=group)
-
-
-@app.route('/station', methods=['POST'])
-@login_required
-def add_new_station():
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    data = request.json
-    message = loco.add_station(
-        data['name'],
-        data.get('contact', 'N/A'),
-        data.get('phone', 'N/A'),
-        int(data.get('order', 0)),
-        g.session)
-    return jsonify(message=message)
-
-
-@app.route('/form', methods=['POST'])
-@login_required
-def add_new_form():
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    data = request.json
-    name = data['name']
-    max_score = int(data['max_score'])
-    order = int(data.get('order', 0))
-    form = loco.add_form(g.session, name, max_score, order)
-    try:
-        g.session.commit()
-        return jsonify(message=gettext('Added {form}').format(form=form))
-    except Exception as exc:
-        g.session.rollback()
-        return jsonify(message=gettext('Error: {message}').format(
-            message=exc)), 400
 
 
 @app.route('/group', methods=['POST'])
