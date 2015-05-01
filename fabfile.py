@@ -75,6 +75,7 @@ def develop():
     l = fab.local
     l('[ -d env ] || virtualenv env')
     l('./env/bin/pip uninstall lost_tracker || true')
+    l('./env/bin/pip install "setuptools>=0.8"')  # needed by IMAPClient
     l('./env/bin/pip install -e .')
     l('mkdir -p __libs__')
 
