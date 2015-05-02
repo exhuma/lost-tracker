@@ -307,6 +307,7 @@ class GroupStation(Base):
     station_id = Column(Integer, ForeignKey('station.id'), primary_key=True)
     state = Column(Integer, default=STATE_UNKNOWN)
     score = Column(Integer, nullable=True, default=None)
+    form_score = Column(Integer, nullable=True, default=None)
     group = relationship("Group")
     station = relationship("Station")
 
@@ -321,17 +322,19 @@ class GroupStation(Base):
             GroupStation.station_id == station_id)).first()
 
     @staticmethod
-    def set_score(session, group_id, station_id, score):
+    def set_score(session, group_id, station_id, station_score, form_score):
         query = GroupStation.query.filter(and_(
             GroupStation.group_id == group_id,
             GroupStation.station_id == station_id))
         row = query.first()
         if not row:
             gs = GroupStation(group_id, station_id)
-            gs.score = score
+            gs.score = station_score
+            gs.form_score = form_score
             session.add(gs)
         else:
-            row.score = score
+            row.score = station_score
+            row.form_score = form_score
 
 
 class TimeSlot(object):

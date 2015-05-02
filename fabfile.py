@@ -83,10 +83,11 @@ def develop():
         l('[ -f plovr-81ed862.jar ] || '
           'wget https://plovr.googlecode.com/files/plovr-81ed862.jar')
         l('[ -d closure-library ] || '
-          'git clone https://code.google.com/p/closure-library/')
+          'git clone https://github.com/google/closure-library.git')
 
     with fab.lcd('__libs__/closure-library'):
-        l('git pull')
+        l('git fetch')
+        l('git checkout 57bdfe0093c')
 
     l('mkdir -p .mamerwiselen/lost-tracker')
 
