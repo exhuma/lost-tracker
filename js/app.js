@@ -66,7 +66,7 @@ lost_tracker.app.attachEvents = function(stationId) {
       var formData = goog.dom.forms.getFormDataMap(form);
       var scoreDocument = JSON.stringify({
         'station': goog.string.parseInt(goog.dom.forms.getValueByName(form, 'station_score')),
-        'form': goog.string.parseInt(goog.dom.forms.getValueByName(form, 'form_score')),
+        'form': goog.string.parseInt(goog.dom.forms.getValueByName(form, 'form_score'))
       });
       fields['station_score'].value = 0;
       fields['form_score'].value = 0;

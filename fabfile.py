@@ -10,6 +10,10 @@ fab.env.roledefs = {
 
 
 REMOTE_FOLDER = '/var/www/lost.lu/www'
+PLOVR_REVISION = '9f12b6c'
+PLOVR = 'plovr/build/plovr-{}.jar'.format(PLOVR_REVISION)
+CLOSURE_REVISION = '57bdfe0093c'
+
 
 
 @fab.task
@@ -80,14 +84,18 @@ def develop():
     l('mkdir -p __libs__')
 
     with fab.lcd('__libs__'):
-        l('[ -f plovr-81ed862.jar ] || '
-          'wget https://plovr.googlecode.com/files/plovr-81ed862.jar')
+        l('[ -d plovr ] || '
+          'git clone https://github.com/bolinfest/plovr.git')
         l('[ -d closure-library ] || '
           'git clone https://github.com/google/closure-library.git')
 
+    with fab.lcd('__libs__/plovr'):
+        l('git fetch')
+        l('git checkout {}'.format(PLOVR_REVISION))
+
     with fab.lcd('__libs__/closure-library'):
         l('git fetch')
-        l('git checkout 57bdfe0093c')
+        l('git checkout {}'.format(CLOSURE_REVISION))
 
     l('mkdir -p .mamerwiselen/lost-tracker')
 
@@ -119,7 +127,7 @@ def build():
     """
     Compile JS sources.
     """
-    fab.local('java -jar __libs__/plovr-81ed862.jar build plovr-config.js')
+    fab.local('java -jar __libs__/{} build plovr-config.js'.format(PLOVR))
 
 
 @fab.task
