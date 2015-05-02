@@ -492,7 +492,7 @@ def update_cell_value(cls, key, datum):
     elif table.columns[datum].type.__class__ == Integer:
         coerce_ = int
     else:
-        coerce_ = lambda x: x
+        coerce_ = lambda x: x  # NOQA
 
     if data['oldValue'] in ('', None) and coerce_ == unicode.strip:
         cell_predicate = or_(table.c[datum] == '',
