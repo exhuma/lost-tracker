@@ -21,7 +21,11 @@
       <td>{{group.inserted.strftime('%Y-%m-%d %H:%M:%S')}}</td>
       <td>{{group.start_time|default('', true)}}</td>
       <td>{{group.direction|default('', true)}}</td>
-      <td><a href="{{url_for('accept_registration', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
+      {% if group.confirmation_key %}
+        <td><a href="{{url_for('accept_registration', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
+      {% else %}
+        <td>&nbsp;</td>
+      {% endif %}
     </tr>
     {%- endfor %}
   </tbody>

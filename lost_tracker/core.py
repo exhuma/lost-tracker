@@ -3,17 +3,19 @@ from stat import S_ISREG, ST_CTIME, ST_MODE
 from lost_tracker.emails import send
 from lost_tracker.util import start_time_to_order
 from lost_tracker.models import (
-    User,
-    Group,
-    Station,
+    DIR_A,
+    DIR_B,
     Form,
-    get_state,
-    TimeSlot,
+    Group,
+    GroupStation,
+    STATE_ARRIVED,
     STATE_FINISHED,
     STATE_UNKNOWN,
-    STATE_ARRIVED,
-    DIR_A,
-    DIR_B)
+    Station,
+    TimeSlot,
+    User,
+    get_state,
+)
 
 from sqlalchemy import and_
 from os.path import exists
@@ -477,3 +479,9 @@ def get_local_photos(conf, url_generator):
         'title': 'Photos',
         'photos': photos
     }
+
+
+def set_score(session, group_id, station_id, station_score, form_score):
+    GroupStation.set_score(session, group_id, station_id, station_score,
+                           form_score)
+    return 'OK'

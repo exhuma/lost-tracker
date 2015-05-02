@@ -16,7 +16,7 @@ import sqlalchemy as sa
 
 def upgrade():
     op.add_column('form', sa.Column('order', sa.Integer, nullable=False,
-                                    default=0))
+                                    server_default='0'))
 
 
 def downgrade():

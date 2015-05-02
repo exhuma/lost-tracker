@@ -246,108 +246,6 @@ def station(name):
         disable_logo=True)
 
 
-@app.route('/form_score')
-@login_required
-def init_form_score():
-    grps = loco.get_grps()  # TODO: rename function
-    form_scores = mdl.get_form_score_full()  # TODO: rename function
-    return render_template(
-        'form_score.html',
-        form_scores=form_scores,
-        groups=grps)
-
-
-@app.route('/score/<int:group_id>/<int:form_id>')
-def group_form_score(group_id, form_id):
-    return jsonify(
-        score=mdl.get_form_score(group_id, form_id))
-
-
-@app.route('/score/<int:group_id>', methods=['POST'])
-@login_required
-def score(group_id):
-    station_id = int(request.form['station_id'])
-
-    try:
-        station_score = int(request.form['station_score'])
-    except ValueError as exc:
-        app.logger.exception(exc)
-        station_score = None
-
-    try:
-        form_id = int(request.form['form_id'])
-        form_score = int(request.form['form_score'])
-    except:
-        form_id = None
-        form_score = 0
-
-    if station_score is not None:
-        group_station = mdl.GroupStation.get(
-            group_id,
-            station_id)
-        if not group_station:
-            group_station = mdl.GroupStation(
-                group_id,
-                station_id)
-            g.session.add(group_station)
-        group_station.score = int(station_score)
-
-    if form_id is not None:
-        mdl.set_form_score(group_id, form_id, int(form_score))
-
-    if request.is_xhr:
-        return jsonify(
-            station_score=station_score,
-            form_score=form_score,
-            status='ok')
-
-    return redirect(url_for("/"))  # TODO: redirect to station page
-
-
-@app.route('/station_score', methods=['POST'])
-@login_required
-def set_station_score():
-    group_id = request.form['group_id']
-    station_id = request.form['station_id']
-    score = request.form['score']
-
-    if group_id:
-        mdl.GroupStation.set_score(group_id, station_id, score)
-
-    if request.is_xhr:
-        return jsonify(status='ok')
-
-    return redirect(url_for("/"))  # TODO: redirect to station page
-
-
-@app.route('/form_score', methods=['POST'])
-@login_required
-def form_score():
-    """
-    Saves the score for one questionnaire into the database.  It takes the
-    following POST parameters:
-
-    :param group_id: The group ID
-    :param form_id: The form/questionnaire ID
-    :param score: The score.
-    """
-
-    try:
-        group_id = int(request.form['group_id'])
-        form_id = int(request.form['form_id'])
-        score = int(request.form['score'])
-    except ValueError as exc:
-        abort(409, str(exc))
-
-    if group_id:
-        mdl.set_form_score(group_id, form_id, score)
-
-    if request.is_xhr:
-        return jsonify(status='ok')
-
-    return redirect(url_for("init_form_score"))
-
-
 @app.route('/scoreboard')
 def scoreboard():
     result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
@@ -359,6 +257,20 @@ def scoreboard():
         output.append([pos, group.name, row.score_sum, group.completed])
         pos += 1
     return render_template('scoreboard.html', scores=output)
+
+
+@app.route('/group/<int:group_id>/score/<int:station_id>', methods=['PUT'])
+def set_group_score(group_id, station_id):
+    try:
+        form_score = request.json['form']
+        station_score = request.json['station']
+    except LookupError:
+        return jsonify({'message': 'Missing value'}), 400
+    loco.set_score(g.session, group_id, station_id, station_score, form_score)
+    return jsonify({
+        'form_score': form_score,
+        'station_score': station_score
+    })
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -580,7 +492,7 @@ def update_cell_value(cls, key, datum):
     elif table.columns[datum].type.__class__ == Integer:
         coerce_ = int
     else:
-        coerce_ = lambda x: x
+        coerce_ = lambda x: x  # NOQA
 
     if data['oldValue'] in ('', None) and coerce_ == unicode.strip:
         cell_predicate = or_(table.c[datum] == '',
@@ -635,40 +547,6 @@ def group_tooltip(group_id):
     group = loco.get_grps_by_id(group_id)
     return render_template('group-tooltip.html',
                            group=group)
-
-
-@app.route('/station', methods=['POST'])
-@login_required
-def add_new_station():
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    data = request.json
-    message = loco.add_station(
-        data['name'],
-        data.get('contact', 'N/A'),
-        data.get('phone', 'N/A'),
-        int(data.get('order', 0)),
-        g.session)
-    return jsonify(message=message)
-
-
-@app.route('/form', methods=['POST'])
-@login_required
-def add_new_form():
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    data = request.json
-    name = data['name']
-    max_score = int(data['max_score'])
-    order = int(data.get('order', 0))
-    form = loco.add_form(g.session, name, max_score, order)
-    try:
-        g.session.commit()
-        return jsonify(message=gettext('Added {form}').format(form=form))
-    except Exception as exc:
-        g.session.rollback()
-        return jsonify(message=gettext('Error: {message}').format(
-            message=exc)), 400
 
 
 @app.route('/group', methods=['POST'])
@@ -789,6 +667,7 @@ def save_settings():
 if __name__ == '__main__':
     import logging
     logging.basicConfig(level=logging.DEBUG)
-    app.run(debug=app.localconf.get('devserver', 'debug', default=False),
+    app.run(debug=userbool(app.localconf.get('devserver', 'debug',
+                                             default=False)),
             host=app.localconf.get('devserver', 'listen'),
             port=int(app.localconf.get('devserver', 'port')))

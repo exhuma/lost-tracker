@@ -60,10 +60,14 @@ lost_tracker.app.attachEvents = function(stationId) {
     var initialFormData = goog.dom.forms.getFormDataMap(form);
     var icons = goog.dom.getElementsByTagNameAndClass('img', 'icon', element);
 
+    // Handle score form submission
     goog.events.listen(fields['submit'], goog.events.EventType.CLICK, function(evt) {
       evt.preventDefault();
       var formData = goog.dom.forms.getFormDataMap(form);
-      var formString = goog.dom.forms.getFormDataString(form);
+      var scoreDocument = JSON.stringify({
+        'station': goog.string.parseInt(goog.dom.forms.getValueByName(form, 'station_score')),
+        'form': goog.string.parseInt(goog.dom.forms.getValueByName(form, 'form_score'))
+      });
       fields['station_score'].value = 0;
       fields['form_score'].value = 0;
       fields['station_score'].disabled = true;
@@ -72,7 +76,7 @@ lost_tracker.app.attachEvents = function(stationId) {
       var old_icon_source = icons[0].src;
       icons[0].src = $SCRIPT_ROOT + '/static/icons/loading.gif';
       goog.net.XhrIo.send(
-          $SCRIPT_ROOT + '/score/' + formData.get('group_id'),
+          $SCRIPT_ROOT + '/group/' + formData.get('group_id') + '/score/' + stationId,
           function(evt){
             var xhr = evt.target;
             var data = xhr.getResponseJson();
@@ -82,8 +86,9 @@ lost_tracker.app.attachEvents = function(stationId) {
             fields['form_score'].disabled = false;
             fields['submit'].disabled = false;
             icons[0].src = old_icon_source;
-          }, 'POST', formString, {
+          }, 'PUT', scoreDocument, {
             'Accept': 'application/json',
+            'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
           });
     });
@@ -95,14 +100,6 @@ lost_tracker.app.attachEvents = function(stationId) {
                                     initialFormData.get('station_id')[0]);
     });
 
-    // Handle the selection of a new form.
-    goog.events.listen(fields['form_id'], goog.events.EventType.CHANGE, function(evt) {
-      var formData = goog.dom.forms.getFormDataMap(evt.target.form);
-      lost_tracker.app.getFormScore(
-        formData.get('group_id'),
-        formData.get('form_id'),
-        fields['form_score']);
-    });
   });
 
   goog.array.forEach(goog.dom.getElementsByTagNameAndClass('img', 'icon'),
@@ -110,23 +107,6 @@ lost_tracker.app.attachEvents = function(stationId) {
         goog.style.setHeight(element, 64);
         goog.style.setWidth(element, 64);
   });
-};
-
-
-/**
- * Get the form score for a group, and update the value of a specific elemnt
- */
-lost_tracker.app.getFormScore = function(group_id, form_id, element) {
-  goog.net.XhrIo.send(
-      $SCRIPT_ROOT + '/score/' + group_id + '/' + form_id,
-      function(evt){
-        var xhr = evt.target;
-        var data = xhr.getResponseJson();
-        element.value = data.score;
-      }, 'GET', null, {
-        'Accept': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      });
 };
 
 
