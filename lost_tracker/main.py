@@ -246,69 +246,6 @@ def station(name):
         disable_logo=True)
 
 
-@app.route('/score/<int:group_id>/<int:form_id>')
-def group_form_score(group_id, form_id):
-    return jsonify(
-        score=mdl.get_form_score(group_id, form_id))
-
-
-@app.route('/score/<int:group_id>', methods=['POST'])
-@login_required
-def score(group_id):
-    station_id = int(request.form['station_id'])
-
-    try:
-        station_score = int(request.form['station_score'])
-    except ValueError as exc:
-        app.logger.exception(exc)
-        station_score = None
-
-    try:
-        form_id = int(request.form['form_id'])
-        form_score = int(request.form['form_score'])
-    except:
-        form_id = None
-        form_score = 0
-
-    if station_score is not None:
-        group_station = mdl.GroupStation.get(
-            group_id,
-            station_id)
-        if not group_station:
-            group_station = mdl.GroupStation(
-                group_id,
-                station_id)
-            g.session.add(group_station)
-        group_station.score = int(station_score)
-
-    if form_id is not None:
-        mdl.set_form_score(group_id, form_id, int(form_score))
-
-    if request.is_xhr:
-        return jsonify(
-            station_score=station_score,
-            form_score=form_score,
-            status='ok')
-
-    return redirect(url_for("/"))  # TODO: redirect to station page
-
-
-@app.route('/station_score', methods=['POST'])
-@login_required
-def set_station_score():
-    group_id = request.form['group_id']
-    station_id = request.form['station_id']
-    score = request.form['score']
-
-    if group_id:
-        mdl.GroupStation.set_score(group_id, station_id, score)
-
-    if request.is_xhr:
-        return jsonify(status='ok')
-
-    return redirect(url_for("/"))  # TODO: redirect to station page
-
-
 @app.route('/scoreboard')
 def scoreboard():
     result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
@@ -320,6 +257,20 @@ def scoreboard():
         output.append([pos, group.name, row.score_sum, group.completed])
         pos += 1
     return render_template('scoreboard.html', scores=output)
+
+
+@app.route('/group/<int:group_id>/score/<int:station_id>', methods=['PUT'])
+def set_group_score(group_id, station_id):
+    try:
+        form_score = request.json['form']
+        station_score = request.json['station']
+    except LookupError:
+        return jsonify({'message': 'Missing value'}), 400
+    loco.set_score(g.session, group_id, station_id, station_score, form_score)
+    return jsonify({
+        'form_score': form_score,
+        'station_score': station_score
+    })
 
 
 @app.route('/register', methods=['GET', 'POST'])
