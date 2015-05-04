@@ -1,5 +1,6 @@
 from collections import namedtuple
 from datetime import datetime
+from json import dumps
 from operator import attrgetter
 import io
 import mimetypes
@@ -37,7 +38,7 @@ from PIL import Image
 from lost_tracker import __version__
 from lost_tracker.flickr import get_photos
 from lost_tracker.database import Base
-from lost_tracker.localtypes import Photo
+from lost_tracker.localtypes import Photo, json_encoder
 from sqlalchemy.exc import IntegrityError
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -237,13 +238,21 @@ def station(name):
 
     questionnaires = loco.get_forms()
 
-    return render_template(
-        'station.html',
+    output = dict(
         station=station,
         groups=groups,
         group_states=group_states,
         questionnaires=questionnaires,
         disable_logo=True)
+
+    if 'application/json' in request.headers['Accept']:
+        response = make_response(dumps(output, default=json_encoder))
+        response.content_type = 'application/json'
+        return response
+    else:
+        return render_template(
+            'station.html',
+            **output)
 
 
 @app.route('/scoreboard')
