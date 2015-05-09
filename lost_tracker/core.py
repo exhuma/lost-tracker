@@ -481,7 +481,8 @@ def get_local_photos(conf, url_generator):
     }
 
 
-def set_score(session, group_id, station_id, station_score, form_score):
+def set_score(session, group_id, station_id, station_score, form_score,
+              state=None):
     GroupStation.set_score(session, group_id, station_id, station_score,
-                           form_score)
+                           form_score, state)
     return 'OK'

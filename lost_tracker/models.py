@@ -355,19 +355,32 @@ class GroupStation(Base):
             GroupStation.station_id == station_id)).first()
 
     @staticmethod
-    def set_score(session, group_id, station_id, station_score, form_score):
+    def set_score(session, group_id, station_id, station_score, form_score,
+                  state=None):
+
+        if isinstance(group_id, basestring):
+            group_id = Group.query.filter_by(name=group_id).one().id
+
+        if isinstance(station_id, basestring):
+            station_id = Station.query.filter_by(name=station_id).one().id
+
         query = GroupStation.query.filter(and_(
             GroupStation.group_id == group_id,
             GroupStation.station_id == station_id))
+
         row = query.first()
         if not row:
             gs = GroupStation(group_id, station_id)
             gs.score = station_score
             gs.form_score = form_score
+            if state:
+                gs.state = state
             session.add(gs)
         else:
             row.score = station_score
             row.form_score = form_score
+            if state:
+                row.state = state
 
     def to_dict(self):
         return {

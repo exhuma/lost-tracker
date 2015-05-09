@@ -2,6 +2,7 @@ from collections import namedtuple
 from datetime import datetime
 from json import dumps
 from operator import attrgetter
+from urllib import unquote_plus
 import io
 import mimetypes
 import os.path
@@ -671,6 +672,28 @@ def save_settings():
     mdl.Setting.put(g.session, 'event_date', event_date)
     flash(gettext('Settings successfully saved.'), 'info')
     return redirect(url_for("settings"))
+
+
+@app.route('/group_state/<group>/<station>', methods=['PUT'])
+def update_group_station_state(group, station):
+    group = unquote_plus(group)
+    station = unquote_plus(station)
+    try:
+        form_score = request.json['form']
+        station_score = request.json['station']
+        station_state = request.json['state']
+    except LookupError:
+        return jsonify({'message': 'Missing value'}), 400
+
+    loco.set_score(g.session, group, station, station_score, form_score,
+                   station_state)
+
+    return jsonify(
+        name=group,
+        form_score=form_score,
+        score=station_score,
+        state=station_state,
+        station_name=station)
 
 
 if __name__ == '__main__':
