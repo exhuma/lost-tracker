@@ -257,7 +257,8 @@ class Station(Base):
     def to_dict(self):
         return {
             '__class__': 'Station',
-            'id': self.id
+            'id': self.id,
+            'name': self.name
         }
 
 
