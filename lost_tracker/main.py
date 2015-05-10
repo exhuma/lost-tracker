@@ -219,7 +219,6 @@ def advance(groupId, station_id):
 
 
 @app.route('/station/<path:name>')
-@login_required
 def station(name):
     station = loco.get_stat_by_name(name)  # TODO: rename function
     if not station:
@@ -271,6 +270,7 @@ def scoreboard():
 
 
 @app.route('/group/<int:group_id>/score/<int:station_id>', methods=['PUT'])
+@login_required
 def set_group_score(group_id, station_id):
     try:
         form_score = request.json['form']
