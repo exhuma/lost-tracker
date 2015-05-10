@@ -176,7 +176,6 @@ class Group(Base):
     phone = Column(Unicode(20))
     direction = Column(Unicode)
     _start_time = Column(Unicode(5), name="start_time")
-    stations = relationship('GroupStation')
     email = Column(Unicode)
     comments = Column(Unicode)
     is_confirmed = Column(Boolean, server_default='false', default=False)
@@ -185,6 +184,8 @@ class Group(Base):
     completed = Column(Boolean, server_default='false', default=False)
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
+
+    stations = relationship('GroupStation')
 
     def __init__(self, name=None, contact=None,
                  phone=None, direction=None, start_time=None,
@@ -216,6 +217,24 @@ class Group(Base):
         else:
             self.order = 0
 
+    def to_dict(self):
+        return {
+            '__class__': 'Group',
+            'id': self.id,
+            'name': self.name,
+            'order': self.order,
+            'cancelled': self.cancelled,
+            'contact': self.contact,
+            'phone': self.phone,
+            'direction': self.direction,
+            'start_time': self._start_time,
+            'email': self.email,
+            'comments': self.comments,
+            'is_confirmed': self.is_confirmed,
+            'finalized': self.finalized,
+            'completed': self.completed,
+        }
+
 
 class Station(Base):
     __tablename__ = 'station'
@@ -224,6 +243,7 @@ class Station(Base):
     order = Column(Integer)
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
+
     groups = relationship('GroupStation')
 
     def __init__(self, name=None, contact=None, phone=None):
@@ -233,6 +253,13 @@ class Station(Base):
 
     def __repr__(self):
         return '<Station %r>' % (self.name)
+
+    def to_dict(self):
+        return {
+            '__class__': 'Station',
+            'id': self.id,
+            'name': self.name
+        }
 
 
 class Form(Base):
@@ -249,6 +276,12 @@ class Form(Base):
 
     def __repr__(self):
         return '<Form %r>' % (self.name)
+
+    def to_dict(self):
+        return {
+            '__class__': 'Form',
+            'id': self.id
+        }
 
 
 class Setting(Base):
@@ -308,6 +341,7 @@ class GroupStation(Base):
     state = Column(Integer, default=STATE_UNKNOWN)
     score = Column(Integer, nullable=True, default=None)
     form_score = Column(Integer, nullable=True, default=None)
+
     group = relationship("Group")
     station = relationship("Station")
 
@@ -322,19 +356,42 @@ class GroupStation(Base):
             GroupStation.station_id == station_id)).first()
 
     @staticmethod
-    def set_score(session, group_id, station_id, station_score, form_score):
+    def set_score(session, group_id, station_id, station_score, form_score,
+                  state=None):
+
+        if isinstance(group_id, basestring):
+            group_id = Group.query.filter_by(name=group_id).one().id
+
+        if isinstance(station_id, basestring):
+            station_id = Station.query.filter_by(name=station_id).one().id
+
         query = GroupStation.query.filter(and_(
             GroupStation.group_id == group_id,
             GroupStation.station_id == station_id))
+
         row = query.first()
         if not row:
             gs = GroupStation(group_id, station_id)
             gs.score = station_score
             gs.form_score = form_score
+            if state:
+                gs.state = state
             session.add(gs)
         else:
             row.score = station_score
             row.form_score = form_score
+            if state:
+                row.state = state
+
+    def to_dict(self):
+        return {
+            '__class__': 'GroupStation',
+            'group_id': self.group_id,
+            'station_id': self.station_id,
+            'state': self.state,
+            'score': self.score,
+            'form_score': self.form_score,
+        }
 
 
 class TimeSlot(object):

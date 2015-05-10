@@ -32,7 +32,9 @@ lost_tracker.app.advanceState = function(event_source, groupId, stationId) {
       $SCRIPT_ROOT + '/advance/' + groupId + '/' + stationId,
       function(evt){
         var xhr = evt.target;
-        if (xhr.isSuccess()){
+        var ctype = xhr.getResponseHeader('Content-Type');
+        var acceptable = goog.string.startsWith(ctype, 'application/json');
+        if (xhr.isSuccess() && acceptable){
           var data = xhr.getResponseJson();
           if (!goog.isDefAndNotNull(data.new_state)){
             return;
@@ -79,13 +81,19 @@ lost_tracker.app.attachEvents = function(stationId) {
           $SCRIPT_ROOT + '/group/' + formData.get('group_id') + '/score/' + stationId,
           function(evt){
             var xhr = evt.target;
-            var data = xhr.getResponseJson();
-            fields['station_score'].value = data.station_score;
-            fields['form_score'].value = data.form_score;
-            fields['station_score'].disabled = false;
-            fields['form_score'].disabled = false;
-            fields['submit'].disabled = false;
-            icons[0].src = old_icon_source;
+            var ctype = xhr.getResponseHeader('Content-Type');
+            var acceptable = goog.string.startsWith(ctype, 'application/json');
+            if (xhr.isSuccess() && acceptable){
+              var data = xhr.getResponseJson();
+              fields['station_score'].value = data.station_score;
+              fields['form_score'].value = data.form_score;
+              fields['station_score'].disabled = false;
+              fields['form_score'].disabled = false;
+              fields['submit'].disabled = false;
+              icons[0].src = old_icon_source;
+            } else {
+              icons[0].src = $SCRIPT_ROOT + '/static/icons/status-warning.png';
+            }
           }, 'PUT', scoreDocument, {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
