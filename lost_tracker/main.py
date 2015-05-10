@@ -1,6 +1,8 @@
 from collections import namedtuple
 from datetime import datetime
+from json import dumps
 from operator import attrgetter
+from urllib import unquote_plus
 import io
 import mimetypes
 import os.path
@@ -35,9 +37,10 @@ from flask import (
 from PIL import Image
 
 from lost_tracker import __version__
-from lost_tracker.flickr import get_photos
 from lost_tracker.database import Base
-from lost_tracker.localtypes import Photo
+from lost_tracker.flickr import get_photos
+from lost_tracker.localtypes import Photo, json_encoder
+from lost_tracker.util import basic_auth
 from sqlalchemy.exc import IntegrityError
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -216,7 +219,6 @@ def advance(groupId, station_id):
 
 
 @app.route('/station/<path:name>')
-@login_required
 def station(name):
     station = loco.get_stat_by_name(name)  # TODO: rename function
     if not station:
@@ -237,13 +239,21 @@ def station(name):
 
     questionnaires = loco.get_forms()
 
-    return render_template(
-        'station.html',
+    output = dict(
         station=station,
         groups=groups,
         group_states=group_states,
         questionnaires=questionnaires,
         disable_logo=True)
+
+    if 'application/json' in request.headers['Accept']:
+        response = make_response(dumps(output, default=json_encoder))
+        response.content_type = 'application/json'
+        return response
+    else:
+        return render_template(
+            'station.html',
+            **output)
 
 
 @app.route('/scoreboard')
@@ -260,6 +270,7 @@ def scoreboard():
 
 
 @app.route('/group/<int:group_id>/score/<int:station_id>', methods=['PUT'])
+@login_required
 def set_group_score(group_id, station_id):
     try:
         form_score = request.json['form']
@@ -662,6 +673,29 @@ def save_settings():
     mdl.Setting.put(g.session, 'event_date', event_date)
     flash(gettext('Settings successfully saved.'), 'info')
     return redirect(url_for("settings"))
+
+
+@app.route('/group_state/<group>/<station>', methods=['PUT'])
+@basic_auth
+def update_group_station_state(group, station):
+    group = unquote_plus(group)
+    station = unquote_plus(station)
+    try:
+        form_score = request.json['form']
+        station_score = request.json['station']
+        station_state = request.json['state']
+    except LookupError:
+        return jsonify({'message': 'Missing value'}), 400
+
+    loco.set_score(g.session, group, station, station_score, form_score,
+                   station_state)
+
+    return jsonify(
+        name=group,
+        form_score=form_score,
+        score=station_score,
+        state=station_state,
+        station_name=station)
 
 
 if __name__ == '__main__':
