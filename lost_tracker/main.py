@@ -37,9 +37,10 @@ from flask import (
 from PIL import Image
 
 from lost_tracker import __version__
-from lost_tracker.flickr import get_photos
 from lost_tracker.database import Base
+from lost_tracker.flickr import get_photos
 from lost_tracker.localtypes import Photo, json_encoder
+from lost_tracker.util import basic_auth
 from sqlalchemy.exc import IntegrityError
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -675,6 +676,7 @@ def save_settings():
 
 
 @app.route('/group_state/<group>/<station>', methods=['PUT'])
+@basic_auth
 def update_group_station_state(group, station):
     group = unquote_plus(group)
     station = unquote_plus(station)

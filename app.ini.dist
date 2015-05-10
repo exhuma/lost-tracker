@@ -7,6 +7,9 @@ dsn=postgresql://postgres@/lost_tracker
 
 [app]
 photo_folder = /path/to/folder
+registration_open = true
+login = lost
+password = lost
 
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
