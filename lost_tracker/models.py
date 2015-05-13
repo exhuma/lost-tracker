@@ -40,18 +40,12 @@ def score_totals():
 
     station_select = select([
         GroupStation.__table__.c.group_id,
-        GroupStation.__table__.c.score])
-
-    form_select = select([
-        form_scores.c.group_id,
-        form_scores.c.score])
+        (
+            func.coalesce(GroupStation.__table__.c.score, 0) +
+            func.coalesce(GroupStation.__table__.c.form_score, 0)
+        )])
 
     group_scores = {}
-    for gid, score in form_select.execute():
-        if score is None:
-            continue
-        group_scores.setdefault(gid, 0)
-        group_scores[gid] += score
 
     for gid, score in station_select.execute():
         if score is None:
