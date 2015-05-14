@@ -34,7 +34,7 @@ from flask import (
     session as flask_session,
     url_for,
 )
-from PIL import Image
+from PIL import Image, ExifTags
 
 from lost_tracker import __version__
 from lost_tracker.database import Base
@@ -115,10 +115,32 @@ def thumbnail(basename):
 
     fullname = os.path.join(root, basename)
     mimetype, _ = mimetypes.guess_type(fullname)
+
     im = Image.open(fullname)
+
+    exif_orientation_id = None
+    for tag in ExifTags.TAGS:
+        if ExifTags.TAGS[tag] == 'Orientation':
+            exif_orientation_id = tag
+            break
+
+    orientation = None
+    if hasattr(im, '_getexif'):
+        exif = im._getexif()
+        if exif:
+            orientation = exif.get(exif_orientation_id)
+
+    if orientation == 3:
+        im = im.rotate(180, expand=True)
+    elif orientation == 6:
+        im = im.rotate(270, expand=True)
+    elif orientation == 8:
+        im = im.rotate(90, expand=True)
+
     im.thumbnail((150, 150), Image.ANTIALIAS)
     blob = io.BytesIO()
     im.save(blob, 'jpeg')
+
     response = make_response(blob.getvalue())
     response.headers['Content-Type'] = mimetype
     return response
