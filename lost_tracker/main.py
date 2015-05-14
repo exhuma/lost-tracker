@@ -406,10 +406,18 @@ def manage():
     groups = loco.get_grps()
     slots = loco.slots()
 
-    groups_a = {mdl.TimeSlot(_.start_time): _ for _ in groups
-                if _.start_time and _.direction == mdl.DIR_A}
-    groups_b = {mdl.TimeSlot(_.start_time): _ for _ in groups
-                if _.start_time and _.direction == mdl.DIR_B}
+    groups_a = {}
+    groups_b = {}
+    for group in groups:
+        try:
+            if group.start_time and group.direction == mdl.DIR_A:
+                groups_a[mdl.TimeSlot(group.start_time)] = group
+            elif group.start_time and group.direction == mdl.DIR_B:
+                groups_b[mdl.TimeSlot(group.start_time)] = group
+        except ValueError as exc:
+            app.logger.warning(exc)
+            group.start_time = None
+
     groups_none = sorted([_ for _ in groups
                           if not _.start_time or _.direction not in (
                               mdl.DIR_A, mdl.DIR_B)],
