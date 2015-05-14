@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-14 15:01+0200\n"
-"PO-Revision-Date: 2015-05-14 15:15+0100\n"
+"POT-Creation-Date: 2015-05-14 16:09+0200\n"
+"PO-Revision-Date: 2015-05-14 16:11+0100\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language-Team: lu <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -69,19 +69,19 @@ msgstr "Du bass agelogged!"
 msgid "Invalid credentials!"
 msgstr "Falsch login daten!"
 
-#: lost_tracker/main.py:435 lost_tracker/main.py:496
+#: lost_tracker/main.py:443 lost_tracker/main.py:504
 msgid "Access Denied"
 msgstr "Zougang ass hei net erlabt!"
 
-#: lost_tracker/main.py:469
+#: lost_tracker/main.py:477
 msgid "Table {name} not yet supported!"
 msgstr "Tabell {name} ass nach net ennerstëtzt!"
 
-#: lost_tracker/main.py:545
+#: lost_tracker/main.py:553
 msgid "Incorrect value for direction: {!r}"
 msgstr "Falschen Wert fir Richtung: {!r}"
 
-#: lost_tracker/main.py:674
+#: lost_tracker/main.py:682
 msgid "Settings successfully saved."
 msgstr "Astellungen si gespeichert."
 
@@ -208,11 +208,27 @@ msgstr ""
 "Et kann e puer Deeg dauren bis d'Umelldung ugehuel get. Mir bieden em e "
 "bessen Gedold!"
 
-#: lost_tracker/templates/index.html:14
+#: lost_tracker/templates/index.html:15
+msgid "Thanks to anyone who participated"
+msgstr "Villmools Merci fir déi, déi  matgemaach hunn"
+
+#: lost_tracker/templates/index.html:16
+msgid "First 3 positions are"
+msgstr "Déi éischt sinn"
+
+#: lost_tracker/templates/index.html:23
+msgid "Each of them will receive a price and will be contacted by phone"
+msgstr "Si kréien e Präiss a gi vun eis ugeruff."
+
+#: lost_tracker/templates/index.html:25
+msgid "Complete leaderboard"
+msgstr "Ganz Lëscht"
+
+#: lost_tracker/templates/index.html:29
 msgid "What is this?"
 msgstr "Ëm wat geet et?"
 
-#: lost_tracker/templates/index.html:18
+#: lost_tracker/templates/index.html:33
 msgid ""
 "A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles."
 "<br /> Impossible tasks.<br /> Not to be missed."
@@ -220,7 +236,7 @@ msgstr ""
 "En 'Nuetsrallye'.<br/>Dobaussen an der Däischtert.<br/>Spiller.<br/"
 ">Räetselen.<br/>Onméiglech Aufgaben.<br/>Net ze verpassen."
 
-#: lost_tracker/templates/index.html:23
+#: lost_tracker/templates/index.html:38
 msgid ""
 "Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
 "Scouten a Guiden vun der FNEL"
@@ -228,7 +244,7 @@ msgstr ""
 "Organiséiert vun de <br /> Caper Piwitschen <br /> an de <br /> Mamer "
 "Wiselen<br /> vun de Scouten & Guiden vun der FNEL"
 
-#: lost_tracker/templates/index.html:29
+#: lost_tracker/templates/index.html:44
 msgid ""
 "Everybody who likes to spend a night outside, who's fairly well on foot and "
 "who does not mind getting home 3 hours late because they got lost may join :)"
@@ -450,41 +466,4 @@ msgstr "Frobéi"
 
 #: lost_tracker/templates/where.html:8
 msgid "We will depart at the Scout's Home in Capellen."
-msgstr "Et geht beim Capellener Scoutshome fort."
-
-#~ msgid "May"
-#~ msgstr "Mee"
-
-#~ msgid "Added {form}"
-#~ msgstr "{form} bäigesat"
-
-#~ msgid "Error: {message}"
-#~ msgstr "Fehler: {message}"
-
-#~ msgid "Form Score"
-#~ msgstr "Frobou Punkten"
-
-#~ msgid "Questionnaire Score"
-#~ msgstr "Resultat vun de Froebéi"
-
-#~ msgid "Back to the home-page"
-#~ msgstr "Zréck op d'Startsäit"
-
-#~ msgid "Form Number"
-#~ msgstr "Nummer vum Frobou"
-
-#~ msgid "Score"
-#~ msgstr "Punkten"
-
-#~ msgid "Group ID"
-#~ msgstr "Gruppen ID"
-
-#~ msgid ""
-#~ "In the year 2012 we raised €2324. <br /> (and <a href='{link}'>the "
-#~ "municipality of Mamer even added €1000!</a>)"
-#~ msgstr ""
-#~ "2012 hu mer 2324€ gespent. <br /> (an <a href='{link}'>d'Gemeng Mamer "
-#~ "huet souguer nach 1000€ dropgesat!</a>)"
-
-#~ msgid "Position"
-#~ msgstr "Plaz"
+msgstr "Mir gin lass am Scoutshome a Capellen."
