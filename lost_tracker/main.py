@@ -48,8 +48,8 @@ import lost_tracker.models as mdl
 mimetypes.init()
 app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
-                       version='1.2', require_load=True)
-app.secret_key='\xd8\xb1ZD\xa2\xf9j%\x0b\xbf\x11\x18\xe0$E\xa4]\xf0\x03\x7fO9\xb0\xb5'  # NOQA
+                       version='2.0', require_load=True)
+app.secret_key = app.localconf.get('app', 'secret_key')
 
 babel = Babel(app)
 

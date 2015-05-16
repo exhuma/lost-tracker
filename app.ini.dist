@@ -1,5 +1,5 @@
 [meta]
-version=1.2
+version=2.0
 
 [db]
 ; Database connection string
@@ -10,6 +10,7 @@ photo_folder = /path/to/folder
 registration_open = true
 login = lost
 password = lost
+secret_key = this-is-not-secret! use os.random to generate random bits!
 
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
