@@ -219,7 +219,7 @@ def teardown_request(exc):
 @app.route('/')
 @app.route('/matrix')
 def matrix():
-    stations = loco.get_stations()
+    stations = mdl.Station.all()
     groups = mdl.Group.all()
     state_matrix = loco.Matrix(stations, groups)
     return render_template('matrix.html',
@@ -239,7 +239,7 @@ def advance(groupId, station_id):
 
 @app.route('/station/<path:name>')
 def station(name):
-    station = loco.get_station_by_name(name)
+    station = mdl.Station.one(name=name)
     if not station:
         return abort(404)
 

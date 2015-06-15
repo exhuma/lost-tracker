@@ -115,27 +115,6 @@ def add_group(grp_name, contact, phone, direction, start_time, session):
                 direction))
 
 
-def get_stations():
-    """
-    Returns all stations from the database as :py:class:`Station` instances.
-    """
-    stations = Station.query
-    stations = stations.order_by(Station.order)
-    stations = stations.all()
-    return stations
-
-
-def get_station_by_name(name):
-    """
-    Returns a :py:class:`Station` by class name. Can be ``None`` if no
-    matching station is found.
-    """
-    qry = Station.query
-    qry = qry.filter_by(name=name)
-    qry = qry.first()
-    return qry
-
-
 def add_station(stat_name, contact, phone, order, session):
     """
     Creates a new :py:class:`Station` in the database.

@@ -181,13 +181,13 @@ class Group(Base):
         return self.name
 
     @staticmethod
-    def all(self):
+    def all():
         groups = Group.query
         groups = groups.order_by(Group.order)
         return groups
 
     @staticmethod
-    def one(self, **filters):
+    def one(**filters):
         """
         Returns a group from the database as :py:class:`Group` instance.
 
@@ -260,6 +260,26 @@ class Station(Base):
 
     def __repr__(self):
         return '<Station %r>' % (self.name)
+
+    @staticmethod
+    def all():
+        """
+        Returns all stations from the database as :py:class:`Station` instances.
+        """
+        stations = Station.query
+        stations = stations.order_by(Station.order)
+        return stations
+
+    @staticmethod
+    def one(**filters):
+        """
+        Returns a :py:class:`Station` by class name. Can be ``None`` if no
+        matching station is found.
+        """
+        qry = Station.query
+        qry = qry.filter_by(name=filter['name'])
+        qry = qry.first()
+        return qry
 
     def to_dict(self):
         return {
