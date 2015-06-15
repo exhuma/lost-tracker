@@ -251,7 +251,7 @@ def station(name):
     GroupStateRow = namedtuple('GroupStateRow', 'group, state')
     group_states = []
     for grp in groups:  # TODO: rename variable
-        group_station = mdl.get_state(grp.id, station.id)
+        group_station = mdl.GroupStation.get(grp.id, station.id)
         if not group_station:
             state = None
         else:

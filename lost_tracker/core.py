@@ -14,7 +14,6 @@ from lost_tracker.models import (
     Station,
     TimeSlot,
     User,
-    get_state,
 )
 
 from sqlalchemy import and_
@@ -53,7 +52,7 @@ def get_matrix(stations, groups):
     for group in groups:
         tmp = [group]
         for station in stations:
-            tmp.append(get_state(group.id, station.id))
+            tmp.append(GroupStation.get(group.id, station.id))
         state_matrix.append(tmp)
     return state_matrix
 
