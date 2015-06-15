@@ -17,7 +17,7 @@
       </tr>
       <tr class="sum">
           <td>{{_('SUM')}}</td>
-          {% for col in sums %}
+          {% for col in matrix.sums %}
           <td>
               <span class="unknown">{{col[0]}}</span>
               <span class="arrived">{{col[1]}}</span>
@@ -29,7 +29,7 @@
     <tfoot>
       <tr class="sum">
           <td>SUM</td>
-          {% for col in sums %}
+          {% for col in matrix.sums %}
           <td>
               <span class="unknown">{{col[0]}}</span>
               <span class="arrived">{{col[1]}}</span>

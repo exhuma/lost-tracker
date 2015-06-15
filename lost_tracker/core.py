@@ -14,7 +14,6 @@ from lost_tracker.models import (
     Station,
     TimeSlot,
     User,
-    get_state,
 )
 
 from sqlalchemy import and_
@@ -33,7 +32,7 @@ WEB_IMAGES = {
 }
 
 
-def get_matrix(stations, groups):
+class Matrix(object):
     """
     Returns a 2-dimensional array containing an entry for each group.
 
@@ -49,25 +48,29 @@ def get_matrix(stations, groups):
     """
     # TODO: make this a list of dicts or a list of namedtuples!
 
-    state_matrix = []
-    for group in groups:
-        tmp = [group]
-        for station in stations:
-            tmp.append(get_state(group.id, station.id))
-        state_matrix.append(tmp)
-    return state_matrix
+    def __init__(self, stations, groups):
+        self._stations = stations
+        self._groups = groups
+        self._matrix = []
 
+        for group in groups:
+            tmp = [group]
+            for station in stations:
+                tmp.append(GroupStation.get(group.id, station.id))
+            self._matrix.append(tmp)
 
-def get_state_sum(state_matrix):
-    """
-    Creates a list where each element contains the sum of "unknown", "arrived"
-    and "finished" states for each station.
-    """
-    # TODO: make this a list of namedtuples!
-    sums = []
-    if state_matrix:
-        sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
-        for row in state_matrix:
+    def __iter__(self):
+        return iter(self._matrix)
+
+    @property
+    def sums(self):
+        """
+        Creates a list where each element contains the sum of "unknown",
+        "arrived" and "finished" states for each station.
+        """
+        # TODO: make this a list of namedtuples!
+        sums = [[0, 0, 0] for _ in self._matrix[0][1:]]
+        for row in self._matrix:
             for i, state in enumerate(row[1:]):
                 if not state:
                     sums[i][STATE_UNKNOWN] += 1
@@ -79,51 +82,10 @@ def get_state_sum(state_matrix):
                     sums[i][STATE_ARRIVED] += 1
                 elif state.state == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
-    return sums
+        return sums
 
 
-def get_grps():
-    """
-    Returns all groups from the database as :py:class:`Group` instances.
-    """
-    groups = Group.query
-    groups = groups.order_by(Group.order)
-    return groups
-
-
-def get_grps_by_id(group_id):
-    """
-    Returns a group from the database as :py:class:`Group` instance by his id.
-    """
-    group = Group.query
-    group = group.filter_by(id=group_id)
-    group = group.first()
-    return group
-
-
-def get_grp_by_registration_key(key):
-    """
-    Returns a group from the database as :py:class:`Group` instance by it's
-    key.
-    """
-    group = Group.query
-    group = group.filter_by(confirmation_key=key)
-    group = group.one()
-    return group
-
-
-def get_grp_by_name(name):
-    """
-    Returns a group from the database as :py:class:`Group` instance by his
-    name.
-    """
-    group = Group.query
-    group = group.filter_by(name=name)
-    group = group.first()
-    return group
-
-
-def add_grp(grp_name, contact, phone, direction, start_time, session):
+def add_group(grp_name, contact, phone, direction, start_time, session):
     """
     Creates a new group in the database.
     """
@@ -153,27 +115,6 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
                 direction))
 
 
-def get_stations():
-    """
-    Returns all stations from the database as :py:class:`Station` instances.
-    """
-    stations = Station.query
-    stations = stations.order_by(Station.order)
-    stations = stations.all()
-    return stations
-
-
-def get_stat_by_name(name):
-    """
-    Returns a :py:class:`Station` by class name. Can be ``None`` if no
-    matching station is found.
-    """
-    qry = Station.query
-    qry = qry.filter_by(name=name)
-    qry = qry.first()
-    return qry
-
-
 def add_station(stat_name, contact, phone, order, session):
     """
     Creates a new :py:class:`Station` in the database.
@@ -189,55 +130,6 @@ def add_form(session, name, max_score, order=0):
     new_form = Form(name, max_score, order)
     session.add(new_form)
     return new_form
-
-
-def get_forms():
-    """
-    Returns all forms from the database as :py:class`Form` instances.
-    """
-    forms = Form.query
-    forms = forms.order_by(Form.order)
-    forms = forms.all()
-    return forms
-
-
-def get_form_by_id(id):
-    """
-    Returns a :py:class:`Form` by class id.
-    """
-    qry = Form.query
-    qry = qry.filter_by(id=id)
-    qry = qry.first()
-    return qry
-
-
-def slots():
-    """
-    maybe put this in a config file
-    """
-
-    return [
-        TimeSlot('18h50'),
-        TimeSlot('19h00'),
-        TimeSlot('19h10'),
-        TimeSlot('19h20'),
-        TimeSlot('19h30'),
-        TimeSlot('19h40'),
-        TimeSlot('19h50'),
-        TimeSlot('20h00'),
-        TimeSlot('20h10'),
-        TimeSlot('20h20'),
-        TimeSlot('20h30'),
-        TimeSlot('20h40'),
-        TimeSlot('20h50'),
-        TimeSlot('21h00'),
-        TimeSlot('21h10'),
-        TimeSlot('21h20'),
-        TimeSlot('21h30'),
-        TimeSlot('21h40'),
-        TimeSlot('21h50'),
-        TimeSlot('22h00'),
-    ]
 
 
 def store_registration(session, data, url, needs_confirmation=True):
@@ -388,7 +280,7 @@ def update_group(id, data, send_email=True):
     """
     Updates an existing group.
     """
-    group = get_grps_by_id(id)
+    group = Group.one(id=id)
     group.direction = data['direction']
     group.name = data['name']
     group.phone = data['phone']
@@ -446,7 +338,7 @@ def delete_form(id):
 
 
 def stats():
-    num_groups = get_grps().count()
+    num_groups = Group.all().count()
     num_slots = len(slots()) * 2  # DIR_A and DIR_B
     return {
         'groups': num_groups,

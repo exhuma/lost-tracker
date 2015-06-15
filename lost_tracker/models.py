@@ -60,84 +60,6 @@ def score_totals():
     return output
 
 
-def get_form_score_full():
-    s = select([form_scores]).order_by(form_scores.c.form_id)
-    return s.execute()
-
-
-def get_form_score(group_id, form_id):
-    s = select([form_scores])
-    s = s.where(form_scores.c.group_id == group_id)
-    s = s.where(form_scores.c.form_id == form_id)
-    result = s.execute().fetchone()
-    if not result:
-        return 0
-    return result.score
-
-
-def get_form_score_by_group(group_id):
-    s = select([form_scores])
-    s = s.where(form_scores.c.group_id == group_id)
-    result = s.execute()
-    if not result:
-        return 0
-    return result.score
-
-
-def set_form_score(group_id, form_id, score):
-    s = select(
-        [form_scores],
-        and_(
-            form_scores.c.group_id == group_id,
-            form_scores.c.form_id == form_id
-        ))
-    row = s.execute().first()
-
-    if not row:
-        i = insert_form_score(group_id, form_id, score)
-        i.execute()
-    else:
-        u = update_form_score(group_id, form_id, score)
-        u.execute()
-
-
-def insert_form_score(group_id, form_id, score):
-    i = form_scores.insert().values(
-        group_id=group_id,
-        form_id=form_id,
-        score=score)
-    return i
-
-
-def update_form_score(group_id, form_id, score):
-    u = form_scores.update().where(
-        and_(
-            form_scores.c.group_id == group_id,
-            form_scores.c.form_id == form_id)
-    ).values(
-        score=score)
-    return u
-
-
-def get_state(group_id, station_id):
-    """
-    Given a group and station ID this will return the  state of the given
-    group at the given station. If no the group does not have a state at that
-    station, the default state (STATE_UNKNOWN) is returned.
-
-    :param group_id: The group ID
-    :type group_id: int
-    :param station_id: The station ID
-    :type station_id: int
-    :return: The state
-    :rtype: int
-    """
-    q = GroupStation.query.filter(and_(
-        GroupStation.group_id == group_id,
-        GroupStation.station_id == station_id))
-    return q.first()
-
-
 def advance(session, group_id, station_id):
     state = GroupStation.get(group_id, station_id)
 
@@ -199,6 +121,38 @@ class Group(Base):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def all():
+        groups = Group.query
+        groups = groups.order_by(Group.order)
+        return groups
+
+    @staticmethod
+    def one(**filters):
+        """
+        Returns a group from the database as :py:class:`Group` instance.
+
+        Currently the following filters are supported:
+
+        ``id``
+            The primary key.
+
+        ``name``
+            Another unique key.
+
+        ``key``
+            The registration confirmation key
+        """
+        group = Group.query
+        if 'id' in filters:
+            group = group.filter_by(id=filters['id'])
+        elif 'name' in filters:
+            group = group.filter_by(name=filters['name'])
+        elif 'key' in filters:
+            group = group.filter_by(confirmation_key=filters['_key'])
+        group = group.one()
+        return group
+
     @property
     def start_time(self):
         return self._start_time
@@ -248,6 +202,26 @@ class Station(Base):
     def __repr__(self):
         return '<Station %r>' % (self.name)
 
+    @staticmethod
+    def all():
+        """
+        Returns all stations from the database as :py:class:`Station` instances.
+        """
+        stations = Station.query
+        stations = stations.order_by(Station.order)
+        return stations
+
+    @staticmethod
+    def one(**filters):
+        """
+        Returns a :py:class:`Station` by class name. Can be ``None`` if no
+        matching station is found.
+        """
+        qry = Station.query
+        qry = qry.filter_by(name=filter['name'])
+        qry = qry.first()
+        return qry
+
     def to_dict(self):
         return {
             '__class__': 'Station',
@@ -270,6 +244,16 @@ class Form(Base):
 
     def __repr__(self):
         return '<Form %r>' % (self.name)
+
+    @staticmethod
+    def all():
+        """
+        Returns all forms from the database as :py:class`Form` instances.
+        """
+        forms = Form.query
+        forms = forms.order_by(Form.order)
+        return forms
+
 
     def to_dict(self):
         return {
@@ -345,9 +329,22 @@ class GroupStation(Base):
 
     @staticmethod
     def get(group_id, station_id):
-        return GroupStation.query.filter(and_(
+        """
+        Given a group and station ID this will return the  state of the given
+        group at the given station. If no the group does not have a state at
+        that station, the default state (STATE_UNKNOWN) is returned.
+
+        :param group_id: The group ID
+        :type group_id: int
+        :param station_id: The station ID
+        :type station_id: int
+        :return: The state
+        :rtype: int
+        """
+        query = GroupStation.query.filter(and_(
             GroupStation.group_id == group_id,
-            GroupStation.station_id == station_id)).first()
+            GroupStation.station_id == station_id))
+        return query.first()
 
     @staticmethod
     def set_score(session, group_id, station_id, station_score, form_score,
@@ -411,6 +408,32 @@ class TimeSlot(object):
 
     def __hash__(self):
         return hash(self.time)
+
+    @staticmethod
+    def all():
+        # TODO maybe put this in a config file
+        return [
+            TimeSlot('18h50'),
+            TimeSlot('19h00'),
+            TimeSlot('19h10'),
+            TimeSlot('19h20'),
+            TimeSlot('19h30'),
+            TimeSlot('19h40'),
+            TimeSlot('19h50'),
+            TimeSlot('20h00'),
+            TimeSlot('20h10'),
+            TimeSlot('20h20'),
+            TimeSlot('20h30'),
+            TimeSlot('20h40'),
+            TimeSlot('20h50'),
+            TimeSlot('21h00'),
+            TimeSlot('21h10'),
+            TimeSlot('21h20'),
+            TimeSlot('21h30'),
+            TimeSlot('21h40'),
+            TimeSlot('21h50'),
+            TimeSlot('22h00'),
+        ]
 
 
 class User(Base):
