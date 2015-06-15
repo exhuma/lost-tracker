@@ -32,7 +32,7 @@ WEB_IMAGES = {
 }
 
 
-def get_matrix(stations, groups):
+class Matrix(object):
     """
     Returns a 2-dimensional array containing an entry for each group.
 
@@ -48,25 +48,29 @@ def get_matrix(stations, groups):
     """
     # TODO: make this a list of dicts or a list of namedtuples!
 
-    state_matrix = []
-    for group in groups:
-        tmp = [group]
-        for station in stations:
-            tmp.append(GroupStation.get(group.id, station.id))
-        state_matrix.append(tmp)
-    return state_matrix
+    def __init__(self, stations, groups):
+        self._stations = stations
+        self._groups = groups
+        self._matrix = []
 
+        for group in groups:
+            tmp = [group]
+            for station in stations:
+                tmp.append(GroupStation.get(group.id, station.id))
+            self._matrix.append(tmp)
 
-def get_state_sum(state_matrix):
-    """
-    Creates a list where each element contains the sum of "unknown", "arrived"
-    and "finished" states for each station.
-    """
-    # TODO: make this a list of namedtuples!
-    sums = []
-    if state_matrix:
-        sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
-        for row in state_matrix:
+    def __iter__(self):
+        return iter(self._matrix)
+
+    @property
+    def sums(self):
+        """
+        Creates a list where each element contains the sum of "unknown",
+        "arrived" and "finished" states for each station.
+        """
+        # TODO: make this a list of namedtuples!
+        sums = [[0, 0, 0] for _ in self._matrix[0][1:]]
+        for row in self._matrix:
             for i, state in enumerate(row[1:]):
                 if not state:
                     sums[i][STATE_UNKNOWN] += 1
@@ -78,7 +82,7 @@ def get_state_sum(state_matrix):
                     sums[i][STATE_ARRIVED] += 1
                 elif state.state == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
-    return sums
+        return sums
 
 
 def get_groups(**filters):

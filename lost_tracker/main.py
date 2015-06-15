@@ -221,14 +221,10 @@ def teardown_request(exc):
 def matrix():
     stations = loco.get_stations()
     groups = loco.get_groups()
-
-    state_matrix = loco.get_matrix(stations, groups)
-    sums = loco.get_state_sum(state_matrix)
-
+    state_matrix = loco.Matrix(stations, groups)
     return render_template('matrix.html',
                            matrix=state_matrix,
-                           stations=stations,
-                           sums=sums)
+                           stations=stations)
 
 
 @app.route('/advance/<groupId>/<station_id>')
