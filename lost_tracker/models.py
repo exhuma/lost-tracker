@@ -458,6 +458,32 @@ class TimeSlot(object):
     def __hash__(self):
         return hash(self.time)
 
+    @staticmethod
+    def all():
+        # TODO maybe put this in a config file
+        return [
+            TimeSlot('18h50'),
+            TimeSlot('19h00'),
+            TimeSlot('19h10'),
+            TimeSlot('19h20'),
+            TimeSlot('19h30'),
+            TimeSlot('19h40'),
+            TimeSlot('19h50'),
+            TimeSlot('20h00'),
+            TimeSlot('20h10'),
+            TimeSlot('20h20'),
+            TimeSlot('20h30'),
+            TimeSlot('20h40'),
+            TimeSlot('20h50'),
+            TimeSlot('21h00'),
+            TimeSlot('21h10'),
+            TimeSlot('21h20'),
+            TimeSlot('21h30'),
+            TimeSlot('21h40'),
+            TimeSlot('21h50'),
+            TimeSlot('22h00'),
+        ]
+
 
 class User(Base):
     """
