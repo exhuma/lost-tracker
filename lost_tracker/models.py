@@ -60,65 +60,6 @@ def score_totals():
     return output
 
 
-def get_form_score_full():
-    s = select([form_scores]).order_by(form_scores.c.form_id)
-    return s.execute()
-
-
-def get_form_score(group_id, form_id):
-    s = select([form_scores])
-    s = s.where(form_scores.c.group_id == group_id)
-    s = s.where(form_scores.c.form_id == form_id)
-    result = s.execute().fetchone()
-    if not result:
-        return 0
-    return result.score
-
-
-def get_form_score_by_group(group_id):
-    s = select([form_scores])
-    s = s.where(form_scores.c.group_id == group_id)
-    result = s.execute()
-    if not result:
-        return 0
-    return result.score
-
-
-def set_form_score(group_id, form_id, score):
-    s = select(
-        [form_scores],
-        and_(
-            form_scores.c.group_id == group_id,
-            form_scores.c.form_id == form_id
-        ))
-    row = s.execute().first()
-
-    if not row:
-        i = insert_form_score(group_id, form_id, score)
-        i.execute()
-    else:
-        u = update_form_score(group_id, form_id, score)
-        u.execute()
-
-
-def insert_form_score(group_id, form_id, score):
-    i = form_scores.insert().values(
-        group_id=group_id,
-        form_id=form_id,
-        score=score)
-    return i
-
-
-def update_form_score(group_id, form_id, score):
-    u = form_scores.update().where(
-        and_(
-            form_scores.c.group_id == group_id,
-            form_scores.c.form_id == form_id)
-    ).values(
-        score=score)
-    return u
-
-
 def advance(session, group_id, station_id):
     state = GroupStation.get(group_id, station_id)
 
