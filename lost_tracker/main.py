@@ -250,14 +250,14 @@ def station(name):
     groups = loco.get_groups()
     GroupStateRow = namedtuple('GroupStateRow', 'group, state')
     group_states = []
-    for grp in groups:  # TODO: rename variable
-        group_station = mdl.GroupStation.get(grp.id, station.id)
+    for group in groups:
+        group_station = mdl.GroupStation.get(group.id, station.id)
         if not group_station:
             state = None
         else:
             state = group_station
         group_states.append(
-            GroupStateRow(grp, state))
+            GroupStateRow(group, state))
     group_states.sort(key=_stategetter)
 
     questionnaires = loco.get_forms()
