@@ -220,7 +220,7 @@ def teardown_request(exc):
 @app.route('/matrix')
 def matrix():
     stations = loco.get_stations()
-    groups = loco.get_grps()
+    groups = loco.get_groups()
 
     state_matrix = loco.get_matrix(stations, groups)
     sums = loco.get_state_sum(state_matrix)
@@ -243,11 +243,11 @@ def advance(groupId, station_id):
 
 @app.route('/station/<path:name>')
 def station(name):
-    station = loco.get_stat_by_name(name)  # TODO: rename function
+    station = loco.get_station_by_name(name)
     if not station:
         return abort(404)
 
-    groups = loco.get_grps()  # TODO: rename function
+    groups = loco.get_groups()
     GroupStateRow = namedtuple('GroupStateRow', 'group, state')
     group_states = []
     for grp in groups:  # TODO: rename variable
@@ -286,7 +286,7 @@ def scoreboard():
     output = []
     pos = 1
     for row in result:
-        group = loco.get_grps_by_id(row.group_id)
+        group = loco.get_group(id=row.group_id)
         output.append([pos, group.name, row.score_sum, group.completed])
         pos += 1
     return render_template('scoreboard.html', scores=output)
@@ -365,7 +365,7 @@ def confirm_registration(key):
 def accept_registration(key):
     if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
-    group = loco.get_grp_by_registration_key(key)
+    group = loco.get_group(key=key)
 
     if group.finalized:
         flash(gettext('This group has already been accepted!'), 'info')
@@ -381,7 +381,7 @@ def accept_registration(key):
 def save_group_info(id):
     if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
-    group = loco.get_grps_by_id(id)
+    group = loco.get_group(id=id)
     if not group.finalized:
         loco.accept_registration(group.confirmation_key, request.form)
         flash(gettext('Accepted registration for group {}').format(group.name),
@@ -426,7 +426,7 @@ def logout():
 def manage():
     if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
-    groups = loco.get_grps()
+    groups = loco.get_groups()
     slots = loco.slots()
 
     groups_a = {}
@@ -575,7 +575,7 @@ def set_time_slot(group_name):
         return jsonify(
             message=gettext('Incorrect value for direction: {!r}').format(
                 data['direction'])), 400
-    group = loco.get_grp_by_name(group_name)
+    group = loco.get_group(id=group_name)
     if not group:
         group = mdl.Group(name=group_name, start_time=data['new_slot'])
         g.session.add(group)
@@ -586,7 +586,7 @@ def set_time_slot(group_name):
 
 @app.route('/js-fragment/group-tooltip/<int:group_id>')
 def group_tooltip(group_id):
-    group = loco.get_grps_by_id(group_id)
+    group = loco.get_group(id=group_id)
     return render_template('group-tooltip.html',
                            group=group)
 
@@ -603,7 +603,7 @@ def add_new_group():
     grp_direction = data['direction']
     grp_start = data['start_time']
 
-    message = loco.add_grp(
+    message = loco.add_group(
         grp_name,
         grp_contact,
         grp_tel,
@@ -643,7 +643,7 @@ def delete_form(id):
 @app.route('/group_list')
 @login_required
 def group_list():
-    groups = loco.get_grps()
+    groups = loco.get_groups()
     groups = groups.order_by(None)
     groups = groups.order_by(mdl.Group.inserted)
     return render_template('group_list.html', groups=groups)

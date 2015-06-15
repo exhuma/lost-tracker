@@ -82,48 +82,43 @@ def get_state_sum(state_matrix):
     return sums
 
 
-def get_grps():
+def get_groups(**filters):
     """
-    Returns all groups from the database as :py:class:`Group` instances.
+    Returns all groups from the database as a list of :py:class:`Group`
+    instances.
     """
     groups = Group.query
     groups = groups.order_by(Group.order)
     return groups
 
 
-def get_grps_by_id(group_id):
+def get_group(**filters):
     """
-    Returns a group from the database as :py:class:`Group` instance by his id.
+    Returns a group from the database as :py:class:`Group` instance.
+
+    Currently the following filters are supported:
+
+    ``id``
+        The primary key.
+
+    ``name``
+        Another unique key.
+
+    ``key``
+        The registration confirmation key
     """
     group = Group.query
-    group = group.filter_by(id=group_id)
-    group = group.first()
-    return group
-
-
-def get_grp_by_registration_key(key):
-    """
-    Returns a group from the database as :py:class:`Group` instance by it's
-    key.
-    """
-    group = Group.query
-    group = group.filter_by(confirmation_key=key)
+    if 'id' in filters:
+        group = group.filter_by(id=filters['id'])
+    elif 'name' in filters:
+        group = group.filter_by(name=filters['name'])
+    elif 'key' in filters:
+        group = group.filter_by(confirmation_key=filters['_key'])
     group = group.one()
     return group
 
 
-def get_grp_by_name(name):
-    """
-    Returns a group from the database as :py:class:`Group` instance by his
-    name.
-    """
-    group = Group.query
-    group = group.filter_by(name=name)
-    group = group.first()
-    return group
-
-
-def add_grp(grp_name, contact, phone, direction, start_time, session):
+def add_group(grp_name, contact, phone, direction, start_time, session):
     """
     Creates a new group in the database.
     """
@@ -163,7 +158,7 @@ def get_stations():
     return stations
 
 
-def get_stat_by_name(name):
+def get_station_by_name(name):
     """
     Returns a :py:class:`Station` by class name. Can be ``None`` if no
     matching station is found.
@@ -388,7 +383,7 @@ def update_group(id, data, send_email=True):
     """
     Updates an existing group.
     """
-    group = get_grps_by_id(id)
+    group = get_group(id=id)
     group.direction = data['direction']
     group.name = data['name']
     group.phone = data['phone']
@@ -446,7 +441,7 @@ def delete_form(id):
 
 
 def stats():
-    num_groups = get_grps().count()
+    num_groups = get_groups().count()
     num_slots = len(slots()) * 2  # DIR_A and DIR_B
     return {
         'groups': num_groups,
