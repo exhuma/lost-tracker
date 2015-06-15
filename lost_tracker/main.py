@@ -216,6 +216,7 @@ def teardown_request(exc):
         app.logger.exception(exc)
 
 
+@app.route('/')
 @app.route('/matrix')
 def matrix():
     stations = loco.get_stations()
@@ -385,7 +386,7 @@ def save_group_info(id):
         loco.accept_registration(group.confirmation_key, request.form)
         flash(gettext('Accepted registration for group {}').format(group.name),
               'info')
-        return redirect(url_for('index'))
+        return redirect(url_for('matrix'))
     else:
         loco.update_group(id,
                           request.form,
@@ -405,7 +406,7 @@ def login():
         if authed:
             login_user(user, remember=True)
             flash(gettext('Logged in successfully'), 'info')
-            return redirect(request.values.get('next') or url_for('index'))
+            return redirect(request.values.get('next') or url_for('matrix'))
         else:
             flash(gettext('Invalid credentials!'), 'error')
             return render_template('login.html')
@@ -648,16 +649,6 @@ def group_list():
     return render_template('group_list.html', groups=groups)
 
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-@app.route('/where')
-def where():
-    return render_template('where.html')
-
-
 @app.route('/gallery')
 def photo_gallery():
     galleries = []
@@ -671,11 +662,6 @@ def photo_gallery():
         galleries.append(flickr_data)
 
     return render_template('gallery.html', galleries=galleries)
-
-
-@app.route('/misc')
-def misc():
-    return render_template('misc.html')
 
 
 @app.route('/settings')
