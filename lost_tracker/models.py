@@ -180,6 +180,38 @@ class Group(Base):
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def all(self):
+        groups = Group.query
+        groups = groups.order_by(Group.order)
+        return groups
+
+    @staticmethod
+    def one(self, **filters):
+        """
+        Returns a group from the database as :py:class:`Group` instance.
+
+        Currently the following filters are supported:
+
+        ``id``
+            The primary key.
+
+        ``name``
+            Another unique key.
+
+        ``key``
+            The registration confirmation key
+        """
+        group = Group.query
+        if 'id' in filters:
+            group = group.filter_by(id=filters['id'])
+        elif 'name' in filters:
+            group = group.filter_by(name=filters['name'])
+        elif 'key' in filters:
+            group = group.filter_by(confirmation_key=filters['_key'])
+        group = group.one()
+        return group
+
     @property
     def start_time(self):
         return self._start_time
@@ -324,13 +356,12 @@ class GroupStation(Base):
         self.group_id = group_id
         self.station_id = station_id
 
-
     @staticmethod
     def get(group_id, station_id):
         """
         Given a group and station ID this will return the  state of the given
-        group at the given station. If no the group does not have a state at that
-        station, the default state (STATE_UNKNOWN) is returned.
+        group at the given station. If no the group does not have a state at
+        that station, the default state (STATE_UNKNOWN) is returned.
 
         :param group_id: The group ID
         :type group_id: int

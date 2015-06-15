@@ -85,42 +85,6 @@ class Matrix(object):
         return sums
 
 
-def get_groups(**filters):
-    """
-    Returns all groups from the database as a list of :py:class:`Group`
-    instances.
-    """
-    groups = Group.query
-    groups = groups.order_by(Group.order)
-    return groups
-
-
-def get_group(**filters):
-    """
-    Returns a group from the database as :py:class:`Group` instance.
-
-    Currently the following filters are supported:
-
-    ``id``
-        The primary key.
-
-    ``name``
-        Another unique key.
-
-    ``key``
-        The registration confirmation key
-    """
-    group = Group.query
-    if 'id' in filters:
-        group = group.filter_by(id=filters['id'])
-    elif 'name' in filters:
-        group = group.filter_by(name=filters['name'])
-    elif 'key' in filters:
-        group = group.filter_by(confirmation_key=filters['_key'])
-    group = group.one()
-    return group
-
-
 def add_group(grp_name, contact, phone, direction, start_time, session):
     """
     Creates a new group in the database.
@@ -386,7 +350,7 @@ def update_group(id, data, send_email=True):
     """
     Updates an existing group.
     """
-    group = get_group(id=id)
+    group = Group.one(id=id)
     group.direction = data['direction']
     group.name = data['name']
     group.phone = data['phone']
@@ -444,7 +408,7 @@ def delete_form(id):
 
 
 def stats():
-    num_groups = get_groups().count()
+    num_groups = Group.all().count()
     num_slots = len(slots()) * 2  # DIR_A and DIR_B
     return {
         'groups': num_groups,
