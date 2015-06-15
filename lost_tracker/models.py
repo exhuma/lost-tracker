@@ -304,6 +304,16 @@ class Form(Base):
     def __repr__(self):
         return '<Form %r>' % (self.name)
 
+    @staticmethod
+    def all():
+        """
+        Returns all forms from the database as :py:class`Form` instances.
+        """
+        forms = Form.query
+        forms = forms.order_by(Form.order)
+        return forms
+
+
     def to_dict(self):
         return {
             '__class__': 'Form',

@@ -132,26 +132,6 @@ def add_form(session, name, max_score, order=0):
     return new_form
 
 
-def get_forms():
-    """
-    Returns all forms from the database as :py:class`Form` instances.
-    """
-    forms = Form.query
-    forms = forms.order_by(Form.order)
-    forms = forms.all()
-    return forms
-
-
-def get_form_by_id(id):
-    """
-    Returns a :py:class:`Form` by class id.
-    """
-    qry = Form.query
-    qry = qry.filter_by(id=id)
-    qry = qry.first()
-    return qry
-
-
 def store_registration(session, data, url, needs_confirmation=True):
     """
     Stores a registration to the database.

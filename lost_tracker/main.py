@@ -256,7 +256,7 @@ def station(name):
             GroupStateRow(group, state))
     group_states.sort(key=_stategetter)
 
-    questionnaires = loco.get_forms()
+    questionnaires = mdl.Form.all()
 
     output = dict(
         station=station,
