@@ -48,7 +48,7 @@ lost_tracker.Tabulator.prototype.updateCell = function(source, key, datum, newVa
     this_obj.setCellValue(source, newValue);
     return;
   }
-  var url = '/cell/' + this_obj.table.getAttribute('data-name') + '/' + key + '/' + datum;
+  var url = $TABULAR_PREFIX + '/cell/' + this_obj.table.getAttribute('data-name') + '/' + key + '/' + datum;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;
     var response = xhr.getResponseJson();
@@ -217,7 +217,7 @@ lost_tracker.Tabulator.prototype.deleteRow = function(node) {
   confirmationDialog.setVisible(true);
   goog.events.listen(confirmationDialog, goog.ui.Dialog.EventType.SELECT, function(e) {
     if (e.key == 'yes') {
-      var url = '/' + table + '/' + id;
+      var url = $TABULAR_PREFIX + '/' + table + '/' + id;
       goog.net.XhrIo.send(url, function(evt) {
         var xhr = evt.target;
         if (xhr.isSuccess()) {
@@ -245,7 +245,7 @@ lost_tracker.Tabulator.prototype.saveNewRow = function(node) {
   var table = goog.dom.getAncestorByTagNameAndClass(node, 'TABLE');
   var data = row.getAttribute('data-values');
   var table = table.getAttribute('data-name');
-  var url = '/' + table;
+  var url = $TABULAR_PREFIX + '/' + table;
   node.src = loaderUrl;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;

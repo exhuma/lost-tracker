@@ -7,7 +7,6 @@ import io
 import mimetypes
 import os.path
 
-from sqlalchemy import Unicode, Integer
 from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
@@ -20,7 +19,7 @@ from flask.ext.login import (
 )
 from flask.ext.babel import gettext, Babel
 from babel.dates import format_date
-from sqlalchemy import create_engine, and_, or_
+from sqlalchemy import create_engine
 from flask import (
     Flask,
     abort,
@@ -35,32 +34,34 @@ from flask import (
     url_for,
 )
 from PIL import Image, ExifTags
+from sqlalchemy.exc import IntegrityError
 
 from lost_tracker import __version__
+from lost_tracker.blueprint.group import GROUP
+from lost_tracker.blueprint.tabedit import TABULAR
 from lost_tracker.database import Base
 from lost_tracker.flickr import get_photos
 from lost_tracker.localtypes import Photo, json_encoder
 from lost_tracker.util import basic_auth
-from sqlalchemy.exc import IntegrityError
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
+
+# URL prefixes (needed in multiple locations for JS. Therefore in a variable)
+TABULAR_PREFIX = '/manage'
+GROUP_PREFIX = '/group'
 
 mimetypes.init()
 app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
                        version='2.0', require_load=True)
 app.secret_key = app.localconf.get('app', 'secret_key')
+app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 
 babel = Babel(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
-
-# This is intentionally not in the config. It's tightly bound to the code. And
-# adding a table without modifying the rest of the code would not make sense.
-MODIFIABLE_TABLES = ('group', 'station', 'form')
 
 
 def userbool(value):
@@ -174,11 +175,13 @@ def inject_context():
         date_display = ''
 
     return dict(
+        Setting=mdl.Setting,
+        __version__=__version__,
+        date_display=date_display,
         localconf=app.localconf,
         registration_open=registration_open,
-        Setting=mdl.Setting,
-        date_display=date_display,
-        __version__=__version__)
+        tabular_prefix=TABULAR_PREFIX,
+    )
 
 
 @app.before_first_request
@@ -391,7 +394,7 @@ def save_group_info(id):
             name=request.form['name']), 'info')
         if request.form['send_email'] == 'true':
             flash(gettext('E-Mail sent successfully!'), 'info')
-            return redirect(url_for('tabularadmin', table='group'))
+            return redirect(url_for('tabular.tabularadmin', table='group'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -417,9 +420,9 @@ def logout():
     return redirect(url_for('matrix'))
 
 
-@app.route('/manage')
+@app.route('/slot_editor')
 @login_required
-def manage():
+def slot_editor():
     if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     groups = mdl.Group.all()
@@ -442,7 +445,7 @@ def manage():
                               mdl.DIR_A, mdl.DIR_B)],
                          key=lambda x: x.name)
 
-    return render_template('manage.html',
+    return render_template('slot_editor.html',
                            slots=slots,
                            dir_a=mdl.DIR_A,
                            dir_b=mdl.DIR_B,
@@ -450,115 +453,6 @@ def manage():
                            groups_b=groups_b,
                            groups_none=groups_none,
                            stats=loco.stats())
-
-
-@app.route('/manage/table/<table>')
-@login_required
-def tabularadmin(table):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-
-    if table not in MODIFIABLE_TABLES:
-        return gettext('Access Denied'), 401
-
-    custom_order = None
-    if 'order' in request.args:
-        custom_order = request.args['order']
-
-    if table == 'group':
-        columns = [_ for _ in mdl.Group.__table__.columns
-                   if _.name not in ('id', 'confirmation_key')]
-        keys = [_ for _ in mdl.Group.__table__.columns if _.primary_key]
-        data = g.session.query(mdl.Group)
-        if custom_order and custom_order in mdl.Group.__table__.columns:
-            data = data.order_by(mdl.Group.__table__.columns[custom_order])
-        else:
-            data = data.order_by(mdl.Group.cancelled, mdl.Group.order)
-    elif table == 'station':
-        columns = [_ for _ in mdl.Station.__table__.columns
-                   if _.name not in ('id', 'confirmation_key')]
-        keys = [_ for _ in mdl.Station.__table__.columns if _.primary_key]
-        data = g.session.query(mdl.Station)
-        if custom_order and custom_order in mdl.Station.__table__.columns:
-            data = data.order_by(mdl.Station.__table__.columns[custom_order])
-        else:
-            data = data.order_by(mdl.Station.order)
-    elif table == 'form':
-        columns = [_ for _ in mdl.Form.__table__.columns
-                   if _.name not in ('id', 'confirmation_key')]
-        keys = [_ for _ in mdl.Form.__table__.columns if _.primary_key]
-        data = g.session.query(mdl.Form)
-        if custom_order and custom_order in mdl.Form.__table__.columns:
-            data = data.order_by(mdl.Form.__table__.columns[custom_order])
-        else:
-            data = data.order_by(mdl.Form.order, mdl.Form.name)
-    else:
-        return gettext('Table {name} not yet supported!').format(
-            name=table), 400
-
-    # prepare data for the template
-    Row = namedtuple('Row', 'key, data')
-    Column = namedtuple('Column', 'name, type, value')
-    rows = []
-    for row in data:
-        pk = {_.name: getattr(row, _.name) for _ in keys}
-        rowdata = [Column(_.name,
-                          _.type.__class__.__name__.lower(),
-                          getattr(row, _.name)) for _ in columns]
-        rows.append(Row(pk, rowdata))
-
-    return render_template('tabular.html',
-                           clsname=table,
-                           columns=columns,
-                           data=rows)
-
-
-@app.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
-@login_required
-def update_cell_value(cls, key, datum):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-
-    if cls not in MODIFIABLE_TABLES:
-        return gettext('Access Denied'), 401
-
-    data = request.json
-    table = mdl.Base.metadata.tables[cls]
-
-    if table.columns[datum].type.__class__ == Unicode:
-        coerce_ = unicode.strip
-    elif table.columns[datum].type.__class__ == Integer:
-        coerce_ = int
-    else:
-        coerce_ = lambda x: x  # NOQA
-
-    if data['oldValue'] in ('', None) and coerce_ == unicode.strip:
-        cell_predicate = or_(table.c[datum] == '',
-                             table.c[datum] == None)  # NOQA
-    elif data['oldValue'] in ('', None):
-        cell_predicate = table.c[datum] == None  # NOQA
-    else:
-        cell_predicate = table.c[datum] == data['oldValue']
-
-    data['newValue'] = coerce_(data['newValue'])
-    query = table.update().values(**{datum: data['newValue']}).where(
-        and_(table.c.id == key, cell_predicate))
-
-    try:
-        result = g.session.execute(query)
-    except Exception as exc:
-        app.logger.debug(exc)
-        return jsonify(message='Invalid data'), 400
-
-    if result.rowcount == 1:
-        return jsonify(success=True, new_value=data['newValue'])
-    else:
-        current_entity = g.session.query(table).filter_by(id=key).one()
-        # If the DB value is already the same as the one we try to put, we can
-        # assume it's a success.
-        if getattr(current_entity, datum) == data['newValue']:
-            return jsonify(success=True, new_value=data['newValue'])
-        return jsonify(db_value=getattr(current_entity, datum)), 409
 
 
 @app.route('/group/<group_name>/timeslot', methods=['PUT'])

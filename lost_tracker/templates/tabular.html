@@ -49,9 +49,9 @@
 
 {% block submenu -%}
   <div id="submenu">
-    <a href="{{url_for('tabularadmin', table='group')}}">{{_('Groups')}}</a>&nbsp;|&nbsp;
-    <a href="{{url_for('tabularadmin', table='station')}}">{{_('Stations')}}</a>&nbsp;|&nbsp;
-    <a href="{{url_for('tabularadmin', table='form')}}">{{_('Forms')}}</a>
+    <a href="{{url_for('tabular.tabularadmin', name='group')}}">{{_('Groups')}}</a>&nbsp;|&nbsp;
+    <a href="{{url_for('tabular.tabularadmin', name='station')}}">{{_('Stations')}}</a>&nbsp;|&nbsp;
+    <a href="{{url_for('tabular.tabularadmin', name='form')}}">{{_('Forms')}}</a>
   </div>
 {%- endblock %}
 
