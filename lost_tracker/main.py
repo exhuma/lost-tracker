@@ -423,7 +423,7 @@ def manage():
     if current_user.is_anonymous() or not current_user.admin:
         return "Access denied", 401
     groups = mdl.Group.all()
-    slots = mdl.Slot.all()
+    slots = mdl.TimeSlot.all()
 
     groups_a = {}
     groups_b = {}
