@@ -627,15 +627,6 @@ def delete_station(id):
     return jsonify(status='ok')
 
 
-@app.route('/form/<int:id>', methods=['DELETE'])
-@login_required
-def delete_form(id):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    loco.delete_form(id)
-    return jsonify(status='ok')
-
-
 @app.route('/group_list')
 @login_required
 def group_list():
