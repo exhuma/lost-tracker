@@ -1,9 +1,6 @@
 from datetime import datetime
 from operator import attrgetter
 from urllib import unquote_plus
-import io
-import mimetypes
-import os.path
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -23,23 +20,20 @@ from flask import (
     flash,
     g,
     jsonify,
-    make_response,
     redirect,
     render_template,
     request,
     session as flask_session,
     url_for,
 )
-from PIL import Image, ExifTags
 from sqlalchemy.exc import IntegrityError
 
 from lost_tracker import __version__
 from lost_tracker.blueprint.group import GROUP
+from lost_tracker.blueprint.photo import PHOTO
 from lost_tracker.blueprint.station import STATION
 from lost_tracker.blueprint.tabedit import TABULAR
 from lost_tracker.database import Base
-from lost_tracker.flickr import get_photos
-from lost_tracker.localtypes import Photo
 from lost_tracker.util import basic_auth
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -48,8 +42,8 @@ import lost_tracker.models as mdl
 TABULAR_PREFIX = '/manage'
 GROUP_PREFIX = '/group'
 STATION_PREFIX = '/station'
+PHOTO_PREFIX = '/photo'
 
-mimetypes.init()
 app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
                        version='2.0', require_load=True)
@@ -57,6 +51,7 @@ app.secret_key = app.localconf.get('app', 'secret_key')
 app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
 app.register_blueprint(STATION, url_prefix=STATION_PREFIX)
+app.register_blueprint(PHOTO, url_prefix=PHOTO_PREFIX)
 
 babel = Babel(app)
 
@@ -67,66 +62,6 @@ login_manager.login_view = "login"
 
 def userbool(value):
     return value.lower()[0:1] in ('t', '1')
-
-
-def photo_url_generator(basename):
-    return Photo(url_for('thumbnail', basename=basename),
-                 url_for('photo', basename=basename))
-
-
-@app.route('/photo/<basename>')
-def photo(basename):
-    basename = os.path.basename(basename)
-    root = app.localconf.get('app', 'photo_folder', default='')
-    if not root:
-        return
-
-    fullname = os.path.join(root, basename)
-    mimetype, _ = mimetypes.guess_type(fullname)
-    with open(fullname, 'rb') as fptr:
-        response = make_response(fptr.read())
-    response.headers['Content-Type'] = mimetype
-    return response
-
-
-@app.route('/thumbnail/<basename>')
-def thumbnail(basename):
-    basename = os.path.basename(basename)
-    root = app.localconf.get('app', 'photo_folder', default='')
-    if not root:
-        return
-
-    fullname = os.path.join(root, basename)
-    mimetype, _ = mimetypes.guess_type(fullname)
-
-    im = Image.open(fullname)
-
-    exif_orientation_id = None
-    for tag in ExifTags.TAGS:
-        if ExifTags.TAGS[tag] == 'Orientation':
-            exif_orientation_id = tag
-            break
-
-    orientation = None
-    if hasattr(im, '_getexif'):
-        exif = im._getexif()
-        if exif:
-            orientation = exif.get(exif_orientation_id)
-
-    if orientation == 3:
-        im = im.rotate(180, expand=True)
-    elif orientation == 6:
-        im = im.rotate(270, expand=True)
-    elif orientation == 8:
-        im = im.rotate(90, expand=True)
-
-    im.thumbnail((150, 150), Image.ANTIALIAS)
-    blob = io.BytesIO()
-    im.save(blob, 'jpeg')
-
-    response = make_response(blob.getvalue())
-    response.headers['Content-Type'] = mimetype
-    return response
 
 
 @babel.localeselector
@@ -376,21 +311,6 @@ def delete_station(id):
         return "Access denied", 401
     loco.delete_station(id)
     return jsonify(status='ok')
-
-
-@app.route('/gallery')
-def photo_gallery():
-    galleries = []
-
-    local_data = loco.get_local_photos(app.localconf, photo_url_generator)
-    if local_data:
-        galleries.append(local_data)
-
-    flickr_data = get_photos(app.localconf)
-    if flickr_data:
-        galleries.append(flickr_data)
-
-    return render_template('gallery.html', galleries=galleries)
 
 
 @app.route('/settings')
