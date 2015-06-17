@@ -56,6 +56,7 @@ app.localconf = Config('mamerwiselen', 'lost-tracker',
                        version='2.0', require_load=True)
 app.secret_key = app.localconf.get('app', 'secret_key')
 app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
+app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
 
 babel = Babel(app)
 
@@ -291,21 +292,6 @@ def scoreboard():
     return render_template('scoreboard.html', scores=output)
 
 
-@app.route('/group/<int:group_id>/score/<int:station_id>', methods=['PUT'])
-@login_required
-def set_group_score(group_id, station_id):
-    try:
-        form_score = request.json['form']
-        station_score = request.json['station']
-    except LookupError:
-        return jsonify({'message': 'Missing value'}), 400
-    loco.set_score(g.session, group_id, station_id, station_score, form_score)
-    return jsonify({
-        'form_score': form_score,
-        'station_score': station_score
-    })
-
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     is_open = mdl.Setting.get(g.session, 'registration_open', default=False)
@@ -375,28 +361,6 @@ def accept_registration(key):
                            dir_b=mdl.DIR_B)
 
 
-@app.route('/group/<id>', methods=['POST'])
-@login_required
-def save_group_info(id):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    group = mdl.Group.one(id=id)
-    if not group.finalized:
-        loco.accept_registration(group.confirmation_key, request.form)
-        flash(gettext('Accepted registration for group {}').format(group.name),
-              'info')
-        return redirect(url_for('matrix'))
-    else:
-        loco.update_group(id,
-                          request.form,
-                          request.form['send_email'] == 'true')
-        flash(gettext('Group {name} successfully updated!').format(
-            name=request.form['name']), 'info')
-        if request.form['send_email'] == 'true':
-            flash(gettext('E-Mail sent successfully!'), 'info')
-            return redirect(url_for('tabular.tabularadmin', table='group'))
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -455,61 +419,11 @@ def slot_editor():
                            stats=loco.stats())
 
 
-@app.route('/group/<group_name>/timeslot', methods=['PUT'])
-@login_required
-def set_time_slot(group_name):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    data = request.json
-    if data['direction'] not in (mdl.DIR_A, mdl.DIR_B):
-        return jsonify(
-            message=gettext('Incorrect value for direction: {!r}').format(
-                data['direction'])), 400
-    group = mdl.Group.one(id=group_name)
-    if not group:
-        group = mdl.Group(name=group_name, start_time=data['new_slot'])
-        g.session.add(group)
-    group.start_time = data['new_slot']
-    group.direction = data['direction']
-    return '{{"is_success": true, "group_id": {}}}'.format(group.id)
-
-
 @app.route('/js-fragment/group-tooltip/<int:group_id>')
 def group_tooltip(group_id):
     group = mdl.Group.one(id=group_id)
     return render_template('group-tooltip.html',
                            group=group)
-
-
-@app.route('/group', methods=['POST'])
-@login_required
-def add_new_group():
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    data = request.json
-    grp_name = data['name']
-    grp_contact = data['contact']
-    grp_tel = data['phone']
-    grp_direction = data['direction']
-    grp_start = data['start_time']
-
-    message = loco.add_group(
-        grp_name,
-        grp_contact,
-        grp_tel,
-        grp_direction,
-        grp_start,
-        g.session)
-    return jsonify(message=message)
-
-
-@app.route('/group/<int:id>', methods=['DELETE'])
-@login_required
-def delete_group(id):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-    loco.delete_group(id)
-    return jsonify(status='ok')
 
 
 @app.route('/station/<int:id>', methods=['DELETE'])
@@ -519,15 +433,6 @@ def delete_station(id):
         return "Access denied", 401
     loco.delete_station(id)
     return jsonify(status='ok')
-
-
-@app.route('/group_list')
-@login_required
-def group_list():
-    groups = mdl.Group.all()
-    groups = groups.order_by(None)
-    groups = groups.order_by(mdl.Group.inserted)
-    return render_template('group_list.html', groups=groups)
 
 
 @app.route('/gallery')
@@ -575,6 +480,9 @@ def save_settings():
 @app.route('/group_state/<group>/<station>', methods=['PUT'])
 @basic_auth
 def update_group_station_state(group, station):
+    """
+    Required by the android client.
+    """
     group = unquote_plus(group)
     station = unquote_plus(station)
     try:

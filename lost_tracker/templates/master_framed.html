@@ -20,7 +20,7 @@
       <span id="auth">
         {% if current_user.is_authenticated() %}
         {{_('Logged in as:')}} {{current_user.name}}{{'*' if current_user.admin else ''}} |
-          <a href="{{url_for('group_list')}}">{{_('List')}}</a> |
+          <a href="{{url_for('group.list')}}">{{_('List')}}</a> |
           <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
           <a href="{{url_for('slot_editor')}}">{{_('Slot Editor')}}</a> |
           <a href="{{url_for('tabular.tabularadmin', name='group')}}">{{_('Manager')}}</a> |
