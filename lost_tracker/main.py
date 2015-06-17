@@ -1,6 +1,4 @@
-from collections import namedtuple
 from datetime import datetime
-from json import dumps
 from operator import attrgetter
 from urllib import unquote_plus
 import io
@@ -22,7 +20,6 @@ from babel.dates import format_date
 from sqlalchemy import create_engine
 from flask import (
     Flask,
-    abort,
     flash,
     g,
     jsonify,
@@ -38,10 +35,11 @@ from sqlalchemy.exc import IntegrityError
 
 from lost_tracker import __version__
 from lost_tracker.blueprint.group import GROUP
+from lost_tracker.blueprint.station import STATION
 from lost_tracker.blueprint.tabedit import TABULAR
 from lost_tracker.database import Base
 from lost_tracker.flickr import get_photos
-from lost_tracker.localtypes import Photo, json_encoder
+from lost_tracker.localtypes import Photo
 from lost_tracker.util import basic_auth
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -49,6 +47,7 @@ import lost_tracker.models as mdl
 # URL prefixes (needed in multiple locations for JS. Therefore in a variable)
 TABULAR_PREFIX = '/manage'
 GROUP_PREFIX = '/group'
+STATION_PREFIX = '/station'
 
 mimetypes.init()
 app = Flask(__name__)
@@ -57,6 +56,7 @@ app.localconf = Config('mamerwiselen', 'lost-tracker',
 app.secret_key = app.localconf.get('app', 'secret_key')
 app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
+app.register_blueprint(STATION, url_prefix=STATION_PREFIX)
 
 babel = Babel(app)
 
@@ -72,25 +72,6 @@ def userbool(value):
 def photo_url_generator(basename):
     return Photo(url_for('thumbnail', basename=basename),
                  url_for('photo', basename=basename))
-
-
-def _stategetter(element):
-    """
-    Custom sorting for group states. Make "arrived" groups come first,
-    then all "unknowns". Make "finished" and "cancelled" groups come last.
-    """
-    if element is None or element.state is None:
-        return 1
-    elif element.group.cancelled:
-        return 80
-    elif element.state.state == mdl.STATE_ARRIVED:
-        return 0
-    elif element.state.state == mdl.STATE_UNKNOWN:
-        return 1
-    elif element.state.state == mdl.STATE_FINISHED:
-        return 2
-    else:
-        return 99
 
 
 @app.route('/photo/<basename>')
@@ -239,44 +220,6 @@ def advance(groupId, station_id):
         group_id=groupId,
         station_id=station_id,
         new_state=new_state)
-
-
-@app.route('/station/<path:name>')
-def station(name):
-    station = mdl.Station.one(name=name)
-    if not station:
-        return abort(404)
-
-    groups = mdl.Group.all()
-    GroupStateRow = namedtuple('GroupStateRow', 'group, state')
-    group_states = []
-    for group in groups:
-        group_station = mdl.GroupStation.get(group.id, station.id)
-        if not group_station:
-            state = None
-        else:
-            state = group_station
-        group_states.append(
-            GroupStateRow(group, state))
-    group_states.sort(key=_stategetter)
-
-    questionnaires = mdl.Form.all()
-
-    output = dict(
-        station=station,
-        groups=groups,
-        group_states=group_states,
-        questionnaires=questionnaires,
-        disable_logo=True)
-
-    if 'application/json' in request.headers['Accept']:
-        response = make_response(dumps(output, default=json_encoder))
-        response.content_type = 'application/json'
-        return response
-    else:
-        return render_template(
-            'station.html',
-            **output)
 
 
 @app.route('/scoreboard')
