@@ -19,13 +19,21 @@ def get_photos(conf):
             'photos': []
         }
 
-    response = requests.get(
-        'https://api.flickr.com/services/rest/?'
-        'method=flickr.photoSets.getPhotos&'
-        'api_key={key}&format=json&'
-        'photoset_id={photoset_id}'.format(
-            key=key,
-            photoset_id=photoset_id))
+    try:
+        response = requests.get(
+            'https://api.flickr.com/services/rest/?'
+            'method=flickr.photoSets.getPhotos&'
+            'api_key={key}&format=json&'
+            'photoset_id={photoset_id}'.format(
+                key=key,
+                photoset_id=photoset_id))
+    except Exception as exc:
+        LOG.error(exc)
+        return {
+            'title': 'Something went wrong when fetching photos from flickr!',
+            'photos': []
+        }
+
     data = loads(response.content[14:-1])
     url_template = ('http://farm{0[farm]}.staticflickr.com/{0[server]}/'
                     '{0[id]}_{0[secret]}_{1}.jpg')

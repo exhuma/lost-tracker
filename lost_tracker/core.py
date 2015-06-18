@@ -339,7 +339,7 @@ def delete_form(id):
 
 def stats():
     num_groups = Group.all().count()
-    num_slots = len(slots()) * 2  # DIR_A and DIR_B
+    num_slots = len(TimeSlot.all()) * 2  # DIR_A and DIR_B
     return {
         'groups': num_groups,
         'slots': num_slots,
