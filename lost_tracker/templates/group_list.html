@@ -22,7 +22,7 @@
       <td>{{group.start_time|default('', true)}}</td>
       <td>{{group.direction|default('', true)}}</td>
       {% if group.confirmation_key %}
-        <td><a href="{{url_for('accept_registration', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
+        <td><a href="{{url_for('registration.accept', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
       {% else %}
         <td>&nbsp;</td>
       {% endif %}

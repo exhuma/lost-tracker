@@ -10,7 +10,7 @@
       <h3>{{_("Only {free_slots} registrations remain available! Hurry up!").format(free_slots=stats.free_slots)}}</h3>
     {% endif %}
 
-    <form id="registration_form" action="{{url_for('register')}}" method="POST">
+    <form id="registration_form" action="{{url_for('registration.new')}}" method="POST">
       <fieldset>
         <legend>{{_("Information about your group")}}</legend>
         <p class="admonition note">{{_('It may take a few days until your registration is accepted. Please be patient!')}}</p>

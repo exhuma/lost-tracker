@@ -12,7 +12,7 @@
       <tr>
           <th>&nbsp;</th>
           {% for row in stations %}
-          <th><a href="{{url_for('station', name=row.name)}}">{{row.name}}</a></th>
+          <th><a href="{{url_for('station.details', name=row.name)}}">{{row.name}}</a></th>
           {% endfor %}
       </tr>
       <tr class="sum">
