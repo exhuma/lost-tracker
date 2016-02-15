@@ -23,7 +23,7 @@ import logging
 import mimetypes
 import os
 import os.path
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 LOG = logging.getLogger(__name__)
 WEB_IMAGES = {
@@ -122,7 +122,7 @@ def add_station(stat_name, contact, phone, order, session):
     new_station = Station(stat_name, contact, phone)
     new_station.order = order
     session.add(new_station)
-    return u"Station {0} added. Contact: {1} / {2}".format(
+    return "Station {0} added. Contact: {1} / {2}".format(
         stat_name, contact, phone)
 
 
@@ -194,7 +194,7 @@ def store_registration(session, data, url, needs_confirmation=True):
                 data['group_name']))
 
         if needs_confirmation:
-            confirm_link = '{}/{}'.format(url, urllib.quote_plus(key))
+            confirm_link = '{}/{}'.format(url, urllib.parse.quote_plus(key))
             send('confirm',
                  to=(data['email'], data['contact_name']),
                  data={

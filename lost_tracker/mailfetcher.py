@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from hashlib import md5
 from os import makedirs
 from os.path import exists, join
@@ -47,7 +47,7 @@ class MailFetcher(object):
         self.connection.select_folder('INBOX')
         messages = self.connection.search(['NOT DELETED'])
         response = self.connection.fetch(messages, ['FLAGS', 'BODY'])
-        for msgid, data in response.iteritems():
+        for msgid, data in response.items():
             if SEEN in data['FLAGS']:
                 LOG.debug('Skipping already processed message #%r', msgid)
                 continue
@@ -85,14 +85,14 @@ class MailFetcher(object):
                 element_name = 'BODY[%d]' % index
 
                 response = self.connection.fetch([msgid], [element_name])
-                item = response.values()[0]
+                item = list(response.values())[0]
                 bindata = item[element_name].decode(encoding)
                 md5sum = md5(bindata).hexdigest()
                 if self.in_index(md5sum):
                     LOG.debug('Ignored duplicate file.')
                     continue
 
-                params = dict(zip(params[0::2], params[1::2]))
+                params = dict(list(zip(params[0::2], params[1::2])))
                 filename = params.get('name', '')
                 unique_name = 'image_{}_{}_{}'.format(msgid, index, filename)
 
@@ -175,8 +175,8 @@ if __name__ == '__main__':
     from getpass import getpass
     logging.basicConfig(level=logging.DEBUG)
     fetcher = MailFetcher(
-        raw_input('Host: '),
-        raw_input('Login: '),
+        input('Host: '),
+        input('Login: '),
         getpass('Password: '),
         True,
         '/tmp/lost_images')

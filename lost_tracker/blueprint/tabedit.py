@@ -99,13 +99,13 @@ def update_cell_value(cls, key, datum):
     table = mdl.Base.metadata.tables[cls]
 
     if table.columns[datum].type.__class__ == Unicode:
-        coerce_ = unicode.strip
+        coerce_ = str.strip
     elif table.columns[datum].type.__class__ == Integer:
         coerce_ = int
     else:
         coerce_ = lambda x: x  # NOQA
 
-    if data['oldValue'] in ('', None) and coerce_ == unicode.strip:
+    if data['oldValue'] in ('', None) and coerce_ == str.strip:
         cell_predicate = or_(table.c[datum] == '',
                              table.c[datum] == None)  # NOQA
     elif data['oldValue'] in ('', None):

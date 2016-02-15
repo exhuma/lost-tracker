@@ -1,6 +1,6 @@
 from datetime import datetime
 from operator import attrgetter
-from urllib import unquote_plus
+from urllib.parse import unquote_plus
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -261,7 +261,7 @@ def settings():
 @login_required
 def save_settings():
     helpdesk = request.form.get('helpdesk', '')
-    registration_open = request.form.get('registration_open', '') == u'on'
+    registration_open = request.form.get('registration_open', '') == 'on'
     shout = request.form.get('shout', '')
     event_date = request.form.get('event_date', '')
     if event_date:

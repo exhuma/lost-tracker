@@ -13,8 +13,8 @@ STATE_UNKNOWN = 0
 STATE_ARRIVED = 1
 STATE_FINISHED = 2
 
-DIR_A = u'Giel'
-DIR_B = u'Roud'
+DIR_A = 'Giel'
+DIR_B = 'Roud'
 
 DATE_FORMAT = '%Y-%m-%d'
 
@@ -271,7 +271,7 @@ class Setting(Base):
     def __init__(self, key, value):
         self.key = key
         self.value_ = dumps(value, default=custom_json_serializer)
-        self.description = u''
+        self.description = ''
 
     def __repr__(self):
         return 'Setting({!r}, {!r})'.format(self.key, self.value)
@@ -279,7 +279,7 @@ class Setting(Base):
     @property
     def value(self):
         value = loads(self.value_)
-        if isinstance(value, (str, unicode)) and '-' in value:
+        if isinstance(value, str) and '-' in value:
             try:
                 value = datetime.strptime(loads(self.value_), DATE_FORMAT)
             except ValueError:
@@ -350,10 +350,10 @@ class GroupStation(Base):
     def set_score(session, group_id, station_id, station_score, form_score,
                   state=None):
 
-        if isinstance(group_id, basestring):
+        if isinstance(group_id, str):
             group_id = Group.query.filter_by(name=group_id).one().id
 
-        if isinstance(station_id, basestring):
+        if isinstance(station_id, str):
             station_id = Station.query.filter_by(name=station_id).one().id
 
         query = GroupStation.query.filter(and_(
