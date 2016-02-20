@@ -33,8 +33,8 @@ def get_photos(conf):
             'title': 'Something went wrong when fetching photos from flickr!',
             'photos': []
         }
+    data = loads(response.text[14:-1])
 
-    data = loads(response.content[14:-1])
     url_template = ('http://farm{0[farm]}.staticflickr.com/{0[server]}/'
                     '{0[id]}_{0[secret]}_{1}.jpg')
     try:
