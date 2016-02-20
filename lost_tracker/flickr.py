@@ -26,7 +26,8 @@ def get_photos(conf):
         'photoset_id={photoset_id}'.format(
             key=key,
             photoset_id=photoset_id))
-    data = loads(response.content[14:-1])
+    data = loads(response.text[14:-1])
+
     url_template = ('http://farm{0[farm]}.staticflickr.com/{0[server]}/'
                     '{0[id]}_{0[secret]}_{1}.jpg')
     try:
