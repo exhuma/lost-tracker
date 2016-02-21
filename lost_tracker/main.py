@@ -5,20 +5,17 @@ from urllib.parse import unquote_plus
 from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
-from flask.ext.login import (
-    LoginManager,
-    current_user,
-    login_required,
-    login_user,
-    logout_user,
-)
 from flask.ext.babel import gettext, Babel
+from flask.ext.security import (
+    SQLAlchemyUserDatastore,
+    Security,
+    login_required,
+    roles_accepted,
+)
 from babel.dates import format_date
-from sqlalchemy import create_engine
 from flask import (
     Flask,
     flash,
-    g,
     jsonify,
     redirect,
     render_template,
@@ -34,7 +31,7 @@ from lost_tracker.blueprint.photo import PHOTO
 from lost_tracker.blueprint.registration import REGISTRATION
 from lost_tracker.blueprint.station import STATION
 from lost_tracker.blueprint.tabedit import TABULAR
-from lost_tracker.database import Base
+
 from lost_tracker.util import basic_auth
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -46,10 +43,20 @@ STATION_PREFIX = '/station'
 PHOTO_PREFIX = '/photo'
 REGISTRATION_PREFIX = '/registration'
 
+
+from flask.ext.security import current_user, core
+
+
+user_datastore = SQLAlchemyUserDatastore(mdl.DB, mdl.User, mdl.Role)
 app = Flask(__name__)
 app.localconf = Config('mamerwiselen', 'lost-tracker',
                        version='2.0', require_load=True)
-app.secret_key = app.localconf.get('app', 'secret_key')
+app.config['SECRET_KEY'] = app.localconf.get('app', 'secret_key')
+app.config['SQLALCHEMY_DATABASE_URI'] = app.localconf.get('db', 'dsn')
+mdl.DB.init_app(app)
+security = Security(app, user_datastore)
+
+
 app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
 app.register_blueprint(PHOTO, url_prefix=PHOTO_PREFIX)
 app.register_blueprint(REGISTRATION, url_prefix=REGISTRATION_PREFIX)
@@ -57,10 +64,6 @@ app.register_blueprint(STATION, url_prefix=STATION_PREFIX)
 app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 
 babel = Babel(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
 
 
 def userbool(value):
@@ -74,16 +77,10 @@ def get_locale():
     return locale
 
 
-@login_manager.user_loader
-def load_user(userid):
-    return loco.get_user(userid)
-
-
 @app.context_processor
 def inject_context():
-    registration_open = mdl.Setting.get(g.session, 'registration_open',
-                                        default=False)
-    event_date = mdl.Setting.get(g.session, 'event_date', None)
+    registration_open = mdl.Setting.get('registration_open', default=False)
+    event_date = mdl.Setting.get('event_date', None)
     if event_date and event_date >= datetime.now():
         date_locale = get_locale()
         if date_locale == 'lu':  # bugfix?
@@ -104,38 +101,41 @@ def inject_context():
     )
 
 
-@app.before_first_request
-def bind_metadata():
-    Base.metadata.bind = create_engine(app.localconf.get('db', 'dsn'))
-
-
 @app.errorhandler(NoResultFound)
 def error_handler(request):
     return gettext('No such entity!'), 404
 
 
+@app.before_first_request
+def create_admin_user():
+    user = user_datastore.create_user(
+        email='admin@example.com',
+        password='admin',
+        active=True)
+    admin_role = mdl.Role(name='admin')
+    user.roles = [admin_role]
+    try:
+        mdl.DB.session.commit()
+    except Exception as exc:
+        flash(str(exc), 'error')
+        mdl.DB.session.rollback()
+
+
 @app.before_request
 def before_request():
-    # This import is deferred as it triggers the DB engine constructor on
-    # first import! As it may not yet be configured at global import time this
-    # would fail if imported globally.
-    from lost_tracker.database import db_session as session
-
     # Only set this if the argument is present (which means the user wants to
     # change the language)
     if 'lang' in request.args:
         app.logger.debug('Changing locale to {}'.format(request.args['lang']))
         flask_session['lang'] = request.args['lang']
 
-    g.session = session
-
 
 @app.teardown_request
 def teardown_request(exc):
     try:
-        g.session.commit()
+        mdl.DB.session.commit()
     except IntegrityError:
-        g.session.rollback()
+        mdl.DB.session.rollback()
         app.logger.exception(exc)
 
 
@@ -153,7 +153,7 @@ def matrix():
 @app.route('/advance/<groupId>/<station_id>')
 @login_required
 def advance(groupId, station_id):
-    new_state = mdl.advance(g.session, groupId, station_id)
+    new_state = mdl.advance(mdl.DB.session, groupId, station_id)
     return jsonify(
         group_id=groupId,
         station_id=station_id,
@@ -173,34 +173,9 @@ def scoreboard():
     return render_template('scoreboard.html', scores=output)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        authed = loco.auth(request.form['login'], request.form['password'])
-        user = loco.get_user(request.form['login'])
-        if authed:
-            login_user(user, remember=True)
-            flash(gettext('Logged in successfully'), 'info')
-            return redirect(request.values.get('next') or url_for('matrix'))
-        else:
-            flash(gettext('Invalid credentials!'), 'error')
-            return render_template('login.html')
-    else:
-        return render_template('login.html')
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('matrix'))
-
-
 @app.route('/slot_editor')
-@login_required
+@roles_accepted('admin')
 def slot_editor():
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
     groups = mdl.Group.all()
     slots = mdl.TimeSlot.all()
 
@@ -239,10 +214,8 @@ def group_tooltip(group_id):
 
 
 @app.route('/station/<int:id>', methods=['DELETE'])
-@login_required
+@roles_accepted('admin')
 def delete_station(id):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
     loco.delete_station(id)
     return jsonify(status='ok')
 
@@ -250,7 +223,7 @@ def delete_station(id):
 @app.route('/settings')
 @login_required
 def settings():
-    settings = {stng.key: stng.value for stng in mdl.Setting.all(g.session)}
+    settings = {stng.key: stng.value for stng in mdl.Setting.all(mdl.DB.session)}
     if 'event_date' in settings and settings['event_date']:
         settings['event_date'] = settings['event_date'].strftime(
             mdl.DATE_FORMAT)
@@ -266,10 +239,10 @@ def save_settings():
     event_date = request.form.get('event_date', '')
     if event_date:
         event_date = datetime.strptime(event_date, '%Y-%m-%d')
-    mdl.Setting.put(g.session, 'helpdesk', helpdesk)
-    mdl.Setting.put(g.session, 'registration_open', registration_open)
-    mdl.Setting.put(g.session, 'shout', shout)
-    mdl.Setting.put(g.session, 'event_date', event_date)
+    mdl.Setting.put(mdl.DB.session, 'helpdesk', helpdesk)
+    mdl.Setting.put(mdl.DB.session, 'registration_open', registration_open)
+    mdl.Setting.put(mdl.DB.session, 'shout', shout)
+    mdl.Setting.put(mdl.DB.session, 'event_date', event_date)
     flash(gettext('Settings successfully saved.'), 'info')
     return redirect(url_for("settings"))
 
@@ -289,7 +262,7 @@ def update_group_station_state(group, station):
     except LookupError:
         return jsonify({'message': 'Missing value'}), 400
 
-    loco.set_score(g.session, group, station, station_score, form_score,
+    loco.set_score(mdl.DB.session, group, station, station_score, form_score,
                    station_state)
 
     return jsonify(

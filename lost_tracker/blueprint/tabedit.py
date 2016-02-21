@@ -4,17 +4,13 @@ from sqlalchemy import and_, or_
 from sqlalchemy import Unicode, Integer
 from flask import (
     Blueprint,
-    g,
     jsonify,
     render_template,
     request,
 )
 
 from flask.ext.babel import gettext
-from flask.ext.login import (
-    current_user,
-    login_required,
-)
+from flask.ext.security import roles_accepted
 
 import lost_tracker.models as mdl
 
@@ -26,11 +22,8 @@ TABULAR = Blueprint('tabular', __name__)
 
 
 @TABULAR.route('/table/<name>')
-@login_required
+@roles_accepted('admin')
 def tabularadmin(name):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
-
     if name not in MODIFIABLE_TABLES:
         return gettext('Access Denied'), 401
 
@@ -42,7 +35,7 @@ def tabularadmin(name):
         columns = [_ for _ in mdl.Group.__table__.columns
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Group.__table__.columns if _.primary_key]
-        data = g.session.query(mdl.Group)
+        data = mdl.DB.session.query(mdl.Group)
         if custom_order and custom_order in mdl.Group.__table__.columns:
             data = data.order_by(mdl.Group.__table__.columns[custom_order])
         else:
@@ -51,7 +44,7 @@ def tabularadmin(name):
         columns = [_ for _ in mdl.Station.__table__.columns
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Station.__table__.columns if _.primary_key]
-        data = g.session.query(mdl.Station)
+        data = mdl.DB.session.query(mdl.Station)
         if custom_order and custom_order in mdl.Station.__table__.columns:
             data = data.order_by(mdl.Station.__table__.columns[custom_order])
         else:
@@ -60,7 +53,7 @@ def tabularadmin(name):
         columns = [_ for _ in mdl.Form.__table__.columns
                    if _.name not in ('id', 'confirmation_key')]
         keys = [_ for _ in mdl.Form.__table__.columns if _.primary_key]
-        data = g.session.query(mdl.Form)
+        data = mdl.DB.session.query(mdl.Form)
         if custom_order and custom_order in mdl.Form.__table__.columns:
             data = data.order_by(mdl.Form.__table__.columns[custom_order])
         else:
@@ -87,10 +80,8 @@ def tabularadmin(name):
 
 
 @TABULAR.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
-@login_required
+@roles_accepted('admin')
 def update_cell_value(cls, key, datum):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
 
     if cls not in MODIFIABLE_TABLES:
         return gettext('Access Denied'), 401
@@ -118,7 +109,7 @@ def update_cell_value(cls, key, datum):
         and_(table.c.id == key, cell_predicate))
 
     try:
-        result = g.session.execute(query)
+        result = mdl.DB.session.execute(query)
     except Exception as exc:
         TABULAR.logger.debug(exc)
         return jsonify(message='Invalid data'), 400
@@ -126,7 +117,7 @@ def update_cell_value(cls, key, datum):
     if result.rowcount == 1:
         return jsonify(success=True, new_value=data['newValue'])
     else:
-        current_entity = g.session.query(table).filter_by(id=key).one()
+        current_entity = mdl.DB.session.query(table).filter_by(id=key).one()
         # If the DB value is already the same as the one we try to put, we can
         # assume it's a success.
         if getattr(current_entity, datum) == data['newValue']:

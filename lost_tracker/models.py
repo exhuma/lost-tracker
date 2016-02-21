@@ -2,11 +2,21 @@ from collections import namedtuple
 from datetime import datetime
 from json import loads, dumps
 
-from sqlalchemy import (Column, Integer, Unicode, ForeignKey, Table, and_,
-                        Boolean, PrimaryKeyConstraint, DateTime, func)
-from sqlalchemy.orm import relationship
+from flask.ext.security import UserMixin, RoleMixin
+from flask.ext.sqlalchemy import SQLAlchemy
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    PrimaryKeyConstraint,
+    Unicode,
+    and_,
+    func,
+)
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import select
-from lost_tracker.database import Base
 from lost_tracker.util import start_time_to_order
 
 STATE_UNKNOWN = 0
@@ -18,9 +28,12 @@ DIR_B = 'Roud'
 
 DATE_FORMAT = '%Y-%m-%d'
 
-form_scores = Table(
+
+DB = SQLAlchemy()
+
+
+form_scores = DB.Table(
     'form_scores',
-    Base.metadata,
     Column('group_id', Integer, ForeignKey('group.id')),
     Column('form_id', Integer, ForeignKey('form.id')),
     Column('score', Integer, default=0),
@@ -47,7 +60,7 @@ def score_totals():
 
     group_scores = {}
 
-    for gid, score in station_select.execute():
+    for gid, score in DB.engine.execute(station_select):
         if score is None:
             continue
         group_scores.setdefault(gid, 0)
@@ -82,7 +95,7 @@ def advance(session, group_id, station_id):
     return state.state
 
 
-class Group(Base):
+class Group(DB.Model):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
@@ -184,7 +197,7 @@ class Group(Base):
         }
 
 
-class Station(Base):
+class Station(DB.Model):
     __tablename__ = 'station'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
@@ -230,7 +243,7 @@ class Station(Base):
         }
 
 
-class Form(Base):
+class Form(DB.Model):
     __tablename__ = 'form'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(20))
@@ -254,7 +267,6 @@ class Form(Base):
         forms = forms.order_by(Form.order)
         return forms
 
-
     def to_dict(self):
         return {
             '__class__': 'Form',
@@ -262,7 +274,7 @@ class Form(Base):
         }
 
 
-class Setting(Base):
+class Setting(DB.Model):
     __tablename__ = 'settings'
     key = Column(Unicode(20), primary_key=True)
     value_ = Column('value', Unicode())
@@ -291,11 +303,11 @@ class Setting(Base):
         self.value_ = dumps(new_value, default=custom_json_serializer)
 
     @staticmethod
-    def get(session, key, default=None):
+    def get(key, default=None):
         query = Setting.query.filter(Setting.key == key)
         row = query.first()
         if not row:
-            new_row = Setting.put(session, key, default)
+            new_row = Setting.put(DB.session, key, default)
             return new_row.value
         return row.value
 
@@ -311,7 +323,7 @@ class Setting(Base):
         return session.query(Setting)
 
 
-class GroupStation(Base):
+class GroupStation(DB.Model):
     __tablename__ = 'group_station_state'
 
     group_id = Column(Integer, ForeignKey('group.id'), primary_key=True)
@@ -436,41 +448,29 @@ class TimeSlot(object):
         ]
 
 
-class User(Base):
-    """
-    A user class for flask-login.
+roles_users = DB.Table(
+    'roles_users',
+    Column('user', Integer(), ForeignKey('user.id')),
+    Column('role', Integer(), ForeignKey('role.id')))
 
-    See https://flask-login.readthedocs.org/en/latest/#your-user-class
 
-    Additional requirements for lost-tracker:
+class Role(DB.Model, RoleMixin):
+    __tablename__ = 'role'
 
-        * Must have a ``name`` attribute. It is displayed in the web interface.
+    id = Column(Integer(), primary_key=True)
+    name = Column(Unicode(80), unique=True)
+    description = Column(Unicode(255))
 
-    @fanky: implement
-    """
+
+class User(DB.Model, UserMixin):
     __tablename__ = 'user'
 
-    login = Column(Unicode(100), primary_key=True)
+    id = Column(Integer, primary_key=True)
+    email = Column(Unicode(100), unique=True)
     name = Column(Unicode(100))
     password = Column(Unicode(100))
-    email = Column(Unicode(100))
     locale = Column(Unicode(2))
-    admin = Column(Boolean, default=False, server_default='false')
-
-    def __init__(self, login, password, email):
-        self.login = login
-        self.name = login
-        self.password = password
-        self.email = email
-
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return self.login
+    active = Column(Boolean())
+    confirmed_at = Column(DateTime())
+    roles = relationship('Role', secondary=roles_users,
+                         backref=backref('user', lazy='dynamic'))

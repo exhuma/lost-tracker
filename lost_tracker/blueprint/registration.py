@@ -1,16 +1,15 @@
 from flask import (
     Blueprint,
     flash,
-    g,
     render_template,
     request,
     url_for,
 )
 
 from flask.ext.babel import gettext
-from flask.ext.login import (
+from flask.ext.security import (
     current_user,
-    login_required,
+    roles_accepted,
 )
 
 import lost_tracker.core as loco
@@ -21,7 +20,7 @@ REGISTRATION = Blueprint('registration', __name__)
 
 @REGISTRATION.route('/new', methods=['GET', 'POST'])
 def new():
-    is_open = mdl.Setting.get(g.session, 'registration_open', default=False)
+    is_open = mdl.Setting.get(mdl.DB.session, 'registration_open', default=False)
     if not is_open:
         return render_template('registration_closed.html')
 
@@ -37,7 +36,7 @@ def new():
         confirmation_link = url_for('.confirm',
                                     _external=True)
         try:
-            loco.store_registration(g.session, data, confirmation_link)
+            loco.store_registration(mdl.DB.session, data, confirmation_link)
         except ValueError as exc:
             return 'Error: ' + str(exc), 400
         return render_template(
@@ -57,7 +56,7 @@ def new():
 @REGISTRATION.route('/confirm')
 @REGISTRATION.route('/confirm/<key>')
 def confirm(key):
-    is_open = mdl.Setting.get(g.session, 'registration_open', default=False)
+    is_open = mdl.Setting.get(mdl.DB.session, 'registration_open', default=False)
     if not is_open:
         return "Access denied", 401
 
@@ -73,10 +72,8 @@ def confirm(key):
 
 
 @REGISTRATION.route('/accept/<key>')
-@login_required
+@roles_accepted('staff', 'admin')
 def accept(key):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
     group = mdl.Group.one(key=key)
 
     if group.finalized:

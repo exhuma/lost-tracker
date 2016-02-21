@@ -18,16 +18,16 @@
       </span>
 
       <span id="auth">
-        {% if current_user.is_authenticated() %}
+        {% if current_user.is_authenticated %}
         {{_('Logged in as:')}} {{current_user.name}}{{'*' if current_user.admin else ''}} |
           <a href="{{url_for('group.list')}}">{{_('List')}}</a> |
           <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
           <a href="{{url_for('slot_editor')}}">{{_('Slot Editor')}}</a> |
           <a href="{{url_for('tabular.tabularadmin', name='group')}}">{{_('Manager')}}</a> |
           <a href="{{url_for('settings')}}">{{_('Settings')}}</a> |
-          <a href="{{url_for('logout')}}">{{_('Logout')}}</a>
+          <a href="{{url_for('security.logout')}}">{{_('Logout')}}</a>
         {% else %}
-          <a href="{{url_for('login')}}">{{_('Login')}}</a>
+          <a href="{{url_for('security.login')}}">{{_('Login')}}</a>
         {% endif %}
       </span>
     </div>
@@ -37,8 +37,8 @@
       {% if not disable_logo %}
         <div id="logo">
           <img src="{{url_for('static', filename='images/logo2014.png')}}" />
-          {% if Setting.get(g.session, 'shout', default=None) %}
-            <h2>{{Setting.get(g.session, 'shout')}}</h2>
+          {% if Setting.get('shout', default=None) %}
+            <h2>{{Setting.get('shout')}}</h2>
           {% endif %}
         </div>
       {% endif %}

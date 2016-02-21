@@ -10,9 +10,9 @@ from flask import (
     request,
 )
 
-from flask.ext.login import (
+from flask.ext.security import (
     current_user,
-    login_required,
+    roles_accepted,
 )
 
 from lost_tracker.localtypes import json_encoder
@@ -80,16 +80,14 @@ def details(name):
 
 
 @STATION.route('/<int:id>', methods=['DELETE'])
-@login_required
+@roles_accepted('admin')
 def delete(id):
-    if current_user.is_anonymous() or not current_user.admin:
-        return "Access denied", 401
     loco.delete_station(id)
     return jsonify(status='ok')
 
 
 @STATION.route('/<station_name>/dashboard')
-@login_required
+@roles_accepted('admin')
 def dashboard(name):
     # TODO implement
     raise NotImplementedError('Not yet implemented')
