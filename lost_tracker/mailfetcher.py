@@ -4,12 +4,13 @@ from os import makedirs
 from os.path import exists, join
 import logging
 
-from imapclient import IMAPClient, SEEN, FLAGGED
+from imapclient import IMAPClient, SEEN, FLAGGED, create_default_context
+from backports import ssl
 
 
 LOG = logging.getLogger(__name__)
 IMAGE_TYPES = {
-    ('image', 'jpeg')
+    (b'image', b'jpeg')
 }
 
 
@@ -27,31 +28,39 @@ def extract_elements(body, elements):
 
 class MailFetcher(object):
 
-    def __init__(self, host, username, password, ssl, image_folder):
+    def __init__(self, host, username, password, use_ssl, image_folder):
         self.host = host
         self.username = username
         self.password = password
-        self.ssl = ssl
+        self.use_ssl = use_ssl
         self.image_folder = image_folder
         self.connection = None
+        self.context = create_default_context()
+        self.context.verify_mode = ssl.CERT_NONE
 
     def connect(self):
-        self.connection = IMAPClient(self.host, use_uid=True, ssl=self.ssl)
+        LOG.debug('Connecting to mail host...')
+        self.connection = IMAPClient(self.host, use_uid=True, ssl=self.use_ssl,
+                                     ssl_context=self.context)
+        LOG.debug('Logging in...')
         self.connection.login(self.username, self.password)
 
     def fetch(self):
+        LOG.debug('Fetching mail...')
         if not exists(self.image_folder):
             makedirs(self.image_folder)
             LOG.info('Created image folder at %r' % self.image_folder)
 
         self.connection.select_folder('INBOX')
-        messages = self.connection.search(['NOT DELETED'])
+        messages = self.connection.search(['NOT', 'DELETED'])
         response = self.connection.fetch(messages, ['FLAGS', 'BODY'])
         for msgid, data in response.items():
-            if SEEN in data['FLAGS']:
+            if SEEN in data[b'FLAGS']:
                 LOG.debug('Skipping already processed message #%r', msgid)
                 continue
-            body = data['BODY']
+            else:
+                LOG.debug('Processing message #%r', msgid)
+            body = data[b'BODY']
             el = []
             extract_elements(body, el)
             fetch_meta = [(i, data) for i, data in enumerate(el)
@@ -82,18 +91,20 @@ class MailFetcher(object):
             index = index + 1
             try:
                 (major, minor, params, _, _, encoding, size) = header
-                element_name = 'BODY[%d]' % index
+                encoding = encoding.decode('ascii')
+                element_name = ('BODY[%d]' % index).encode('ascii')
 
                 response = self.connection.fetch([msgid], [element_name])
                 item = list(response.values())[0]
-                bindata = item[element_name].decode(encoding)
+                bindata = item[element_name]
                 md5sum = md5(bindata).hexdigest()
                 if self.in_index(md5sum):
                     LOG.debug('Ignored duplicate file.')
                     continue
 
                 params = dict(list(zip(params[0::2], params[1::2])))
-                filename = params.get('name', '')
+                filename = params.get(b'name', b'')
+                filename = filename.decode('ascii', errors='ignore')
                 unique_name = 'image_{}_{}_{}'.format(msgid, index, filename)
 
                 fullname = join(self.image_folder, unique_name)
@@ -139,9 +150,9 @@ def run_cli():
     args = parser.parse_args()
 
     if args.verbose >= 2:
-        logging.basicConfig(level=logging.DEBUG, file=sys.stdout)
+        logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
     elif args.verbose >= 1:
-        logging.basicConfig(level=logging.INFO, file=sys.stdout)
+        logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     else:
         logging.basicConfig(level=logging.WARNING)
 

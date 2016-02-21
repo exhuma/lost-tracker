@@ -9,7 +9,7 @@ setup(
         'Flask-Login==0.2.9',
         'Flask-SQLAlchemy==1.0',
         'Flask==0.10.1',
-        'IMAPClient==0.12',
+        'IMAPClient==1.0.1',
         'Pillow==2.8.1',
         'SQLAlchemy==0.9.3',
         'config-resolver >= 4.2, <5.0',
@@ -24,7 +24,8 @@ setup(
         ],
         'test': [
             'pytest',
-            'pytest-xdist'
+            'pytest-xdist',
+            'mock'
         ]
     },
     entry_points={
