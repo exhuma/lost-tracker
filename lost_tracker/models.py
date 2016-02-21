@@ -231,7 +231,7 @@ class Station(DB.Model):
         matching station is found.
         """
         qry = Station.query
-        qry = qry.filter_by(name=filter['name'])
+        qry = qry.filter_by(name=filters['name'])
         qry = qry.first()
         return qry
 

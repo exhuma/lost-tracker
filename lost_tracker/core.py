@@ -69,6 +69,8 @@ class Matrix(object):
         "arrived" and "finished" states for each station.
         """
         # TODO: make this a list of namedtuples!
+        if not self._matrix:
+            return []
         sums = [[0, 0, 0] for _ in self._matrix[0][1:]]
         for row in self._matrix:
             for i, state in enumerate(row[1:]):
