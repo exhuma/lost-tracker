@@ -347,6 +347,10 @@ TD.state {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf8c83', endColorstr='#b2847c',GradientType=0 ); /* IE6-9 */
 }
 
+DIV.error {
+    color: #000;
+}
+
 INPUT[type="submit"] {
     width: 100%;
     -webkit-border-radius: 4px;
