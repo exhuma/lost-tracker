@@ -150,9 +150,9 @@ def run_cli():
     args = parser.parse_args()
 
     if args.verbose >= 2:
-        logging.basicConfig(level=logging.DEBUG, file=sys.stdout)
+        logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
     elif args.verbose >= 1:
-        logging.basicConfig(level=logging.INFO, file=sys.stdout)
+        logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     else:
         logging.basicConfig(level=logging.WARNING)
 
