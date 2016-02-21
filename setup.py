@@ -9,7 +9,7 @@ setup(
         'Flask-Login==0.2.9',
         'Flask-SQLAlchemy==1.0',
         'Flask==0.10.1',
-        'IMAPClient==0.12',
+        'IMAPClient==1.0.1',
         'Pillow==2.8.1',
         'SQLAlchemy==0.9.3',
         'alembic==0.6.3',
@@ -17,10 +17,12 @@ setup(
         'envelopes==0.4',
         'envelopes==0.4',
         'flask-babel==0.9',
-        'mock==1.0.1',
         'psycopg2==2.5.2',
         'requests==2.6.0',
     ],
+    extras_require={
+        'test': ['mock']
+    },
     entry_points={
         'console_scripts': [
             'fetch_photos = lost_tracker.mailfetcher:run_cli',
