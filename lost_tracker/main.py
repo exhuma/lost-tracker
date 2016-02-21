@@ -2,7 +2,7 @@ from collections import namedtuple
 from datetime import datetime
 from json import dumps
 from operator import attrgetter
-from urllib import unquote_plus
+from urllib.parse import unquote_plus
 import io
 import mimetypes
 import os.path

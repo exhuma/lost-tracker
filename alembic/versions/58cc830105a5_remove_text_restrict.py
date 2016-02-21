@@ -26,18 +26,18 @@ def upgrade():
 
 
 def downgrade():
-    print 80 * "*"
-    print "WARNING: The following columns might get truncated:"
-    print "    - group.name"
-    print "    - group.contact"
-    print "    - group.phone"
-    print "    - group.start_time"
-    print 80 * "*"
-    print "Creating backup table as group_{0}".format(revision)
+    print(80 * "*")
+    print("WARNING: The following columns might get truncated:")
+    print("    - group.name")
+    print("    - group.contact")
+    print("    - group.phone")
+    print("    - group.start_time")
+    print(80 * "*")
+    print("Creating backup table as group_{0}".format(revision))
     op.execute('CREATE TABLE group_{0} AS '
                'SELECT * FROM "group"'.format(revision))
-    print "If everything went well, you may delete the backup table!"
-    print 80 * "*"
+    print("If everything went well, you may delete the backup table!")
+    print(80 * "*")
     op.execute('UPDATE "group" SET '
                'name=substring(name from 1 for 50), '
                'contact=substring(contact from 1 for 50), '

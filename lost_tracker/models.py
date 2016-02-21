@@ -295,7 +295,7 @@ class Setting(Base):
     @property
     def value(self):
         value = loads(self.value_)
-        if isinstance(value, (str, unicode)) and '-' in value:
+        if isinstance(value, str) and '-' in value:
             try:
                 value = datetime.strptime(loads(self.value_), DATE_FORMAT)
             except ValueError:
