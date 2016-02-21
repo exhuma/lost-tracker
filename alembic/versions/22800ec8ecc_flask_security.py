@@ -23,7 +23,6 @@ def upgrade():
     op.create_unique_constraint("unique_user", "user", ["email"])
     op.add_column('user', sa.Column('active', sa.Boolean()))
     op.add_column('user', sa.Column('confirmed_at', sa.DateTime()))
-    op.create_primary_key('user_pkey', 'user', ['id'])
 
     # Create new needed tables
     op.create_table(
@@ -44,7 +43,6 @@ def downgrade():
     op.drop_column('user', 'id')
     op.drop_column('user', 'active')
     op.drop_column('user', 'confirmed_at')
-    op.drop_constraint('unique_user', 'user')
     op.add_column('user', sa.Column('login', sa.Unicode(100)))
     op.add_column('user', sa.Column('admin', sa.Boolean(),
                                     server_default='false'))
