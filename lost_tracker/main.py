@@ -6,6 +6,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
 from flask.ext.babel import gettext, Babel
+from flask.ext.social import Social, SQLAlchemyConnectionDatastore
 from flask.ext.security import (
     SQLAlchemyUserDatastore,
     Security,
@@ -54,7 +55,12 @@ app.localconf = Config('mamerwiselen', 'lost-tracker',
 app.config['SECRET_KEY'] = app.localconf.get('app', 'secret_key')
 app.config['SQLALCHEMY_DATABASE_URI'] = app.localconf.get('db', 'dsn')
 mdl.DB.init_app(app)
+app.config['SOCIAL_TWITTER'] = {
+    'consumer_key': 'consumer',
+    'consumer_secret': 'secret',
+}
 security = Security(app, user_datastore)
+social = Social(app, SQLAlchemyConnectionDatastore(mdl.DB, mdl.Connection))
 
 
 app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
@@ -271,6 +277,17 @@ def update_group_station_state(group, station):
         score=station_score,
         state=station_state,
         station_name=station)
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template(
+        'profile.html',
+        content='Profile Page',
+        twitter_conn=social.twitter.get_connection(),
+        facebook_conn=social.facebook.get_connection(),
+        foursquare_conn=social.foursquare.get_connection())
 
 
 if __name__ == '__main__':

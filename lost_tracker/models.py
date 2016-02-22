@@ -474,3 +474,16 @@ class User(DB.Model, UserMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary=roles_users,
                          backref=backref('user', lazy='dynamic'))
+
+
+class Connection(DB.Model):
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    provider_id = Column(Unicode(255))
+    provider_user_id = Column(Unicode(255))
+    access_token = Column(Unicode(255))
+    secret = Column(Unicode(255))
+    display_name = Column(Unicode(255))
+    profile_url = Column(Unicode(512))
+    image_url = Column(Unicode(512))
+    rank = Column(Integer)

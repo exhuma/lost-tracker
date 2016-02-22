@@ -11,6 +11,8 @@ setup(
         'flask-babel==0.9',
         'flask-security==1.7.5',
         'flask-sqlalchemy==2.1',
+        'flask-social',
+        'python-twitter',
         'flask==0.10.1',
         'imapclient==1.0.1',
         'pillow==2.8.1',
