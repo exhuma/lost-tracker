@@ -1,8 +1,8 @@
+{% extends "master_wide.html" %}
+
 {% macro show_provider_button(provider_id, display_name, conn) %}
     {% if conn %}
-    <form action="{{ url_for('social.remove_connection', provider_id=conn.provider_id, provider_user_id=conn.provider_user_id) }}" method="DELETE">
-      <input type="submit" value="Disconnect {{ display_name }}" />
-    </form>
+    <input type="button" id="disconnect-button" value="Disconnect Twitter" />
     {% else %}
     <form action="{{ url_for('social.connect', provider_id=provider_id) }}" method="POST">
       <input type="submit" value="Connect {{ display_name }}" />
@@ -10,8 +10,12 @@
     {% endif %}
 {% endmacro %}
 
+{% block content %}
+<script type="text/javascript" charset="utf-8">
+  new lost_tracker.Profile();
+</script>
+
 {{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
-
 {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
-
-{{ show_provider_button('foursquare', 'foursquare', foursquare_conn) }}
+{{ show_provider_button('google', 'google', google_conn) }}
+{% endblock %}

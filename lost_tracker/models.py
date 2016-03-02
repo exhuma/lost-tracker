@@ -487,3 +487,16 @@ class Connection(DB.Model):
     profile_url = Column(Unicode(512))
     image_url = Column(Unicode(512))
     rank = Column(Integer)
+
+    user = relationship('User')
+
+    def __init__(self, *args, **kwargs):
+        self.user_id = kwargs['user_id']
+        self.provider_id = kwargs['provider_id']
+        self.provider_user_id = kwargs['provider_user_id']
+        self.access_token = kwargs['access_token']
+        self.secret = kwargs['secret']
+        self.display_name = kwargs['display_name']
+        self.profile_url = kwargs['profile_url']
+        self.image_url = kwargs['image_url']
+        self.rank = kwargs.get('rank')

@@ -6,19 +6,28 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
 from flask.ext.babel import gettext, Babel
-from flask.ext.social import Social, SQLAlchemyConnectionDatastore
+from flask.ext.social import (
+    SQLAlchemyConnectionDatastore,
+    Social,
+    login_failed,
+)
+from flask.ext.social.views import connect_handler
+from flask.ext.social.utils import get_connection_values_from_oauth_response
 from flask.ext.security import (
     SQLAlchemyUserDatastore,
     Security,
     http_auth_required,
     login_required,
+    login_user,
     roles_accepted,
 )
 from babel.dates import format_date
 from flask import (
     Flask,
+    current_app,
     flash,
     jsonify,
+    make_response,
     redirect,
     render_template,
     request,
@@ -55,13 +64,25 @@ app.localconf = Config('mamerwiselen', 'lost-tracker',
 app.config['SECRET_KEY'] = app.localconf.get('app', 'secret_key')
 app.config['SQLALCHEMY_DATABASE_URI'] = app.localconf.get('db', 'dsn')
 mdl.DB.init_app(app)
+app.config['SOCIAL_FACEBOOK'] = {
+    'consumer_key': app.localconf['facebook']['consumer_key'],
+    'consumer_secret': app.localconf['facebook']['consumer_secret']
+}
 app.config['SOCIAL_TWITTER'] = {
-    'consumer_key': 'consumer',
-    'consumer_secret': 'secret',
+    'consumer_key': app.localconf['twitter']['consumer_key'],
+    'consumer_secret': app.localconf['twitter']['consumer_secret']
+}
+app.config['SOCIAL_GOOGLE'] = {
+    'consumer_key': app.localconf['google']['consumer_key'],
+    'consumer_secret': app.localconf['google']['consumer_secret'],
+    'request_token_params': {
+        'scope': ('https://www.googleapis.com/auth/userinfo.profile '
+                  'https://www.googleapis.com/auth/plus.me '
+                  'https://www.googleapis.com/auth/userinfo.email')
+    }
 }
 security = Security(app, user_datastore)
 social = Social(app, SQLAlchemyConnectionDatastore(mdl.DB, mdl.Connection))
-
 
 app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
 app.register_blueprint(PHOTO, url_prefix=PHOTO_PREFIX)
@@ -70,6 +91,43 @@ app.register_blueprint(STATION, url_prefix=STATION_PREFIX)
 app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 
 babel = Babel(app)
+
+
+def get_facebook_email(oauth_response):
+    from facebook import GraphAPI
+    api = GraphAPI(access_token=oauth_response['access_token'], version='2.5')
+    response = api.request('/me', args={'fields': 'email'})
+    return response['email']
+
+
+@login_failed.connect_via(app)
+def auto_add_user(sender, provider, oauth_response):
+    connection_values = get_connection_values_from_oauth_response(
+        provider, oauth_response)
+    email = connection_values['email']
+    if not email or not email.strip():
+        email = ''
+
+    if provider.name.lower() == 'facebook':
+        fname = connection_values['full_name']
+        email = get_facebook_email(oauth_response)
+    elif provider.name.lower() == 'twitter':
+        fname = connection_values['display_name'][1:]  # cut off leading @
+    else:
+        fname = connection_values['display_name']
+
+    user = user_datastore.create_user(
+        email=email,
+        name=fname,
+        active=True,
+        confirmed_at=datetime.now(),
+    )
+    user_datastore.commit()
+    connection_values['user_id'] = user.id
+    connect_handler(connection_values, provider)
+    login_user(user)
+    mdl.DB.session.commit()
+    return redirect(url_for('profile'))
 
 
 def userbool(value):
@@ -279,15 +337,15 @@ def update_group_station_state(group, station):
         station_name=station)
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'DELETE'])
 @login_required
 def profile():
     return render_template(
         'profile.html',
         content='Profile Page',
-        twitter_conn=social.twitter.get_connection(),
-        facebook_conn=social.facebook.get_connection(),
-        foursquare_conn=social.foursquare.get_connection())
+        twitter_conn=social.twitter.get_connection() if social.twitter else None,
+        facebook_conn=social.facebook.get_connection() if social.facebook else None,
+        google_conn=social.google.get_connection() if social.google else None)
 
 
 if __name__ == '__main__':
