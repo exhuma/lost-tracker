@@ -2,20 +2,29 @@
 
 {% macro show_provider_button(provider_id, display_name, conn) %}
     {% if conn %}
-    <input type="button" id="disconnect-button" value="Disconnect Twitter" />
+      <span class="social-disconnect-button clickable fa-stack fa-lg"
+            title="Disconnect {{display_name}}"
+            data-user-id="{{conn.provider_user_id}}"
+            data-provider-id="{{provider_id}}">
+        <i class="fa fa-{{provider_id}} fa-stack-1x"></i>
+        <i class="fa fa-ban fa-stack-2x text-danger"></i>
+      </span>
     {% else %}
-    <form action="{{ url_for('social.connect', provider_id=provider_id) }}" method="POST">
-      <input type="submit" value="Connect {{ display_name }}" />
-    </form>
+      <form class="inline-form" action="{{url_for('social.connect', provider_id=provider_id)}}" method="POST">
+        <span class="login-button clickable fa-stack fa-lg" title="Connect {{display_name}}" data-provider-id="{{provider_id}}">
+          <i class="fa fa-{{provider_id}} fa-stack-1x"></i>
+          <i class="fa fa-square-o fa-stack-2x"></i>
+        </span>
+      </form>
     {% endif %}
 {% endmacro %}
 
 {% block content %}
-<script type="text/javascript" charset="utf-8">
-  new lost_tracker.Profile();
-</script>
-
-{{ show_provider_button('twitter', 'Twitter', twitter_conn) }}
-{{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
-{{ show_provider_button('google', 'google', google_conn) }}
+  {# TODO (TOS & Priv Pol}) {{ show_provider_button('twitter', 'Twitter', twitter_conn) }} #}
+  {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+  {{ show_provider_button('google', 'google', google_conn) }}
+  <br clear="both" />
+  <script type="text/javascript" charset="utf-8">
+    new lost_tracker.SocialPage();
+  </script>
 {% endblock %}
