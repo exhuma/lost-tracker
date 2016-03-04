@@ -192,7 +192,7 @@ def create_admin_user():
     try:
         mdl.DB.session.commit()
     except Exception as exc:
-        flash(str(exc), 'error')
+        app.logger.debug(str(exc))
         mdl.DB.session.rollback()
 
 
@@ -209,7 +209,7 @@ def before_request():
 def teardown_request(exc):
     try:
         mdl.DB.session.commit()
-    except IntegrityError:
+    except Exception:
         mdl.DB.session.rollback()
         app.logger.exception(exc)
 
