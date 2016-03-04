@@ -1,0 +1,44 @@
+{% extends "master_wide.html" %}
+
+{% macro show_provider_button(provider_id, display_name, conn) %}
+    {% if conn %}
+      <span class="social-disconnect-button clickable fa-stack fa-lg"
+            title="Disconnect {{display_name}}"
+            data-user-id="{{conn.provider_user_id}}"
+            data-provider-id="{{provider_id}}">
+        <i class="fa fa-{{provider_id}} fa-stack-1x"></i>
+        <i class="fa fa-ban fa-stack-2x text-danger"></i>
+      </span>
+    {% else %}
+      <form class="inline-form" action="{{url_for('social.connect', provider_id=provider_id)}}" method="POST">
+        <span class="login-button clickable fa-stack fa-lg" title="Connect {{display_name}}" data-provider-id="{{provider_id}}">
+          <i class="fa fa-{{provider_id}} fa-stack-1x"></i>
+          <i class="fa fa-square-o fa-stack-2x"></i>
+        </span>
+      </form>
+    {% endif %}
+{% endmacro %}
+
+{% block content %}
+  <form id="profile_form" action="{{url_for('user.save_profile')}}" method="POST">
+    <fieldset>
+      <legend>{{_("Personal Information")}}</legend>
+      <dl>
+        <dt>{{_("e-mail")}}</dt>
+        <dd><input type="email" name="email" value="{{current_user.email}}" /></dd>
+      </dl>
+      <dl>
+        <dt>Social Connections</dt>
+        <dd>
+          {# TODO (TOS & Priv Pol}) {{ show_provider_button('twitter', 'Twitter', twitter_conn) }} #}
+          {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
+          {{ show_provider_button('google', 'google', google_conn) }}
+          <br clear="both" />
+        </dd>
+      <input type="submit" value="{{_("Update")}}" />
+    </fieldset>
+  </form>
+  <script type="text/javascript" charset="utf-8">
+    new lost_tracker.SocialPage();
+  </script>
+{% endblock %}

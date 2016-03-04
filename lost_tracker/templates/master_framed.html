@@ -1,5 +1,12 @@
 {% extends "master.html" %}
 
+{% macro seclink(role, href, text) %}
+  {% if current_user.has_role(role) %}
+    <a href="{{href}}">{{text}}</a>
+  {% endif %}
+{% endmacro %}
+
+
 {% block mainmenu %}
     <div id="menu">
       <span id="#mainmenu">
@@ -19,12 +26,12 @@
 
       <span id="auth">
         {% if current_user.is_authenticated %}
-        {{_('Logged in as:')}} {{current_user.name}}{{'*' if current_user.admin else ''}} |
-          <a href="{{url_for('group.list')}}">{{_('List')}}</a> |
+          {{_('Logged in as:')}} <a href="{{url_for('profile')}}">{{current_user.name}}</a>{{'*' if current_user.admin else ''}} |
+          {{ seclink('admin', url_for('group.list'), _('List')) }} |
           <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
-          <a href="{{url_for('slot_editor')}}">{{_('Slot Editor')}}</a> |
-          <a href="{{url_for('tabular.tabularadmin', name='group')}}">{{_('Manager')}}</a> |
-          <a href="{{url_for('settings')}}">{{_('Settings')}}</a> |
+          {{ seclink('admin', url_for('slot_editor'), _('Slot Editor')) }} |
+          {{ seclink('admin', url_for('tabular.tabularadmin', name='group'), _('Manager'))}} |
+          {{ seclink('admin', url_for('settings'), _('Settings'))}} |
           <a href="{{url_for('security.logout')}}">{{_('Logout')}}</a>
         {% else %}
           <a href="{{url_for('security.login')}}">{{_('Login')}}</a>

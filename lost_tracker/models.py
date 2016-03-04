@@ -474,3 +474,29 @@ class User(DB.Model, UserMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary=roles_users,
                          backref=backref('user', lazy='dynamic'))
+
+
+class Connection(DB.Model):
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    provider_id = Column(Unicode(255))
+    provider_user_id = Column(Unicode(255))
+    access_token = Column(Unicode(255))
+    secret = Column(Unicode(255))
+    display_name = Column(Unicode(255))
+    profile_url = Column(Unicode(512))
+    image_url = Column(Unicode(512))
+    rank = Column(Integer)
+
+    user = relationship('User', backref='social_connections')
+
+    def __init__(self, *args, **kwargs):
+        self.user_id = kwargs['user_id']
+        self.provider_id = kwargs['provider_id']
+        self.provider_user_id = kwargs['provider_user_id']
+        self.access_token = kwargs['access_token']
+        self.secret = kwargs['secret']
+        self.display_name = kwargs['display_name']
+        self.profile_url = kwargs['profile_url']
+        self.image_url = kwargs['image_url']
+        self.rank = kwargs.get('rank')
