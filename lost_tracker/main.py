@@ -42,16 +42,18 @@ from lost_tracker.blueprint.photo import PHOTO
 from lost_tracker.blueprint.registration import REGISTRATION
 from lost_tracker.blueprint.station import STATION
 from lost_tracker.blueprint.tabedit import TABULAR
+from lost_tracker.blueprint.user import USER
 
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
 
 # URL prefixes (needed in multiple locations for JS. Therefore in a variable)
-TABULAR_PREFIX = '/manage'
 GROUP_PREFIX = '/group'
-STATION_PREFIX = '/station'
 PHOTO_PREFIX = '/photo'
 REGISTRATION_PREFIX = '/registration'
+STATION_PREFIX = '/station'
+TABULAR_PREFIX = '/manage'
+USER_PREFIX = '/user'
 
 
 from flask.ext.security import current_user, core
@@ -89,6 +91,7 @@ app.register_blueprint(PHOTO, url_prefix=PHOTO_PREFIX)
 app.register_blueprint(REGISTRATION, url_prefix=REGISTRATION_PREFIX)
 app.register_blueprint(STATION, url_prefix=STATION_PREFIX)
 app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
+app.register_blueprint(USER, url_prefix=USER_PREFIX)
 
 babel = Babel(app)
 
