@@ -296,7 +296,7 @@ def delete_station(id):
 
 
 @app.route('/settings')
-@login_required
+@roles_accepted('admin')
 def settings():
     settings = {stng.key: stng.value for stng in mdl.Setting.all(mdl.DB.session)}
     if 'event_date' in settings and settings['event_date']:

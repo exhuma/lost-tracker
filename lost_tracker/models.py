@@ -488,7 +488,7 @@ class Connection(DB.Model):
     image_url = Column(Unicode(512))
     rank = Column(Integer)
 
-    user = relationship('User')
+    user = relationship('User', backref='social_connections')
 
     def __init__(self, *args, **kwargs):
         self.user_id = kwargs['user_id']
