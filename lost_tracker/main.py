@@ -125,6 +125,14 @@ def auto_add_user(sender, provider, oauth_response):
         active=True,
         confirmed_at=datetime.now(),
     )
+
+    role_query = mdl.DB.session.query(mdl.Role).filter_by(name='authenticated')
+    try:
+        role = role_query.one()
+    except NoResultFound:
+        role = mdl.Role(name='authenticated')
+
+    user.roles.append(role)
     user_datastore.commit()
     connection_values['user_id'] = user.id
     connect_handler(connection_values, provider)
