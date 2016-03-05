@@ -1,29 +1,29 @@
 # English translations for PROJECT.
-# Copyright (C) 2014 ORGANIZATION
+# Copyright (C) 2016 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-05-14 18:20+0200\n"
-"PO-Revision-Date: 2015-05-14 18:21+0100\n"
+"POT-Creation-Date: 2016-03-05 15:35+0100\n"
+"PO-Revision-Date: 2016-03-05 15:36+0100\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
+"Language: en\n"
 "Language-Team: en <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
-"Language: en\n"
+"Generated-By: Babel 2.2.0\n"
 "X-Generator: Poedit 1.6.7\n"
 
-#: lost_tracker/main.py:191
+#: lost_tracker/main.py:195
 msgid "No such entity!"
 msgstr "No such entity!"
 
-#: lost_tracker/main.py:332
+#: lost_tracker/main.py:336
 msgid ""
 "The registration has been recorded. However it is not yet activated.  You "
 "will receive a confirmation e-mail any second now. You must click on the "
@@ -37,7 +37,7 @@ msgstr ""
 "registration will be processed by the lost team, and you will receive "
 "another e-mail with the final confirmation once that is done."
 
-#: lost_tracker/main.py:356
+#: lost_tracker/main.py:360
 msgid ""
 "Thank you. Your registration has been activated and the lost-team has been "
 "notified about your entry. Once everything is processed you will recieve "
@@ -47,43 +47,43 @@ msgstr ""
 "notified about your entry. Once everything is processed you will recieve "
 "another e-mail with the final details."
 
-#: lost_tracker/main.py:370
+#: lost_tracker/main.py:374
 msgid "This group has already been accepted!"
 msgstr "This group has already been accepted!"
 
-#: lost_tracker/main.py:386
+#: lost_tracker/main.py:390
 msgid "Accepted registration for group {}"
 msgstr "Accepted registration for group {}"
 
-#: lost_tracker/main.py:393
+#: lost_tracker/main.py:397
 msgid "Group {name} successfully updated!"
 msgstr "Group {name} successfully updated!"
 
-#: lost_tracker/main.py:396
+#: lost_tracker/main.py:400
 msgid "E-Mail sent successfully!"
 msgstr "E-Mail sent successfully!"
 
-#: lost_tracker/main.py:407
+#: lost_tracker/main.py:411
 msgid "Logged in successfully"
 msgstr "Logged in successfully"
 
-#: lost_tracker/main.py:410
+#: lost_tracker/main.py:414
 msgid "Invalid credentials!"
 msgstr "Invalid credentials!"
 
-#: lost_tracker/main.py:465 lost_tracker/main.py:526
+#: lost_tracker/main.py:469 lost_tracker/main.py:530
 msgid "Access Denied"
 msgstr "Access Denied"
 
-#: lost_tracker/main.py:499
+#: lost_tracker/main.py:503
 msgid "Table {name} not yet supported!"
 msgstr "Table {name} not yet supported!"
 
-#: lost_tracker/main.py:575
+#: lost_tracker/main.py:579
 msgid "Incorrect value for direction: {!r}"
 msgstr "Incorrect value for direction: {!r}"
 
-#: lost_tracker/main.py:704
+#: lost_tracker/main.py:708
 msgid "Settings successfully saved."
 msgstr "Settings successfully saved."
 
@@ -212,26 +212,10 @@ msgstr ""
 "patient!"
 
 #: lost_tracker/templates/index.html:15
-msgid "Thanks to anyone who participated"
-msgstr "Thanks to anyone who participated"
-
-#: lost_tracker/templates/index.html:16
-msgid "The winners are"
-msgstr "The winners are"
-
-#: lost_tracker/templates/index.html:24
-msgid "Each of them will receive a price and will be contacted by phone"
-msgstr "Each of them will receive a price and will be contacted by phone"
-
-#: lost_tracker/templates/index.html:26
-msgid "Complete leaderboard"
-msgstr "Complete leaderboard"
-
-#: lost_tracker/templates/index.html:30
 msgid "What is this?"
 msgstr "What is this?"
 
-#: lost_tracker/templates/index.html:34
+#: lost_tracker/templates/index.html:18
 msgid ""
 "A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles."
 "<br /> Impossible tasks.<br /> Not to be missed."
@@ -239,7 +223,7 @@ msgstr ""
 "A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles."
 "<br /> Impossible tasks.<br /> Not to be missed."
 
-#: lost_tracker/templates/index.html:39
+#: lost_tracker/templates/index.html:23
 msgid ""
 "Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
 "Scouten a Guiden vun der FNEL"
@@ -247,7 +231,7 @@ msgstr ""
 "Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
 "Scouten a Guiden vun der FNEL"
 
-#: lost_tracker/templates/index.html:45
+#: lost_tracker/templates/index.html:29
 msgid ""
 "Everybody who likes to spend a night outside, who's fairly well on foot and "
 "who does not mind getting home 3 hours late because they got lost may join :)"
@@ -463,5 +447,17 @@ msgid "Forms"
 msgstr "Forms"
 
 #: lost_tracker/templates/where.html:8
-msgid "We will depart at the Scout's Home in Capellen."
-msgstr "We will depart at the Scout's Home in Capellen."
+msgid "We will depart at the Scout's Home in Mamer."
+msgstr "We will depart at the Scout's Home in Mamer."
+
+#~ msgid "Thanks to anyone who participated"
+#~ msgstr "Thanks to anyone who participated"
+
+#~ msgid "The winners are"
+#~ msgstr "The winners are"
+
+#~ msgid "Each of them will receive a price and will be contacted by phone"
+#~ msgstr "Each of them will receive a price and will be contacted by phone"
+
+#~ msgid "Complete leaderboard"
+#~ msgstr "Complete leaderboard"
