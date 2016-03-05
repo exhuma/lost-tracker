@@ -165,6 +165,9 @@ def load_user(userid):
 def inject_context():
     registration_open = mdl.Setting.get(g.session, 'registration_open',
                                         default=False)
+
+    location_display = mdl.Setting.get(g.session, 'event_location', '')
+    coords = mdl.Setting.get(g.session, 'location_coords', '')
     event_date = mdl.Setting.get(g.session, 'event_date', None)
     event_date = datetime.strptime(event_date, '%Y-%m-%d') if event_date else None  # NOQA
     if event_date and event_date >= datetime.now():
@@ -176,12 +179,16 @@ def inject_context():
                                    locale=date_locale)
     else:
         date_display = ''
+        location_display = ''
+        coords = ''
 
     return dict(
         localconf=app.localconf,
         registration_open=registration_open,
         Setting=mdl.Setting,
         date_display=date_display,
+        location_display=location_display,
+        location_coords=coords,
         __version__=__version__)
 
 
@@ -687,8 +694,7 @@ def misc():
 def settings():
     settings = {stng.key: stng.value for stng in mdl.Setting.all(g.session)}
     if 'event_date' in settings and settings['event_date']:
-        settings['event_date'] = settings['event_date'].strftime(
-            mdl.DATE_FORMAT)
+        settings['event_date'] = settings['event_date']
     return render_template('settings.html', settings=settings)
 
 
@@ -701,10 +707,14 @@ def save_settings():
     event_date = request.form.get('event_date', '')
     if event_date:
         event_date = datetime.strptime(event_date, '%Y-%m-%d')
+    event_location = request.form.get('event_location', '')
+    location_coords = request.form.get('location_coords', '')
     mdl.Setting.put(g.session, 'helpdesk', helpdesk)
     mdl.Setting.put(g.session, 'registration_open', registration_open)
     mdl.Setting.put(g.session, 'shout', shout)
     mdl.Setting.put(g.session, 'event_date', event_date)
+    mdl.Setting.put(g.session, 'event_location', event_location)
+    mdl.Setting.put(g.session, 'location_coords', location_coords)
     flash(gettext('Settings successfully saved.'), 'info')
     return redirect(url_for("settings"))
 
