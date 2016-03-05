@@ -1,6 +1,9 @@
 from datetime import datetime
 from operator import attrgetter
-from urllib.parse import unquote_plus
+try:
+    from urllib.parse import unquote_plus  # py3
+except ImportError:
+    from urllib import unquote_plus  # py2
 
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -156,6 +159,9 @@ def get_locale():
 def inject_context():
     registration_open = mdl.Setting.get('registration_open', default=False)
     event_date = mdl.Setting.get('event_date', None)
+    event_date = datetime.strptime(event_date, '%Y-%m-%d') if event_date else None  # NOQA
+    location_display = mdl.Setting.get('event_location', '')
+    coords = mdl.Setting.get('location_coords', '')
     if event_date and event_date >= datetime.now():
         date_locale = get_locale()
         if date_locale == 'lu':  # bugfix?
@@ -165,6 +171,8 @@ def inject_context():
                                    locale=date_locale)
     else:
         date_display = ''
+        location_display = ''
+        coords = ''
 
     return dict(
         Setting=mdl.Setting,
@@ -173,6 +181,8 @@ def inject_context():
         localconf=app.localconf,
         registration_open=registration_open,
         tabular_prefix=TABULAR_PREFIX,
+        location_display=location_display,
+        location_coords=coords,
     )
 
 
@@ -300,8 +310,7 @@ def delete_station(id):
 def settings():
     settings = {stng.key: stng.value for stng in mdl.Setting.all(mdl.DB.session)}
     if 'event_date' in settings and settings['event_date']:
-        settings['event_date'] = settings['event_date'].strftime(
-            mdl.DATE_FORMAT)
+        settings['event_date'] = settings['event_date']
     return render_template('settings.html', settings=settings)
 
 
@@ -314,10 +323,15 @@ def save_settings():
     event_date = request.form.get('event_date', '')
     if event_date:
         event_date = datetime.strptime(event_date, '%Y-%m-%d')
+    event_location = request.form.get('event_location', '')
+    location_coords = request.form.get('location_coords', '')
+
     mdl.Setting.put(mdl.DB.session, 'helpdesk', helpdesk)
     mdl.Setting.put(mdl.DB.session, 'registration_open', registration_open)
     mdl.Setting.put(mdl.DB.session, 'shout', shout)
     mdl.Setting.put(mdl.DB.session, 'event_date', event_date)
+    mdl.Setting.put(mdl.DB.session, 'event_location', event_location)
+    mdl.Setting.put(mdl.DB.session, 'location_coords', location_coords)
     flash(gettext('Settings successfully saved.'), 'info')
     return redirect(url_for("settings"))
 

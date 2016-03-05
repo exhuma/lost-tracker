@@ -51,6 +51,7 @@
       {% endif %}
 
       {% if date_display %}<h1>{{date_display}}</h1>{% endif %}
+      {% if location_display %}<h2>{{location_display}}</h2>{% endif %}
 
       {% with messages = get_flashed_messages(with_categories=True) %}
           {% if messages %}

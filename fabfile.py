@@ -4,8 +4,8 @@ import fabric.api as fab
 import fabric.colors as clr
 
 fab.env.roledefs = {
-    'prod': ['lostlu@dozer.foobar.lu'],
-    'failover': ['lost_tracker_backup@eurinfo.net'],
+    'failover': ['lostlu@dozer.foobar.lu'],
+    'prod': ['lost_tracker_backup@eurinfo.net'],
 }
 
 
@@ -54,13 +54,10 @@ def clean():
 
 @fab.task
 def redeploy():
-    fab.execute(build)
-    fab.execute(upload)
-    name = fab.local('python setup.py --fullname', capture=True)
+    name = fab.local('python setup.py --name', capture=True)
     with fab.cd(REMOTE_FOLDER):
-        fab.run('env/bin/pip uninstall lost_tracker')
-    fab.execute(install)
-    fab.execute(clean)
+        fab.run('env/bin/pip uninstall %s' % name)
+    fab.execute(deploy)
 
 
 @fab.task
