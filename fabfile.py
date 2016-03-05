@@ -4,8 +4,8 @@ import fabric.api as fab
 import fabric.colors as clr
 
 fab.env.roledefs = {
-    'prod': ['lostlu@dozer.foobar.lu'],
-    'failover': ['lost_tracker_backup@eurinfo.net'],
+    'failover': ['lostlu@dozer.foobar.lu'],
+    'prod': ['lost_tracker_backup@eurinfo.net'],
 }
 
 
