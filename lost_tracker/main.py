@@ -2,7 +2,10 @@ from collections import namedtuple
 from datetime import datetime
 from json import dumps
 from operator import attrgetter
-from urllib.parse import unquote_plus
+try:
+    from urllib.parse import unquote_plus  # py3
+except ImportError:
+    from urllib import unquote_plus  # py2
 import io
 import mimetypes
 import os.path
