@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-05 15:35+0100\n"
-"PO-Revision-Date: 2016-03-05 15:37+0100\n"
+"POT-Creation-Date: 2016-03-05 16:03+0100\n"
+"PO-Revision-Date: 2016-03-05 16:04+0100\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: lu\n"
 "Language-Team: lu <LL@li.org>\n"
@@ -19,11 +19,11 @@ msgstr ""
 "Generated-By: Babel 2.2.0\n"
 "X-Generator: Poedit 1.6.7\n"
 
-#: lost_tracker/main.py:195
+#: lost_tracker/main.py:202
 msgid "No such entity!"
 msgstr "Dat gëtt et net!"
 
-#: lost_tracker/main.py:336
+#: lost_tracker/main.py:343
 msgid ""
 "The registration has been recorded. However it is not yet activated.  You "
 "will receive a confirmation e-mail any second now. You must click on the "
@@ -36,7 +36,7 @@ msgstr ""
 "op de Link fir deng E-Mail ze bestätegen, eréischt da kriss de vum LOST-Team "
 "deng Startzäit confirméiert."
 
-#: lost_tracker/main.py:360
+#: lost_tracker/main.py:367
 msgid ""
 "Thank you. Your registration has been activated and the lost-team has been "
 "notified about your entry. Once everything is processed you will recieve "
@@ -45,43 +45,43 @@ msgstr ""
 "Merci. Du bass elo registréiert.<br/>Geschwënn kriss du eng E-Mail mat de "
 "leschten Detailer."
 
-#: lost_tracker/main.py:374
+#: lost_tracker/main.py:381
 msgid "This group has already been accepted!"
 msgstr "Dës Grupp gëtt et schonn!"
 
-#: lost_tracker/main.py:390
+#: lost_tracker/main.py:397
 msgid "Accepted registration for group {}"
 msgstr "D'{}-Grupp ass registréiert!"
 
-#: lost_tracker/main.py:397
+#: lost_tracker/main.py:404
 msgid "Group {name} successfully updated!"
 msgstr "D'Grupp {name} ass upgedate!"
 
-#: lost_tracker/main.py:400
+#: lost_tracker/main.py:407
 msgid "E-Mail sent successfully!"
 msgstr "D'E-Mail ass fortgeschéckt!"
 
-#: lost_tracker/main.py:411
+#: lost_tracker/main.py:418
 msgid "Logged in successfully"
 msgstr "Du bass agelogged!"
 
-#: lost_tracker/main.py:414
+#: lost_tracker/main.py:421
 msgid "Invalid credentials!"
 msgstr "Falsch login daten!"
 
-#: lost_tracker/main.py:469 lost_tracker/main.py:530
+#: lost_tracker/main.py:476 lost_tracker/main.py:537
 msgid "Access Denied"
 msgstr "Zougang ass hei net erlabt!"
 
-#: lost_tracker/main.py:503
+#: lost_tracker/main.py:510
 msgid "Table {name} not yet supported!"
 msgstr "Tabell {name} ass nach net ennerstëtzt!"
 
-#: lost_tracker/main.py:579
+#: lost_tracker/main.py:586
 msgid "Incorrect value for direction: {!r}"
 msgstr "Falschen Wert fir Richtung: {!r}"
 
-#: lost_tracker/main.py:708
+#: lost_tracker/main.py:718
 msgid "Settings successfully saved."
 msgstr "Astellungen si gespeichert."
 
@@ -423,7 +423,7 @@ msgstr "Programmastellungen"
 msgid "Global"
 msgstr "Global"
 
-#: lost_tracker/templates/settings.html:22
+#: lost_tracker/templates/settings.html:26
 msgid "Save"
 msgstr "Speichren"
 
@@ -448,9 +448,13 @@ msgstr "Posten"
 msgid "Forms"
 msgstr "Frobéi"
 
-#: lost_tracker/templates/where.html:8
-msgid "We will depart at the Scout's Home in Mamer."
-msgstr "Mir gin lass am Scoutshome a Mamer."
+#: lost_tracker/templates/where.html:9
+msgid "Departure and registration location:"
+msgstr "Vun hei gi mer lass:"
+
+#: lost_tracker/templates/where.html:18
+msgid "No location defined yet!"
+msgstr "D'Platz ass nach nët definéiert!"
 
 #~ msgid "First 3 positions are"
 #~ msgstr "Déi éischt sinn"
@@ -466,3 +470,6 @@ msgstr "Mir gin lass am Scoutshome a Mamer."
 
 #~ msgid "Complete leaderboard"
 #~ msgstr "Ganz Lëscht"
+
+#~ msgid "We will depart at the Scout's Home in Mamer."
+#~ msgstr "Mir gin lass am Scoutshome a Mamer."
