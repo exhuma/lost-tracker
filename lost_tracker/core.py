@@ -23,7 +23,10 @@ import logging
 import mimetypes
 import os
 import os.path
-import urllib.request, urllib.parse, urllib.error
+try:
+    from urllib.parse import quote_plus
+except ImportError:
+    from urllib import quote_plus
 
 LOG = logging.getLogger(__name__)
 WEB_IMAGES = {
@@ -153,7 +156,7 @@ def store_registration(session, data, url, needs_confirmation=True):
     ``/confirm/<key>`` where ``<key`` is a randomly generated string.
 
     @franky: implement
-    @franky: urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
+    @franky: quote_plus(os.urandom(50).encode('base64')[0:30])
     @franky: See ``_external`` at
              http://flask.pocoo.org/docs/api/#flask.url_for
     @franky: The "key" should be unique in the DB. Generate new keys as long as
@@ -196,7 +199,7 @@ def store_registration(session, data, url, needs_confirmation=True):
                 data['group_name']))
 
         if needs_confirmation:
-            confirm_link = '{}/{}'.format(url, urllib.parse.quote_plus(key))
+            confirm_link = '{}/{}'.format(url, quote_plus(key))
             send('confirm',
                  to=(data['email'], data['contact_name']),
                  data={

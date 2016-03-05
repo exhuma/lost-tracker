@@ -70,16 +70,16 @@ app.config['SECRET_KEY'] = app.localconf.get('app', 'secret_key')
 app.config['SQLALCHEMY_DATABASE_URI'] = app.localconf.get('db', 'dsn')
 mdl.DB.init_app(app)
 app.config['SOCIAL_FACEBOOK'] = {
-    'consumer_key': app.localconf['facebook']['consumer_key'],
-    'consumer_secret': app.localconf['facebook']['consumer_secret']
+    'consumer_key': app.localconf.get('facebook', 'consumer_key'),
+    'consumer_secret': app.localconf.get('facebook', 'consumer_secret')
 }
 app.config['SOCIAL_TWITTER'] = {
-    'consumer_key': app.localconf['twitter']['consumer_key'],
-    'consumer_secret': app.localconf['twitter']['consumer_secret']
+    'consumer_key': app.localconf.get('twitter', 'consumer_key'),
+    'consumer_secret': app.localconf.get('twitter', 'consumer_secret')
 }
 app.config['SOCIAL_GOOGLE'] = {
-    'consumer_key': app.localconf['google']['consumer_key'],
-    'consumer_secret': app.localconf['google']['consumer_secret'],
+    'consumer_key': app.localconf.get('google', 'consumer_key'),
+    'consumer_secret': app.localconf.get('google', 'consumer_secret'),
     'request_token_params': {
         'scope': ('https://www.googleapis.com/auth/userinfo.profile '
                   'https://www.googleapis.com/auth/plus.me '
