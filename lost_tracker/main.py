@@ -166,6 +166,7 @@ def inject_context():
     registration_open = mdl.Setting.get(g.session, 'registration_open',
                                         default=False)
     event_date = mdl.Setting.get(g.session, 'event_date', None)
+    event_date = datetime.strptime(event_date, '%Y-%m-%d') if event_date else None  # NOQA
     if event_date and event_date >= datetime.now():
         date_locale = get_locale()
         if date_locale == 'lu':  # bugfix?
