@@ -10,12 +10,14 @@
 {% block mainmenu %}
     <div id="menu">
       <span id="#mainmenu">
-        <a href="http://www.lost.lu"><strong>Lost.lu</strong></a> |
+        <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
+        <a href="{{url_for('where')}}">{{_('Where is this?')}}</a> |
         {% if registration_open %}
           <a href="{{url_for('registration.new')}}">{{_('Register')}}</a> |
         {% endif %}
         <a href="{{url_for('photo.gallery')}}">{{_('Pictures')}}</a> |
         <a href="{{url_for('scoreboard')}}">{{_('Scoreboard')}}</a> |
+        <a href="{{url_for('misc')}}">{{_('Anything else?')}}</a>
       </span>
 
       <span id="flags">

@@ -225,6 +225,20 @@ def teardown_request(exc):
 
 
 @app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/where')
+def where():
+    return render_template('where.html')
+
+
+@app.route('/misc')
+def misc():
+    return render_template('misc.html')
+
+
 @app.route('/matrix')
 def matrix():
     stations = mdl.Station.all()
