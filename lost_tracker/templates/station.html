@@ -6,8 +6,8 @@
 
 <h1>{{station.name}}</h1>
 
-{% if Setting.get(g.session, 'helpdesk', default=None) %}
-<p>{{Setting.get(g.session, 'helpdesk')}}</p>
+{% if Setting.get('helpdesk', default=None) %}
+<p>{{Setting.get('helpdesk')}}</p>
 {% endif %}
 
 {% for row in group_states %}

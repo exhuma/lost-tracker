@@ -21,7 +21,7 @@ REGISTRATION = Blueprint('registration', __name__)
 
 @REGISTRATION.route('/new', methods=['GET', 'POST'])
 def new():
-    is_open = mdl.Setting.get(mdl.DB.session, 'registration_open', default=False)
+    is_open = mdl.Setting.get('registration_open', default=False)
     if not is_open:
         return render_template('registration_closed.html')
 
@@ -58,7 +58,7 @@ def new():
 @REGISTRATION.route('/confirm')
 @REGISTRATION.route('/confirm/<key>')
 def confirm(key):
-    is_open = mdl.Setting.get(mdl.DB.session, 'registration_open', default=False)
+    is_open = mdl.Setting.get('registration_open', default=False)
     if not is_open:
         return "Access denied", 401
 
