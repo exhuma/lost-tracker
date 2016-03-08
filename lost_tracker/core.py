@@ -7,6 +7,7 @@ from lost_tracker.models import (
     Form,
     Group,
     GroupStation,
+    Role,
     STATE_ARRIVED,
     STATE_FINISHED,
     STATE_UNKNOWN,
@@ -136,7 +137,7 @@ def add_form(session, name, max_score, order=0):
     return new_form
 
 
-def store_registration(mailer, session, data, url, needs_confirmation=True):
+def store_registration(mailer, session, data):
     """
     Stores a registration to the database.
 
@@ -144,23 +145,9 @@ def store_registration(mailer, session, data, url, needs_confirmation=True):
 
         * group_name
         * contact_name
-        * email
         * tel
         * time
         * comments
-
-    If *needs_confirmation* is true (the default), this method will store the
-    reservation as "not yet confirmed". An e-mail will be sent out to the
-    address specified in the *email* field. The e-mail will contain a link to
-    ``/confirm/<key>`` where ``<key`` is a randomly generated string.
-
-    @franky: implement
-    @franky: quote_plus(os.urandom(50).encode('base64')[0:30])
-    @franky: See ``_external`` at
-             http://flask.pocoo.org/docs/api/#flask.url_for
-    @franky: The "key" should be unique in the DB. Generate new keys as long as
-             duplicates are found in the DB.
-    mailing with python: https://pypi.python.org/pypi/Envelopes/0.4
     """
     qry = Group.query.filter_by(name=data['group_name'])
     check = qry.first()
@@ -169,6 +156,7 @@ def store_registration(mailer, session, data, url, needs_confirmation=True):
             data['group_name']))
     else:
         key = os.urandom(50).encode('base64').replace('/', '')[0:20]
+        # Regenerate keys if needed (just in case to avoid duplicates).
         qry = Group.query.filter_by(confirmation_key=key)
         check_key = qry.first()
         while check_key:
@@ -181,10 +169,9 @@ def store_registration(mailer, session, data, url, needs_confirmation=True):
                         data['tel'],
                         None,
                         data['time'],
-                        data['email'],
                         data['comments'],
-                        key
-                        )
+                        key,
+                        data['user_id'])
         new_grp.order = start_time_to_order(data['time'])
 
         session.add(new_grp)
@@ -197,18 +184,15 @@ def store_registration(mailer, session, data, url, needs_confirmation=True):
             raise ValueError('Error while adding the new group {0}'.format(
                 data['group_name']))
 
-        if needs_confirmation:
-            confirm_link = '{}/{}'.format(url, quote_plus(key))
-            mailer.send('confirm',
-                        to=(data['email'], data['contact_name']),
-                        data={
-                            'confirmation_link': confirm_link
-                        })
-        return True
+        return key
 
 
 def confirm_registration(mailer, key, activation_url):
     """
+    OBSOLETE: This step is obsolete since we now have social logins. This was a
+              measure to prevent spam. Requireing social logins removes this
+              issue. Email notifications have already been removed!
+
     If a user received a confirmation e-mail, this method will be called if the
     user clicks the confirmation key. The registration is put into 'pending'
     state and e-mails will be sent to the people who manage the event
@@ -220,7 +204,6 @@ def confirm_registration(mailer, key, activation_url):
     grp = query.first()
 
     if grp:
-
         if grp.is_confirmed:
             # Group is already confirmed. Don't process it further (no
             # additional mails will be sent).
@@ -228,19 +211,16 @@ def confirm_registration(mailer, key, activation_url):
             return True
 
         grp.is_confirmed = True
+        admin_query = Role.query.filter(Role.name == 'admin')
+        if admin_query.count():
+            mails = [user.email for user in admin_query[0].user]
+            mailer.send('registration_check',
+                        to=mails,
+                        data={
+                            'group': grp,
+                            'activation_url': activation_url
+                        })
 
-        query = User.query
-        user = query.all()
-        mails = []
-        for line in user:
-            mails.append(line.email)
-
-        mailer.send('registration_check',
-                    to=mails,
-                    data={
-                        'group': grp,
-                        'activation_url': activation_url
-                    })
         return True
 
     else:
@@ -249,11 +229,9 @@ def confirm_registration(mailer, key, activation_url):
 
 def accept_registration(mailer, key, data):
     """
-    This method is called if a manager clicked the "accept" link, an e-mail is
-    sent out to the reservation contact telling them all is done. The
+    This method is called if a staff-member clicked the "accept" link, an e-mail
+    is sent out to the reservation contact telling them all is done. The
     registration is marked as 'finalized'.
-
-    @franky: implement
     """
     query = Group.query.filter(Group.confirmation_key == key)
     grp = query.first()

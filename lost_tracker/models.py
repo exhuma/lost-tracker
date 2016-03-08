@@ -105,8 +105,8 @@ class Group(DB.Model):
     phone = Column(Unicode(20))
     direction = Column(Unicode)
     _start_time = Column(Unicode(5), name="start_time")
-    email = Column(Unicode)
     comments = Column(Unicode)
+    user_id = Column(Integer, ForeignKey('user.id'))
     is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
     finalized = Column(Boolean, server_default='false', default=False)
@@ -114,19 +114,26 @@ class Group(DB.Model):
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
 
+    user = relationship('User')
     stations = relationship('GroupStation')
 
-    def __init__(self, name=None, contact=None,
-                 phone=None, direction=None, start_time=None,
-                 email=None, comments=None, confirmation_key=None):
+    def __init__(self,
+                 name=None,
+                 contact=None,
+                 phone=None,
+                 direction=None,
+                 start_time=None,
+                 comments=None,
+                 confirmation_key=None,
+                 user_id=None):
         self.name = name
         self.contact = contact
         self.phone = phone
         self.direction = direction
         self.start_time = start_time
-        self.email = email
         self.comments = comments
         self.confirmation_key = confirmation_key
+        self.user_id = user_id
 
     def __repr__(self):
         return '<Group %r>' % (self.name)
@@ -162,7 +169,7 @@ class Group(DB.Model):
         elif 'name' in filters:
             group = group.filter_by(name=filters['name'])
         elif 'key' in filters:
-            group = group.filter_by(confirmation_key=filters['_key'])
+            group = group.filter_by(confirmation_key=filters['key'])
         group = group.one()
         return group
 
@@ -189,7 +196,6 @@ class Group(DB.Model):
             'phone': self.phone,
             'direction': self.direction,
             'start_time': self._start_time,
-            'email': self.email,
             'comments': self.comments,
             'is_confirmed': self.is_confirmed,
             'finalized': self.finalized,

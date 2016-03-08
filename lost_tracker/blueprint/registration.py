@@ -9,6 +9,7 @@ from flask import (
 
 from flask.ext.babel import gettext
 from flask.ext.security import (
+    current_user,
     login_required,
     roles_accepted,
 )
@@ -30,50 +31,35 @@ def new():
         data = {
             "group_name": request.form.get('group_name'),
             "contact_name": request.form.get('contact_name'),
-            "email": request.form.get('email'),
             "tel": request.form.get('tel'),
             "time": request.form.get('time'),
             "comments": request.form.get('comments'),
+            "user_id": current_user.id,
         }
-        confirmation_link = url_for('.confirm',
-                                    _external=True)
         try:
-            loco.store_registration(current_app.mailer, mdl.DB.session, data,
-                                    confirmation_link)
+            key = loco.store_registration(
+                current_app.mailer, mdl.DB.session, data)
         except ValueError as exc:
             return 'Error: ' + str(exc), 400
+
+        # We'll auto-confirm the registration. This is not possible due to the
+        # social login. However, this step could be removed altogether. Leaving
+        # it in right now to avoid making too many changes all at once.
+        loco.confirm_registration(
+            current_app.mailer,
+            key,
+            activation_url=url_for('.accept',
+                                key=key,
+                                _external=True))
+
         return render_template(
             'notice.html',
             message=gettext(
-                'The registration has been recorded. However it is not yet '
-                'activated.  You will receive a confirmation e-mail any '
-                'second now. You must click on the link in that e-mail to '
-                'activate the registrtion! Once this step is done, the '
-                'registration will be processed by the lost team, and you '
-                'will receive another e-mail with the final confirmation once '
-                'that is done.'))
+                'The registration has been recorded. You will receive an '
+                'e-mail once the registartion has been successfully '
+                'processed!'))
 
     return render_template('register.html', stats=loco.stats())
-
-
-@REGISTRATION.route('/confirm')
-@REGISTRATION.route('/confirm/<key>')
-@login_required
-def confirm(key):
-    is_open = mdl.Setting.get('registration_open', default=False)
-    if not is_open:
-        return "Access denied", 401
-
-    loco.confirm_registration(
-        current_app.mailer,
-        key,
-        activation_url=url_for('.accept',
-                               key=key,
-                               _external=True))
-    return render_template('notice.html', message=gettext(
-        'Thank you. Your registration has been activated and the lost-team '
-        'has been notified about your entry. Once everything is processed you '
-        'will recieve another e-mail with the final details.'))
 
 
 @REGISTRATION.route('/accept/<key>')
@@ -83,6 +69,8 @@ def accept(key):
 
     if group.finalized:
         flash(gettext('This group has already been accepted!'), 'info')
+
+    group.finalized = True
 
     return render_template('edit_group.html',
                            group=group,
