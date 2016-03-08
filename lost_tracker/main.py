@@ -169,10 +169,9 @@ def get_locale():
 def inject_context():
     registration_open = mdl.Setting.get('registration_open', default=False)
     event_date = mdl.Setting.get('event_date', None)
-    event_date = datetime.strptime(event_date, '%Y-%m-%d') if event_date else None  # NOQA
     location_display = mdl.Setting.get('event_location', '')
     coords = mdl.Setting.get('location_coords', '')
-    if event_date and event_date >= datetime.now():
+    if event_date and event_date >= datetime.now().date():
         date_locale = get_locale()
         if date_locale == 'lu':  # bugfix?
             date_locale = 'de'
@@ -332,9 +331,8 @@ def delete_station(id):
 @app.route('/settings')
 @roles_accepted('admin')
 def settings():
-    settings = {stng.key: stng.value for stng in mdl.Setting.all(mdl.DB.session)}
-    if 'event_date' in settings and settings['event_date']:
-        settings['event_date'] = settings['event_date']
+    settings = {stng.key: stng.value
+                for stng in mdl.Setting.all(mdl.DB.session)}
     return render_template('settings.html', settings=settings)
 
 
@@ -345,8 +343,6 @@ def save_settings():
     registration_open = request.form.get('registration_open', '') == 'on'
     shout = request.form.get('shout', '')
     event_date = request.form.get('event_date', '')
-    if event_date:
-        event_date = datetime.strptime(event_date, '%Y-%m-%d')
     event_location = request.form.get('event_location', '')
     location_coords = request.form.get('location_coords', '')
 

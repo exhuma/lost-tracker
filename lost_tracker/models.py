@@ -280,6 +280,14 @@ class Setting(DB.Model):
     value_ = Column('value', Unicode())
     description = Column('description', Unicode())
 
+    # Allow simple conversions for saved values.
+    TYPECONVERSION = {
+        'event_date': (
+            lambda val: datetime.strptime(val, '%Y-%m-%d').date() if val else None,  # NOQA
+            lambda val: val.strftime('%Y-%m-%d') if val else ''
+        )
+    }
+
     def __init__(self, key, value):
         self.key = key
         self.value_ = dumps(value, default=custom_json_serializer)
@@ -308,12 +316,19 @@ class Setting(DB.Model):
         row = query.first()
         if not row:
             new_row = Setting.put(DB.session, key, default)
-            return new_row.value
-        return row.value
+            output = new_row.value
+        else:
+            output = row.value
+
+        convert_outof_db, _ = Setting.TYPECONVERSION.get(
+            key, (lambda x: x, None))
+        return convert_outof_db(output)
 
     @staticmethod
     def put(session, key, value):
-        row = Setting(key, value)
+        _, convert_into_db = Setting.TYPECONVERSION.get(
+            key, (None, lambda x: x))
+        row = Setting(key, convert_into_db(value))
         new_row = session.merge(row)
         session.add(new_row)
         return new_row
