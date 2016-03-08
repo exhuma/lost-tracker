@@ -5,7 +5,7 @@
 {% block content %}
 {% if registration_open %}
   <div class="admonition note">
-    {{_('Registration is <strong>open</strong>! <a href="{url}">Register now!</a>').format(url=url_for('register'))}}
+    {{_('Registration is <strong>open</strong>! <a href="{url}">Register now!</a>').format(url=url_for('registration.new'))}}
     <hr />
     {{_('It may take a few days until your registration is accepted. Please be patient!')}}
   </div>
