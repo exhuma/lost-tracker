@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    current_app,
     flash,
     render_template,
     request,
@@ -36,7 +37,8 @@ def new():
         confirmation_link = url_for('.confirm',
                                     _external=True)
         try:
-            loco.store_registration(mdl.DB.session, data, confirmation_link)
+            loco.store_registration(current_app.mailer, mdl.DB.session, data,
+                                    confirmation_link)
         except ValueError as exc:
             return 'Error: ' + str(exc), 400
         return render_template(
@@ -61,6 +63,7 @@ def confirm(key):
         return "Access denied", 401
 
     loco.confirm_registration(
+        current_app.mailer,
         key,
         activation_url=url_for('.accept',
                                key=key,

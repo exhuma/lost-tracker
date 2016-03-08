@@ -46,6 +46,7 @@ from lost_tracker.blueprint.registration import REGISTRATION
 from lost_tracker.blueprint.station import STATION
 from lost_tracker.blueprint.tabedit import TABULAR
 from lost_tracker.blueprint.user import USER
+from lost_tracker.emails import Mailer
 
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -97,6 +98,15 @@ app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 app.register_blueprint(USER, url_prefix=USER_PREFIX)
 
 babel = Babel(app)
+
+
+class DummyMailer(object):
+    """
+    A mailer class for testing. Does not actually send any e-mails.
+    """
+
+    def send(self, *args, **kwargs):
+        print("DummyMailer.send called with %r %r" % (args, kwargs))
 
 
 def get_facebook_email(oauth_response):
@@ -390,7 +400,12 @@ def profile():
 if __name__ == '__main__':
     import logging
     logging.basicConfig(level=logging.DEBUG)
-    app.run(debug=userbool(app.localconf.get('devserver', 'debug',
-                                             default=False)),
+    DEBUG = userbool(app.localconf.get('devserver', 'debug',
+                                       default=False))
+    if DEBUG:
+        app.mailer = DummyMailer()
+    else:
+        app.mailer = Mailer()
+    app.run(debug=DEBUG,
             host=app.localconf.get('devserver', 'listen'),
             port=int(app.localconf.get('devserver', 'port')))

@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    current_app,
     flash,
     jsonify,
     redirect,
@@ -38,12 +39,14 @@ def set_score(group_id, station_id):
 def save_info(id):
     group = mdl.Group.one(id=id)
     if not group.finalized:
-        loco.accept_registration(group.confirmation_key, request.form)
+        loco.accept_registration(current_app.mailer, group.confirmation_key,
+                                 request.form)
         flash(gettext('Accepted registration for group {}').format(group.name),
               'info')
         return redirect(url_for('matrix'))
     else:
-        loco.update_group(id,
+        loco.update_group(current_app.mailer,
+                          id,
                           request.form,
                           request.form['send_email'] == 'true')
         flash(gettext('Group {name} successfully updated!').format(

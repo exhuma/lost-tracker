@@ -1,6 +1,5 @@
 from stat import S_ISREG, ST_CTIME, ST_MODE
 
-from lost_tracker.emails import send
 from lost_tracker.util import start_time_to_order
 from lost_tracker.models import (
     DIR_A,
@@ -137,7 +136,7 @@ def add_form(session, name, max_score, order=0):
     return new_form
 
 
-def store_registration(session, data, url, needs_confirmation=True):
+def store_registration(mailer, session, data, url, needs_confirmation=True):
     """
     Stores a registration to the database.
 
@@ -200,15 +199,15 @@ def store_registration(session, data, url, needs_confirmation=True):
 
         if needs_confirmation:
             confirm_link = '{}/{}'.format(url, quote_plus(key))
-            send('confirm',
-                 to=(data['email'], data['contact_name']),
-                 data={
-                     'confirmation_link': confirm_link
-                 })
+            mailer.send('confirm',
+                        to=(data['email'], data['contact_name']),
+                        data={
+                            'confirmation_link': confirm_link
+                        })
         return True
 
 
-def confirm_registration(key, activation_url):
+def confirm_registration(mailer, key, activation_url):
     """
     If a user received a confirmation e-mail, this method will be called if the
     user clicks the confirmation key. The registration is put into 'pending'
@@ -236,19 +235,19 @@ def confirm_registration(key, activation_url):
         for line in user:
             mails.append(line.email)
 
-        send('registration_check',
-             to=mails,
-             data={
-                 'group': grp,
-                 'activation_url': activation_url
-             })
+        mailer.send('registration_check',
+                    to=mails,
+                    data={
+                        'group': grp,
+                        'activation_url': activation_url
+                    })
         return True
 
     else:
         raise ValueError('Given key not found in DB')
 
 
-def accept_registration(key, data):
+def accept_registration(mailer, key, data):
     """
     This method is called if a manager clicked the "accept" link, an e-mail is
     sent out to the reservation contact telling them all is done. The
@@ -271,17 +270,17 @@ def accept_registration(key, data):
             grp.comments = data['comments']
             grp.contact = data['contact']
             grp.email = data['email']
-            send('welcome',
-                 to=(grp.email, grp.name),
-                 data={
-                     'group': grp
-                 })
+            mailer.send('welcome',
+                        to=(grp.email, grp.name),
+                        data={
+                            'group': grp
+                        })
             return True
     else:
         raise ValueError('Given key not found in DB')
 
 
-def update_group(id, data, send_email=True):
+def update_group(mailer, id, data, send_email=True):
     """
     Updates an existing group.
     """
@@ -295,11 +294,11 @@ def update_group(id, data, send_email=True):
     group.email = data['email']
 
     if send_email:
-        send('registration_update',
-             to=(data['email'], data['contact']),
-             data={
-                 'group': group
-             })
+        mailer.send('registration_update',
+                    to=(data['email'], data['contact']),
+                    data={
+                        'group': group
+                    })
 
 
 def auth(login, password):
