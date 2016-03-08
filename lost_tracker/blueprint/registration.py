@@ -9,7 +9,7 @@ from flask import (
 
 from flask.ext.babel import gettext
 from flask.ext.security import (
-    current_user,
+    login_required,
     roles_accepted,
 )
 
@@ -20,6 +20,7 @@ REGISTRATION = Blueprint('registration', __name__)
 
 
 @REGISTRATION.route('/new', methods=['GET', 'POST'])
+@login_required
 def new():
     is_open = mdl.Setting.get('registration_open', default=False)
     if not is_open:
@@ -57,6 +58,7 @@ def new():
 
 @REGISTRATION.route('/confirm')
 @REGISTRATION.route('/confirm/<key>')
+@login_required
 def confirm(key):
     is_open = mdl.Setting.get('registration_open', default=False)
     if not is_open:
