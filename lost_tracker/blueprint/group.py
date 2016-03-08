@@ -53,7 +53,7 @@ def save_info(id):
             name=request.form['name']), 'info')
         if request.form['send_email'] == 'true':
             flash(gettext('E-Mail sent successfully!'), 'info')
-            return redirect(url_for('tabular.tabularadmin', table='group'))
+            return redirect(url_for('tabular.tabularadmin', name='group'))
 
 
 @GROUP.route('/<group_name>/timeslot', methods=['PUT'])
