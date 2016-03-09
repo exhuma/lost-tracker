@@ -245,7 +245,7 @@ lost_tracker.Tabulator.prototype.saveNewRow = function(node) {
   var table = goog.dom.getAncestorByTagNameAndClass(node, 'TABLE');
   var data = row.getAttribute('data-values');
   var table = table.getAttribute('data-name');
-  var url = $TABULAR_PREFIX + '/' + table;
+  var url = $TABULAR_PREFIX + '/table/' + table;
   node.src = loaderUrl;
   goog.net.XhrIo.send(url, function(evt) {
     var xhr = evt.target;

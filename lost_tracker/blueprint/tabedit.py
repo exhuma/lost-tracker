@@ -85,6 +85,32 @@ def tabularadmin(name):
                            data=rows)
 
 
+@TABULAR.route('/table/<name>', methods=['POST'])
+@roles_accepted(mdl.Role.ADMIN)
+def store_new_row(name):
+    if name not in MODIFIABLE_TABLES:
+        return gettext('Access Denied'), 403
+
+    payload = request.json
+    if name == 'group':
+        entity_class = mdl.Group
+    elif name == 'station':
+        entity_class = mdl.Station
+    elif name == 'form':
+        entity_class = mdl.Form
+    else:
+        return gettext('Table {name} not yet supported!').format(
+            name=name), 400
+
+    entity = entity_class()
+    for column in entity_class.__table__.columns:
+        setattr(entity, column.name, payload.get(column.name))
+
+    mdl.DB.session.add(entity)
+    mdl.DB.session.commit()
+    return '"OK"'
+
+
 @TABULAR.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
 @roles_accepted(mdl.Role.ADMIN)
 def update_cell_value(cls, key, datum):
