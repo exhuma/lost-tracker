@@ -6,6 +6,15 @@
   {% endif %}
 {% endmacro %}
 
+{% macro avatar(user, size) %}
+  {% if current_user and current_user.social_connections and current_user.social_connections[0].image_url %}
+    <img align="middle" width="{{size}}" height="{{size}}" class="avatar" src="{{current_user.social_connections[0].image_url}}" alt="Avatar" />
+  {% else %}
+    <img align="middle" width="{{size}}" height="{{size}}" class="avatar" src="{{url_for('static', filename='images/generic_avatar.png')}}" alt="Avatar" />
+  {% endif %}
+
+{% endmacro %}
+
 
 {% block mainmenu %}
     <div id="menu">
@@ -28,7 +37,7 @@
 
       <span id="auth">
         {% if current_user.is_authenticated %}
-          {{_('Logged in as:')}} <a href="{{url_for('profile')}}">{{current_user.name}}</a>{{'*' if current_user.admin else ''}} |
+          {{_('Logged in as:')}} <a href="{{url_for('profile')}}">{{avatar(current_user, 20)}} {{current_user.name}}</a>{{'*' if current_user.admin else ''}} |
           {{ seclink('admin', url_for('group.list'), _('List')) }} |
           <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
           {{ seclink('admin', url_for('slot_editor'), _('Slot Editor')) }} |

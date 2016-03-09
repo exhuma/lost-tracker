@@ -39,3 +39,7 @@
 *:first-child+html .goog-inline-block {
   display: inline;
 }
+
+.avatar {
+    border-radius: 50%;
+}
