@@ -87,10 +87,10 @@ def update_cell_value(cls, key, datum):
         return gettext('Access Denied'), 401
 
     data = request.json
-    table = mdl.Base.metadata.tables[cls]
+    table = mdl.DB.metadata.tables[cls]
 
     if table.columns[datum].type.__class__ == Unicode:
-        coerce_ = str.strip
+        coerce_ = unicode.strip
     elif table.columns[datum].type.__class__ == Integer:
         coerce_ = int
     else:
