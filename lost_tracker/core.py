@@ -250,24 +250,44 @@ def accept_registration(mailer, key, group):
     return True
 
 
-def update_group(mailer, id, data, send_email=True):
+def update_group(mailer, id, data):
     """
     Updates an existing group.
     """
     group = Group.one(id=id)
-    group.direction = data['direction']
     group.name = data['name']
     group.phone = data['phone']
-    group.start_time = data['start_time']
     group.comments = data['comments']
     group.contact = data['contact']
 
-    if send_email:
+    if 'direction' in data:
+        group.direction = data['direction']
+
+    if 'start_time' in data:
+        group.start_time = data['start_time']
+
+    send_email = data.get('send_email', True)
+    if data['notification_recipient'] == 'admins':
+        admin_query = Role.query.filter(Role.name == 'admin')
+        if admin_query.count():
+            recipients = [(user.email, user.name)
+                          for user in admin_query[0].user]
+        else:
+            recipients = []
+    elif data['notification_recipient'] == 'owner':
+        recipients = [(group.user.email, data['contact'])]
+    else:
+        LOG.warning('Got an unexpected mail recipient hint: %r',
+                    data['notification_recipient'])
+
+    if send_email and recipients:
         mailer.send('registration_update',
-                    to=[(group.user.email, data['contact'])],
+                    to=recipients,
                     data={
                         'group': group
                     })
+    else:
+        LOG.debug('No mail sent: vars=%r', locals())
 
 
 def auth(login, password):

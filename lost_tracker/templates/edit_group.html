@@ -6,6 +6,7 @@
   <fieldset>
     <legend>{{_('Group Infos')}}</legend>
     <input type="hidden" name="id" value="{{group.id}}" />
+    <input type="hidden" name="intent" value="{{'accept' if current_user.has_role('admin') else 'update'}}" />
     <dl>
       <dt>{{_('Name')}}</dt>
       <dd><input type="text" name="name" value="{{group.name}}" /></dd>
@@ -13,20 +14,24 @@
       <dd><input type="text" name="contact" value="{{group.contact}}" /></dd>
       <dt>{{_('Phone')}}</dt>
       <dd><input type="text" name="phone" value="{{group.phone}}" /></dd>
-      <dt>{{_('Direction')}}</dt>
-      <dd>
-        <select name="direction">
-          <option value="{{dir_a}}" disabled {{'selected' if group.direction not in (dir_a, dir_b)}}>{{_('Direction')}}</option>
-          <option value="{{dir_a}}" {{'selected' if group.direction == dir_a}}>{{dir_a}}</option>
-          <option value="{{dir_b}}" {{'selected' if group.direction == dir_b}}>{{dir_b}}</option>
-        </select>
-      </dd>
-      <dt>{{_('Starting Time')}}</dt>
-      <dd><input type="text" name="start_time" value="{{group.start_time}}"/></dd>
+      {% if current_user.has_role('admin') %}
+        <dt>{{_('Direction')}}</dt>
+        <dd>
+          <select name="direction">
+            <option value="{{dir_a}}" disabled {{'selected' if group.direction not in (dir_a, dir_b)}}>{{_('Direction')}}</option>
+            <option value="{{dir_a}}" {{'selected' if group.direction == dir_a}}>{{dir_a}}</option>
+            <option value="{{dir_b}}" {{'selected' if group.direction == dir_b}}>{{dir_b}}</option>
+          </select>
+        </dd>
+        <dt>{{_('Starting Time')}}</dt>
+        <dd><input type="text" name="start_time" value="{{group.start_time}}"/></dd>
+      {% endif %}
       <dt>{{_('Comments')}}</dt>
       <dd><textarea name="comments" rows="10">{{group.comments}}</textarea></dd>
-      <dt>{{_('Options')}}</dt>
-      <dd><input type="checkbox" checked id="send_email" name="send_email" value="true" /><label for="send_email">{{_('Send e-mail to the group about the changes.')}}</label></dd>
+      {% if current_user.has_role('admin') %}
+        <dt>{{_('Options')}}</dt>
+        <dd><input type="checkbox" checked id="send_email" name="send_email" value="true" /><label for="send_email">{{_('Send e-mail to the group about the changes.')}}</label></dd>
+      {% endif %}
     </dl>
     <input type="submit" value="Save" />
   </fieldset>

@@ -114,7 +114,7 @@ class Group(DB.Model):
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
 
-    user = relationship('User')
+    user = relationship('User', backref="groups")
     stations = relationship('GroupStation')
 
     def __init__(self,

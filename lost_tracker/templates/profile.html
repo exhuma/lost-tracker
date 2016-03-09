@@ -1,4 +1,4 @@
-{% extends "master_wide.html" %}
+{% extends "master_narrow.html" %}
 
 {% macro show_provider_button(provider_id, display_name, conn) %}
     {% if conn %}
@@ -20,6 +20,36 @@
 {% endmacro %}
 
 {% block content %}
+  <h2>{{_("Your bookings")}}</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{{_("Name")}}</th>
+        <th>{{_("Starting Time")}}</th>
+        <th>{{_("Verified by he Lost team?")}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for group in current_user.groups %}
+        <tr>
+          <td><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
+          <td>{{group.start_time or "?"}}</td>
+          <td>{{group.finalized}}</td>
+        </tr>
+      {% else %}
+      <tr><td colspan="2">
+        <h3>{{_("No bookings")}}</h3>
+        <a href="{{url_for('registration.new')}}">{{_("Register")}}</a>
+      </td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+  <hr />
+
+
   <form id="profile_form" action="{{url_for('user.save_profile')}}" method="POST">
     <fieldset>
       <legend>{{_("Personal Information")}}</legend>
