@@ -62,14 +62,18 @@ def save_info(id):
     if current_user.has_role(mdl.Role.ADMIN):
         data['direction'] = request.form['direction']
         data['start_time'] = request.form['start_time']
-        data['send_email'] = request.form['send_email'] == 'true'
-        data['notification_recipient'] = 'owner'
+        data['send_email'] = request.form.get('send_email') == 'true'
+        data['cancelled'] = request.form.get('cancelled') == 'true'
+        data['finished'] = request.form.get('finished') == 'true'
         if intent == 'accept' and not group.finalized:
             loco.accept_registration(current_app.mailer,
                                      group.confirmation_key,
                                      group)
             flash(gettext('Accepted registration for group {}').format(
                 group.name), 'info')
+        else:
+            data['accepted'] = request.form.get('accepted') == 'true'
+        data['notification_recipient'] = 'owner'
 
     loco.update_group(current_app.mailer, id, data)
 
@@ -80,7 +84,7 @@ def save_info(id):
         flash(gettext('E-Mail sent successfully!'), 'info')
 
     if current_user.has_role(mdl.Role.ADMIN):
-        return redirect(url_for('tabular.tabularadmin', name='group'))
+        return redirect(url_for('group.edit', name=data['name']))
     else:
         return redirect(url_for('profile'))
 
@@ -102,7 +106,7 @@ def set_time_slot(group_name):
     return '{{"is_success": true, "group_id": {}}}'.format(group.id)
 
 
-@GROUP.route('/list')
+@GROUP.route('/')
 @roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def list():
     groups = mdl.Group.all()

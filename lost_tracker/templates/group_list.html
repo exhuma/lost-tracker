@@ -9,7 +9,7 @@
       <th>{{_("Registration Date")}}</th>
       <th>{{_("Start Time")}}</th>
       <th>{{_("Direction")}}</th>
-      <th>{{_("Edit Link")}}</th>
+      <th>{{_("Accept Registration")}}</th>
     </tr>
   </thead>
   <tbody>
@@ -17,14 +17,14 @@
     <tr>
       <td
         class="{{'finalized' if group.finalized else 'confirmed' if group.is_confirmed else ''}}"
-        data-group_id="{{group.id}}">{{group.name}}</td>
-      <td>{{group.inserted.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+        data-group_id="{{group.id}}"><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
+      <td>{{group.inserted.strftime('%Y-%m-%d %H:%M')}}</td>
       <td>{{group.start_time|default('', true)}}</td>
       <td>{{group.direction|default('', true)}}</td>
-      {% if group.confirmation_key %}
+      {% if group.confirmation_key and not group.finalized %}
         <td><a href="{{url_for('registration.accept', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
       {% else %}
-        <td>&nbsp;</td>
+        <td><i class="fa fa-check"></i></td>
       {% endif %}
     </tr>
     {%- endfor %}

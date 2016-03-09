@@ -266,6 +266,12 @@ def update_group(mailer, id, data):
     if 'start_time' in data:
         group.start_time = data['start_time']
 
+    if 'cancelled' in data:
+        group.cancelled = data['cancelled']
+
+    if 'finished' in data:
+        group.completed = data['finished']
+
     send_email = data.get('send_email', True)
     if data['notification_recipient'] == 'admins':
         admin_query = Role.query.filter(Role.name == Role.ADMIN)

@@ -53,7 +53,7 @@ GROUP_PREFIX = '/group'
 PHOTO_PREFIX = '/photo'
 REGISTRATION_PREFIX = '/registration'
 STATION_PREFIX = '/station'
-TABULAR_PREFIX = '/manage'
+TABULAR_PREFIX = '/tabedit'
 USER_PREFIX = '/user'
 
 

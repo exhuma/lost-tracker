@@ -41,7 +41,7 @@
           {{ seclink(Role.ADMIN, url_for('group.list'), _('List')) }} |
           <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
           {{ seclink(Role.ADMIN, url_for('slot_editor'), _('Slot Editor')) }} |
-          {{ seclink(Role.ADMIN, url_for('tabular.tabularadmin', name='group'), _('Manager'))}} |
+          {{ seclink(Role.ADMIN, url_for('group.list'), _('Manage Groups'))}} |
           {{ seclink(Role.ADMIN, url_for('settings'), _('Settings'))}} |
           <a href="{{url_for('security.logout')}}">{{_('Logout')}}</a>
         {% else %}
