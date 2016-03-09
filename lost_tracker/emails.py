@@ -19,7 +19,8 @@ class Mailer(object):
         elif template == 'welcome':
             subject = 'Welcome to Lost, your registration is completed.'
         else:
-            raise ValueError('Unsupported e-mail template: {}'.format(template))
+            raise ValueError('Unsupported e-mail template: {}'.format(
+                template))
 
         tmpl = _ENV.get_template('email/{}.txt'.format(template))
         content = tmpl.render(**data)

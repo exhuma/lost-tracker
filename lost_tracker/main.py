@@ -382,8 +382,8 @@ def profile():
     return render_template(
         'profile.html',
         content='Profile Page',
-        twitter_conn=social.twitter.get_connection() if social.twitter else None,
-        facebook_conn=social.facebook.get_connection() if social.facebook else None,
+        twitter_conn=social.twitter.get_connection() if social.twitter else None,  # NOQA
+        facebook_conn=social.facebook.get_connection() if social.facebook else None,  # NOQA
         google_conn=social.google.get_connection() if social.google else None)
 
 

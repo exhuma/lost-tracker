@@ -1,8 +1,7 @@
-from functools import wraps
 import logging
 import re
 
-from flask import request, Response, current_app
+from flask import current_app
 
 
 LOG = logging.getLogger(__name__)

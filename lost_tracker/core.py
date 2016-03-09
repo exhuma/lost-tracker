@@ -26,7 +26,7 @@ import os.path
 try:
     from urllib.parse import quote_plus
 except ImportError:
-    from urllib import quote_plus
+    from urllib import quote_plus  # NOQA
 
 LOG = logging.getLogger(__name__)
 WEB_IMAGES = {

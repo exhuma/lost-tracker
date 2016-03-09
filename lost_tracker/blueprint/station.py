@@ -11,7 +11,6 @@ from flask import (
 )
 
 from flask.ext.security import (
-    current_user,
     roles_accepted,
 )
 

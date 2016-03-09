@@ -49,8 +49,8 @@ def new():
             current_app.mailer,
             key,
             activation_url=url_for('.accept',
-                                key=key,
-                                _external=True))
+                                   key=key,
+                                   _external=True))
 
         return render_template(
             'notice.html',
