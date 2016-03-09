@@ -69,7 +69,7 @@ class Matrix(object):
     def sums(self):
         """
         Creates a list where each element contains the sum of "unknown",
-        "arrived" and "finished" states for each station.
+        "arrived" and "completed" states for each station.
         """
         # TODO: make this a list of namedtuples!
         if not self._matrix:
@@ -231,16 +231,16 @@ def accept_registration(mailer, key, group):
     """
     This method is called if a staff-member clicked the "accept" link, an e-mail
     is sent out to the reservation contact telling them all is done. The
-    registration is marked as 'finalized'.
+    registration is marked as 'accepted'.
     """
 
     if not group:
         return False
 
-    if group.finalized:
+    if group.accepted:
         return False
 
-    group.finalized = True
+    group.accepted = True
 
     mailer.send('welcome',
                 to=[(group.user.email, group.name)],
@@ -269,8 +269,8 @@ def update_group(mailer, id, data):
     if 'cancelled' in data:
         group.cancelled = data['cancelled']
 
-    if 'finished' in data:
-        group.completed = data['finished']
+    if 'completed' in data:
+        group.completed = data['completed']
 
     send_email = data.get('send_email', True)
     if data['notification_recipient'] == 'admins':

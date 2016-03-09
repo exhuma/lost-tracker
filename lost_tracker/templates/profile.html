@@ -35,7 +35,7 @@
         <tr>
           <td><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
           <td>{{group.start_time or "?"}}</td>
-          <td>{{group.finalized}}</td>
+          <td>{{group.accepted}}</td>
         </tr>
       {% else %}
       <tr><td colspan="2">

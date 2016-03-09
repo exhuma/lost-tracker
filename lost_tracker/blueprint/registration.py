@@ -68,7 +68,7 @@ def new():
 def accept(key):
     group = mdl.Group.one(key=key)
 
-    if group.finalized:
+    if group.accepted:
         flash(gettext('This group has already been accepted!'), 'info')
 
     loco.accept_registration(current_app.mailer, key, group)

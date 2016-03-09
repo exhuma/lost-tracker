@@ -64,8 +64,8 @@ def save_info(id):
         data['start_time'] = request.form['start_time']
         data['send_email'] = request.form.get('send_email') == 'true'
         data['cancelled'] = request.form.get('cancelled') == 'true'
-        data['finished'] = request.form.get('finished') == 'true'
-        if intent == 'accept' and not group.finalized:
+        data['completed'] = request.form.get('completed') == 'true'
+        if intent == 'accept' and not group.accepted:
             loco.accept_registration(current_app.mailer,
                                      group.confirmation_key,
                                      group)

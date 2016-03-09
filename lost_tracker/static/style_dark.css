@@ -71,7 +71,7 @@ TD.confirmed {
     border: 2px dotted yellow;
 }
 
-TD.finalized {
+TD.accepted {
     border: 2px solid green;
 }
 

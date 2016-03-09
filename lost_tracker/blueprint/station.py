@@ -24,7 +24,7 @@ STATION = Blueprint('station', __name__)
 def _stategetter(element):
     """
     Custom sorting for group states. Make "arrived" groups come first,
-    then all "unknowns". Make "finished" and "cancelled" groups come last.
+    then all "unknowns". Make "completed" and "cancelled" groups come last.
     """
     if element is None or element.state is None:
         return 1

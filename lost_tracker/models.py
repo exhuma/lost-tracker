@@ -109,7 +109,7 @@ class Group(DB.Model):
     user_id = Column(Integer, ForeignKey('user.id'))
     is_confirmed = Column(Boolean, server_default='false', default=False)
     confirmation_key = Column(Unicode(20), unique=True)
-    finalized = Column(Boolean, server_default='false', default=False)
+    accepted = Column(Boolean, server_default='false', default=False)
     completed = Column(Boolean, server_default='false', default=False)
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
@@ -198,7 +198,7 @@ class Group(DB.Model):
             'start_time': self._start_time,
             'comments': self.comments,
             'is_confirmed': self.is_confirmed,
-            'finalized': self.finalized,
+            'accepted': self.accepted,
             'completed': self.completed,
         }
 

@@ -116,7 +116,7 @@ DIV.group .form_icon {
 }
 
 .arrived,
-.finished,
+.completed,
 .state_0,
 .state_1,
 .state_2,
@@ -138,7 +138,7 @@ DIV.group .form_icon {
 }
 
 .state_2,
-.finished {
+.completed {
     background: hsl(120, 100%, 20%);
     color: hsl(120, 100%, 75%);
 }
@@ -156,7 +156,7 @@ DIV.group .form_icon {
 }
 
 .group.state_2,
-.group.finished {
+.group.completed {
     background: hsla(120, 100%, 10%, 0.5);
     color: hsl(120, 100%, 75%);
 }

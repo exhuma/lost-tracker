@@ -33,9 +33,9 @@
         <dt>{{_('Starting Time')}}</dt>
         <dd><input type="text" name="start_time" value="{{group.start_time}}"/></dd>
         <dt>{{_('Flags')}}</dt>
-        <dd><input type="checkbox" {{'checked' if group.finalized else ''}} id="accepted" name="accepted" value="true" /><label for="accepted">{{_('Group registration has been accepted')}}</label></dd>
+        <dd><input type="checkbox" {{'checked' if group.accepted else ''}} id="accepted" name="accepted" value="true" /><label for="accepted">{{_('Group registration has been accepted')}}</label></dd>
         <dd><input type="checkbox" {{'checked' if group.cancelled else ''}} id="cancelled" name="cancelled" value="true" /><label for="cancelled">{{_('Group has cancelled')}}</label></dd>
-        <dd><input type="checkbox" {{'checked' if group.completed else ''}} id="finished" name="finished" value="true" /><label for="finished">{{_('Group has finished')}}</label></dd>
+        <dd><input type="checkbox" {{'checked' if group.completed else ''}} id="completed" name="completed" value="true" /><label for="completed">{{_('Group has completed')}}</label></dd>
       {% endif %}
       <dt>{{_('Comments')}}</dt>
       <dd><textarea name="comments" rows="10">{{group.comments}}</textarea></dd>
