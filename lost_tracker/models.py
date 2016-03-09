@@ -478,6 +478,9 @@ roles_users = DB.Table(
 class Role(DB.Model, RoleMixin):
     __tablename__ = 'role'
 
+    ADMIN = 'admin'
+    STAFF = 'staff'
+
     id = Column(Integer(), primary_key=True)
     name = Column(Unicode(80), unique=True)
     description = Column(Unicode(255))

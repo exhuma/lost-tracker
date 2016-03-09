@@ -22,7 +22,7 @@ TABULAR = Blueprint('tabular', __name__)
 
 
 @TABULAR.route('/table/<name>')
-@roles_accepted('admin')
+@roles_accepted(mdl.Role.ADMIN)
 def tabularadmin(name):
     if name not in MODIFIABLE_TABLES:
         return gettext('Access Denied'), 401
@@ -80,7 +80,7 @@ def tabularadmin(name):
 
 
 @TABULAR.route('/cell/<cls>/<key>/<datum>', methods=['PUT'])
-@roles_accepted('admin')
+@roles_accepted(mdl.Role.ADMIN)
 def update_cell_value(cls, key, datum):
 
     if cls not in MODIFIABLE_TABLES:

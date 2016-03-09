@@ -22,7 +22,7 @@ LOG = logging.getLogger(__name__)
 
 
 @GROUP.route('/<int:group_id>/score/<int:station_id>', methods=['PUT'])
-@roles_accepted('staff', 'admin')
+@roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def set_score(group_id, station_id):
     try:
         form_score = request.json['form']
@@ -43,7 +43,7 @@ def save_info(id):
     intent = request.form.get('intent', 'accept')
     group = mdl.Group.one(id=id)
 
-    if not current_user.has_role('admin'):
+    if not current_user.has_role(mdl.Role.ADMIN):
         if intent != 'update' or group.user.id != current_user.id:
             # For non-admins we only allow "update" permission on owned goups.
             return gettext("Access Denied!"), 403
@@ -59,7 +59,7 @@ def save_info(id):
     }
 
     # ... next, if we are allowed, add admin-only attributes
-    if current_user.has_role('admin'):
+    if current_user.has_role(mdl.Role.ADMIN):
         data['direction'] = request.form['direction']
         data['start_time'] = request.form['start_time']
         data['send_email'] = request.form['send_email'] == 'true'
@@ -79,14 +79,14 @@ def save_info(id):
     if data['send_email']:
         flash(gettext('E-Mail sent successfully!'), 'info')
 
-    if current_user.has_role('admin'):
+    if current_user.has_role(mdl.Role.ADMIN):
         return redirect(url_for('tabular.tabularadmin', name='group'))
     else:
         return redirect(url_for('profile'))
 
 
 @GROUP.route('/<group_name>/timeslot', methods=['PUT'])
-@roles_accepted('staff', 'admin')
+@roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def set_time_slot(group_name):
     data = request.json
     if data['direction'] not in (mdl.DIR_A, mdl.DIR_B):
@@ -103,7 +103,7 @@ def set_time_slot(group_name):
 
 
 @GROUP.route('/list')
-@roles_accepted('staff', 'admin')
+@roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def list():
     groups = mdl.Group.all()
     groups = groups.order_by(None)
@@ -117,7 +117,8 @@ def edit(name):
     if not group:
         return gettext('Not found!'), 404
 
-    if group.user.id != current_user.id and not current_user.has_role('admin'):
+    if group.user.id != current_user.id and not current_user.has_role(
+            mdl.Role.ADMIN):
         return gettext('Access Denied!'), 403
 
     return render_template('edit_group.html',

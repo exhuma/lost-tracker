@@ -79,14 +79,14 @@ def details(name):
 
 
 @STATION.route('/<int:id>', methods=['DELETE'])
-@roles_accepted('admin')
+@roles_accepted(mdl.Role.ADMIN)
 def delete(id):
     loco.delete_station(id)
     return jsonify(status='ok')
 
 
 @STATION.route('/<station_name>/dashboard')
-@roles_accepted('admin')
+@roles_accepted(mdl.Role.ADMIN)
 def dashboard(name):
     # TODO implement
     raise NotImplementedError('Not yet implemented')

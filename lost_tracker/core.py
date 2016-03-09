@@ -211,7 +211,7 @@ def confirm_registration(mailer, key, activation_url):
             return True
 
         grp.is_confirmed = True
-        admin_query = Role.query.filter(Role.name == 'admin')
+        admin_query = Role.query.filter(Role.name == Role.ADMIN)
         if admin_query.count():
             mails = [(user.email, user.name) for user in admin_query[0].user]
             mailer.send('registration_check',
@@ -268,7 +268,7 @@ def update_group(mailer, id, data):
 
     send_email = data.get('send_email', True)
     if data['notification_recipient'] == 'admins':
-        admin_query = Role.query.filter(Role.name == 'admin')
+        admin_query = Role.query.filter(Role.name == Role.ADMIN)
         if admin_query.count():
             recipients = [(user.email, user.name)
                           for user in admin_query[0].user]

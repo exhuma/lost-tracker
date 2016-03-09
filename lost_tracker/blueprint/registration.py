@@ -64,7 +64,7 @@ def new():
 
 
 @REGISTRATION.route('/accept/<key>')
-@roles_accepted('staff', 'admin')
+@roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def accept(key):
     group = mdl.Group.one(key=key)
 

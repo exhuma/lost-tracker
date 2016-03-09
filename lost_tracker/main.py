@@ -178,14 +178,15 @@ def inject_context():
         coords = ''
 
     return dict(
+        Role=mdl.Role,
         Setting=mdl.Setting,
         __version__=__version__,
         date_display=date_display,
         localconf=app.localconf,
+        location_coords=coords,
+        location_display=location_display,
         registration_open=registration_open,
         tabular_prefix=TABULAR_PREFIX,
-        location_display=location_display,
-        location_coords=coords,
     )
 
 
@@ -200,7 +201,7 @@ def create_admin_user():
         email='admin@example.com',
         password='admin',
         active=True)
-    admin_role = mdl.Role(name='admin')
+    admin_role = mdl.Role(name=mdl.Role.ADMIN)
     user.roles = [admin_role]
     try:
         mdl.DB.session.commit()
@@ -276,7 +277,7 @@ def scoreboard():
 
 
 @app.route('/slot_editor')
-@roles_accepted('admin')
+@roles_accepted(mdl.Role.ADMIN)
 def slot_editor():
     groups = mdl.Group.all()
     slots = mdl.TimeSlot.all()
@@ -316,14 +317,14 @@ def group_tooltip(group_id):
 
 
 @app.route('/station/<int:id>', methods=['DELETE'])
-@roles_accepted('admin')
+@roles_accepted(mdl.Role.ADMIN)
 def delete_station(id):
     loco.delete_station(id)
     return jsonify(status='ok')
 
 
 @app.route('/settings')
-@roles_accepted('admin')
+@roles_accepted(mdl.Role.ADMIN)
 def settings():
     settings = {stng.key: stng.value
                 for stng in mdl.Setting.all(mdl.DB.session)}

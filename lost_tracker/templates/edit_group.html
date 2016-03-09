@@ -13,7 +13,7 @@
   <fieldset>
     <legend>{{_('Group Infos')}}</legend>
     <input type="hidden" name="id" value="{{group.id}}" />
-    <input type="hidden" name="intent" value="{{'accept' if current_user.has_role('admin') else 'update'}}" />
+    <input type="hidden" name="intent" value="{{'accept' if current_user.has_role(Role.ADMIN) else 'update'}}" />
     <dl>
       <dt>{{_('Name')}}</dt>
       <dd><input type="text" name="name" value="{{group.name}}" /></dd>
@@ -21,7 +21,7 @@
       <dd><input type="text" name="contact" value="{{group.contact}}" /></dd>
       <dt>{{_('Phone')}}</dt>
       <dd><input type="text" name="phone" value="{{group.phone}}" /></dd>
-      {% if current_user.has_role('admin') %}
+      {% if current_user.has_role(Role.ADMIN) %}
         <dt>{{_('Direction')}}</dt>
         <dd>
           <select name="direction">
@@ -35,7 +35,7 @@
       {% endif %}
       <dt>{{_('Comments')}}</dt>
       <dd><textarea name="comments" rows="10">{{group.comments}}</textarea></dd>
-      {% if current_user.has_role('admin') %}
+      {% if current_user.has_role(Role.ADMIN) %}
         <dt>{{_('Options')}}</dt>
         <dd><input type="checkbox" checked id="send_email" name="send_email" value="true" /><label for="send_email">{{_('Send e-mail to the group about the changes.')}}</label></dd>
       {% endif %}
