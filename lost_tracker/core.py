@@ -213,7 +213,7 @@ def confirm_registration(mailer, key, activation_url):
         grp.is_confirmed = True
         admin_query = Role.query.filter(Role.name == 'admin')
         if admin_query.count():
-            mails = [user.email for user in admin_query[0].user]
+            mails = [(user.email, user.name) for user in admin_query[0].user]
             mailer.send('registration_check',
                         to=mails,
                         data={
@@ -227,35 +227,27 @@ def confirm_registration(mailer, key, activation_url):
         raise ValueError('Given key not found in DB')
 
 
-def accept_registration(mailer, key, data):
+def accept_registration(mailer, key, group):
     """
     This method is called if a staff-member clicked the "accept" link, an e-mail
     is sent out to the reservation contact telling them all is done. The
     registration is marked as 'finalized'.
     """
-    query = Group.query.filter(Group.confirmation_key == key)
-    grp = query.first()
 
-    if grp:
-        if grp.finalized:
-            raise ValueError('Registration already finalized')
-        else:
-            grp.finalized = True
-            grp.direction = data['direction']
-            grp.name = data['name']
-            grp.phone = data['phone']
-            grp.start_time = data['start_time']
-            grp.comments = data['comments']
-            grp.contact = data['contact']
-            grp.email = data['email']
-            mailer.send('welcome',
-                        to=(grp.email, grp.name),
-                        data={
-                            'group': grp
-                        })
-            return True
-    else:
-        raise ValueError('Given key not found in DB')
+    if not group:
+        return False
+
+    if group.finalized:
+        return False
+
+    group.finalized = True
+
+    mailer.send('welcome',
+                to=[(group.user.email, group.name)],
+                data={
+                    'group': group
+                })
+    return True
 
 
 def update_group(mailer, id, data, send_email=True):
@@ -269,11 +261,10 @@ def update_group(mailer, id, data, send_email=True):
     group.start_time = data['start_time']
     group.comments = data['comments']
     group.contact = data['contact']
-    group.email = data['email']
 
     if send_email:
         mailer.send('registration_update',
-                    to=(data['email'], data['contact']),
+                    to=[(group.user.email, data['contact'])],
                     data={
                         'group': group
                     })

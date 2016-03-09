@@ -70,7 +70,7 @@ def accept(key):
     if group.finalized:
         flash(gettext('This group has already been accepted!'), 'info')
 
-    group.finalized = True
+    loco.accept_registration(current_app.mailer, key, group)
 
     return render_template('edit_group.html',
                            group=group,
