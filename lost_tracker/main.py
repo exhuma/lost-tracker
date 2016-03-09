@@ -27,17 +27,14 @@ from flask.ext.security import (
 from babel.dates import format_date
 from flask import (
     Flask,
-    current_app,
     flash,
     jsonify,
-    make_response,
     redirect,
     render_template,
     request,
     session as flask_session,
     url_for,
 )
-from sqlalchemy.exc import IntegrityError
 
 from lost_tracker import __version__
 from lost_tracker.blueprint.group import GROUP
@@ -58,9 +55,6 @@ REGISTRATION_PREFIX = '/registration'
 STATION_PREFIX = '/station'
 TABULAR_PREFIX = '/manage'
 USER_PREFIX = '/user'
-
-
-from flask.ext.security import current_user, core
 
 
 user_datastore = SQLAlchemyUserDatastore(mdl.DB, mdl.User, mdl.Role)
