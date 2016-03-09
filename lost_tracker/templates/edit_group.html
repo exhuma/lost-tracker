@@ -2,6 +2,13 @@
 {% block title %}{{_('Edit Group')}}{% endblock %}
 {% block content %}
 <h1>{{group.name}}</h1>
+{% if group.user.id != current_user.id %}
+  <div style="text-align: center;">
+    {{ avatar(group.user, 100) }}<br />
+    {{ _("Group owner") }}: {{group.user.name}}
+  </div>
+  <hr />
+{% endif %}
 <form id="group_edit" action="{{url_for('group.save_info', id=group.id)}}" method="POST">
   <fieldset>
     <legend>{{_('Group Infos')}}</legend>
