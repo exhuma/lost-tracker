@@ -97,7 +97,7 @@ def set_time_slot(group_name):
         return jsonify(
             message=gettext('Incorrect value for direction: {!r}').format(
                 data['direction'])), 400
-    group = mdl.Group.one(id=group_name)
+    group = mdl.Group.one(name=group_name)
     if not group:
         group = mdl.Group(name=group_name, start_time=data['new_slot'])
         mdl.DB.session.add(group)
