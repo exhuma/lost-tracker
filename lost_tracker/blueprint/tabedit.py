@@ -21,6 +21,12 @@ MODIFIABLE_TABLES = ('group', 'station', 'form')
 TABULAR = Blueprint('tabular', __name__)
 
 
+@TABULAR.route('/')
+@roles_accepted(mdl.Role.ADMIN)
+def empty():
+    return render_template('tabularindex.html')
+
+
 @TABULAR.route('/table/<name>')
 @roles_accepted(mdl.Role.ADMIN)
 def tabularadmin(name):
