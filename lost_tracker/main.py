@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 from operator import attrgetter
 try:
@@ -94,13 +95,15 @@ app.register_blueprint(USER, url_prefix=USER_PREFIX)
 babel = Babel(app)
 
 
+
 class DummyMailer(object):
     """
     A mailer class for testing. Does not actually send any e-mails.
     """
+    LOG = logging.getLogger('%s.DummyMailer' % __name__)
 
     def send(self, *args, **kwargs):
-        print("DummyMailer.send called with %r %r" % (args, kwargs))
+        self.LOG.info("DummyMailer.send called with %r %r" % (args, kwargs))
 
 
 def get_facebook_email(oauth_response):
@@ -389,8 +392,6 @@ def profile():
 
 
 if __name__ == '__main__':
-    import logging
-    logging.basicConfig(level=logging.DEBUG)
     DEBUG = userbool(app.localconf.get('devserver', 'debug',
                                        default=False))
     if DEBUG:
