@@ -20,6 +20,7 @@ setup(
         'pillow==2.8.1',
         'psycopg2==2.5.2',
         'python-twitter>=3.0rc1',
+        'qrcode==5.2.2',
         'requests==2.6.0',
         'sqlalchemy==0.9.3',
     ],

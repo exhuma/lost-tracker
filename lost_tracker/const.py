@@ -2,6 +2,7 @@
 COMMENT_PREFIX = '/comment'
 GROUP_PREFIX = '/group'
 PHOTO_PREFIX = '/photo'
+QR_PREFIX = '/qr'
 REGISTRATION_PREFIX = '/registration'
 STATION_PREFIX = '/station'
 TABULAR_PREFIX = '/tabedit'
