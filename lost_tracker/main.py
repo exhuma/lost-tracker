@@ -9,7 +9,7 @@ except ImportError:
 from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
-from flask.ext.babel import gettext, Babel
+from flask.ext.babel import gettext, Babel, format_datetime
 from flask.ext.social import (
     SQLAlchemyConnectionDatastore,
     Social,
@@ -36,8 +36,10 @@ from flask import (
     session as flask_session,
     url_for,
 )
+from markdown import markdown
 
 from lost_tracker import __version__
+from lost_tracker.blueprint.comment import COMMENT
 from lost_tracker.blueprint.group import GROUP
 from lost_tracker.blueprint.photo import PHOTO
 from lost_tracker.blueprint.registration import REGISTRATION
@@ -50,6 +52,7 @@ import lost_tracker.core as loco
 import lost_tracker.models as mdl
 
 # URL prefixes (needed in multiple locations for JS. Therefore in a variable)
+COMMENT_PREFIX = '/comment'
 GROUP_PREFIX = '/group'
 PHOTO_PREFIX = '/photo'
 REGISTRATION_PREFIX = '/registration'
@@ -85,6 +88,7 @@ app.config['SOCIAL_GOOGLE'] = {
 security = Security(app, user_datastore)
 social = Social(app, SQLAlchemyConnectionDatastore(mdl.DB, mdl.Connection))
 
+app.register_blueprint(COMMENT, url_prefix=COMMENT_PREFIX)
 app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
 app.register_blueprint(PHOTO, url_prefix=PHOTO_PREFIX)
 app.register_blueprint(REGISTRATION, url_prefix=REGISTRATION_PREFIX)
@@ -93,7 +97,6 @@ app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 app.register_blueprint(USER, url_prefix=USER_PREFIX)
 
 babel = Babel(app)
-
 
 
 class DummyMailer(object):
@@ -111,6 +114,16 @@ def get_facebook_email(oauth_response):
     api = GraphAPI(access_token=oauth_response['access_token'], version='2.5')
     response = api.request('/me', args={'fields': 'email'})
     return response['email']
+
+
+@app.template_filter('md')
+def convert_markdown(value):
+    return markdown(value)
+
+
+@app.template_filter('humantime')
+def humanize_time(value):
+    return format_datetime(value, format='long')
 
 
 @login_failed.connect_via(app)

@@ -106,6 +106,18 @@ def set_time_slot(group_name):
     return '{{"is_success": true, "group_id": {}}}'.format(group.id)
 
 
+@GROUP.route('/<int:id>/comments')
+@login_required
+def show_comments(id):
+    group = mdl.Group.one(id=id)
+    if not group:
+        return gettext('No such entity!'), 404
+    if group not in current_user.groups:
+        return gettext('Access Denied!'), 403
+
+    return render_template('messages.html', group=group)
+
+
 @GROUP.route('/')
 @roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def list():

@@ -16,6 +16,7 @@ setup(
         'flask==0.10.1',
         'google-api-python-client==1.5.0',
         'imapclient==1.0.1',
+        'markdown==2.6.5',
         'pillow==2.8.1',
         'psycopg2==2.5.2',
         'python-twitter>=3.0rc1',
