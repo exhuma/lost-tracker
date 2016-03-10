@@ -9,7 +9,7 @@ except ImportError:
 from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
-from flask.ext.babel import gettext, Babel, format_datetime
+from flask.ext.babel import gettext, Babel, format_datetime, format_date
 from flask.ext.social import (
     SQLAlchemyConnectionDatastore,
     Social,
@@ -25,7 +25,6 @@ from flask.ext.security import (
     login_user,
     roles_accepted,
 )
-from babel.dates import format_date
 from flask import (
     Flask,
     flash,
@@ -170,7 +169,7 @@ def userbool(value):
 
 @babel.localeselector
 def get_locale():
-    locale = flask_session.get('lang', 'lu')
+    locale = flask_session.get('lang', 'lb')
     app.logger.debug('Using locale {}'.format(locale))
     return locale
 
@@ -183,11 +182,7 @@ def inject_context():
     coords = mdl.Setting.get('location_coords', '')
     if event_date and event_date >= datetime.now().date():
         date_locale = get_locale()
-        if date_locale == 'lu':  # bugfix?
-            date_locale = 'de'
-        date_display = format_date(event_date,
-                                   format='long',
-                                   locale=date_locale)
+        date_display = format_date(event_date, format='long')
     else:
         date_display = ''
         location_display = ''
@@ -354,6 +349,7 @@ def save_settings():
     registration_open = request.form.get('registration_open', '') == 'on'
     shout = request.form.get('shout', '')
     event_date = request.form.get('event_date', '')
+    event_date = datetime.strptime(event_date, '%Y-%m-%d').date() if event_date else None  # NOQA
     event_location = request.form.get('event_location', '')
     location_coords = request.form.get('location_coords', '')
 
