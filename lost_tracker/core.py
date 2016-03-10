@@ -35,6 +35,16 @@ WEB_IMAGES = {
 }
 
 
+def _generate_state_list(station):
+    return [{
+        "stationId": state.station_id,
+        "groupId": state.group_id,
+        "formScore": state.form_score,
+        "stationScore": state.score,
+        "state": state.state
+    } for state in station.groups]
+
+
 class Matrix(object):
     """
     Returns a 2-dimensional array containing an entry for each group.
@@ -377,3 +387,15 @@ def set_score(session, group_id, station_id, station_score, form_score,
     GroupStation.set_score(session, group_id, station_id, station_score,
                            form_score, state)
     return 'OK'
+
+
+def get_dashboard(station):
+    return {
+        "station": {
+            "name": station.name,
+            "id": station.id
+        },
+        "main_states": _generate_state_list(station),
+        "before_states": _generate_state_list(station.before),
+        "after_states": _generate_state_list(station.after)
+    }

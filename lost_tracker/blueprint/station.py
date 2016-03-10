@@ -10,6 +10,8 @@ from flask import (
     request,
 )
 
+from flask.ext.babel import gettext
+
 from flask.ext.security import (
     roles_accepted,
 )
@@ -85,8 +87,12 @@ def delete(id):
     return jsonify(status='ok')
 
 
-@STATION.route('/<station_name>/dashboard')
+@STATION.route('/<name>/dashboard')
 @roles_accepted(mdl.Role.ADMIN)
 def dashboard(name):
-    # TODO implement
-    raise NotImplementedError('Not yet implemented')
+    station = mdl.Station.one(name=name)
+    if not station:
+        return gettext('No such entity!'), 404
+
+    output = loco.get_dashboard(station)
+    return jsonify(data=output)

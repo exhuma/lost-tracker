@@ -248,6 +248,29 @@ class Station(DB.Model):
             'name': self.name
         }
 
+    @property
+    def before(self):
+        """
+        Returns the station immediately before this one (using the "order"
+        field)
+        """
+        query = Station.query
+        query = query.order_by(Station.order)
+        query = query.filter(Station.order < self.order)
+        query = query.limit(1)
+        return query.one()
+
+    @property
+    def after(self):
+        """
+        Returns the station immediately after this one (using the "order" field)
+        """
+        query = Station.query
+        query = query.order_by(Station.order)
+        query = query.filter(Station.order > self.order)
+        query = query.limit(1)
+        return query.one()
+
 
 class Form(DB.Model):
     __tablename__ = 'form'
