@@ -8,8 +8,13 @@ LOG = logging.getLogger(__name__)
 
 
 def start_time_to_order(value):
-    # Tries to put something sensical into the "order" field.
-    # If unsuccessful, return 0. Can be edited later.
+    """
+    Convert a time-string to a numeric value which can be used in the "order"
+    field.
+
+    It simply removes all non-numeric characters and casts it to int. This is
+    done so the value remains somewhat human-readable.
+    """
     if not value:
         return 0
 
