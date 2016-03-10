@@ -40,6 +40,24 @@ form_scores = DB.Table(
     PrimaryKeyConstraint('group_id', 'form_id'))
 
 
+def _get_unique_order(cls, current_value):
+    """
+    Retrieves a unique "order" value for an entity. If the given value exists,
+    it repeatedly augments the value by ``1`` until an unused value is found.
+
+    We must ensure that the order is uniqe because of the recent addition to the
+    "dashboard" which contains pointers from one station to the next and
+    previous station. If "order" is not unique, that query becomes
+    non-deterministic!
+    """
+    existing_slot = cls.one(order=current_value)
+    order = current_value
+    while existing_slot:
+        order = order + 1
+        existing_slot = cls.one(order=order)
+    return order
+
+
 def custom_json_serializer(value):
     if isinstance(value, datetime):
         return value.strftime(DATE_FORMAT)
@@ -99,7 +117,7 @@ class Group(DB.Model):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
-    order = Column(Integer)
+    order = Column(Integer, unique=True)
     cancelled = Column(Boolean, default=False, server_default='false')
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
@@ -170,7 +188,11 @@ class Group(DB.Model):
             group = group.filter_by(name=filters['name'])
         elif 'key' in filters:
             group = group.filter_by(confirmation_key=filters['key'])
-        group = group.one()
+        elif 'order' in filters:
+            group = group.filter_by(order=filters['order'])
+        else:
+            raise ValueError('Unsupported Unique Field!')
+        group = group.first()
         return group
 
     @property
@@ -181,9 +203,9 @@ class Group(DB.Model):
     def start_time(self, value):
         self._start_time = value
         if value:
-            self.order = start_time_to_order(value)
+            self.order = _get_unique_order(Group, start_time_to_order(value))
         else:
-            self.order = 0
+            self.order = _get_unique_order(Group, 0)
 
     def to_dict(self):
         return {
@@ -207,7 +229,7 @@ class Station(DB.Model):
     __tablename__ = 'station'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
-    order = Column(Integer)
+    order = Column(Integer, unique=True)
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
 
@@ -252,7 +274,10 @@ class Station(DB.Model):
     def before(self):
         """
         Returns the station immediately before this one (using the "order"
-        field)
+        field).
+
+        Note that the "order" field should be unique for this to be
+        deterministic!
         """
         query = Station.query
         query = query.order_by(Station.order)
@@ -264,6 +289,9 @@ class Station(DB.Model):
     def after(self):
         """
         Returns the station immediately after this one (using the "order" field)
+
+        Note that the "order" field should be unique for this to be
+        deterministic!
         """
         query = Station.query
         query = query.order_by(Station.order)
@@ -277,12 +305,12 @@ class Form(DB.Model):
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(20))
     max_score = Column(Integer)
-    order = Column(Integer, nullable=False, default=0)
+    order = Column(Integer, nullable=False, unique=True, default=0)
 
     def __init__(self, name=None, max_score=100, order=0):
         self.name = name
         self.max_score = max_score
-        self.order = order
+        self.order = _get_unique_order(Form, order)
 
     def __repr__(self):
         return '<Form %r>' % (self.name)

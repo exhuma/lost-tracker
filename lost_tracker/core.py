@@ -14,6 +14,7 @@ from lost_tracker.models import (
     Station,
     TimeSlot,
     User,
+    _get_unique_order,
 )
 
 from sqlalchemy import and_
@@ -134,6 +135,7 @@ def add_station(stat_name, contact, phone, order, session):
     """
     Creates a new :py:class:`Station` in the database.
     """
+    order = _get_unique_order(Station, order)
     new_station = Station(stat_name, contact, phone)
     new_station.order = order
     session.add(new_station)
@@ -142,6 +144,7 @@ def add_station(stat_name, contact, phone, order, session):
 
 
 def add_form(session, name, max_score, order=0):
+    order = _get_unique_order(Form, order)
     new_form = Form(name, max_score, order)
     session.add(new_form)
     return new_form
@@ -182,7 +185,8 @@ def store_registration(mailer, session, data):
                         data['comments'],
                         key,
                         data['user_id'])
-        new_grp.order = start_time_to_order(data['time'])
+        order = start_time_to_order(data['time'])
+        new_grp.order = _get_unique_order(Group, order)
 
         session.add(new_grp)
         try:
