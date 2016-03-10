@@ -514,4 +514,14 @@ TABLE#scoreboard TD.score {
 }
 /* }}} */
 
+/* {{{ Font-Awesome */
+.fa-close {
+    color: rgba(100, 0, 0, 0.3);
+}
+
+.fa-check {
+    color: rgb(0, 255, 0);
+}
+/* }}} */
+
 /* vim: set fdm=marker : */
