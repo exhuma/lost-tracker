@@ -520,6 +520,19 @@ class TimeSlot(object):
         ]
 
 
+class Message(DB.Model):
+    __tablename__ = 'messages'
+    id = Column(Integer, primary_key=True)
+    content = Column(Unicode)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    group_id = Column(Integer, ForeignKey('group.id'))
+    inserted = Column(DateTime, server_default=func.now(), default=func.now())
+    updated = Column(DateTime)
+
+    user = relationship('User', backref="messages")
+    group = relationship('Group', backref="messages")
+
+
 roles_users = DB.Table(
     'roles_users',
     Column('user', Integer(), ForeignKey('user.id')),

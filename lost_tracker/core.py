@@ -7,6 +7,7 @@ from lost_tracker.models import (
     Form,
     Group,
     GroupStation,
+    Message,
     Role,
     STATE_ARRIVED,
     STATE_FINISHED,
@@ -403,3 +404,14 @@ def get_dashboard(station):
         "before_states": _generate_state_list(station.before),
         "after_states": _generate_state_list(station.after)
     }
+
+
+def store_message(session, group, user, content):
+    msg = Message(
+        content=content,
+        user=user,
+        group=group,
+    )
+    session.add(msg)
+    session.commit()
+    return msg

@@ -28,6 +28,7 @@
         <th>{{_("Name")}}</th>
         <th>{{_("Starting Time")}}</th>
         <th>{{_("Verified by he Lost team?")}}</th>
+        <th>{{_("Messages")}}</th>
       </tr>
     </thead>
     <tbody>
@@ -36,6 +37,7 @@
           <td><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
           <td>{{group.start_time or "?"}}</td>
           <td><i class="fa fa-{{'check' if group.accepted else 'close'}}"></i></td>
+          <td><a href="{{url_for('group.show_comments', id=group.id)}}"><i class="fa fa-comments"></i></a></td>
         </tr>
       {% else %}
       <tr><td colspan="2">

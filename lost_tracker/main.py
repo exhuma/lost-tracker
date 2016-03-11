@@ -9,7 +9,7 @@ except ImportError:
 from sqlalchemy.orm.exc import NoResultFound
 
 from config_resolver import Config
-from flask.ext.babel import gettext, Babel
+from flask.ext.babel import gettext, Babel, format_datetime, format_date
 from flask.ext.social import (
     SQLAlchemyConnectionDatastore,
     Social,
@@ -25,7 +25,6 @@ from flask.ext.security import (
     login_user,
     roles_accepted,
 )
-from babel.dates import format_date
 from flask import (
     Flask,
     flash,
@@ -36,8 +35,10 @@ from flask import (
     session as flask_session,
     url_for,
 )
+from markdown import markdown
 
 from lost_tracker import __version__
+from lost_tracker.blueprint.comment import COMMENT
 from lost_tracker.blueprint.group import GROUP
 from lost_tracker.blueprint.photo import PHOTO
 from lost_tracker.blueprint.registration import REGISTRATION
@@ -50,6 +51,7 @@ import lost_tracker.core as loco
 import lost_tracker.models as mdl
 
 # URL prefixes (needed in multiple locations for JS. Therefore in a variable)
+COMMENT_PREFIX = '/comment'
 GROUP_PREFIX = '/group'
 PHOTO_PREFIX = '/photo'
 REGISTRATION_PREFIX = '/registration'
@@ -85,6 +87,7 @@ app.config['SOCIAL_GOOGLE'] = {
 security = Security(app, user_datastore)
 social = Social(app, SQLAlchemyConnectionDatastore(mdl.DB, mdl.Connection))
 
+app.register_blueprint(COMMENT, url_prefix=COMMENT_PREFIX)
 app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
 app.register_blueprint(PHOTO, url_prefix=PHOTO_PREFIX)
 app.register_blueprint(REGISTRATION, url_prefix=REGISTRATION_PREFIX)
@@ -93,7 +96,6 @@ app.register_blueprint(TABULAR, url_prefix=TABULAR_PREFIX)
 app.register_blueprint(USER, url_prefix=USER_PREFIX)
 
 babel = Babel(app)
-
 
 
 class DummyMailer(object):
@@ -111,6 +113,16 @@ def get_facebook_email(oauth_response):
     api = GraphAPI(access_token=oauth_response['access_token'], version='2.5')
     response = api.request('/me', args={'fields': 'email'})
     return response['email']
+
+
+@app.template_filter('md')
+def convert_markdown(value):
+    return markdown(value)
+
+
+@app.template_filter('humantime')
+def humanize_time(value):
+    return format_datetime(value, format='d. MMM Y k:s')
 
 
 @login_failed.connect_via(app)
@@ -157,7 +169,7 @@ def userbool(value):
 
 @babel.localeselector
 def get_locale():
-    locale = flask_session.get('lang', 'lu')
+    locale = flask_session.get('lang', 'lb')
     app.logger.debug('Using locale {}'.format(locale))
     return locale
 
@@ -170,11 +182,7 @@ def inject_context():
     coords = mdl.Setting.get('location_coords', '')
     if event_date and event_date >= datetime.now().date():
         date_locale = get_locale()
-        if date_locale == 'lu':  # bugfix?
-            date_locale = 'de'
-        date_display = format_date(event_date,
-                                   format='long',
-                                   locale=date_locale)
+        date_display = format_date(event_date, format='long')
     else:
         date_display = ''
         location_display = ''
@@ -341,6 +349,7 @@ def save_settings():
     registration_open = request.form.get('registration_open', '') == 'on'
     shout = request.form.get('shout', '')
     event_date = request.form.get('event_date', '')
+    event_date = datetime.strptime(event_date, '%Y-%m-%d').date() if event_date else None  # NOQA
     event_location = request.form.get('event_location', '')
     location_coords = request.form.get('location_coords', '')
 
