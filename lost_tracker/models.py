@@ -134,6 +134,8 @@ class Group(DB.Model):
 
     user = relationship('User', backref="groups")
     stations = relationship('GroupStation')
+    messages = relationship('Message', backref="group",
+                            order_by='Message.inserted')
 
     def __init__(self,
                  name=None,
@@ -529,9 +531,6 @@ class Message(DB.Model):
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
 
-    user = relationship('User', backref="messages")
-    group = relationship('Group', backref="messages")
-
 
 roles_users = DB.Table(
     'roles_users',
@@ -562,6 +561,8 @@ class User(DB.Model, UserMixin):
     confirmed_at = Column(DateTime())
     roles = relationship('Role', secondary=roles_users,
                          backref=backref('user', lazy='dynamic'))
+    messages = relationship('Message', backref="user",
+                            order_by='Message.inserted')
 
 
 class Connection(DB.Model):
