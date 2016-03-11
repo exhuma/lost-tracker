@@ -524,4 +524,36 @@ TABLE#scoreboard TD.score {
 }
 /* }}} */
 
+/* {{{ message rows */
+.message-row {
+    border: 1px solid black;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1em;
+}
+
+.message-row + .message-row {
+    margin-top: 0.8em;
+}
+
+.message-content P:first-child {
+    margin-top: 0;
+}
+
+.message-time {
+    float: right;
+    font-size: small;
+}
+
+.message-content {
+    text-align: left;
+}
+
+.message-image {
+    float: left;
+    margin-right: 0.5em;
+    width: 50px;
+}
+/* }}} */
+
 /* vim: set fdm=marker : */

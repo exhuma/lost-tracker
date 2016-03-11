@@ -3,9 +3,11 @@
 {% block content %}
 <h2>{{_("Messages for")}} {{group.name}}</h2>
 {% for message in group.messages %}
-  <div>
-    {{avatar(message.user, 40)}}
-    {{message.inserted|humantime}} - {{message.content|md|safe}}
+  <div class="message-row">
+    <span class="message-image">{{avatar(message.user, 40)}}</span>
+    <span class="message-time"><i class="fa fa-clock-o"></i> {{message.inserted|humantime}}</span>
+    <span class="message-content">{{message.content|md|safe}}</span>
+    <br clear="both" />
   </div>
 {% else %}
   {{_("No messages")}}

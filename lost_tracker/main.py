@@ -122,7 +122,7 @@ def convert_markdown(value):
 
 @app.template_filter('humantime')
 def humanize_time(value):
-    return format_datetime(value, format='long')
+    return format_datetime(value, format='d. MMM Y k:s')
 
 
 @login_failed.connect_via(app)
