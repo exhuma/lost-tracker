@@ -117,7 +117,7 @@ def get_facebook_email(oauth_response):
 
 @app.template_filter('md')
 def convert_markdown(value):
-    return markdown(value)
+    return markdown(value, safe_mode='replace', enable_attributes=False)
 
 
 @app.template_filter('humantime')
