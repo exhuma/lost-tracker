@@ -37,7 +37,6 @@
       <span id="auth">
         {% if current_user.is_authenticated %}
           {{_('Logged in as:')}} <a href="{{url_for('root.profile')}}">{{avatar(current_user, 20)}}</a>&nbsp;<a href="{{url_for('root.profile')}}">{{current_user.name}}</a> |
-          {{ seclink(Role.ADMIN, url_for('group.list'), _('List')) }} |
           <a href="{{url_for('root.matrix')}}">{{_('Matrix')}}</a> |
           {{ seclink(Role.ADMIN, url_for('root.slot_editor'), _('Slot Editor')) }} |
           {{ seclink(Role.ADMIN, url_for('group.list'), _('Manage Groups'))}} |
