@@ -18,14 +18,14 @@
 {% block mainmenu %}
     <div id="menu">
       <span id="#mainmenu">
-        <a href="{{url_for('index')}}"><strong>Lost.lu</strong></a> |
-        <a href="{{url_for('where')}}">{{_('Where is this?')}}</a> |
+        <a href="{{url_for('root.index')}}"><strong>Lost.lu</strong></a> |
+        <a href="{{url_for('root.where')}}">{{_('Where is this?')}}</a> |
         {% if registration_open %}
           <a href="{{url_for('registration.new')}}">{{_('Register')}}</a> |
         {% endif %}
         <a href="{{url_for('photo.gallery')}}">{{_('Pictures')}}</a> |
-        <a href="{{url_for('scoreboard')}}">{{_('Scoreboard')}}</a> |
-        <a href="{{url_for('misc')}}">{{_('Anything else?')}}</a>
+        <a href="{{url_for('root.scoreboard')}}">{{_('Scoreboard')}}</a> |
+        <a href="{{url_for('root.misc')}}">{{_('Anything else?')}}</a>
       </span>
 
       <span id="flags">
@@ -38,10 +38,10 @@
         {% if current_user.is_authenticated %}
           {{_('Logged in as:')}} <a href="{{url_for('profile')}}">{{avatar(current_user, 20)}}</a>&nbsp;<a href="{{url_for('profile')}}">{{current_user.name}}</a> |
           {{ seclink(Role.ADMIN, url_for('group.list'), _('List')) }} |
-          <a href="{{url_for('matrix')}}">{{_('Matrix')}}</a> |
-          {{ seclink(Role.ADMIN, url_for('slot_editor'), _('Slot Editor')) }} |
+          <a href="{{url_for('root.matrix')}}">{{_('Matrix')}}</a> |
+          {{ seclink(Role.ADMIN, url_for('root.slot_editor'), _('Slot Editor')) }} |
           {{ seclink(Role.ADMIN, url_for('group.list'), _('Manage Groups'))}} |
-          {{ seclink(Role.ADMIN, url_for('settings'), _('Settings'))}} |
+          {{ seclink(Role.ADMIN, url_for('root.settings'), _('Settings'))}} |
           <a href="{{url_for('security.logout')}}">{{_('Logout')}}</a>
         {% else %}
           <a href="{{url_for('security.login')}}">{{_('Login')}}</a>
