@@ -2,6 +2,7 @@ from stat import S_ISREG, ST_CTIME, ST_MODE
 
 from lost_tracker.util import start_time_to_order
 from lost_tracker.models import (
+    DB,
     DIR_A,
     DIR_B,
     Form,
@@ -40,14 +41,23 @@ WEB_IMAGES = {
 def _generate_state_list(station):
     if not station:
         return []
-    return [{
-        "stationId": state.station_id,
-        "groupId": state.group_id,
-        "groupName": state.group.name,
-        "formScore": state.form_score or 0,
-        "stationScore": state.score or 0,
-        "state": state.state
-    } for state in station.groups]
+    groups = Group.all().order_by(Group.order)
+    state_info = DB.session.query(GroupStation).filter(
+        GroupStation.station == station)
+    state_info_map = {state.group: state for state in state_info}
+    output = []
+    for group in groups:
+        si = state_info_map.get(group)
+        output.append({
+            "stationId": si.station_id if si else 0,
+            "groupId": group.id,
+            "groupName": group.name,
+            "formScore": (si.form_score or 0) if si else 0,
+            "stationScore": (si.score or 0) if si else 0,
+            "state": si.state if si else 0
+        })
+    output = sorted(output, key=lambda x: (x['state'], x['groupName']))
+    return output
 
 
 class Matrix(object):
