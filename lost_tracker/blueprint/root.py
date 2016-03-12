@@ -18,7 +18,6 @@ from flask import (
 )
 from flask.ext.babel import gettext, format_datetime, format_date
 from flask.ext.security import (
-    http_auth_required,
     login_required,
     roles_accepted,
 )
@@ -29,6 +28,7 @@ import lost_tracker.core as loco
 import lost_tracker.models as mdl
 from lost_tracker import __version__
 from lost_tracker.const import TABULAR_PREFIX
+from lost_tracker.util import basic_auth
 
 
 ROOT = Blueprint('root', __name__)
@@ -237,7 +237,7 @@ def save_settings():
 
 
 @ROOT.route('/group_state/<group>/<station>', methods=['PUT'])
-@http_auth_required('lostlu')
+@basic_auth
 def update_group_station_state(group, station):
     """
     Required by the android client.
