@@ -88,7 +88,6 @@ def delete(id):
 
 
 @STATION.route('/<name>/dashboard')
-@roles_accepted(mdl.Role.ADMIN)
 def dashboard(name):
     station = mdl.Station.one(name=name)
     if not station:

@@ -254,12 +254,17 @@ def update_group_station_state(group, station):
     loco.set_score(mdl.DB.session, group, station, station_score, form_score,
                    station_state)
 
+    station_entity = mdl.Station.one(name=station)
+    group_entity = mdl.Group.one(name=group)
+
     return jsonify(
         name=group,
         form_score=form_score,
         score=station_score,
         state=station_state,
-        station_name=station)
+        station_name=station,
+        station_id=station_entity.id,
+        group_id=group_entity.id)
 
 
 @ROOT.route('/profile', methods=['GET', 'DELETE'])

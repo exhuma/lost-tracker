@@ -285,7 +285,7 @@ class Station(DB.Model):
         query = query.order_by(Station.order)
         query = query.filter(Station.order < self.order)
         query = query.limit(1)
-        return query.one()
+        return query.first()
 
     @property
     def after(self):
@@ -299,7 +299,7 @@ class Station(DB.Model):
         query = query.order_by(Station.order)
         query = query.filter(Station.order > self.order)
         query = query.limit(1)
-        return query.one()
+        return query.first()
 
 
 class Form(DB.Model):

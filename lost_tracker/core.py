@@ -38,11 +38,14 @@ WEB_IMAGES = {
 
 
 def _generate_state_list(station):
+    if not station:
+        return []
     return [{
         "stationId": state.station_id,
         "groupId": state.group_id,
-        "formScore": state.form_score,
-        "stationScore": state.score,
+        "groupName": state.group.name,
+        "formScore": state.form_score or 0,
+        "stationScore": state.score or 0,
         "state": state.state
     } for state in station.groups]
 
