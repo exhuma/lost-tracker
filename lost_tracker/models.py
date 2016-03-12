@@ -436,10 +436,10 @@ class GroupStation(DB.Model):
     def set_score(session, group_id, station_id, station_score, form_score,
                   state=None):
 
-        if isinstance(group_id, str):
+        if isinstance(group_id, (str, unicode)):
             group_id = Group.query.filter_by(name=group_id).one().id
 
-        if isinstance(station_id, str):
+        if isinstance(station_id, (str, unicode)):
             station_id = Station.query.filter_by(name=station_id).one().id
 
         query = GroupStation.query.filter(and_(
