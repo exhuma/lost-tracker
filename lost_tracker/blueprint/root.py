@@ -233,7 +233,7 @@ def save_settings():
     mdl.Setting.put(mdl.DB.session, 'event_location', event_location)
     mdl.Setting.put(mdl.DB.session, 'location_coords', location_coords)
     flash(gettext('Settings successfully saved.'), 'info')
-    return redirect(url_for("settings"))
+    return redirect(url_for(".settings"))
 
 
 @ROOT.route('/group_state/<group>/<station>', methods=['PUT'])
@@ -265,6 +265,7 @@ def update_group_station_state(group, station):
 @ROOT.route('/profile', methods=['GET', 'DELETE'])
 @login_required
 def profile():
+    social = current_app.extensions['social']
     return render_template(
         'profile.html',
         content='Profile Page',

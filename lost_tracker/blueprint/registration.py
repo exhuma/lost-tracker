@@ -58,7 +58,7 @@ def new():
                 'The registration has been recorded. You will receive an '
                 'e-mail once the registartion has been successfully '
                 'processed! You can see all your registered groups on <a '
-                'href="{}">your profile</a>.').format(url_for('profile')))
+                'href="{}">your profile</a>.').format(url_for('root.profile')))
 
     return render_template('register.html', stats=loco.stats())
 

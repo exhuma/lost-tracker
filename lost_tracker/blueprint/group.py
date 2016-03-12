@@ -86,7 +86,7 @@ def save_info(id):
     if current_user.has_role(mdl.Role.ADMIN):
         return redirect(url_for('group.edit', name=data['name']))
     else:
-        return redirect(url_for('profile'))
+        return redirect(url_for('root.profile'))
 
 
 @GROUP.route('/<group_name>/timeslot', methods=['PUT'])

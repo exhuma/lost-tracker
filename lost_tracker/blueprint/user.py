@@ -18,4 +18,4 @@ USER = Blueprint('user', __name__)
 def save_profile():
     current_user.email = request.form['email']
     flash(gettext('E-Mail successfully updated to %s') % request.form['email'])
-    return redirect(url_for('profile'))
+    return redirect(url_for('root.profile'))
