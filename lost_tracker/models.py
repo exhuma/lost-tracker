@@ -1,6 +1,7 @@
 from collections import namedtuple
 from datetime import datetime
 from json import loads, dumps
+import logging
 
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.sqlalchemy import SQLAlchemy
@@ -30,6 +31,7 @@ DATE_FORMAT = '%Y-%m-%d'
 
 
 DB = SQLAlchemy()
+LOG = logging.getLogger(__name__)
 
 
 form_scores = DB.Table(
@@ -563,6 +565,21 @@ class User(DB.Model, UserMixin):
                          backref=backref('user', lazy='dynamic'))
     messages = relationship('Message', backref="user",
                             order_by='Message.inserted')
+
+    @staticmethod
+    def by_role(role_name):
+        role = Role.query.filter_by(name=role_name).first()
+        if not role:
+            LOG.debug('Unknown role name: %r', role_name)
+            return []
+
+        query = DB.session.query(User).outerjoin(roles_users)
+        query = query.filter(roles_users.c.role == role.id)
+        return query
+
+    def __repr__(self):
+        return "<User #%d email=%r>" % (self.id, self.email)
+
 
 
 class Connection(DB.Model):

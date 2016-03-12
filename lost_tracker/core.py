@@ -419,7 +419,7 @@ def get_dashboard(station):
     }
 
 
-def store_message(session, group, user, content):
+def store_message(session, mailer, group, user, content):
     msg = Message(
         content=content,
         user=user,
@@ -427,4 +427,15 @@ def store_message(session, group, user, content):
     )
     session.add(msg)
     session.commit()
+
+    # Send out mail notifications
+    admins = set(User.by_role(Role.ADMIN))
+    recipients = admins | set([group.user])
+    mailer.send('new_message',
+                to=recipients,
+                data={
+                    'author': user,
+                    'group': group,
+                    'content': content
+                })
     return msg

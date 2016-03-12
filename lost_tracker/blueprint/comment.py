@@ -2,6 +2,7 @@ import logging
 
 from flask import (
     Blueprint,
+    current_app,
     flash,
     redirect,
     request,
@@ -33,7 +34,11 @@ def add():
 
     content = request.form.get('content', '').strip()
     if content:
-        loco.store_message(mdl.DB.session, group, current_user, content)
+        loco.store_message(mdl.DB.session,
+                           current_app.mailer,
+                           group,
+                           current_user,
+                           content)
 
     flash(gettext("Message saved!"))
     return redirect(url_for('group.show_comments', id=group_id))
