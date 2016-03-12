@@ -8,8 +8,16 @@ $script = <<SCRIPT
 
 BASEDIR=/opt/lost-tracker
 ENVDIR=${BASEDIR}/env
+CONFDIR=${BASEDIR}/.mamerwiselen/lost-tracker
 
 echo "[***] Running system setup..."
+add-apt-repository -y ppa:webupd8team/java
+
+echo debconf shared/accepted-oracle-license-v1-1 select true | \
+  sudo debconf-set-selections
+echo debconf shared/accepted-oracle-license-v1-1 seen true | \
+    sudo debconf-set-selections
+
 aptitude update
 aptitude -y install \
     apache2 \
@@ -23,22 +31,41 @@ aptitude -y install \
     libpq-dev \
     libxml2-dev \
     libxslt1-dev \
-    postgresql-server \
+    oracle-java8-installer \
+    postgresql \
+    postgresql-client \
     python-dev \
     python-virtualenv \
     vim-nox
 
 mkdir -p ${BASEDIR}
 virtualenv ${ENVDIR}
-# XXX pyvenv-3.4 ${ENVDIR}
-# XXX useradd -r -d ${BASEDIR} -m lostlu
-# XXX chown -R lostlu ${BASEDIR}
 
 echo "[***] Installing the application..."
 
 ${ENVDIR}/bin/pip install -U pip
 ${ENVDIR}/bin/pip install -r /vagrant/requirements.txt
-${ENVDIR}/bin/pip install -e /vagrant
+${ENVDIR}/bin/pip install -e /vagrant[dev]
+
+cp /vagrant/vagrant_resources/pg_hba.conf /etc/postgresql/9.1/main
+service postgresql reload
+createuser -U postgres -DRS lostlu
+createdb -U postgres -O lostlu lostlu
+
+mkdir -p ${CONFDIR}
+cp -v /vagrant/vagrant_resources/app.ini ${CONFDIR}
+(cd ${BASEDIR} && ${ENVDIR}/bin/alembic -c /vagrant/vagrant_resources/alembic.ini upgrade head)
+
+chown -R vagrant ${BASEDIR}
+
+echo "================================================================================"
+echo " To run the servers, enter the VM using "vagrant ssh""
+echo " next run:"
+echo "   (cd ${BASEDIR} && ./env/bin/python /vagrant/lost_tracker/main.py)"
+echo "   (cd /vagrant && java -jar __libs__/plovr/build/plovr-9f12b6c.jar serve plovr-config.js)"
+echo ""
+echo " BOTH COMMANDS MUST BE RUNNING!"
+echo "================================================================================"
 SCRIPT
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
