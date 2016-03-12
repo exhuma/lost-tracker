@@ -6,11 +6,15 @@ version=2.0
 dsn=postgresql://postgres@/lost_tracker
 
 [app]
+helpdesk = Text visible on all pages
 photo_folder = /path/to/folder
 registration_open = true
 login = lost
 password = lost
 secret_key = this-is-not-secret! use os.random to generate random bits!
+
+; A secondary title which is visible on each page.
+shout = hui!
 
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -23,3 +27,15 @@ listen=0.0.0.0
 port=5000
 ; Enable/Disable debugging mode.
 debug=True
+
+[twitter]
+consumer_key=
+consumer_secret=
+
+[google]
+consumer_key=
+consumer_secret=
+
+[facebook]
+consumer_key=
+consumer_secret=
