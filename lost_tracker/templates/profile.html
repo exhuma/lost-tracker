@@ -62,9 +62,11 @@
       <dl>
         <dt>Social Connections</dt>
         <dd>
-          {# TODO (TOS & Priv Pol}) {{ show_provider_button('twitter', 'Twitter', twitter_conn) }} #}
-          {{ show_provider_button('facebook', 'Facebook', facebook_conn) }}
-          {{ show_provider_button('google', 'google', google_conn) }}
+          {% for provider, obj in social.providers.items() %}
+            {{ show_provider_button(provider, provider, obj.get_connection()) }}
+          {% else %}
+            ERROR: NO SOCIAL CONNECTION AVAILABLE!
+          {% endfor %}
           <br clear="both" />
         </dd>
       <input type="submit" value="{{_("Update")}}" />

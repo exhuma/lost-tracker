@@ -47,13 +47,11 @@ from lost_tracker.const import (
 )
 
 
-babel = Babel()
-security = Security()
-social = Social()
-
-
 def make_app():
 
+    babel = Babel()
+    security = Security()
+    social = Social()
     user_datastore = SQLAlchemyUserDatastore(mdl.DB, mdl.User, mdl.Role)
 
     def auto_add_user(sender, provider, oauth_response):
@@ -100,23 +98,36 @@ def make_app():
     app.config['SECRET_KEY'] = app.localconf.get('app', 'secret_key')
     app.config['SQLALCHEMY_DATABASE_URI'] = app.localconf.get('db', 'dsn')
     mdl.DB.init_app(app)
-    app.config['SOCIAL_FACEBOOK'] = {
-        'consumer_key': app.localconf.get('facebook', 'consumer_key'),
-        'consumer_secret': app.localconf.get('facebook', 'consumer_secret')
-    }
-    app.config['SOCIAL_TWITTER'] = {
-        'consumer_key': app.localconf.get('twitter', 'consumer_key'),
-        'consumer_secret': app.localconf.get('twitter', 'consumer_secret')
-    }
-    app.config['SOCIAL_GOOGLE'] = {
-        'consumer_key': app.localconf.get('google', 'consumer_key'),
-        'consumer_secret': app.localconf.get('google', 'consumer_secret'),
-        'request_token_params': {
-            'scope': ('https://www.googleapis.com/auth/userinfo.profile '
-                      'https://www.googleapis.com/auth/plus.me '
-                      'https://www.googleapis.com/auth/userinfo.email')
+
+    # Social connections
+    social_connections = {}
+    if 'facebook' in app.localconf.sections():
+        social_connections['SOCIAL_FACEBOOK'] = {
+            'consumer_key': app.localconf.get('facebook', 'consumer_key'),
+            'consumer_secret': app.localconf.get('facebook', 'consumer_secret')
         }
-    }
+    if 'twitter' in app.localconf.sections():
+        social_connections['SOCIAL_TWITTER'] = {
+            'consumer_key': app.localconf.get('twitter', 'consumer_key'),
+            'consumer_secret': app.localconf.get('twitter', 'consumer_secret')
+        }
+    if 'google' in app.localconf.sections():
+        social_connections['SOCIAL_GOOGLE'] = {
+            'consumer_key': app.localconf.get('google', 'consumer_key'),
+            'consumer_secret': app.localconf.get('google', 'consumer_secret'),
+            'request_token_params': {
+                'scope': ('https://www.googleapis.com/auth/userinfo.profile '
+                          'https://www.googleapis.com/auth/plus.me '
+                          'https://www.googleapis.com/auth/userinfo.email')
+            }
+        }
+
+    if len(social_connections) < 1:
+        raise Exception('Must at least configure one social provider '
+                        '(facebook, google or twitter) in the config file!')
+
+    app.config.update(social_connections)
+
     social.init_app(app, SQLAlchemyConnectionDatastore(mdl.DB, mdl.Connection))
     security.init_app(app, user_datastore)
 
