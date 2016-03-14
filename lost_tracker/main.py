@@ -32,7 +32,7 @@ from lost_tracker.blueprint.root import ROOT
 from lost_tracker.blueprint.station import STATION
 from lost_tracker.blueprint.tabedit import TABULAR
 from lost_tracker.blueprint.user import USER
-from lost_tracker.emails import Mailer
+from lost_tracker.emails import Mailer, DummyMailer
 
 import lost_tracker.models as mdl
 
@@ -143,16 +143,6 @@ def make_app():
     babel.localeselector(get_locale)
     login_failed.connect(auto_add_user, app)
     return app
-
-
-class DummyMailer(object):
-    """
-    A mailer class for testing. Does not actually send any e-mails.
-    """
-    LOG = logging.getLogger('%s.DummyMailer' % __name__)
-
-    def send(self, *args, **kwargs):
-        self.LOG.info("DummyMailer.send called with %r %r" % (args, kwargs))
 
 
 def get_facebook_email(oauth_response):
