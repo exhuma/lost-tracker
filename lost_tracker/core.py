@@ -419,6 +419,10 @@ def get_dashboard(station):
     }
 
 
+def delete_message(message):
+    DB.session.delete(message)
+    DB.session.commit()
+
 def store_message(session, mailer, group, user, content):
     msg = Message(
         content=content,

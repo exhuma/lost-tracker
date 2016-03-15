@@ -10,7 +10,7 @@ from flask import (
 )
 
 from flask.ext.babel import gettext
-from flask.ext.security import current_user, login_required
+from flask.ext.security import current_user, login_required, roles_required
 
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -42,3 +42,14 @@ def add():
 
     flash(gettext("Message saved!"))
     return redirect(url_for('group.show_comments', id=group_id))
+
+
+@COMMENT.route('/<int:id>', methods=['DELETE'])
+@roles_required(mdl.Role.ADMIN)
+def delete(id):
+    message = mdl.Message.get(id)
+    if not message:
+        return gettext('Not found!'), 404
+
+    loco.delete_message(message)
+    return '"OK"'

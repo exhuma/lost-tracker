@@ -27,7 +27,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
 from lost_tracker import __version__
-from lost_tracker.const import TABULAR_PREFIX
+from lost_tracker.const import TABULAR_PREFIX, COMMENT_PREFIX
 from lost_tracker.util import basic_auth
 
 
@@ -89,6 +89,7 @@ def inject_context():
         localconf=current_app.localconf,
         location_coords=coords,
         location_display=location_display,
+        comment_prefix=COMMENT_PREFIX,
         registration_open=registration_open,
         tabular_prefix=TABULAR_PREFIX,
     )

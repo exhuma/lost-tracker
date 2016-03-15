@@ -3,9 +3,10 @@
 {% block content %}
 <h2>{{_("Messages for")}} {{group.name}}</h2>
 {% for message in group.messages %}
-  <div class="message-row">
+  <div class="message-row" data-message-id="{{message.id}}">
     <span class="message-image">{{avatar(message.user, 40)}}</span>
     <span class="message-time"><i class="fa fa-clock-o"></i> {{message.inserted|humantime}}</span>
+    <span class="message-button clickable" data-action="delete"><i class="fa fa-trash"></i></span>
     <span class="message-content">{{message.content|md|safe}}</span>
     <br clear="both" />
   </div>
@@ -22,6 +23,8 @@
   <br /><br /><br />
   <input type="submit" value={{_("Save")}} />
 </form>
-
+<script type="text/javascript" charset="utf-8">
+  new lost_tracker.MessageView();
+</script>
 
 {% endblock %}

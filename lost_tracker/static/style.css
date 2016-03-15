@@ -554,6 +554,20 @@ TABLE#scoreboard TD.score {
     margin-right: 0.5em;
     width: 50px;
 }
+
+.message-button {
+    float: right;
+    margin-right: 0.3em;
+    vertical-align: top;
+}
+
+.message-button .fa-trash:hover {
+    color: #ff0;
+}
+
+.message-button .fa-trash {
+    color: #a00;
+}
 /* }}} */
 
 /* vim: set fdm=marker : */

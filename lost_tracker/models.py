@@ -533,6 +533,10 @@ class Message(DB.Model):
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
 
+    @staticmethod
+    def get(id):
+        return Message.query.get(id)
+
 
 roles_users = DB.Table(
     'roles_users',
@@ -579,7 +583,6 @@ class User(DB.Model, UserMixin):
 
     def __repr__(self):
         return "<User #%d email=%r>" % (self.id, self.email)
-
 
 
 class Connection(DB.Model):
