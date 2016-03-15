@@ -14,7 +14,6 @@
 
 {% block content %}
   <h1>{{_('Login')}}</h1>
-  {% include "security/_messages.html" %}
   {% include "security/_menu.html" %}
   {# TODO (TOS & Priv Pol) {{ social_login('twitter', 'Twitter' )}} #}
   {{ social_login('facebook', 'Facebook' )}}
