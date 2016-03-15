@@ -568,6 +568,22 @@ TABLE#scoreboard TD.score {
 .message-button .fa-trash {
     color: #a00;
 }
+
+.fa-google {
+    color: #B71C1C;
+}
+
+.fa-google + .fa-stack-2x {
+    color: #C62828;
+}
+
+.fa-facebook {
+    color: #3b5998;
+}
+
+.fa-facebook + .fa-stack-2x {
+    color: #8b9dc3;
+}
 /* }}} */
 
 /* vim: set fdm=marker : */
