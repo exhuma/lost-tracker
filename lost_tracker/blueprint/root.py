@@ -107,7 +107,7 @@ def convert_markdown(value):
 
 @ROOT.app_template_filter('humantime')
 def humanize_time(value):
-    return format_datetime(value, format='d. MMM Y k:s')
+    return format_datetime(value, format='d. MMM YYYY kk:ss')
 
 
 # ------ Routes ---------------------------------------------------------------
