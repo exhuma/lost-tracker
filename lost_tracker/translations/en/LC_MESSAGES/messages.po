@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-09 17:09+0100\n"
-"PO-Revision-Date: 2016-03-09 17:12+0100\n"
+"POT-Creation-Date: 2016-03-16 18:29+0100\n"
+"PO-Revision-Date: 2016-03-16 18:33+0100\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -18,16 +18,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
 
-#: lost_tracker/main.py:195
-msgid "No such entity!"
-msgstr "No such entity!"
+#: lost_tracker/blueprint/comment.py:28
+msgid "Invalid Request!"
+msgstr "Invalid Request!"
 
-#: lost_tracker/main.py:350
-msgid "Settings successfully saved."
-msgstr "Settings successfully saved."
+#: lost_tracker/blueprint/comment.py:33
+msgid "Access denied!"
+msgstr "Access denied!"
+
+#: lost_tracker/blueprint/comment.py:43
+msgid "Message saved!"
+msgstr "Message saved!"
+
+#: lost_tracker/blueprint/comment.py:52
+#: lost_tracker/blueprint/group.py:134
+msgid "Not found!"
+msgstr "Not found!"
 
 #: lost_tracker/blueprint/group.py:49
-#: lost_tracker/blueprint/group.py:126
+#: lost_tracker/blueprint/group.py:116
+#: lost_tracker/blueprint/group.py:138
 msgid "Access Denied!"
 msgstr "Access Denied!"
 
@@ -47,9 +57,11 @@ msgstr "E-Mail sent successfully!"
 msgid "Incorrect value for direction: {!r}"
 msgstr "Incorrect value for direction: {!r}"
 
-#: lost_tracker/blueprint/group.py:122
-msgid "Not found!"
-msgstr "Not found!"
+#: lost_tracker/blueprint/group.py:114
+#: lost_tracker/blueprint/root.py:103
+#: lost_tracker/blueprint/station.py:94
+msgid "No such entity!"
+msgstr "No such entity!"
 
 #: lost_tracker/blueprint/registration.py:57
 msgid "The registration has been recorded. You will receive an e-mail once the registartion has been successfully processed! You can see all your registered groups on <a href=\"{}\">your profile</a>."
@@ -59,12 +71,22 @@ msgstr "The registration has been recorded. You will receive an e-mail once the 
 msgid "This group has already been accepted!"
 msgstr "This group has already been accepted!"
 
-#: lost_tracker/blueprint/tabedit.py:28
-#: lost_tracker/blueprint/tabedit.py:87
+#: lost_tracker/blueprint/root.py:122
+msgid "File not found!"
+msgstr "File not found!"
+
+#: lost_tracker/blueprint/root.py:249
+msgid "Settings successfully saved."
+msgstr "Settings successfully saved."
+
+#: lost_tracker/blueprint/tabedit.py:34
+#: lost_tracker/blueprint/tabedit.py:92
+#: lost_tracker/blueprint/tabedit.py:119
 msgid "Access Denied"
 msgstr "Access Denied"
 
-#: lost_tracker/blueprint/tabedit.py:62
+#: lost_tracker/blueprint/tabedit.py:68
+#: lost_tracker/blueprint/tabedit.py:102
 msgid "Table {name} not yet supported!"
 msgstr "Table {name} not yet supported!"
 
@@ -126,8 +148,8 @@ msgid "Group has cancelled"
 msgstr "Group has cancelled"
 
 #: lost_tracker/templates/edit_group.html:38
-msgid "Group has finished"
-msgstr "Group has finished"
+msgid "Group has completed"
+msgstr "Group has completed"
 
 #: lost_tracker/templates/edit_group.html:40
 msgid "Comments"
@@ -142,7 +164,7 @@ msgid "Send e-mail to the group about the changes."
 msgstr "Send e-mail to the group about the changes."
 
 #: lost_tracker/templates/gallery.html:3
-#: lost_tracker/templates/master_framed.html:27
+#: lost_tracker/templates/master_framed.html:26
 msgid "Pictures"
 msgstr "Pictures"
 
@@ -228,7 +250,7 @@ msgstr "Everybody who likes to spend a night outside, who's fairly well on foot 
 #: lost_tracker/templates/login.html:6
 #: lost_tracker/templates/login.html:13
 #: lost_tracker/templates/login.html:18
-#: lost_tracker/templates/master_framed.html:48
+#: lost_tracker/templates/master_framed.html:46
 #: lost_tracker/templates/security/login_user.html:4
 #: lost_tracker/templates/security/login_user.html:16
 msgid "Login"
@@ -242,65 +264,82 @@ msgstr "Login Info"
 msgid "Password"
 msgstr "Password"
 
-#: lost_tracker/templates/master_framed.html:23
+#: lost_tracker/templates/master_framed.html:22
 #: lost_tracker/templates/where.html:3
 #: lost_tracker/templates/where.html:6
 msgid "Where is this?"
 msgstr "Where is this?"
 
-#: lost_tracker/templates/master_framed.html:25
-#: lost_tracker/templates/profile.html:43
+#: lost_tracker/templates/master_framed.html:24
+#: lost_tracker/templates/profile.html:45
 #: lost_tracker/templates/register.html:3
 #: lost_tracker/templates/register.html:29
 msgid "Register"
 msgstr "Register"
 
-#: lost_tracker/templates/master_framed.html:28
+#: lost_tracker/templates/master_framed.html:27
 #: lost_tracker/templates/scoreboard.html:3
 #: lost_tracker/templates/scoreboard.html:10
 msgid "Scoreboard"
 msgstr "Scoreboard"
 
-#: lost_tracker/templates/master_framed.html:29
+#: lost_tracker/templates/master_framed.html:28
 #: lost_tracker/templates/misc.html:3
 #: lost_tracker/templates/misc.html:6
 msgid "Anything else?"
 msgstr "Anything else?"
 
-#: lost_tracker/templates/master_framed.html:40
+#: lost_tracker/templates/master_framed.html:39
 msgid "Logged in as:"
 msgstr "Logged in as:"
 
-#: lost_tracker/templates/master_framed.html:41
-msgid "List"
-msgstr "List"
-
-#: lost_tracker/templates/master_framed.html:42
+#: lost_tracker/templates/master_framed.html:40
 #: lost_tracker/templates/matrix.html:3
 msgid "Matrix"
 msgstr "Matrix"
 
-#: lost_tracker/templates/master_framed.html:43
+#: lost_tracker/templates/master_framed.html:41
 #: lost_tracker/templates/slot_editor.html:3
 msgid "Slot Editor"
 msgstr "Slot Editor"
 
-#: lost_tracker/templates/master_framed.html:44
+#: lost_tracker/templates/master_framed.html:42
 msgid "Manage Groups"
 msgstr "Manage Groups"
 
-#: lost_tracker/templates/master_framed.html:45
+#: lost_tracker/templates/master_framed.html:43
 #: lost_tracker/templates/settings.html:3
 msgid "Settings"
 msgstr "Settings"
 
-#: lost_tracker/templates/master_framed.html:46
+#: lost_tracker/templates/master_framed.html:44
 msgid "Logout"
 msgstr "Logout"
 
 #: lost_tracker/templates/matrix.html:19
 msgid "SUM"
 msgstr "SUM"
+
+#: lost_tracker/templates/messages.html:4
+msgid "Messages for"
+msgstr "Messages for"
+
+#: lost_tracker/templates/messages.html:14
+msgid "No messages"
+msgstr "No messages"
+
+#: lost_tracker/templates/messages.html:18
+msgid "Add Message"
+msgstr "Add Message"
+
+#: lost_tracker/templates/messages.html:22
+msgid "For text formatting use <a href=\"https://daringfireball.net/projects/markdown/basics\">markdown</a> (<a href=\"https://en.wikipedia.org/wiki/Markdown\">Wikipedia</a>, <a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>)"
+msgstr "For text formatting use <a href=\"https://daringfireball.net/projects/markdown/basics\">markdown</a> (<a href=\"https://en.wikipedia.org/wiki/Markdown\">Wikipedia</a>, <a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>)"
+
+#: lost_tracker/templates/messages.html:24
+#: lost_tracker/templates/settings.html:26
+msgid "Save"
+msgstr "Save"
 
 #: lost_tracker/templates/misc.html:8
 msgid "Entry fees are about €7 to €9 per person."
@@ -343,19 +382,23 @@ msgstr "Your bookings"
 msgid "Verified by he Lost team?"
 msgstr "Verified by he Lost team?"
 
-#: lost_tracker/templates/profile.html:42
+#: lost_tracker/templates/profile.html:31
+msgid "Messages"
+msgstr "Messages"
+
+#: lost_tracker/templates/profile.html:44
 msgid "No bookings"
 msgstr "No bookings"
 
-#: lost_tracker/templates/profile.html:55
+#: lost_tracker/templates/profile.html:57
 msgid "Personal Information"
 msgstr "Personal Information"
 
-#: lost_tracker/templates/profile.html:57
+#: lost_tracker/templates/profile.html:59
 msgid "e-mail"
 msgstr "e-mail"
 
-#: lost_tracker/templates/profile.html:68
+#: lost_tracker/templates/profile.html:72
 msgid "Update"
 msgstr "Update"
 
@@ -418,10 +461,6 @@ msgstr "Application Settings"
 msgid "Global"
 msgstr "Global"
 
-#: lost_tracker/templates/settings.html:26
-msgid "Save"
-msgstr "Save"
-
 #: lost_tracker/templates/slot_editor.html:6
 msgid "Time Slots"
 msgstr "Time Slots"
@@ -444,18 +483,22 @@ msgid "Questionnaire"
 msgstr "Questionnaire"
 
 #: lost_tracker/templates/tabular.html:48
+#: lost_tracker/templates/tabularindex.html:3
 msgid "Manager"
 msgstr "Manager"
 
 #: lost_tracker/templates/tabular.html:52
+#: lost_tracker/templates/tabularindex.html:7
 msgid "Groups"
 msgstr "Groups"
 
 #: lost_tracker/templates/tabular.html:53
+#: lost_tracker/templates/tabularindex.html:8
 msgid "Stations"
 msgstr "Stations"
 
 #: lost_tracker/templates/tabular.html:54
+#: lost_tracker/templates/tabularindex.html:9
 msgid "Forms"
 msgstr "Forms"
 
@@ -466,6 +509,11 @@ msgstr "Departure and registration location:"
 #: lost_tracker/templates/where.html:18
 msgid "No location defined yet!"
 msgstr "No location defined yet!"
+
+#: lost_tracker/templates/security/login_user.html:8
+#, python-format
+msgid "Log in with %s"
+msgstr "Log in with %s"
 
 #~ msgid "Thanks to anyone who participated"
 #~ msgstr "Thanks to anyone who participated"
@@ -493,3 +541,9 @@ msgstr "No location defined yet!"
 
 #~ msgid "Edit Link"
 #~ msgstr "Edit Link"
+
+#~ msgid "Group has finished"
+#~ msgstr "Group has finished"
+
+#~ msgid "List"
+#~ msgstr "List"
