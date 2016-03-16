@@ -40,7 +40,7 @@
           <td><a href="{{url_for('group.show_comments', id=group.id)}}"><i class="fa fa-comments"></i></a></td>
         </tr>
       {% else %}
-      <tr><td colspan="2">
+      <tr><td colspan="4">
         <h3>{{_("No bookings")}}</h3>
         <a href="{{url_for('registration.new')}}">{{_("Register")}}</a>
       </td></tr>
