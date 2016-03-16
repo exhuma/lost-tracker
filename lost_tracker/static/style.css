@@ -586,4 +586,10 @@ TABLE#scoreboard TD.score {
 }
 /* }}} */
 
+/* {{{ login form */
+.login-button {
+    margin: 1.5em 2em;
+}
+/* }}} */
+
 /* vim: set fdm=marker : */

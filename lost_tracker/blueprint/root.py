@@ -7,6 +7,7 @@ except ImportError:
 
 from flask import (
     Blueprint,
+    Markup,
     current_app,
     flash,
     jsonify,
@@ -16,11 +17,12 @@ from flask import (
     session as flask_session,
     url_for,
 )
-from flask.ext.babel import gettext, format_datetime, format_date
+from flask.ext.babel import gettext, format_datetime, format_date, get_locale
 from flask.ext.security import (
     login_required,
     roles_accepted,
 )
+from jinja2.exceptions import TemplateNotFound
 from markdown import markdown
 from sqlalchemy.orm.exc import NoResultFound
 
@@ -85,11 +87,12 @@ def inject_context():
         Role=mdl.Role,
         Setting=mdl.Setting,
         __version__=__version__,
+        comment_prefix=COMMENT_PREFIX,
         date_display=date_display,
         localconf=current_app.localconf,
         location_coords=coords,
         location_display=location_display,
-        comment_prefix=COMMENT_PREFIX,
+        mdtemplate=mdtemplate,
         registration_open=registration_open,
         tabular_prefix=TABULAR_PREFIX,
     )
@@ -108,6 +111,16 @@ def convert_markdown(value):
 @ROOT.app_template_filter('humantime')
 def humanize_time(value):
     return format_datetime(value, format='d. MMM YYYY kk:ss')
+
+
+def mdtemplate(filename):
+    try:
+        source, _, _ = current_app.jinja_loader.get_source(
+            current_app.jinja_env, '%s/%s' % (get_locale(), filename))
+        output = Markup(markdown(source))
+    except TemplateNotFound:
+        output = gettext('File not found!')
+    return output
 
 
 # ------ Routes ---------------------------------------------------------------
