@@ -27,6 +27,7 @@ from flask import (
 from lost_tracker.blueprint.comment import COMMENT
 from lost_tracker.blueprint.group import GROUP
 from lost_tracker.blueprint.photo import PHOTO
+from lost_tracker.blueprint.qr import QR
 from lost_tracker.blueprint.registration import REGISTRATION
 from lost_tracker.blueprint.root import ROOT
 from lost_tracker.blueprint.station import STATION
@@ -40,6 +41,7 @@ from lost_tracker.const import (
     COMMENT_PREFIX,
     GROUP_PREFIX,
     PHOTO_PREFIX,
+    QR_PREFIX,
     REGISTRATION_PREFIX,
     STATION_PREFIX,
     TABULAR_PREFIX,
@@ -134,6 +136,7 @@ def make_app():
     app.register_blueprint(COMMENT, url_prefix=COMMENT_PREFIX)
     app.register_blueprint(GROUP, url_prefix=GROUP_PREFIX)
     app.register_blueprint(PHOTO, url_prefix=PHOTO_PREFIX)
+    app.register_blueprint(QR, url_prefix=QR_PREFIX)
     app.register_blueprint(REGISTRATION, url_prefix=REGISTRATION_PREFIX)
     app.register_blueprint(ROOT)
     app.register_blueprint(STATION, url_prefix=STATION_PREFIX)

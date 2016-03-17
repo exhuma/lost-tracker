@@ -25,6 +25,7 @@
   <table>
     <thead>
       <tr>
+        <th>{{_("QR-Code")}}</th>
         <th>{{_("Name")}}</th>
         <th>{{_("Starting Time")}}</th>
         <th>{{_("Verified by he Lost team?")}}</th>
@@ -34,6 +35,8 @@
     <tbody>
       {% for group in current_user.groups %}
         <tr>
+          <td><a href="{{url_for('qr.generate', id=group.id)}}">
+              <img src="{{url_for('qr.generate', id=group.id, size=64)}}" /></a></td>
           <td><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
           <td>{{group.start_time or "?"}}</td>
           <td><i class="fa fa-{{'check' if group.accepted else 'close'}}"></i></td>
