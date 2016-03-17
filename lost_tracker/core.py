@@ -423,6 +423,7 @@ def delete_message(message):
     DB.session.delete(message)
     DB.session.commit()
 
+
 def store_message(session, mailer, group, user, content):
     msg = Message(
         content=content,
@@ -443,3 +444,23 @@ def store_message(session, mailer, group, user, content):
                     'content': content
                 })
     return msg
+
+
+def set_group_state(session, group_id, station_id, new_state):
+    station = session.query(Station).filter_by(id=station_id).first()
+    if not station:
+        LOG.debug('No station found with ID %r', station_id)
+        return False
+
+    group = session.query(Group).filter_by(id=group_id).first()
+    if not group:
+        LOG.debug('No group found with ID %r', group_id)
+        return False
+
+    state = GroupStation(
+        group_id=group_id,
+        station_id=station_id,
+        state=new_state)
+    state = session.merge(state)
+    session.flush()
+    return state

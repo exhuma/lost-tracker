@@ -411,9 +411,10 @@ class GroupStation(DB.Model):
     group = relationship("Group")
     station = relationship("Station")
 
-    def __init__(self, group_id, station_id):
+    def __init__(self, group_id, station_id, state=STATE_UNKNOWN):
         self.group_id = group_id
         self.station_id = station_id
+        self.state = state
 
     @staticmethod
     def get(group_id, station_id):
