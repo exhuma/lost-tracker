@@ -281,6 +281,26 @@ def update_group_station_state(group, station):
         group_id=group_entity.id)
 
 
+@ROOT.route('/group_state/<group>/<station>', methods=['GET'])
+def get_group_station_state(group, station):
+    """
+    Required by the android client.
+    """
+    group = mdl.Group.one(name=unquote_plus(group))
+    station = mdl.Station.one(name=unquote_plus(station))
+    if not group:
+        return '"No such group!"', 404
+
+    if not station:
+        return '"No such station!"', 404
+
+    state = mdl.GroupStation.get(group.id, station.id)
+    if not state:
+        return '"Not state"', 404
+
+    return jsonify(state.to_dict())
+
+
 @ROOT.route('/profile', methods=['GET', 'DELETE'])
 @login_required
 def profile():
