@@ -95,15 +95,21 @@ def score_totals():
 
 def advance(session, group_id, station_id):
     state = GroupStation.get(group_id, station_id)
+    group = state.group
+    station = state.station
 
     # The first state to set - if there is nothing yet - is "ARRIVED"
     if not state:
+        if not group.departure_time and station.is_start:
+            group.departure_time = func.now()
         state = GroupStation(group_id, station_id)
         state.state = STATE_ARRIVED
         session.add(state)
         return STATE_ARRIVED
 
     if state.state == STATE_UNKNOWN:
+        if not group.departure_time and station.is_start:
+            group.departure_time = func.now()
         state.state = STATE_ARRIVED
     elif state.state == STATE_ARRIVED:
         state.state = STATE_FINISHED
@@ -133,6 +139,7 @@ class Group(DB.Model):
     completed = Column(Boolean, server_default='false', default=False)
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
+    departure_time = Column(DateTime, server_default=None, default=None)
 
     user = relationship('User', backref="groups")
     stations = relationship('GroupStation')
@@ -236,6 +243,7 @@ class Station(DB.Model):
     order = Column(Integer, unique=True)
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
+    is_start = Column(Boolean, default=False)
 
     groups = relationship('GroupStation')
 
@@ -440,18 +448,25 @@ class GroupStation(DB.Model):
                   state=None):
 
         if isinstance(group_id, (str, unicode)):
-            group_id = Group.query.filter_by(name=group_id).one().id
+            group = Group.query.filter_by(name=group_id).one()
+        else:
+            group = Group.query.filter_by(id=group_id).one()
 
         if isinstance(station_id, (str, unicode)):
-            station_id = Station.query.filter_by(name=station_id).one().id
+            station = Station.query.filter_by(name=station_id).one()
+        else:
+            station = Station.query.filter_by(id=station_id).one()
 
         query = GroupStation.query.filter(and_(
-            GroupStation.group_id == group_id,
-            GroupStation.station_id == station_id))
+            GroupStation.group_id == group.id,
+            GroupStation.station_id == station.id))
+
+        if not group.departure_time and station.is_start and state == STATE_ARRIVED:
+            group.departure_time = func.now()
 
         row = query.first()
         if not row:
-            gs = GroupStation(group_id, station_id)
+            gs = GroupStation(group.id, station.id)
             gs.score = station_score
             gs.form_score = form_score
             if state:

@@ -21,7 +21,8 @@ from lost_tracker.models import (
 
 from sqlalchemy import and_
 from os.path import exists
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy import func  # TODO this module should have no SA
+from sqlalchemy.exc import IntegrityError  # TODO this module should have no SA
 import logging
 import mimetypes
 import os
@@ -456,6 +457,9 @@ def set_group_state(session, group_id, station_id, new_state):
     if not group:
         LOG.debug('No group found with ID %r', group_id)
         return False
+
+    if not group.departure_time and station.is_start and new_state == STATE_ARRIVED:
+        group.departure_time = func.now()
 
     state = GroupStation(
         group_id=group_id,
