@@ -11,12 +11,13 @@
 <h3>({{_("Current score")}})</h3>
 
 <br>
+
 <table id="scoreboard" border="0" width="100%">
     {% for row in scores %}
-    <tr class="{{'completed' if row[4] else ''}} position_{{row[0]}}">
-      <td class="position">{{row[0]}}{%if not row[4] %}<sup><small><i class="fa fa-hourglass-o"></i></small></sup>{% endif %}</td>
-        <td class="name">{{row[1]}}</td>
-        <td class="score">{{row[2]}}<br /><small>{{'%3.2f' % row[3]}}/min</small></td>
+    <tr class="{{'completed' if row.has_completed else ''}} position_{{row.position}}">
+      <td class="position">{{row.position}}{%if not row.has_completed %}<sup><small><i class="fa fa-hourglass-o"></i></small></sup>{% endif %}</td>
+        <td class="name">{{row.group_name}}</td>
+        <td class="score">{{row.total_score}}<br /><small>{{'%3.2f' % row.points_per_minute}}/min</small></td>
     </tr>
     {% endfor %}
 </table>

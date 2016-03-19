@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import datetime
 from operator import attrgetter
 try:
@@ -31,6 +32,10 @@ import lost_tracker.models as mdl
 from lost_tracker import __version__
 from lost_tracker.const import TABULAR_PREFIX, COMMENT_PREFIX
 from lost_tracker.util import basic_auth
+
+ScoreBoardRow = namedtuple(
+    'ScoreBoardRow',
+    'position group_name total_score points_per_minute has_completed')
 
 
 ROOT = Blueprint('root', __name__)
@@ -169,8 +174,8 @@ def scoreboard():
     pos = 1
     for row in result:
         group = mdl.Group.one(id=row.group_id)
-        # TODO namedtuple!
-        output.append([pos, group.name, row.score_sum, row.ppm, group.completed])
+        output.append(ScoreBoardRow(
+            pos, group.name, row.score_sum, row.ppm, group.completed))
         pos += 1
     return render_template('scoreboard.html', scores=output)
 
