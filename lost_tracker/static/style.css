@@ -139,7 +139,7 @@ DIV.group .form_icon {
 
 .state_2,
 .completed {
-    background: hsl(120, 100%, 20%);
+    background: hsla(120, 50%, 20%, 0.2);
     color: hsl(120, 100%, 75%);
 }
 
@@ -463,27 +463,22 @@ TABLE#scoreboard TD {
 
 .position_1 {
     font-size: 200%;
-    line-height: 200%;
 }
 
 .position_2 {
     font-size: 180%;
-    line-height: 180%;
 }
 
 .position_3 {
     font-size: 160%;
-    line-height: 160%;
 }
 
 .position_4 {
     font-size: 140%;
-    line-height: 140%;
 }
 
 .position_5 {
     font-size: 120%;
-    line-height: 120%;
 }
 
 TABLE#scoreboard TD.position,
@@ -502,6 +497,10 @@ TABLE#scoreboard TD.name {
 
 TABLE#scoreboard TD.score {
     text-align: right;
+}
+
+TABLE#scoreboard small {
+    font-size: 50%;
 }
 
 .inline-form {
