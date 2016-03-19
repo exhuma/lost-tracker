@@ -169,7 +169,8 @@ def scoreboard():
     pos = 1
     for row in result:
         group = mdl.Group.one(id=row.group_id)
-        output.append([pos, group.name, row.score_sum, group.completed])
+        # TODO namedtuple!
+        output.append([pos, group.name, row.score_sum, row.ppm, group.completed])
         pos += 1
     return render_template('scoreboard.html', scores=output)
 

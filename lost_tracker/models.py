@@ -17,7 +17,6 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.sql import select
 from lost_tracker.util import start_time_to_order
 
 STATE_UNKNOWN = 0
@@ -69,43 +68,45 @@ def custom_json_serializer(value):
 
 def score_totals():
     score_result = namedtuple('ScoreResult',
-                              'group_id, score_sum')
+                              'group_id, score_sum, ppm')
 
-    station_select = select([
-        GroupStation.__table__.c.group_id,
-        (
-            func.coalesce(GroupStation.__table__.c.score, 0) +
-            func.coalesce(GroupStation.__table__.c.form_score, 0)
-        )])
-
+    query = GroupStation.query
     group_scores = {}
-
-    for gid, score in DB.engine.execute(station_select):
-        if score is None:
-            continue
-        group_scores.setdefault(gid, 0)
-        group_scores[gid] += score
+    for row in query:
+        station_score = row.score or 0
+        form_score = row.form_score or 0
+        group_scores.setdefault(row.group, 0)
+        group_scores[row.group] += (station_score + form_score)
 
     output = []
-    for gid in group_scores:
-        output.append(score_result(gid, group_scores[gid]))
+    for group in group_scores:
+        if group.departure_time:
+            interval = datetime.now() - group.departure_time
+            minutes_since_start = interval.total_seconds() / 60
+            ppm = group_scores[group] / minutes_since_start
+        else:
+            ppm = 0
+        output.append(score_result(group.id, group_scores[group], ppm))
 
     return output
 
 
 def advance(session, group_id, station_id):
     state = GroupStation.get(group_id, station_id)
-    group = state.group
-    station = state.station
 
     # The first state to set - if there is nothing yet - is "ARRIVED"
     if not state:
+        group = Group.one(id=group_id)
+        station = Station.one(id=station_id)
         if not group.departure_time and station.is_start:
             group.departure_time = func.now()
         state = GroupStation(group_id, station_id)
         state.state = STATE_ARRIVED
         session.add(state)
         return STATE_ARRIVED
+
+    group = state.group
+    station = state.station
 
     if state.state == STATE_UNKNOWN:
         if not group.departure_time and station.is_start:
@@ -271,7 +272,10 @@ class Station(DB.Model):
         matching station is found.
         """
         qry = Station.query
-        qry = qry.filter_by(name=filters['name'])
+        if 'id' in filters:
+            qry = qry.filter_by(id=filters['id'])
+        elif 'name' in filters:
+            qry = qry.filter_by(name=filters['name'])
         qry = qry.first()
         return qry
 
