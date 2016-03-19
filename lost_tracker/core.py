@@ -1,4 +1,14 @@
+from collections import namedtuple
+from os.path import exists
 from stat import S_ISREG, ST_CTIME, ST_MODE
+import logging
+import mimetypes
+import os
+import os.path
+try:
+    from urllib.parse import quote_plus
+except ImportError:
+    from urllib import quote_plus  # NOQA
 
 from lost_tracker.util import start_time_to_order
 from lost_tracker.models import (
@@ -20,17 +30,8 @@ from lost_tracker.models import (
 )
 
 from sqlalchemy import and_
-from os.path import exists
 from sqlalchemy import func  # TODO this module should have no SA
 from sqlalchemy.exc import IntegrityError  # TODO this module should have no SA
-import logging
-import mimetypes
-import os
-import os.path
-try:
-    from urllib.parse import quote_plus
-except ImportError:
-    from urllib import quote_plus  # NOQA
 
 LOG = logging.getLogger(__name__)
 WEB_IMAGES = {
@@ -38,6 +39,7 @@ WEB_IMAGES = {
     'image/png',
 }
 
+MatrixSum = namedtuple('MatrixSum', 'unknown arrived completed')
 
 def _generate_state_list(station):
     if not station:
@@ -75,7 +77,6 @@ class Matrix(object):
             ...
         ]
     """
-    # TODO: make this a list of dicts or a list of namedtuples!
 
     def __init__(self, stations, groups):
         self._stations = stations
@@ -97,7 +98,6 @@ class Matrix(object):
         Creates a list where each element contains the sum of "unknown",
         "arrived" and "completed" states for each station.
         """
-        # TODO: make this a list of namedtuples!
         if not self._matrix:
             return []
         sums = [[0, 0, 0] for _ in self._matrix[0][1:]]
@@ -113,7 +113,8 @@ class Matrix(object):
                     sums[i][STATE_ARRIVED] += 1
                 elif state.state == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
-        return sums
+        # Wrap in named-tuples for readability
+        return [MatrixSum(*sum) for sum in sums]
 
 
 def add_group(grp_name, contact, phone, direction, start_time, session):

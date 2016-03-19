@@ -19,9 +19,9 @@
           <td>{{_('SUM')}}</td>
           {% for col in matrix.sums %}
           <td>
-              <span class="unknown">{{col[0]}}</span>
-              <span class="arrived">{{col[1]}}</span>
-              <span class="completed">{{col[2]}}</span>
+              <span class="unknown">{{col.unknown}}</span>
+              <span class="arrived">{{col.arrived}}</span>
+              <span class="completed">{{col.completed}}</span>
           </td>
           {% endfor %}
       </tr>
@@ -31,9 +31,9 @@
           <td>SUM</td>
           {% for col in matrix.sums %}
           <td>
-              <span class="unknown">{{col[0]}}</span>
-              <span class="arrived">{{col[1]}}</span>
-              <span class="completed">{{col[2]}}</span>
+              <span class="unknown">{{col.unknown}}</span>
+              <span class="arrived">{{col.arrived}}</span>
+              <span class="completed">{{col.completed}}</span>
           </td>
           {% endfor %}
       </tr>
