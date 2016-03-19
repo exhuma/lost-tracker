@@ -179,7 +179,7 @@ def scoreboard():
 @roles_accepted(mdl.Role.ADMIN)
 def slot_editor():
     groups = mdl.Group.all()
-    slots = mdl.TimeSlot.all()
+    slots = mdl.TimeSlot.all(current_app.localconf)
 
     groups_a = {}
     groups_b = {}
@@ -205,7 +205,7 @@ def slot_editor():
                            groups_a=groups_a,
                            groups_b=groups_b,
                            groups_none=groups_none,
-                           stats=loco.stats())
+                           stats=loco.stats(current_app.localconf))
 
 
 @ROOT.route('/js-fragment/group-tooltip/<int:group_id>')

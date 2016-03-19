@@ -60,7 +60,8 @@ def new():
                 'processed! You can see all your registered groups on <a '
                 'href="{}">your profile</a>.').format(url_for('root.profile')))
 
-    return render_template('register.html', stats=loco.stats())
+    return render_template('register.html',
+                           stats=loco.stats(current_app.localconf))
 
 
 @REGISTRATION.route('/accept/<key>')
