@@ -62,19 +62,18 @@
         <dt>{{_("e-mail")}}</dt>
         <dd><input type="email" name="email" value="{{current_user.email}}" /></dd>
       </dl>
-      <dl>
-        <dt>Social Connections</dt>
-        <dd>
-          {% for provider, obj in social.providers.items() %}
-            {{ show_provider_button(provider, provider, obj.get_connection()) }}
-          {% else %}
-            ERROR: NO SOCIAL CONNECTION AVAILABLE!
-          {% endfor %}
-          <br clear="both" />
-        </dd>
       <input type="submit" value="{{_("Update")}}" />
     </fieldset>
   </form>
+
+  <fieldset>
+    <legend>{{_("Social Connections")}}</legend>
+    {% for provider, obj in social.providers.items() %}
+      {{ show_provider_button(provider, provider, obj.get_connection()) }}
+    {% else %}
+      ERROR: NO SOCIAL CONNECTION AVAILABLE!
+    {% endfor %}
+  </fieldset>
   <script type="text/javascript" charset="utf-8">
     new lost_tracker.SocialPage();
   </script>
