@@ -1,6 +1,7 @@
-import logging
 from datetime import datetime
 from sqlalchemy.orm.exc import NoResultFound
+from time import sleep
+import logging
 
 from config_resolver import Config
 from flask.ext.babel import Babel
@@ -144,6 +145,7 @@ def make_app():
     app.register_blueprint(USER, url_prefix=USER_PREFIX)
     babel.init_app(app)
     babel.localeselector(get_locale)
+    sleep(1)
     login_failed.connect(auto_add_user, app)
     return app
 
