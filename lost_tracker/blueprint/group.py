@@ -61,7 +61,8 @@ def save_info(id):
 
     # ... next, if we are allowed, add admin-only attributes
     if current_user.has_role(mdl.Role.ADMIN):
-        data['direction'] = request.form['direction']
+        if 'direction' in request.form:
+            data['direction'] = request.form['direction']
         data['start_time'] = request.form['start_time']
         data['send_email'] = request.form.get('send_email') == 'true'
         data['cancelled'] = request.form.get('cancelled') == 'true'
