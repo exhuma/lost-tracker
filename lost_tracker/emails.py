@@ -43,7 +43,7 @@ class DummyMailer(object):
         print('Sending Mail'.center(80, '-'))
         print('To:')
         for recipient in to:
-            print('    %r' % recipient)
+            print('    %r' % str(recipient))
         print('Subject: %r' % subject)
         print('Body'.center(80, '-'))
         print(body)
