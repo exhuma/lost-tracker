@@ -17,5 +17,6 @@ USER = Blueprint('user', __name__)
 @roles_accepted('authenticated')
 def save_profile():
     current_user.email = request.form['email']
-    flash(gettext('E-Mail successfully updated to %s') % request.form['email'])
+    flash(gettext('E-Mail successfully updated to {}').format(
+        request.form['email']))
     return redirect(url_for('root.profile'))
