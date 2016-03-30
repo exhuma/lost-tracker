@@ -20,7 +20,7 @@
       <span id="#mainmenu">
         <a href="{{url_for('root.index')}}"><strong>Lost.lu</strong></a> |
         <a href="{{url_for('root.where')}}">{{_('Where is this?')}}</a> |
-        {% if registration_open %}
+        {% if registration_open or current_user.has_role(Role.ADMIN) %}
           <a href="{{url_for('registration.new')}}">{{_('Register')}}</a> |
         {% endif %}
         <a href="{{url_for('photo.gallery')}}">{{_('Pictures')}}</a> |

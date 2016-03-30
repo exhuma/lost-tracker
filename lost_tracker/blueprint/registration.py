@@ -24,7 +24,7 @@ REGISTRATION = Blueprint('registration', __name__)
 @login_required
 def new():
     is_open = mdl.Setting.get('registration_open', default=False)
-    if not is_open:
+    if not is_open and not current_user.has_role(mdl.Role.ADMIN):
         return render_template('registration_closed.html')
 
     if request.method == 'POST':
