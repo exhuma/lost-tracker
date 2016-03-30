@@ -141,6 +141,7 @@ class Group(DB.Model):
     inserted = Column(DateTime, server_default=func.now(), default=func.now())
     updated = Column(DateTime)
     departure_time = Column(DateTime, server_default=None, default=None)
+    num_vegetarians = Column(Integer, server_default='0', default=0)
 
     user = relationship('User', backref="groups")
     stations = relationship('GroupStation')

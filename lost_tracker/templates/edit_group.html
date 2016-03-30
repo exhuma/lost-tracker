@@ -21,6 +21,8 @@
       <dd><input type="text" name="contact" value="{{group.contact}}" /></dd>
       <dt>{{_('Phone')}}</dt>
       <dd><input type="text" name="phone" value="{{group.phone}}" /></dd>
+      <dt>{{_('Number of vegetarians')}}</dt>
+      <dd><input type="number" min="0" step="1" name="num_vegetarians" value="{{group.num_vegetarians}}" /></dd>
       {% if current_user.has_role(Role.ADMIN) %}
         <dt>{{_('Direction')}}</dt>
         <dd>

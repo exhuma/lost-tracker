@@ -35,6 +35,7 @@ def new():
             "time": request.form.get('time'),
             "comments": request.form.get('comments'),
             "user_id": current_user.id,
+            "num_vegetarians": request.form.get('num_vegetarians'),
         }
         try:
             key = loco.store_registration(
