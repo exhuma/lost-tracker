@@ -77,7 +77,9 @@ def develop():
     l('[ -d env ] || virtualenv env')
     l('./env/bin/pip uninstall lost_tracker || true')
     l('./env/bin/pip install "setuptools>=0.8"')  # needed by IMAPClient
-    l('./env/bin/pip install -e .')
+    # some packages are unavailable on pypi :( -> Use requirements.txt
+    l('./env/bin/pip install -r requirements.txt')
+    l('./env/bin/pip install -e .[dev,test]')
     l('mkdir -p __libs__')
 
     with fab.lcd('__libs__'):
