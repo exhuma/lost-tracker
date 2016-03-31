@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-30 21:32+0200\n"
-"PO-Revision-Date: 2016-03-30 21:35+0200\n"
+"POT-Creation-Date: 2016-03-31 18:29+0200\n"
+"PO-Revision-Date: 2016-03-31 18:31+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: lb\n"
 "Language-Team: lb <LL@li.org>\n"
@@ -18,6 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
 "X-Generator: Poedit 1.8.4\n"
+
+#: lost_tracker/main.py:97
+msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
+msgstr "Benotzer ass elo mat {} verboon. Ignoréier d'Message déi seet: \"{}\""
 
 #: lost_tracker/blueprint/comment.py:28 lost_tracker/blueprint/qr.py:50
 #: lost_tracker/blueprint/qr.py:55
@@ -481,9 +485,8 @@ msgid "Phone Number"
 msgstr "Telefonsnummer"
 
 #: lost_tracker/templates/register.html:26
-#, fuzzy
 msgid "Details (if you have any special requests, let us know here)."
-msgstr "Detailer (Falls Du extra Wensch hues, schreiw se heiran w.e.g)."
+msgstr "Detailer (Falls Du extra Wënsch hues, schreiw së heiran w.e.g)."
 
 #: lost_tracker/templates/registration_closed.html:3
 #: lost_tracker/templates/registration_closed.html:6
