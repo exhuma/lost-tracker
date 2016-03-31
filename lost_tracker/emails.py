@@ -53,7 +53,7 @@ class DummyMailer(object):
 class Mailer(object):
 
     def send(self, template, to, data):
-        subject, content = build_content()
+        subject, content = build_content(template, data)
         mail = Envelope(
             from_addr=('reservation@lost.lu', 'Lost.lu Registration Team'),
             to_addr=to,
