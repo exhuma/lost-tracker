@@ -429,7 +429,7 @@ def delete_message(message):
     DB.session.commit()
 
 
-def store_message(session, mailer, group, user, content):
+def store_message(session, mailer, group, user, content, url):
     msg = Message(
         content=content,
         user=user,
@@ -445,8 +445,9 @@ def store_message(session, mailer, group, user, content):
                 to=recipients,
                 data={
                     'author': user,
+                    'content': content,
                     'group': group,
-                    'content': content
+                    'url': url,
                 })
     return msg
 

@@ -11,15 +11,15 @@ MailData = namedtuple('MailData', 'subject body')
 
 def build_content(template, data):
     if template == 'registration_check':
-        subject = 'New registration for {0.name}'.format(data['group'])
+        subject = u'New registration for {0.name}'.format(data['group'])
     elif template == 'confirm':
-        subject = 'Please confirm your registration for lost.lu'
+        subject = u'Please confirm your registration for lost.lu'
     elif template == 'registration_update':
-        subject = 'Lost Registration Change'
+        subject = u'Lost Registration Change'
     elif template == 'welcome':
-        subject = 'Welcome to Lost, your registration is completed.'
+        subject = u'Welcome to Lost, your registration is completed.'
     elif template == 'new_message':
-        subject = 'New message on lost.lu'
+        subject = u'New message on lost.lu'
     else:
         raise ValueError('Unsupported e-mail template: {}'.format(
             template))
@@ -29,35 +29,37 @@ def build_content(template, data):
     return MailData(subject, content)
 
 
-class DummyMailer(object):
+class Mailer(object):
+
+    def send(self, template, to, data):
+        subject, content = build_content(template, data)
+
+        # Allow both User instances and tuples to be used as recipients
+        recipients = []
+        for recipient in to:
+            if hasattr(recipient, 'email') and hasattr(recipient, 'name'):
+                recipients.append((recipient.email, recipient.name))
+            else:
+                recipients.append(recipient)
+
+        mail = Envelope(
+            from_addr=('reservation@lost.lu', 'Lost.lu Registration Team'),
+            to_addr=recipients,
+            subject=subject,
+            text_body=content)
+        LOG.debug('Sending email out to {!r} via localhost'.format(to))
+        self._send(mail)
+
+    def _send(self, mail):
+        mail.send('localhost')
+
+
+class DummyMailer(Mailer):
     """
     A mailer class for testing. Does not actually send any e-mails. Prints
     emails to stdout instead.
     """
     LOG = logging.getLogger('%s.DummyMailer' % __name__)
 
-    def send(self, template, to, data):
-        subject, body = build_content(template, data)
-        self.LOG.info("DummyMailer called with template=%r, to=%r, data=%r" % (
-            template, to, data))
-        print('Sending Mail'.center(80, '-'))
-        print('To:')
-        for recipient in to:
-            print('    %r' % str(recipient))
-        print('Subject: %r' % subject)
-        print('Body'.center(80, '-'))
-        print(body)
-        print('End of Mail'.center(80, '-'))
-
-
-class Mailer(object):
-
-    def send(self, template, to, data):
-        subject, content = build_content()
-        mail = Envelope(
-            from_addr=('reservation@lost.lu', 'Lost.lu Registration Team'),
-            to_addr=to,
-            subject=subject,
-            text_body=content)
-        LOG.debug('Sending email out to {!r} via localhost'.format(to))
-        mail.send('localhost')
+    def _send(self, mail):
+        print(mail)

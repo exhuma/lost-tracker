@@ -5,7 +5,7 @@
 <table id="grouplist">
   <thead>
     <tr>
-      <th>{{_("Group")}}</th>
+      <th colspan="2">{{_("Group")}}</th>
       <th>{{_("Registration Date")}}</th>
       <th>{{_("Start Time")}}</th>
       <th>{{_("Direction")}}</th>
@@ -18,6 +18,7 @@
       <td
         class="{{'accepted' if group.accepted else 'confirmed' if group.is_confirmed else ''}}"
         data-group_id="{{group.id}}"><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
+      <td><a href="{{url_for('group.show_comments', id=group.id)}}"><i class="fa fa-comments"></i></a></td>
       <td>{{group.inserted.strftime('%Y-%m-%d %H:%M')}}</td>
       <td>{{group.start_time|default('', true)}}</td>
       <td>{{group.direction|default('', true)}}</td>

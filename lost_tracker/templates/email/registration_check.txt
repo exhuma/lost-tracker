@@ -11,10 +11,3 @@ Desired Departure Time:
 Comments
 -----------------------------------------
 {{group.comments}}
-
-
-Please verify your e-mail by clicking on
-the link below to activate this
-registration:
-
-{{activation_url}}

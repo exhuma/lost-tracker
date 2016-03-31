@@ -33,6 +33,13 @@ goog.exportSymbol('lost_tracker.MessageView',
   lost_tracker.MessageView);
 
 
+/** @type {string} */
+var $COMMENT_PREFIX;
+
+/** @type {string} */
+var $TABULAR_PREFIX;
+
+
 if (goog.DEBUG) {
   var debugConsole = new goog.debug.Console;
   debugConsole.setCapturing(true);

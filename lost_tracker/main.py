@@ -1,10 +1,8 @@
 from datetime import datetime
 from sqlalchemy.orm.exc import NoResultFound
-from time import sleep
-import logging
 
 from config_resolver import Config
-from flask.ext.babel import Babel
+from flask.ext.babel import Babel, gettext
 from flask.ext.social import (
     SQLAlchemyConnectionDatastore,
     Social,
@@ -20,6 +18,7 @@ from flask.ext.security import (
 from flask import (
     Flask,
     current_app,
+    flash,
     redirect,
     session as flask_session,
     url_for,
@@ -57,6 +56,9 @@ def make_app():
     social = Social()
     user_datastore = SQLAlchemyUserDatastore(mdl.DB, mdl.User, mdl.Role)
 
+    app = Flask(__name__)
+
+    @login_failed.connect_via(app)
     def auto_add_user(sender, provider, oauth_response):
         connection_values = get_connection_values_from_oauth_response(
             provider, oauth_response)
@@ -92,9 +94,13 @@ def make_app():
         connect_handler(connection_values, provider)
         login_user(user)
         mdl.DB.session.commit()
+        flash(gettext(
+            'Successfully linked login with {}. '
+            'Ignore the message saying: "{}"').format(
+            provider.name, '... account not associated with an existing user'),
+            'info')
         return redirect(url_for('root.profile'))
 
-    app = Flask(__name__)
     app.user_datastore = user_datastore
     app.localconf = Config('mamerwiselen', 'lost-tracker',
                            version='2.0', require_load=True)
@@ -145,8 +151,6 @@ def make_app():
     app.register_blueprint(USER, url_prefix=USER_PREFIX)
     babel.init_app(app)
     babel.localeselector(get_locale)
-    sleep(1)
-    login_failed.connect(auto_add_user, app)
     return app
 
 
