@@ -29,27 +29,6 @@ def build_content(template, data):
     return MailData(subject, content)
 
 
-class DummyMailer(object):
-    """
-    A mailer class for testing. Does not actually send any e-mails. Prints
-    emails to stdout instead.
-    """
-    LOG = logging.getLogger('%s.DummyMailer' % __name__)
-
-    def send(self, template, to, data):
-        subject, body = build_content(template, data)
-        self.LOG.info("DummyMailer called with template=%r, to=%r, data=%r" % (
-            template, to, data))
-        print(u'Sending Mail'.center(80, '-'))
-        print(u'To:')
-        for recipient in to:
-            print(u'    %r' % str(recipient))
-        print(u'Subject: %r' % subject)
-        print(u'Body'.center(80, '-'))
-        print(body)
-        print(u'End of Mail'.center(80, '-'))
-
-
 class Mailer(object):
 
     def send(self, template, to, data):
@@ -69,4 +48,18 @@ class Mailer(object):
             subject=subject,
             text_body=content)
         LOG.debug('Sending email out to {!r} via localhost'.format(to))
+        self._send(mail)
+
+    def _send(self, mail):
         mail.send('localhost')
+
+
+class DummyMailer(Mailer):
+    """
+    A mailer class for testing. Does not actually send any e-mails. Prints
+    emails to stdout instead.
+    """
+    LOG = logging.getLogger('%s.DummyMailer' % __name__)
+
+    def _send(self, mail):
+        print(mail)
