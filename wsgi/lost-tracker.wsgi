@@ -6,5 +6,8 @@ import logging
 logging.basicConfig(level=logging.WARNING,
                     filename='/var/www/lost.lu/www/applog/error_log')
 
-from lost_tracker.main import app as application  # NOQA
+from lost_tracker.main import make_app
+from lost_tracker.emails import Mailer
+application = make_app()  # NOQA
+application.mailer = Mailer()
 # vim: set ft=python :
