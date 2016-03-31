@@ -11,15 +11,15 @@ MailData = namedtuple('MailData', 'subject body')
 
 def build_content(template, data):
     if template == 'registration_check':
-        subject = 'New registration for {0.name}'.format(data['group'])
+        subject = u'New registration for {0.name}'.format(data['group'])
     elif template == 'confirm':
-        subject = 'Please confirm your registration for lost.lu'
+        subject = u'Please confirm your registration for lost.lu'
     elif template == 'registration_update':
-        subject = 'Lost Registration Change'
+        subject = u'Lost Registration Change'
     elif template == 'welcome':
-        subject = 'Welcome to Lost, your registration is completed.'
+        subject = u'Welcome to Lost, your registration is completed.'
     elif template == 'new_message':
-        subject = 'New message on lost.lu'
+        subject = u'New message on lost.lu'
     else:
         raise ValueError('Unsupported e-mail template: {}'.format(
             template))
@@ -40,14 +40,14 @@ class DummyMailer(object):
         subject, body = build_content(template, data)
         self.LOG.info("DummyMailer called with template=%r, to=%r, data=%r" % (
             template, to, data))
-        print('Sending Mail'.center(80, '-'))
-        print('To:')
+        print(u'Sending Mail'.center(80, '-'))
+        print(u'To:')
         for recipient in to:
-            print('    %r' % str(recipient))
-        print('Subject: %r' % subject)
-        print('Body'.center(80, '-'))
+            print(u'    %r' % str(recipient))
+        print(u'Subject: %r' % subject)
+        print(u'Body'.center(80, '-'))
         print(body)
-        print('End of Mail'.center(80, '-'))
+        print(u'End of Mail'.center(80, '-'))
 
 
 class Mailer(object):
