@@ -114,7 +114,8 @@ def show_comments(id):
     group = mdl.Group.one(id=id)
     if not group:
         return gettext('No such entity!'), 404
-    if group not in current_user.groups:
+    if (group not in current_user.groups and
+            not current_user.has_role(mdl.Role.ADMIN)):
         return gettext('Access Denied!'), 403
 
     return render_template('messages.html', group=group)
