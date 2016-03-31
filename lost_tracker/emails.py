@@ -54,9 +54,18 @@ class Mailer(object):
 
     def send(self, template, to, data):
         subject, content = build_content(template, data)
+
+        # Allow both User instances and tuples to be used as recipients
+        recipients = []
+        for recipient in recipients:
+            if hasattr(recipient, 'email') and hasattr(recipient, 'name'):
+                recipients.append((recipient.email, recipient.name))
+            else:
+                recipients.append(recipient)
+
         mail = Envelope(
             from_addr=('reservation@lost.lu', 'Lost.lu Registration Team'),
-            to_addr=to,
+            to_addr=recipients,
             subject=subject,
             text_body=content)
         LOG.debug('Sending email out to {!r} via localhost'.format(to))
