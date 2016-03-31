@@ -155,7 +155,14 @@ DT {
     color: hsl(230, 20%, 50%);
 }
 
-#flashes DIV.error
+#flashes DIV.success,
+.admonition.success {
+    background: hsl(120, 42%, 13%);
+    border: 1px solid hsl(127, 50%, 20%);
+    color: hsl(92, 39%, 58%);
+}
+
+#flashes DIV.error,
 .admonition.error {
     background: hsl(20, 40%, 10%);
     border: 1px solid hsl(20, 50%, 20%);
