@@ -36,7 +36,7 @@ class Mailer(object):
 
         # Allow both User instances and tuples to be used as recipients
         recipients = []
-        for recipient in recipients:
+        for recipient in to:
             if hasattr(recipient, 'email') and hasattr(recipient, 'name'):
                 recipients.append((recipient.email, recipient.name))
             else:
