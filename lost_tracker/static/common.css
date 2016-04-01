@@ -39,3 +39,11 @@
 *:first-child+html .goog-inline-block {
   display: inline;
 }
+
+.avatar {
+    border-radius: 50%;
+}
+
+INPUT + LABEL {
+    margin-left: 0.5em;
+}

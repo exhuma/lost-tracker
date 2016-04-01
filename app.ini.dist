@@ -1,15 +1,41 @@
 [meta]
-version=1.2
+version=2.1
 
 [db]
 ; Database connection string
 dsn=postgresql://postgres@/lost_tracker
 
 [app]
+helpdesk = Text visible on all pages
 photo_folder = /path/to/folder
 registration_open = true
 login = lost
 password = lost
+secret_key = this-is-not-secret! use os.random to generate random bits!
+time_slots =
+    18h50
+    19h00
+    19h10
+    19h20
+    19h30
+    19h40
+    19h50
+    20h00
+    20h10
+    20h20
+    20h30
+    20h40
+    20h50
+    21h00
+    21h10
+    21h20
+    21h30
+    21h40
+    21h50
+    22h00
+
+; A secondary title which is visible on each page.
+shout = 
 
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -22,3 +48,15 @@ listen=0.0.0.0
 port=5000
 ; Enable/Disable debugging mode.
 debug=True
+
+[twitter]
+consumer_key=
+consumer_secret=
+
+[google]
+consumer_key=
+consumer_secret=
+
+[facebook]
+consumer_key=
+consumer_secret=

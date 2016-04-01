@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename='dialog.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
     <link rel="stylesheet" href="{{url_for('static', filename='style_dark.css')}}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     {%- if config.get('DEBUG', False) %}
       <script type="text/javascript" src="http://{{request.host.split(':')[0]}}:9810/compile?id=dev&amp;mode=raw"></script>
     {% else %}
@@ -26,6 +27,8 @@
 
     <script type="text/javascript">
       $SCRIPT_ROOT = {{request.script_root|tojson|safe}};
+      $TABULAR_PREFIX = {{tabular_prefix|tojson|safe}};
+      $COMMENT_PREFIX = {{comment_prefix|tojson|safe}};
     </script>
 
     {% block mainmenu %}{% endblock %}

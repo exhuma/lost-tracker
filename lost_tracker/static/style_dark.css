@@ -71,7 +71,7 @@ TD.confirmed {
     border: 2px dotted yellow;
 }
 
-TD.finalized {
+TD.accepted {
     border: 2px solid green;
 }
 
@@ -86,6 +86,7 @@ INPUT[type="checkbox"]:focus{
 INPUT[type='password'],
 INPUT[type='text'],
 INPUT[type='email'],
+INPUT[type='number'],
 TEXTAREA {
     background: hsla(0, 0%, 0%, 0.4);
     border: 1px solid hsl(30, 100%, 10%);
@@ -94,6 +95,7 @@ TEXTAREA {
     width: 80%;
 }
 
+INPUT[type='number']:focus,
 INPUT[type='text']:focus,
 INPUT[type='email']:focus,
 TEXTAREA:focus {
@@ -153,7 +155,14 @@ DT {
     color: hsl(230, 20%, 50%);
 }
 
-#flashes DIV.error
+#flashes DIV.success,
+.admonition.success {
+    background: hsl(120, 42%, 13%);
+    border: 1px solid hsl(127, 50%, 20%);
+    color: hsl(92, 39%, 58%);
+}
+
+#flashes DIV.error,
 .admonition.error {
     background: hsl(20, 40%, 10%);
     border: 1px solid hsl(20, 50%, 20%);

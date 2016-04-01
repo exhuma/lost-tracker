@@ -1,27 +1,38 @@
 from setuptools import setup, find_packages
 from pkg_resources import resource_string
+version = resource_string('lost_tracker', 'version.txt').decode('ascii')
 setup(
     name="lost-tracker",
-    version=resource_string(
-        'lost_tracker', 'version.txt').strip().decode('ascii'),
+    version=version.strip(),
     packages=find_packages(),
     install_requires=[
-        'Flask-Login==0.2.9',
-        'Flask-SQLAlchemy==1.0',
-        'Flask==0.10.1',
-        'IMAPClient==1.0.1',
-        'Pillow==2.8.1',
-        'SQLAlchemy==0.9.3',
-        'alembic==0.6.3',
         'config-resolver >= 4.2, <5.0',
         'envelopes==0.4',
-        'envelopes==0.4',
+        'facebook-sdk>=1.0.0a0',
         'flask-babel==0.9',
+        'flask-security==1.7.5',
+        'flask-social>=1.6.2',
+        'flask-sqlalchemy==2.1',
+        'flask==0.10.1',
+        'google-api-python-client==1.5.0',
+        'imapclient==1.0.1',
+        'markdown==2.6.5',
+        'pillow==2.8.1',
         'psycopg2==2.5.2',
+        'python-twitter>=3.0rc1',
+        'qrcode==5.2.2',
         'requests==2.6.0',
+        'sqlalchemy==0.9.3',
     ],
     extras_require={
-        'test': ['mock']
+        'dev': [
+            'alembic',
+        ],
+        'test': [
+            'pytest',
+            'pytest-xdist',
+            'mock'
+        ]
     },
     entry_points={
         'console_scripts': [

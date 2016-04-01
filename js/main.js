@@ -1,8 +1,10 @@
 goog.require('goog.debug.Console');
 goog.require('goog.log');
 goog.require('lost_tracker.GroupList');
+goog.require('lost_tracker.MessageView');
 goog.require('lost_tracker.RegistrationForm');
 goog.require('lost_tracker.SlotEditor');
+goog.require('lost_tracker.SocialPage');
 goog.require('lost_tracker.Tabulator');
 goog.require('lost_tracker.app');
 
@@ -23,6 +25,19 @@ goog.exportSymbol('lost_tracker.Tabulator',
 
 goog.exportSymbol('lost_tracker.GroupList',
   lost_tracker.GroupList);
+
+goog.exportSymbol('lost_tracker.SocialPage',
+  lost_tracker.SocialPage);
+
+goog.exportSymbol('lost_tracker.MessageView',
+  lost_tracker.MessageView);
+
+
+/** @type {string} */
+var $COMMENT_PREFIX;
+
+/** @type {string} */
+var $TABULAR_PREFIX;
 
 
 if (goog.DEBUG) {

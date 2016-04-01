@@ -6,8 +6,8 @@
 
 <h1>{{station.name}}</h1>
 
-{% if Setting.get(g.session, 'helpdesk', default=None) %}
-<p>{{Setting.get(g.session, 'helpdesk')}}</p>
+{% if Setting.get('helpdesk', default=None) %}
+<p>{{Setting.get('helpdesk')}}</p>
 {% endif %}
 
 {% for row in group_states %}
@@ -17,7 +17,7 @@
     <div class="details">
         <div class="name">{{row.group.name}}</div>
         <div class="score_card">
-            <form action="{{url_for('set_group_score', station_id=station.id, group_id=row.group.id)}}" method="POST">
+            <form action="{{url_for('group.set_score', station_id=station.id, group_id=row.group.id)}}" method="POST">
                 <p style="display: none;"><input type="hidden" name="station_id"
                     value="{{station.id}}" /></p>
                 <p style="display: none;"><input type="hidden" name="group_id"

@@ -2,10 +2,18 @@
 {% block title %}{{_('Edit Group')}}{% endblock %}
 {% block content %}
 <h1>{{group.name}}</h1>
-<form id="group_edit" action="{{url_for('save_group_info', id=group.id)}}" method="POST">
+{% if group.user.id != current_user.id %}
+  <div style="text-align: center;">
+    {{ avatar(group.user, 100) }}<br />
+    {{ _("Group owner") }}: {{group.user.name}}
+  </div>
+  <hr />
+{% endif %}
+<form id="group_edit" action="{{url_for('group.save_info', id=group.id)}}" method="POST">
   <fieldset>
     <legend>{{_('Group Infos')}}</legend>
     <input type="hidden" name="id" value="{{group.id}}" />
+    <input type="hidden" name="intent" value="{{'accept' if current_user.has_role(Role.ADMIN) else 'update'}}" />
     <dl>
       <dt>{{_('Name')}}</dt>
       <dd><input type="text" name="name" value="{{group.name}}" /></dd>
@@ -13,22 +21,30 @@
       <dd><input type="text" name="contact" value="{{group.contact}}" /></dd>
       <dt>{{_('Phone')}}</dt>
       <dd><input type="text" name="phone" value="{{group.phone}}" /></dd>
-      <dt>{{_('Direction')}}</dt>
-      <dd>
-        <select name="direction">
-          <option value="{{dir_a}}" disabled {{'selected' if group.direction not in (dir_a, dir_b)}}>{{_('Direction')}}</option>
-          <option value="{{dir_a}}" {{'selected' if group.direction == dir_a}}>{{dir_a}}</option>
-          <option value="{{dir_b}}" {{'selected' if group.direction == dir_b}}>{{dir_b}}</option>
-        </select>
-      </dd>
-      <dt>{{_('Starting Time')}}</dt>
-      <dd><input type="text" name="start_time" value="{{group.start_time}}"/></dd>
-      <dt>{{_('e-mail')}}</dt>
-      <dd><input type="email" name="email" value="{{group.email}}" /></dd>
+      <dt>{{_('Number of vegetarians')}}</dt>
+      <dd><input type="number" min="0" step="1" name="num_vegetarians" value="{{group.num_vegetarians}}" /></dd>
+      {% if current_user.has_role(Role.ADMIN) %}
+        <dt>{{_('Direction')}}</dt>
+        <dd>
+          <select name="direction">
+            <option value="{{dir_a}}" disabled {{'selected' if group.direction not in (dir_a, dir_b)}}>{{_('Direction')}}</option>
+            <option value="{{dir_a}}" {{'selected' if group.direction == dir_a}}>{{dir_a}}</option>
+            <option value="{{dir_b}}" {{'selected' if group.direction == dir_b}}>{{dir_b}}</option>
+          </select>
+        </dd>
+        <dt>{{_('Starting Time')}}</dt>
+        <dd><input type="text" name="start_time" value="{{group.start_time}}"/></dd>
+        <dt>{{_('Flags')}}</dt>
+        <dd><input type="checkbox" {{'checked' if group.accepted else ''}} id="accepted" name="accepted" value="true" /><label for="accepted">{{_('Group registration has been accepted')}}</label></dd>
+        <dd><input type="checkbox" {{'checked' if group.cancelled else ''}} id="cancelled" name="cancelled" value="true" /><label for="cancelled">{{_('Group has cancelled')}}</label></dd>
+        <dd><input type="checkbox" {{'checked' if group.completed else ''}} id="completed" name="completed" value="true" /><label for="completed">{{_('Group has completed')}}</label></dd>
+      {% endif %}
       <dt>{{_('Comments')}}</dt>
       <dd><textarea name="comments" rows="10">{{group.comments}}</textarea></dd>
-      <dt>{{_('Options')}}</dt>
-      <dd><input type="checkbox" checked id="send_email" name="send_email" value="true" /><label for="send_email">{{_('Send e-mail to the group about the changes.')}}</label></dd>
+      {% if current_user.has_role(Role.ADMIN) %}
+        <dt>{{_('Options')}}</dt>
+        <dd><input type="checkbox" checked id="send_email" name="send_email" value="true" /><label for="send_email">{{_('Send e-mail to the group about the changes.')}}</label></dd>
+      {% endif %}
     </dl>
     <input type="submit" value="Save" />
   </fieldset>

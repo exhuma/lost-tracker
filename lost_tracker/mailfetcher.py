@@ -1,4 +1,4 @@
-from __future__ import print_function
+
 from hashlib import md5
 from os import makedirs
 from os.path import exists, join

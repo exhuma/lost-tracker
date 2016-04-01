@@ -1,30 +1,37 @@
+from collections import namedtuple
+from os.path import exists
 from stat import S_ISREG, ST_CTIME, ST_MODE
+import logging
+import mimetypes
+import os
+import os.path
+try:
+    from urllib.parse import quote_plus
+except ImportError:
+    from urllib import quote_plus  # NOQA
 
-from lost_tracker.emails import send
 from lost_tracker.util import start_time_to_order
 from lost_tracker.models import (
+    DB,
     DIR_A,
     DIR_B,
     Form,
     Group,
     GroupStation,
+    Message,
+    Role,
     STATE_ARRIVED,
     STATE_FINISHED,
     STATE_UNKNOWN,
     Station,
     TimeSlot,
     User,
-    get_state,
+    _get_unique_order,
 )
 
 from sqlalchemy import and_
-from os.path import exists
-from sqlalchemy.exc import IntegrityError
-import logging
-import mimetypes
-import os
-import os.path
-import urllib
+from sqlalchemy import func  # TODO this module should have no SA
+from sqlalchemy.exc import IntegrityError  # TODO this module should have no SA
 
 LOG = logging.getLogger(__name__)
 WEB_IMAGES = {
@@ -32,8 +39,31 @@ WEB_IMAGES = {
     'image/png',
 }
 
+MatrixSum = namedtuple('MatrixSum', 'unknown arrived completed')
 
-def get_matrix(stations, groups):
+def _generate_state_list(station):
+    if not station:
+        return []
+    groups = Group.all().order_by(Group.order)
+    state_info = DB.session.query(GroupStation).filter(
+        GroupStation.station == station)
+    state_info_map = {state.group: state for state in state_info}
+    output = []
+    for group in groups:
+        si = state_info_map.get(group)
+        output.append({
+            "stationId": si.station_id if si else 0,
+            "groupId": group.id,
+            "groupName": group.name,
+            "formScore": (si.form_score or 0) if si else 0,
+            "stationScore": (si.score or 0) if si else 0,
+            "state": si.state if si else 0
+        })
+    output = sorted(output, key=lambda x: (x['state'], x['groupName']))
+    return output
+
+
+class Matrix(object):
     """
     Returns a 2-dimensional array containing an entry for each group.
 
@@ -47,27 +77,31 @@ def get_matrix(stations, groups):
             ...
         ]
     """
-    # TODO: make this a list of dicts or a list of namedtuples!
 
-    state_matrix = []
-    for group in groups:
-        tmp = [group]
-        for station in stations:
-            tmp.append(get_state(group.id, station.id))
-        state_matrix.append(tmp)
-    return state_matrix
+    def __init__(self, stations, groups):
+        self._stations = stations
+        self._groups = groups
+        self._matrix = []
 
+        for group in groups:
+            tmp = [group]
+            for station in stations:
+                tmp.append(GroupStation.get(group.id, station.id))
+            self._matrix.append(tmp)
 
-def get_state_sum(state_matrix):
-    """
-    Creates a list where each element contains the sum of "unknown", "arrived"
-    and "finished" states for each station.
-    """
-    # TODO: make this a list of namedtuples!
-    sums = []
-    if state_matrix:
-        sums = [[0, 0, 0] for _ in state_matrix[0][1:]]
-        for row in state_matrix:
+    def __iter__(self):
+        return iter(self._matrix)
+
+    @property
+    def sums(self):
+        """
+        Creates a list where each element contains the sum of "unknown",
+        "arrived" and "completed" states for each station.
+        """
+        if not self._matrix:
+            return []
+        sums = [[0, 0, 0] for _ in self._matrix[0][1:]]
+        for row in self._matrix:
             for i, state in enumerate(row[1:]):
                 if not state:
                     sums[i][STATE_UNKNOWN] += 1
@@ -79,51 +113,11 @@ def get_state_sum(state_matrix):
                     sums[i][STATE_ARRIVED] += 1
                 elif state.state == STATE_FINISHED:
                     sums[i][STATE_FINISHED] += 1
-    return sums
+        # Wrap in named-tuples for readability
+        return [MatrixSum(*sum) for sum in sums]
 
 
-def get_grps():
-    """
-    Returns all groups from the database as :py:class:`Group` instances.
-    """
-    groups = Group.query
-    groups = groups.order_by(Group.order)
-    return groups
-
-
-def get_grps_by_id(group_id):
-    """
-    Returns a group from the database as :py:class:`Group` instance by his id.
-    """
-    group = Group.query
-    group = group.filter_by(id=group_id)
-    group = group.first()
-    return group
-
-
-def get_grp_by_registration_key(key):
-    """
-    Returns a group from the database as :py:class:`Group` instance by it's
-    key.
-    """
-    group = Group.query
-    group = group.filter_by(confirmation_key=key)
-    group = group.one()
-    return group
-
-
-def get_grp_by_name(name):
-    """
-    Returns a group from the database as :py:class:`Group` instance by his
-    name.
-    """
-    group = Group.query
-    group = group.filter_by(name=name)
-    group = group.first()
-    return group
-
-
-def add_grp(grp_name, contact, phone, direction, start_time, session):
+def add_group(grp_name, contact, phone, direction, start_time, session):
     """
     Creates a new group in the database.
     """
@@ -153,94 +147,26 @@ def add_grp(grp_name, contact, phone, direction, start_time, session):
                 direction))
 
 
-def get_stations():
-    """
-    Returns all stations from the database as :py:class:`Station` instances.
-    """
-    stations = Station.query
-    stations = stations.order_by(Station.order)
-    stations = stations.all()
-    return stations
-
-
-def get_stat_by_name(name):
-    """
-    Returns a :py:class:`Station` by class name. Can be ``None`` if no
-    matching station is found.
-    """
-    qry = Station.query
-    qry = qry.filter_by(name=name)
-    qry = qry.first()
-    return qry
-
-
 def add_station(stat_name, contact, phone, order, session):
     """
     Creates a new :py:class:`Station` in the database.
     """
+    order = _get_unique_order(Station, order)
     new_station = Station(stat_name, contact, phone)
     new_station.order = order
     session.add(new_station)
-    return u"Station {0} added. Contact: {1} / {2}".format(
+    return "Station {0} added. Contact: {1} / {2}".format(
         stat_name, contact, phone)
 
 
 def add_form(session, name, max_score, order=0):
+    order = _get_unique_order(Form, order)
     new_form = Form(name, max_score, order)
     session.add(new_form)
     return new_form
 
 
-def get_forms():
-    """
-    Returns all forms from the database as :py:class`Form` instances.
-    """
-    forms = Form.query
-    forms = forms.order_by(Form.order)
-    forms = forms.all()
-    return forms
-
-
-def get_form_by_id(id):
-    """
-    Returns a :py:class:`Form` by class id.
-    """
-    qry = Form.query
-    qry = qry.filter_by(id=id)
-    qry = qry.first()
-    return qry
-
-
-def slots():
-    """
-    maybe put this in a config file
-    """
-
-    return [
-        TimeSlot('18h50'),
-        TimeSlot('19h00'),
-        TimeSlot('19h10'),
-        TimeSlot('19h20'),
-        TimeSlot('19h30'),
-        TimeSlot('19h40'),
-        TimeSlot('19h50'),
-        TimeSlot('20h00'),
-        TimeSlot('20h10'),
-        TimeSlot('20h20'),
-        TimeSlot('20h30'),
-        TimeSlot('20h40'),
-        TimeSlot('20h50'),
-        TimeSlot('21h00'),
-        TimeSlot('21h10'),
-        TimeSlot('21h20'),
-        TimeSlot('21h30'),
-        TimeSlot('21h40'),
-        TimeSlot('21h50'),
-        TimeSlot('22h00'),
-    ]
-
-
-def store_registration(session, data, url, needs_confirmation=True):
+def store_registration(mailer, session, data):
     """
     Stores a registration to the database.
 
@@ -248,23 +174,10 @@ def store_registration(session, data, url, needs_confirmation=True):
 
         * group_name
         * contact_name
-        * email
         * tel
         * time
         * comments
-
-    If *needs_confirmation* is true (the default), this method will store the
-    reservation as "not yet confirmed". An e-mail will be sent out to the
-    address specified in the *email* field. The e-mail will contain a link to
-    ``/confirm/<key>`` where ``<key`` is a randomly generated string.
-
-    @franky: implement
-    @franky: urllib.quote_plus(os.urandom(50).encode('base64')[0:30])
-    @franky: See ``_external`` at
-             http://flask.pocoo.org/docs/api/#flask.url_for
-    @franky: The "key" should be unique in the DB. Generate new keys as long as
-             duplicates are found in the DB.
-    mailing with python: https://pypi.python.org/pypi/Envelopes/0.4
+        * num_vegetarians
     """
     qry = Group.query.filter_by(name=data['group_name'])
     check = qry.first()
@@ -273,6 +186,7 @@ def store_registration(session, data, url, needs_confirmation=True):
             data['group_name']))
     else:
         key = os.urandom(50).encode('base64').replace('/', '')[0:20]
+        # Regenerate keys if needed (just in case to avoid duplicates).
         qry = Group.query.filter_by(confirmation_key=key)
         check_key = qry.first()
         while check_key:
@@ -285,11 +199,12 @@ def store_registration(session, data, url, needs_confirmation=True):
                         data['tel'],
                         None,
                         data['time'],
-                        data['email'],
                         data['comments'],
-                        key
-                        )
-        new_grp.order = start_time_to_order(data['time'])
+                        key,
+                        data['user_id'])
+        order = start_time_to_order(data['time'])
+        new_grp.order = _get_unique_order(Group, order)
+        new_grp.num_vegetarians = int(data['num_vegetarians'])
 
         session.add(new_grp)
         try:
@@ -301,18 +216,15 @@ def store_registration(session, data, url, needs_confirmation=True):
             raise ValueError('Error while adding the new group {0}'.format(
                 data['group_name']))
 
-        if needs_confirmation:
-            confirm_link = '{}/{}'.format(url, urllib.quote_plus(key))
-            send('confirm',
-                 to=(data['email'], data['contact_name']),
-                 data={
-                     'confirmation_link': confirm_link
-                 })
-        return True
+        return key
 
 
-def confirm_registration(key, activation_url):
+def confirm_registration(mailer, key, activation_url):
     """
+    OBSOLETE: This step is obsolete since we now have social logins. This was a
+              measure to prevent spam. Requireing social logins removes this
+              issue. Email notifications have already been removed!
+
     If a user received a confirmation e-mail, this method will be called if the
     user clicks the confirmation key. The registration is put into 'pending'
     state and e-mails will be sent to the people who manage the event
@@ -324,7 +236,6 @@ def confirm_registration(key, activation_url):
     grp = query.first()
 
     if grp:
-
         if grp.is_confirmed:
             # Group is already confirmed. Don't process it further (no
             # additional mails will be sent).
@@ -332,77 +243,90 @@ def confirm_registration(key, activation_url):
             return True
 
         grp.is_confirmed = True
+        admin_query = Role.query.filter(Role.name == Role.ADMIN)
+        if admin_query.count():
+            mails = [(user.email, user.name) for user in admin_query[0].user]
+            mailer.send('registration_check',
+                        to=mails,
+                        data={
+                            'group': grp,
+                            'activation_url': activation_url
+                        })
 
-        query = User.query
-        user = query.all()
-        mails = []
-        for line in user:
-            mails.append(line.email)
-
-        send('registration_check',
-             to=mails,
-             data={
-                 'group': grp,
-                 'activation_url': activation_url
-             })
         return True
 
     else:
         raise ValueError('Given key not found in DB')
 
 
-def accept_registration(key, data):
+def accept_registration(mailer, key, group):
     """
-    This method is called if a manager clicked the "accept" link, an e-mail is
-    sent out to the reservation contact telling them all is done. The
-    registration is marked as 'finalized'.
-
-    @franky: implement
+    This method is called if a staff-member clicked the "accept" link, an e-mail
+    is sent out to the reservation contact telling them all is done. The
+    registration is marked as 'accepted'.
     """
-    query = Group.query.filter(Group.confirmation_key == key)
-    grp = query.first()
 
-    if grp:
-        if grp.finalized:
-            raise ValueError('Registration already finalized')
-        else:
-            grp.finalized = True
-            grp.direction = data['direction']
-            grp.name = data['name']
-            grp.phone = data['phone']
-            grp.start_time = data['start_time']
-            grp.comments = data['comments']
-            grp.contact = data['contact']
-            grp.email = data['email']
-            send('welcome',
-                 to=(grp.email, grp.name),
-                 data={
-                     'group': grp
-                 })
-            return True
-    else:
-        raise ValueError('Given key not found in DB')
+    if not group:
+        return False
+
+    if group.accepted:
+        return False
+
+    group.accepted = True
+
+    mailer.send('welcome',
+                to=[(group.user.email, group.name)],
+                data={
+                    'group': group
+                })
+    return True
 
 
-def update_group(id, data, send_email=True):
+def update_group(mailer, id, data):
     """
     Updates an existing group.
     """
-    group = get_grps_by_id(id)
-    group.direction = data['direction']
+    group = Group.one(id=id)
     group.name = data['name']
     group.phone = data['phone']
-    group.start_time = data['start_time']
     group.comments = data['comments']
     group.contact = data['contact']
-    group.email = data['email']
+    group.num_vegetarians = data['num_vegetarians']
 
-    if send_email:
-        send('registration_update',
-             to=(data['email'], data['contact']),
-             data={
-                 'group': group
-             })
+    if 'direction' in data:
+        group.direction = data['direction']
+
+    if 'start_time' in data:
+        group.start_time = data['start_time']
+
+    if 'cancelled' in data:
+        group.cancelled = data['cancelled']
+
+    if 'completed' in data:
+        group.completed = data['completed']
+
+    send_email = data.get('send_email', True)
+    if data['notification_recipient'] == 'admins':
+        admin_query = Role.query.filter(Role.name == Role.ADMIN)
+        if admin_query.count():
+            recipients = [(user.email, user.name)
+                          for user in admin_query[0].user]
+        else:
+            recipients = []
+    elif data['notification_recipient'] == 'owner':
+        recipients = [(group.user.email, data['contact'])]
+    else:
+        LOG.warning('Got an unexpected mail recipient hint: %r',
+                    data['notification_recipient'])
+
+    if send_email and recipients:
+        mailer.send('registration_update',
+                    to=recipients,
+                    data={
+                        'group': group
+                    })
+    else:
+        LOG.debug('No mail sent: vars=%r', locals())
 
 
 def auth(login, password):
@@ -445,9 +369,9 @@ def delete_form(id):
     Form.query.filter(Form.id == id).delete()
 
 
-def stats():
-    num_groups = get_grps().count()
-    num_slots = len(slots()) * 2  # DIR_A and DIR_B
+def stats(conf):
+    num_groups = Group.all().count()
+    num_slots = len(TimeSlot.all(conf)) * 2  # DIR_A and DIR_B
     return {
         'groups': num_groups,
         'slots': num_slots,
@@ -486,3 +410,66 @@ def set_score(session, group_id, station_id, station_score, form_score,
     GroupStation.set_score(session, group_id, station_id, station_score,
                            form_score, state)
     return 'OK'
+
+
+def get_dashboard(station):
+    return {
+        "station": {
+            "name": station.name,
+            "id": station.id
+        },
+        "main_states": _generate_state_list(station),
+        "before_states": _generate_state_list(station.before),
+        "after_states": _generate_state_list(station.after)
+    }
+
+
+def delete_message(message):
+    DB.session.delete(message)
+    DB.session.commit()
+
+
+def store_message(session, mailer, group, user, content, url):
+    msg = Message(
+        content=content,
+        user=user,
+        group=group,
+    )
+    session.add(msg)
+    session.commit()
+
+    # Send out mail notifications
+    admins = set(User.by_role(Role.ADMIN))
+    recipients = admins | set([group.user])
+    mailer.send('new_message',
+                to=recipients,
+                data={
+                    'author': user,
+                    'content': content,
+                    'group': group,
+                    'url': url,
+                })
+    return msg
+
+
+def set_group_state(session, group_id, station_id, new_state):
+    station = session.query(Station).filter_by(id=station_id).first()
+    if not station:
+        LOG.debug('No station found with ID %r', station_id)
+        return False
+
+    group = session.query(Group).filter_by(id=group_id).first()
+    if not group:
+        LOG.debug('No group found with ID %r', group_id)
+        return False
+
+    if not group.departure_time and station.is_start and new_state == STATE_ARRIVED:
+        group.departure_time = func.now()
+
+    state = GroupStation(
+        group_id=group_id,
+        station_id=station_id,
+        state=new_state)
+    state = session.merge(state)
+    session.flush()
+    return state

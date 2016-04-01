@@ -1,0 +1,602 @@
+# Luxembourgish translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-03-31 18:29+0200\n"
+"PO-Revision-Date: 2016-03-31 18:31+0200\n"
+"Last-Translator: Michel Albert <michel@albert.lu>\n"
+"Language: lb\n"
+"Language-Team: lb <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.2.0\n"
+"X-Generator: Poedit 1.8.4\n"
+
+#: lost_tracker/main.py:97
+msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
+msgstr "Benotzer ass elo mat {} verboon. Ignoréier d'Message déi seet: \"{}\""
+
+#: lost_tracker/blueprint/comment.py:28 lost_tracker/blueprint/qr.py:50
+#: lost_tracker/blueprint/qr.py:55
+msgid "Invalid Request!"
+msgstr "Ongëltegen Opruff!"
+
+#: lost_tracker/blueprint/comment.py:33
+msgid "Access denied!"
+msgstr "Zougang ass hei net erlabt!"
+
+#: lost_tracker/blueprint/comment.py:43
+msgid "Message saved!"
+msgstr "Nochriicht ass gespeäichert!"
+
+#: lost_tracker/blueprint/comment.py:52 lost_tracker/blueprint/group.py:136
+msgid "Not found!"
+msgstr "Nët fonnt!"
+
+#: lost_tracker/blueprint/group.py:49 lost_tracker/blueprint/group.py:118
+#: lost_tracker/blueprint/group.py:140
+msgid "Access Denied!"
+msgstr "Zougang ass hei net erlabt!"
+
+#: lost_tracker/blueprint/group.py:74
+msgid "Accepted registration for group {}"
+msgstr "D'{}-Grupp ass registréiert!"
+
+#: lost_tracker/blueprint/group.py:82
+msgid "Group {name} successfully updated!"
+msgstr "D'Grupp {name} ass upgedate!"
+
+#: lost_tracker/blueprint/group.py:86
+msgid "E-Mail sent successfully!"
+msgstr "D'E-Mail ass fortgeschéckt!"
+
+#: lost_tracker/blueprint/group.py:100
+msgid "Incorrect value for direction: {!r}"
+msgstr "Falschen Wert fir Richtung: {!r}"
+
+#: lost_tracker/blueprint/group.py:116 lost_tracker/blueprint/qr.py:42
+#: lost_tracker/blueprint/root.py:108 lost_tracker/blueprint/station.py:94
+msgid "No such entity!"
+msgstr "Dat gëtt et net!"
+
+#: lost_tracker/blueprint/registration.py:58
+msgid ""
+"The registration has been recorded. You will receive an e-mail once the "
+"registartion has been successfully processed! You can see all your registered "
+"groups on <a href=\"{}\">your profile</a>."
+msgstr ""
+"D'Umeldung ass gespeichert. Du kriss eng Mail soubal së verschafft gouf. Du "
+"kanns all déng Umeldungen op <a href=\"{}\">déngem Profil</a> gesin."
+
+#: lost_tracker/blueprint/registration.py:74
+msgid "This group has already been accepted!"
+msgstr "Dës Grupp gëtt et schonn!"
+
+#: lost_tracker/blueprint/root.py:127
+msgid "File not found!"
+msgstr "Datei nët fonnt!"
+
+#: lost_tracker/blueprint/root.py:255
+msgid "Settings successfully saved."
+msgstr "Astellungen si gespeichert."
+
+#: lost_tracker/blueprint/tabedit.py:34 lost_tracker/blueprint/tabedit.py:92
+#: lost_tracker/blueprint/tabedit.py:119
+msgid "Access Denied"
+msgstr "Zougang ass hei net erlabt!"
+
+#: lost_tracker/blueprint/tabedit.py:68 lost_tracker/blueprint/tabedit.py:102
+msgid "Table {name} not yet supported!"
+msgstr "Tabell {name} ass nach net ennerstëtzt!"
+
+#: lost_tracker/blueprint/user.py:20
+msgid "E-Mail successfully updated to {}"
+msgstr "D'Email ass op {} geännert gin."
+
+#: lost_tracker/templates/edit_group.html:2
+msgid "Edit Group"
+msgstr "Grupp Änneren"
+
+#: lost_tracker/templates/edit_group.html:8
+msgid "Group owner"
+msgstr "Gruppeneegentümer"
+
+#: lost_tracker/templates/edit_group.html:14
+msgid "Group Infos"
+msgstr "Gruppeninformatiounen"
+
+#: lost_tracker/templates/edit_group.html:18
+#: lost_tracker/templates/profile.html:29
+msgid "Name"
+msgstr "Numm"
+
+#: lost_tracker/templates/edit_group.html:20
+#: lost_tracker/templates/group-tooltip.html:6
+msgid "Contact"
+msgstr "Kontakt"
+
+#: lost_tracker/templates/edit_group.html:22
+#: lost_tracker/templates/group-tooltip.html:8
+msgid "Phone"
+msgstr "Telefonsnummer"
+
+#: lost_tracker/templates/edit_group.html:24
+#: lost_tracker/templates/register.html:24
+msgid "Number of vegetarians"
+msgstr "Unzuel vun Vegetarier"
+
+#: lost_tracker/templates/edit_group.html:27
+#: lost_tracker/templates/edit_group.html:30
+#: lost_tracker/templates/group-tooltip.html:9
+#: lost_tracker/templates/group_list.html:11
+msgid "Direction"
+msgstr "Richtung"
+
+#: lost_tracker/templates/edit_group.html:35
+#: lost_tracker/templates/group-tooltip.html:10
+#: lost_tracker/templates/profile.html:30
+msgid "Starting Time"
+msgstr "Startzäit"
+
+#: lost_tracker/templates/edit_group.html:37
+msgid "Flags"
+msgstr ""
+
+#: lost_tracker/templates/edit_group.html:38
+msgid "Group registration has been accepted"
+msgstr "D'Grupp ass ugeholl gin"
+
+#: lost_tracker/templates/edit_group.html:39
+msgid "Group has cancelled"
+msgstr "Grupp huet ofgebrach"
+
+#: lost_tracker/templates/edit_group.html:40
+msgid "Group has completed"
+msgstr "D'Grupp ass fäerdeg"
+
+#: lost_tracker/templates/edit_group.html:42
+msgid "Comments"
+msgstr "Kommentaren"
+
+#: lost_tracker/templates/edit_group.html:45
+msgid "Options"
+msgstr "Optiounen"
+
+#: lost_tracker/templates/edit_group.html:46
+msgid "Send e-mail to the group about the changes."
+msgstr "E-mail mat den Ännerungen un d'Grupp schécken."
+
+#: lost_tracker/templates/gallery.html:3
+#: lost_tracker/templates/master_framed.html:26
+msgid "Pictures"
+msgstr "Biller"
+
+#: lost_tracker/templates/gallery.html:14 lost_tracker/templates/gallery.html:17
+msgid "Nothing here yet"
+msgstr "Hei ass nach näscht"
+
+#: lost_tracker/templates/group-tooltip.html:11
+msgid "Status"
+msgstr "Status"
+
+#: lost_tracker/templates/group-tooltip.html:11
+msgid "Cancelled"
+msgstr "Ofgebrach"
+
+#: lost_tracker/templates/group-tooltip.html:11
+msgid "Active"
+msgstr "Aktiv"
+
+#: lost_tracker/templates/group-tooltip.html:12
+msgid "Registration Status"
+msgstr "Umelldungs Status"
+
+#: lost_tracker/templates/group-tooltip.html:12
+msgid "Accepted"
+msgstr "Akzeptéiert"
+
+#: lost_tracker/templates/group-tooltip.html:12
+msgid "Confirmed"
+msgstr "Bestätegt"
+
+#: lost_tracker/templates/group_list.html:2
+msgid "Group List"
+msgstr "Gruppen"
+
+#: lost_tracker/templates/group_list.html:8
+msgid "Group"
+msgstr "Grupp"
+
+#: lost_tracker/templates/group_list.html:9
+msgid "Registration Date"
+msgstr "Umelldungsdatum"
+
+#: lost_tracker/templates/group_list.html:10
+msgid "Start Time"
+msgstr "Startzäit"
+
+#: lost_tracker/templates/group_list.html:12
+msgid "Accept Registration"
+msgstr "Umeldung unhuelen"
+
+#: lost_tracker/templates/index.html:3
+msgid "Front Page"
+msgstr "Haptsäit"
+
+#: lost_tracker/templates/index.html:8
+msgid "Registration is <strong>open</strong>! <a href=\"{url}\">Register now!</a>"
+msgstr "D'Umellung ass <strong>op</strong>! <a href=\"{url}\">Elo umellen!</a>"
+
+#: lost_tracker/templates/index.html:10 lost_tracker/templates/register.html:16
+msgid ""
+"It may take a few days until your registration is accepted. Please be patient!"
+msgstr ""
+"Et kann e puer Deeg dauren bis d'Umelldung ugehuel get. Mir bieden em e bessen "
+"Gedold!"
+
+#: lost_tracker/templates/index.html:15
+msgid "What is this?"
+msgstr "Ëm wat geet et?"
+
+#: lost_tracker/templates/index.html:18
+msgid ""
+"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /"
+"> Impossible tasks.<br /> Not to be missed."
+msgstr ""
+"En 'Nuetsrallye'.<br/>Dobaussen an der Däischtert.<br/>Spiller.<br/>Räetselen."
+"<br/>Onméiglech Aufgaben.<br/>Net ze verpassen."
+
+#: lost_tracker/templates/index.html:23
+msgid ""
+"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
+"Scouten a Guiden vun der FNEL"
+msgstr ""
+"Organiséiert vun de <br /> Caper Piwitschen <br /> an de <br /> Mamer "
+"Wiselen<br /> vun de Scouten & Guiden vun der FNEL"
+
+#: lost_tracker/templates/index.html:29
+msgid ""
+"Everybody who likes to spend a night outside, who's fairly well on foot and who "
+"does not mind getting home 3 hours late because they got lost may join :)"
+msgstr ""
+"Jiddereen, dee gär eng Nuecht dobaussen ass, gutt ze Fouss ass an och kee "
+"Problem huet 3 Stonnen ze spéit heemzekommen, well e sech verlaf huet. :)"
+
+#: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:6
+#: lost_tracker/templates/login.html:13 lost_tracker/templates/login.html:18
+#: lost_tracker/templates/master_framed.html:46
+#: lost_tracker/templates/security/login_user.html:4
+#: lost_tracker/templates/security/login_user.html:16
+msgid "Login"
+msgstr "Login"
+
+#: lost_tracker/templates/login.html:10
+msgid "Login Info"
+msgstr "Login Info"
+
+#: lost_tracker/templates/login.html:15
+msgid "Password"
+msgstr "Passwuert"
+
+#: lost_tracker/templates/master_framed.html:22
+#: lost_tracker/templates/where.html:3 lost_tracker/templates/where.html:6
+msgid "Where is this?"
+msgstr "Wou geet et lass?"
+
+#: lost_tracker/templates/master_framed.html:24
+#: lost_tracker/templates/profile.html:48 lost_tracker/templates/register.html:3
+#: lost_tracker/templates/register.html:31
+msgid "Register"
+msgstr "Umellen"
+
+#: lost_tracker/templates/master_framed.html:27
+#: lost_tracker/templates/scoreboard.html:3
+#: lost_tracker/templates/scoreboard.html:10
+msgid "Scoreboard"
+msgstr "Punktentafel"
+
+#: lost_tracker/templates/master_framed.html:28
+#: lost_tracker/templates/misc.html:3 lost_tracker/templates/misc.html:6
+msgid "Anything else?"
+msgstr "Detailer"
+
+#: lost_tracker/templates/master_framed.html:39
+msgid "Logged in as:"
+msgstr "Ageloggt als:"
+
+#: lost_tracker/templates/master_framed.html:40
+#: lost_tracker/templates/matrix.html:3
+msgid "Matrix"
+msgstr "Matrix"
+
+#: lost_tracker/templates/master_framed.html:41
+#: lost_tracker/templates/slot_editor.html:3
+msgid "Slot Editor"
+msgstr "Slot Editor"
+
+#: lost_tracker/templates/master_framed.html:42
+msgid "Manage Groups"
+msgstr "Gruppen bearbechten"
+
+#: lost_tracker/templates/master_framed.html:43
+#: lost_tracker/templates/settings.html:3
+msgid "Settings"
+msgstr "Astellungen"
+
+#: lost_tracker/templates/master_framed.html:44
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: lost_tracker/templates/matrix.html:19
+msgid "SUM"
+msgstr "Somm"
+
+#: lost_tracker/templates/messages.html:4
+msgid "Messages for"
+msgstr "Nochriichten fiir"
+
+#: lost_tracker/templates/messages.html:14
+msgid "No messages"
+msgstr "Keng Noochriichten"
+
+#: lost_tracker/templates/messages.html:18
+msgid "Add Message"
+msgstr "Noochriicht bäisetzen"
+
+#: lost_tracker/templates/messages.html:22
+msgid ""
+"For text formatting use <a href=\"https://daringfireball.net/projects/markdown/"
+"basics\">markdown</a> (<a href=\"https://en.wikipedia.org/wiki/Markdown"
+"\">Wikipedia</a>, <a href=\"https://github.com/adam-p/markdown-here/wiki/"
+"Markdown-Cheatsheet\">Cheatsheet</a>)"
+msgstr ""
+"Fir Textformatéirung gët <a href=\"https://daringfireball.net/projects/markdown/"
+"basics\">markdown</a> ugebueden. Kuck och bei <a href=\"https://en.wikipedia."
+"org/wiki/Markdown\">Wikipedia</a> an <a href=\"https://github.com/adam-p/"
+"markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>."
+
+#: lost_tracker/templates/messages.html:24
+#: lost_tracker/templates/settings.html:26
+msgid "Save"
+msgstr "Speichren"
+
+#: lost_tracker/templates/misc.html:8
+msgid "Entry fees are about €7 to €9 per person."
+msgstr "Et kascht tëschent 7€ an 9€ op de Kapp fir matzemaachen."
+
+#: lost_tracker/templates/misc.html:10
+msgid "Food and beverages are available at the start and on the trail."
+msgstr "Iessen a Gedrénks gëtt et um Start, an der Mëtt an um Schluss vum Rallye."
+
+#: lost_tracker/templates/misc.html:13
+msgid ""
+"We do this because we like it. Tell us wat you think and visit us on Facebook:"
+msgstr ""
+"Mir organiséieren dëse Rallye, well et Freed mécht. Besich eis op Facebook a "
+"schreif eis, wat s de denks!"
+
+#: lost_tracker/templates/misc.html:14
+msgid "Lost in the Darkness on Facebook"
+msgstr "Lost in the Darkness op Facebook"
+
+#: lost_tracker/templates/misc.html:18
+msgid "Everything penny we earn is donated to ONGD FNEL!"
+msgstr "All Su geet un d'ONGD FNEL!"
+
+#: lost_tracker/templates/misc.html:20
+msgid "In the year 2014 we raised €1000, donated to fnel Rover Tanzania."
+msgstr "Am Joër 2014 hu mer €1000 un d'fnel Rover Tanzania gespend."
+
+#: lost_tracker/templates/misc.html:22
+msgid ""
+"In the year 2015 we will donate all the income to the fnel Nepal Project "
+"(ongdFNEL)"
+msgstr ""
+"Am Joër 2015 spendéiren mer den ganzen Benefice un den fnel Nepal Projet "
+"(ongdFNEL)."
+
+#: lost_tracker/templates/notice.html:3 lost_tracker/templates/notice.html:7
+msgid "Notice"
+msgstr "Notiz"
+
+#: lost_tracker/templates/profile.html:23
+msgid "Your bookings"
+msgstr "Déng Umeldungen"
+
+#: lost_tracker/templates/profile.html:28
+msgid "QR-Code"
+msgstr "QR-Code"
+
+#: lost_tracker/templates/profile.html:31
+msgid "Verified by he Lost team?"
+msgstr "Vum Lost Team nokontrolléiert?"
+
+#: lost_tracker/templates/profile.html:32
+msgid "Messages"
+msgstr "Noochriichten"
+
+#: lost_tracker/templates/profile.html:47
+msgid "No bookings"
+msgstr "Keng Umeldungen"
+
+#: lost_tracker/templates/profile.html:60
+msgid "Personal Information"
+msgstr "Perséinlech Informatiounen"
+
+#: lost_tracker/templates/profile.html:62
+msgid "e-mail"
+msgstr "E-Mail"
+
+#: lost_tracker/templates/profile.html:65
+msgid "Update"
+msgstr ""
+
+#: lost_tracker/templates/profile.html:70
+msgid "Social Connections"
+msgstr "Sozial Verbindungen"
+
+#: lost_tracker/templates/register.html:6
+msgid "Registration"
+msgstr "Umellung"
+
+#: lost_tracker/templates/register.html:8
+msgid ""
+"We are sorry, the event is currently fully booked! You can register however. "
+"With luck we can sqeeze you in, but don't get your hopes up :("
+msgstr ""
+"Et deet eis leed!<br/>Mer hu momentan keng fräi Startzäit méi! Mer huelen déng "
+"Umelldung awer gären un a setzen dëch op d'Waardelëscht! Mat e bësse Chance "
+"kënne mer deng Equipe entzwousch dertëscht quetschen. Mer mellen eis, wann sech "
+"eng Méiglechkeet bitt!"
+
+#: lost_tracker/templates/register.html:10
+msgid "Only {free_slots} registrations remain available! Hurry up!"
+msgstr ""
+"Just nach {free_slots} Plaze fräi fir matzegoen!<br/>Mell dech séier un, ier et "
+"ze spéit ass!"
+
+#: lost_tracker/templates/register.html:15
+msgid "Information about your group"
+msgstr "Informatiounen iwwer deng Equipe"
+
+#: lost_tracker/templates/register.html:18
+#: lost_tracker/templates/slot_editor.html:30
+msgid "Group Name"
+msgstr "Numm vun der Grupp"
+
+#: lost_tracker/templates/register.html:20
+msgid "Contact Name"
+msgstr "Kontaktnumm"
+
+#: lost_tracker/templates/register.html:20
+#: lost_tracker/templates/register.html:22
+msgid "on the road"
+msgstr "ënnerwee"
+
+#: lost_tracker/templates/register.html:22
+msgid "Phone Number"
+msgstr "Telefonsnummer"
+
+#: lost_tracker/templates/register.html:26
+msgid "Details (if you have any special requests, let us know here)."
+msgstr "Detailer (Falls Du extra Wënsch hues, schreiw së heiran w.e.g)."
+
+#: lost_tracker/templates/registration_closed.html:3
+#: lost_tracker/templates/registration_closed.html:6
+msgid "Registration Closed"
+msgstr "Umeldung ass zou!"
+
+#: lost_tracker/templates/registration_closed.html:7
+msgid "We are sorry, the registration is currently closed!"
+msgstr "Leider ass d'Umelldung am Moment zou!"
+
+#: lost_tracker/templates/scoreboard.html:11
+msgid "Current score"
+msgstr "momentan Punktenzuel"
+
+#: lost_tracker/templates/settings.html:7
+msgid "Application Settings"
+msgstr "Programmastellungen"
+
+#: lost_tracker/templates/settings.html:11
+msgid "Global"
+msgstr "Global"
+
+#: lost_tracker/templates/slot_editor.html:6
+msgid "Time Slots"
+msgstr "Zäiten"
+
+#: lost_tracker/templates/slot_editor.html:10
+msgid "Slot"
+msgstr "Platz"
+
+#: lost_tracker/templates/slot_editor.html:26
+msgid "Unassigned Groups"
+msgstr "Onzougewisen Gruppen"
+
+#: lost_tracker/templates/station.html:3 lost_tracker/templates/station.html:28
+msgid "Station"
+msgstr "Posten"
+
+#: lost_tracker/templates/station.html:43
+msgid "Questionnaire"
+msgstr "Froebou"
+
+#: lost_tracker/templates/tabular.html:48
+#: lost_tracker/templates/tabularindex.html:3
+msgid "Manager"
+msgstr "Manager"
+
+#: lost_tracker/templates/tabular.html:52
+#: lost_tracker/templates/tabularindex.html:7
+msgid "Groups"
+msgstr "Gruppen"
+
+#: lost_tracker/templates/tabular.html:53
+#: lost_tracker/templates/tabularindex.html:8
+msgid "Stations"
+msgstr "Posten"
+
+#: lost_tracker/templates/tabular.html:54
+#: lost_tracker/templates/tabularindex.html:9
+msgid "Forms"
+msgstr "Frobéi"
+
+#: lost_tracker/templates/where.html:9
+msgid "Departure and registration location:"
+msgstr "Vun hei gi mer lass:"
+
+#: lost_tracker/templates/where.html:18
+msgid "No location defined yet!"
+msgstr "D'Platz ass nach nët definéiert!"
+
+#: lost_tracker/templates/security/login_user.html:8
+#, python-format
+msgid "Log in with %s"
+msgstr "Mat %s umellen"
+
+#~ msgid "First 3 positions are"
+#~ msgstr "Déi éischt sinn"
+
+#~ msgid "Thanks to anyone who participated"
+#~ msgstr "Villmools Merci fir déi, déi  matgemaach hunn"
+
+#~ msgid "The winners are"
+#~ msgstr "Déi éischt sinn"
+
+#~ msgid "Each of them will receive a price and will be contacted by phone"
+#~ msgstr "Si kréien e Präiss a gi vun eis ugeruff."
+
+#~ msgid "Complete leaderboard"
+#~ msgstr "Ganz Lëscht"
+
+#~ msgid "We will depart at the Scout's Home in Mamer."
+#~ msgstr "Mir gin lass am Scoutshome a Mamer."
+
+#~ msgid "Logged in successfully"
+#~ msgstr "Du bass agelogged!"
+
+#~ msgid "Invalid credentials!"
+#~ msgstr "Falsch login daten!"
+
+#~ msgid "Phone Number (on the road)"
+#~ msgstr "Telefonsnummer (Handy fir ënnerwee)"
+
+#~ msgid "Edit Link"
+#~ msgstr "Link änneren"
+
+#~ msgid "Group has finished"
+#~ msgstr "Grupp ass färdeg"
+
+#~ msgid "List"
+#~ msgstr "Lëscht"
+
+#~ msgid "Details"
+#~ msgstr "Detailer"

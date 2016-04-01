@@ -3,27 +3,27 @@
 {% block title %}{{_('Register')}}{% endblock %}
 
 {% block content %}
-    <h1>{{_("Registration")}} - {{Setting.get(g.session, 'event_date', '').strftime('%Y')}}</h1>
+    <h1>{{_("Registration")}} - {{Setting.get('event_date', '').strftime('%Y')}}</h1>
     {% if stats.free_slots <= 0 %}
       <h3>{{_("We are sorry, the event is currently fully booked! You can register however. With luck we can sqeeze you in, but don't get your hopes up :(")}}</h3>
     {% elif stats.load >= 0.7 %}
       <h3>{{_("Only {free_slots} registrations remain available! Hurry up!").format(free_slots=stats.free_slots)}}</h3>
     {% endif %}
 
-    <form id="registration_form" action="{{url_for('register')}}" method="POST">
+    <form id="registration_form" action="{{url_for('registration.new')}}" method="POST">
       <fieldset>
         <legend>{{_("Information about your group")}}</legend>
         <p class="admonition note">{{_('It may take a few days until your registration is accepted. Please be patient!')}}</p>
         <dl>
           <dt>{{_("Group Name")}}</dt>
           <dd><input type="text" name="group_name" /></dd>
-          <dt>{{_("Contact Name")}}</dt>
+          <dt>{{_("Contact Name")}} ({{_("on the road")}})</dt>
           <dd><input type="text" name="contact_name" /></dd>
-          <dt>{{_("e-mail")}}</dt>
-          <dd><input type="email" name="email" /></dd>
-          <dt>{{_("Phone Number (on the road)")}}</dt>
+          <dt>{{_("Phone Number")}} ({{_("on the road")}})</dt>
           <dd><input type="text" name="tel" /></dd>
-          <dt>{{_("Details")}}</dt>
+          <dt>{{_("Number of vegetarians")}}</dt>
+          <dd><input type="number" min="0" step="1" name="num_vegetarians" value="0" /></dd>
+          <dt>{{_("Details (if you have any special requests, let us know here).")}}</dt>
           <dd>
             <textarea name="comments" rows="8" cols="40"></textarea>
           </dd>

@@ -1,8 +1,8 @@
-@import url(http://fonts.googleapis.com/css?family=Metal+Mania|Sofadi+One);
+@import url(http://fonts.googleapis.com/css?family=Metal+Mania);
 
 BODY{
     margin: 0;
-    font-family: 'Sofadi One', Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
     text-align: center;
 }
 
@@ -116,7 +116,7 @@ DIV.group .form_icon {
 }
 
 .arrived,
-.finished,
+.completed,
 .state_0,
 .state_1,
 .state_2,
@@ -138,8 +138,8 @@ DIV.group .form_icon {
 }
 
 .state_2,
-.finished {
-    background: hsl(120, 100%, 20%);
+.completed {
+    background: hsla(120, 50%, 20%, 0.2);
     color: hsl(120, 100%, 75%);
 }
 
@@ -156,7 +156,7 @@ DIV.group .form_icon {
 }
 
 .group.state_2,
-.group.finished {
+.group.completed {
     background: hsla(120, 100%, 10%, 0.5);
     color: hsl(120, 100%, 75%);
 }
@@ -347,6 +347,10 @@ TD.state {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bf8c83', endColorstr='#b2847c',GradientType=0 ); /* IE6-9 */
 }
 
+DIV.error {
+    color: #000;
+}
+
 INPUT[type="submit"] {
     width: 100%;
     -webkit-border-radius: 4px;
@@ -459,27 +463,22 @@ TABLE#scoreboard TD {
 
 .position_1 {
     font-size: 200%;
-    line-height: 200%;
 }
 
 .position_2 {
     font-size: 180%;
-    line-height: 180%;
 }
 
 .position_3 {
     font-size: 160%;
-    line-height: 160%;
 }
 
 .position_4 {
     font-size: 140%;
-    line-height: 140%;
 }
 
 .position_5 {
     font-size: 120%;
-    line-height: 120%;
 }
 
 TABLE#scoreboard TD.position,
@@ -500,9 +499,99 @@ TABLE#scoreboard TD.score {
     text-align: right;
 }
 
+TABLE#scoreboard small {
+    font-size: 50%;
+}
+
+.inline-form {
+    display: inline;
+}
+
+FORM + FIELDSET {
+    margin-top: 1em;
+}
+
 /* {{{ Modal Dialogs */
 .modal-dialog {
     max-width: 30em;
+}
+/* }}} */
+
+/* {{{ Font-Awesome */
+.fa-close {
+    color: rgba(100, 0, 0, 0.3);
+}
+
+.fa-check {
+    color: rgb(0, 255, 0);
+}
+/* }}} */
+
+/* {{{ message rows */
+.message-row {
+    border: 1px solid black;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1em;
+}
+
+.message-row + .message-row {
+    margin-top: 0.8em;
+}
+
+.message-content P:first-child {
+    margin-top: 0;
+}
+
+.message-time {
+    float: right;
+    font-size: small;
+}
+
+.message-content {
+    text-align: left;
+}
+
+.message-image {
+    float: left;
+    margin-right: 0.5em;
+    width: 50px;
+}
+
+.message-button {
+    float: right;
+    margin-right: 0.3em;
+    vertical-align: top;
+}
+
+.message-button .fa-trash:hover {
+    color: #ff0;
+}
+
+.message-button .fa-trash {
+    color: #a00;
+}
+
+.fa-google {
+    color: #B71C1C;
+}
+
+.fa-google + .fa-stack-2x {
+    color: #C62828;
+}
+
+.fa-facebook {
+    color: #3b5998;
+}
+
+.fa-facebook + .fa-stack-2x {
+    color: #8b9dc3;
+}
+/* }}} */
+
+/* {{{ login form */
+.login-button {
+    margin: 1.5em 2em;
 }
 /* }}} */
 

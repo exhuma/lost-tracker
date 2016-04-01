@@ -5,26 +5,27 @@
 <table id="grouplist">
   <thead>
     <tr>
-      <th>{{_("Group")}}</th>
+      <th colspan="2">{{_("Group")}}</th>
       <th>{{_("Registration Date")}}</th>
       <th>{{_("Start Time")}}</th>
       <th>{{_("Direction")}}</th>
-      <th>{{_("Edit Link")}}</th>
+      <th>{{_("Accept Registration")}}</th>
     </tr>
   </thead>
   <tbody>
     {% for group in groups -%}
     <tr>
       <td
-        class="{{'finalized' if group.finalized else 'confirmed' if group.is_confirmed else ''}}"
-        data-group_id="{{group.id}}">{{group.name}}</td>
-      <td>{{group.inserted.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+        class="{{'accepted' if group.accepted else 'confirmed' if group.is_confirmed else ''}}"
+        data-group_id="{{group.id}}"><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
+      <td><a href="{{url_for('group.show_comments', id=group.id)}}"><i class="fa fa-comments"></i></a></td>
+      <td>{{group.inserted.strftime('%Y-%m-%d %H:%M')}}</td>
       <td>{{group.start_time|default('', true)}}</td>
       <td>{{group.direction|default('', true)}}</td>
-      {% if group.confirmation_key %}
-        <td><a href="{{url_for('accept_registration', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
+      {% if group.confirmation_key and not group.accepted %}
+        <td><a href="{{url_for('registration.accept', key=group.confirmation_key)}}">{{group.confirmation_key}}</a></td>
       {% else %}
-        <td>&nbsp;</td>
+        <td><i class="fa fa-check"></i></td>
       {% endif %}
     </tr>
     {%- endfor %}

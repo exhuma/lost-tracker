@@ -34,12 +34,14 @@ def upload():
         fab.put('dist/{0}.tar.gz'.format(name), '.')
         fab.put('alembic.ini', '.')
         fab.put('alembic', '.')
+        fab.put('requirements.txt', '.')
 
 
 @fab.task
 def install():
     name = fab.local('python setup.py --fullname', capture=True)
     with fab.cd(REMOTE_FOLDER):
+        fab.run('env/bin/pip install -r requirements.txt')
         fab.run('env/bin/pip install {0}.tar.gz'.format(name))
         fab.run('env/bin/alembic upgrade head')
         fab.run('touch wsgi/lost-tracker.wsgi')
@@ -50,6 +52,7 @@ def clean():
     name = fab.local('python setup.py --fullname', capture=True)
     with fab.cd(REMOTE_FOLDER):
         fab.run('rm {0}.tar.gz'.format(name))
+        fab.run('rm requirements.txt')
 
 
 @fab.task
@@ -77,7 +80,9 @@ def develop():
     l('[ -d env ] || virtualenv env')
     l('./env/bin/pip uninstall lost_tracker || true')
     l('./env/bin/pip install "setuptools>=0.8"')  # needed by IMAPClient
-    l('./env/bin/pip install -e .')
+    # some packages are unavailable on pypi :( -> Use requirements.txt
+    l('./env/bin/pip install -r requirements.txt')
+    l('./env/bin/pip install -e .[dev,test]')
     l('mkdir -p __libs__')
 
     with fab.lcd('__libs__'):

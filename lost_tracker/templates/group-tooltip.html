@@ -3,12 +3,12 @@ _('Group not found in DB!')
 {% else %}
 <h1>{{group.name}}</h1>
 <table border="0" cellspacing="0" cellpadding="0">
-  <tr><th>{{_('Contact')}}</td><td>{{group.contact}}{% if group.email -%}
-      &nbsp;<a href="mailto:{{group.email}}"><img valign="middle" src="/static/icons/email.png" /></a>{%- endif %}</td></td>
+  <tr><th>{{_('Contact')}}</td><td>{{group.contact}}{% if group.user.email -%}
+      &nbsp;<a href="mailto:{{group.user.email}}"><img valign="middle" src="/static/icons/email.png" /></a>{%- endif %}</td></td>
   <tr><th>{{_('Phone')}}</td><td>{{group.phone}}</td></td>
   <tr><th>{{_('Direction')}}</td><td>{{group.direction}}</td></td>
   <tr><th>{{_('Starting Time')}}</td><td>{{group.start_time}}</td></td>
   <tr><th>{{_('Status')}}</th><td>{{group.cancelled and _('Cancelled') or _('Active')}}</td></tr>
-  <tr><th>{{_('Registration Status')}}</th><td class="{{'finalized' if group.finalized else 'confirmed' if group.is_confirmed else ''}}">{{_('Accepted') if group.finalized else _('Confirmed') if group.is_confirmed else ''}}</td></tr>
+  <tr><th>{{_('Registration Status')}}</th><td class="{{'accepted' if group.accepted else 'confirmed' if group.is_confirmed else ''}}">{{_('Accepted') if group.accepted else _('Confirmed') if group.is_confirmed else ''}}</td></tr>
 </table>
 {% endif %}
