@@ -25,22 +25,20 @@
   <table>
     <thead>
       <tr>
-        <th>{{_("QR-Code")}}</th>
-        <th>{{_("Name")}}</th>
+        <th colspan="3">{{_("Name")}}</th>
         <th>{{_("Starting Time")}}</th>
         <th>{{_("Verified by he Lost team?")}}</th>
-        <th>{{_("Messages")}}</th>
       </tr>
     </thead>
     <tbody>
       {% for group in current_user.groups %}
         <tr>
-          <td><a href="{{url_for('qr.generate', id=group.id)}}">
-              <img src="{{url_for('qr.generate', id=group.id, size=64)}}" /></a></td>
           <td><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
+          <td><a href="{{url_for('group.show_comments', id=group.id)}}"><i class="fa fa-comments">&nbsp;<sup>{{group.messages|count}}</sup></i></a></td>
+          <td class="qrcode"><a href="{{url_for('qr.generate', id=group.id)}}">
+              <img src="{{url_for('qr.generate', id=group.id, size=64)}}" /></a></td>
           <td>{{group.start_time or "?"}}</td>
           <td><i class="fa fa-{{'check' if group.accepted else 'close'}}"></i></td>
-          <td><a href="{{url_for('group.show_comments', id=group.id)}}"><i class="fa fa-comments"></i></a></td>
         </tr>
       {% else %}
       <tr><td colspan="5">

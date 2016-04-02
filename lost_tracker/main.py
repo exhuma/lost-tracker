@@ -36,6 +36,7 @@ from lost_tracker.blueprint.user import USER
 from lost_tracker.emails import Mailer, DummyMailer
 
 import lost_tracker.models as mdl
+import lost_tracker.fbhelper as fb
 
 from lost_tracker.const import (
     COMMENT_PREFIX,
@@ -68,7 +69,7 @@ def make_app():
 
         if provider.name.lower() == 'facebook':
             fname = connection_values['full_name']
-            email = get_facebook_email(oauth_response)
+            email = fb.get_email(oauth_response)
         elif provider.name.lower() == 'twitter':
             fname = connection_values['display_name'][1:]  # cut off leading @
         else:
@@ -152,13 +153,6 @@ def make_app():
     babel.init_app(app)
     babel.localeselector(get_locale)
     return app
-
-
-def get_facebook_email(oauth_response):
-    from facebook import GraphAPI
-    api = GraphAPI(access_token=oauth_response['access_token'], version='2.5')
-    response = api.request('/me', args={'fields': 'email'})
-    return response['email']
 
 
 def userbool(value):
