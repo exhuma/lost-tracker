@@ -185,3 +185,51 @@ def babel_update():
     fab.local('./env/bin/pybabel update '
               '-i messages.pot '
               '-d lost_tracker/translations')
+
+
+def _get_psql_params():
+    '''
+    return a list of PostgreSQL parameters. These parameters are usable for
+    commands like ``psql`` or ``pg_dump``. It uses a config-file containing a
+    ``db.dsn`` option to determine those parameters.
+    '''
+    from urlparse import urlparse
+    with fab.cd(REMOTE_FOLDER), fab.hide('stdout', 'running', 'stderr'):
+        dsn = fab.run(
+            './env/bin/python -c "'
+            'from config_resolver import Config; '
+            'import logging; logging.basicConfig(level=logging.ERROR); '
+            "config = Config('mamerwiselen', 'lost-tracker'); "
+            "print(config.get('db', 'dsn'))"
+            '"'
+        ).strip()
+    if not dsn:
+        fab.abort(clr.red('Unable to get DSN from config file!'))
+
+    # psql does not support SQLAlchemy Style DSNs so we need to parse it and
+    # reconstruct a proper command
+    dsn_detail = urlparse(dsn)
+    psql_params = ['-U', dsn_detail.username]
+    if dsn_detail.port:
+        psql_params.extend(['-p', dsn_detail.port])
+    if dsn_detail.hostname and dsn_detail.hostname != 'localhost':
+        psql_params.extend(['-h', dsn_detail.hostname])
+    psql_params.append(dsn_detail.path[1:])
+    return psql_params
+
+
+@fab.task
+def pull_db():
+    psql_params = _get_psql_params()
+    with fab.cd(REMOTE_FOLDER):
+        tempfile = fab.run('mktemp --tmpdir=.')
+        full_cmd = ['pg_dump', '--clean', '-f', tempfile] + psql_params
+        fab.run(' '.join(full_cmd))
+        retrieved_files = fab.get(tempfile)
+        fab.run('rm %s' % tempfile)
+        if len(retrieved_files) != 1:
+            fab.abort(clr.red('Expected to retrieve exactly one file. '
+                              'But got %d!' % len(retrieved_files)))
+        local_file = next(iter(retrieved_files))
+        fab.local('psql -X -q -f %s lost_tracker_2016' % local_file)
+        fab.local('rm %s' % local_file)
