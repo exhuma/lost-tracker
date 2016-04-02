@@ -44,10 +44,15 @@ class Mailer(object):
 
         mail = Envelope(
             from_addr=('reservation@lost.lu', 'Lost.lu Registration Team'),
-            to_addr=recipients,
+            to_addr='',
+            cc_addr=('reservation@lost.lu', 'Lost.lu Registration Team'),
             subject=subject,
-            text_body=content)
-        LOG.debug('Sending email out to {!r} via localhost'.format(to))
+            text_body=content,
+            bcc_addr=recipients)
+        LOG.debug('Sending %r out to %r (BCC=%r),  via localhost',
+                  mail,
+                  mail.to_addr,
+                  mail.bcc_addr)
         self._send(mail)
 
     def _send(self, mail):
