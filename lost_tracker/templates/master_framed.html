@@ -8,7 +8,7 @@
 
 {% macro avatar(user, size) -%}
   {% if user and user.social_connections and user.social_connections[0].image_url -%}
-    <img align="middle" width="{{size}}" height="{{size}}" class="avatar" src="{{user.social_connections[0].image_url}}" alt="Avatar" />
+    <img align="middle" width="{{size}}" height="{{size}}" class="avatar" src="{{user|avatar_url}}" alt="Avatar" />
   {%- else -%}
     <img align="middle" width="{{size}}" height="{{size}}" class="avatar" src="{{url_for('static', filename='images/generic_avatar.png')}}" alt="Avatar" />
   {%- endif %}
