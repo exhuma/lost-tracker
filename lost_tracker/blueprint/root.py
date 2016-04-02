@@ -1,5 +1,6 @@
 from collections import namedtuple
 from datetime import datetime
+from hashlib import md5
 from operator import attrgetter
 try:
     from urllib.parse import unquote_plus  # py3
@@ -29,6 +30,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
+import lost_tracker.fbhelper as fb
 from lost_tracker import __version__
 from lost_tracker.const import TABULAR_PREFIX, COMMENT_PREFIX
 from lost_tracker.util import basic_auth
@@ -111,6 +113,19 @@ def error_handler(request):
 @ROOT.app_template_filter('md')
 def convert_markdown(value):
     return markdown(value, safe_mode='replace', enable_attributes=False)
+
+
+@ROOT.app_template_filter('avatar_url')
+def fetch_avatar_url(user):
+    if not user.social_connections:
+        mailhash = md5(user.email.lower()).hexdigest()
+        gravatar = 'http://www.gravatar.com/avatar/%s?d=identicon' % mailhash
+        return gravatar
+    first_social = user.social_connections[0]
+    if first_social.provider_id == 'facebook':
+        return fb.get_image_url(first_social)
+    else:
+        return first_social.image_url
 
 
 @ROOT.app_template_filter('humantime')
