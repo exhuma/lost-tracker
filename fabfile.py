@@ -1,3 +1,4 @@
+from __future__ import print_function
 from ConfigParser import SafeConfigParser
 
 import fabric.api as fab
@@ -129,6 +130,25 @@ def build():
     """
     Compile JS sources.
     """
+    from os import stat
+    from json import load
+    with open('plovr-config.js') as fp:
+        plovr_config = load(fp)
+
+    input_file = plovr_config['inputs']
+    output_file = plovr_config['output-file']
+
+    stat_in = stat(input_file)
+    stat_out = stat(output_file)
+
+    if stat_in.st_mtime <= stat_out.st_mtime:
+        print(clr.blue(input_file),
+              clr.green('is older than'),
+              clr.blue(output_file),
+              clr.green('Assuming it has not changed and skipping '
+                        'closure-build!'))
+        return
+
     fab.local('java -jar __libs__/{} build plovr-config.js'.format(PLOVR))
 
 
