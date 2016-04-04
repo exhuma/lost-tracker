@@ -174,6 +174,7 @@ def store_registration(mailer, session, data):
 
         * group_name
         * contact_name
+        * email
         * tel
         * time
         * comments
@@ -205,6 +206,7 @@ def store_registration(mailer, session, data):
         order = start_time_to_order(data['time'])
         new_grp.order = _get_unique_order(Group, order)
         new_grp.num_vegetarians = int(data['num_vegetarians'])
+        new_grp.email = data['email']
 
         session.add(new_grp)
         try:
@@ -291,6 +293,7 @@ def update_group(mailer, id, data):
     group.phone = data['phone']
     group.comments = data['comments']
     group.contact = data['contact']
+    group.email = data['email']
     group.num_vegetarians = data['num_vegetarians']
 
     if 'direction' in data:

@@ -31,6 +31,7 @@ def new():
         data = {
             "group_name": request.form.get('group_name'),
             "contact_name": request.form.get('contact_name'),
+            "email": request.form.get('email'),
             "tel": request.form.get('tel'),
             "time": request.form.get('time'),
             "comments": request.form.get('comments'),
