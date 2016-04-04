@@ -31,11 +31,13 @@ def new():
         data = {
             "group_name": request.form.get('group_name'),
             "contact_name": request.form.get('contact_name'),
+            "email": request.form.get('email'),
             "tel": request.form.get('tel'),
             "time": request.form.get('time'),
             "comments": request.form.get('comments'),
             "user_id": current_user.id,
             "num_vegetarians": request.form.get('num_vegetarians'),
+            "num_participants": request.form.get('num_participants'),
         }
         try:
             key = loco.store_registration(

@@ -1,11 +1,11 @@
 {% extends "master_narrow.html" %}
 {% block title %}{{_('Edit Group')}}{% endblock %}
 {% block content %}
-<h1>{{group.name}}</h1>
+<h1>{{group.name}}&nbsp;<small><a href="{{url_for('group.show_comments', id=group.id)}}" title="{{group.messages|count}} messages"><i class="fa fa-comments"></i></a></small></h1>
 {% if group.user.id != current_user.id %}
   <div style="text-align: center;">
-    {{ avatar(group.user, 100) }}<br />
-    {{ _("Group owner") }}: {{group.user.name}}
+    {{ avatar(group.user, 100) }}<br /><br />
+    {{group.user.name}}
   </div>
   <hr />
 {% endif %}
@@ -19,8 +19,12 @@
       <dd><input type="text" name="name" value="{{group.name}}" /></dd>
       <dt>{{_('Contact')}}</dt>
       <dd><input type="text" name="contact" value="{{group.contact}}" /></dd>
+      <dt>{{_('Email')}}</dt>
+      <dd><input type="email" name="email" value="{{group.email}}" /></dd>
       <dt>{{_('Phone')}}</dt>
       <dd><input type="text" name="phone" value="{{group.phone}}" /></dd>
+      <dt>{{_('Total number of participants (including vegetarians)')}}</dt>
+      <dd><input type="number" min="0" step="1" name="num_participants" value="{{group.num_participants}}" /></dd>
       <dt>{{_('Number of vegetarians')}}</dt>
       <dd><input type="number" min="0" step="1" name="num_vegetarians" value="{{group.num_vegetarians}}" /></dd>
       {% if current_user.has_role(Role.ADMIN) %}

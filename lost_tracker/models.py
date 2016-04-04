@@ -126,6 +126,7 @@ class Group(DB.Model):
     __tablename__ = 'group'
     id = Column(Integer, primary_key=True)
     name = Column(Unicode(50), unique=True)
+    email = Column(Unicode(100))
     order = Column(Integer, unique=True)
     cancelled = Column(Boolean, default=False, server_default='false')
     contact = Column(Unicode(50))
@@ -142,6 +143,7 @@ class Group(DB.Model):
     updated = Column(DateTime)
     departure_time = Column(DateTime, server_default=None, default=None)
     num_vegetarians = Column(Integer, server_default='0', default=0)
+    num_participants = Column(Integer, server_default='0', default=0)
 
     user = relationship('User', backref="groups")
     stations = relationship('GroupStation')
@@ -165,6 +167,7 @@ class Group(DB.Model):
         self.comments = comments
         self.confirmation_key = confirmation_key
         self.user_id = user_id
+        self.email = ''
 
     def __repr__(self):
         return '<Group %r>' % (self.name)
@@ -225,6 +228,7 @@ class Group(DB.Model):
             '__class__': 'Group',
             'id': self.id,
             'name': self.name,
+            'email': self.email,
             'order': self.order,
             'cancelled': self.cancelled,
             'contact': self.contact,

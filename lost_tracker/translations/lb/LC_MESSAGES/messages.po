@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-31 18:29+0200\n"
-"PO-Revision-Date: 2016-03-31 18:31+0200\n"
+"POT-Creation-Date: 2016-04-04 22:24+0200\n"
+"PO-Revision-Date: 2016-04-04 22:28+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: lb\n"
 "Language-Team: lb <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Generated-By: Babel 2.2.0\n"
 "X-Generator: Poedit 1.8.4\n"
 
-#: lost_tracker/main.py:97
+#: lost_tracker/main.py:98
 msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
 msgstr "Benotzer ass elo mat {} verboon. Ignoréier d'Message déi seet: \"{}\""
 
@@ -28,45 +28,45 @@ msgstr "Benotzer ass elo mat {} verboon. Ignoréier d'Message déi seet: \"{}\""
 msgid "Invalid Request!"
 msgstr "Ongëltegen Opruff!"
 
-#: lost_tracker/blueprint/comment.py:33
+#: lost_tracker/blueprint/comment.py:34
 msgid "Access denied!"
 msgstr "Zougang ass hei net erlabt!"
 
-#: lost_tracker/blueprint/comment.py:43
+#: lost_tracker/blueprint/comment.py:46
 msgid "Message saved!"
-msgstr "Nochriicht ass gespeäichert!"
+msgstr "Nooriichten ass gespeäichert!"
 
-#: lost_tracker/blueprint/comment.py:52 lost_tracker/blueprint/group.py:136
+#: lost_tracker/blueprint/comment.py:55 lost_tracker/blueprint/group.py:139
 msgid "Not found!"
 msgstr "Nët fonnt!"
 
-#: lost_tracker/blueprint/group.py:49 lost_tracker/blueprint/group.py:118
-#: lost_tracker/blueprint/group.py:140
+#: lost_tracker/blueprint/group.py:49 lost_tracker/blueprint/group.py:121
+#: lost_tracker/blueprint/group.py:143
 msgid "Access Denied!"
 msgstr "Zougang ass hei net erlabt!"
 
-#: lost_tracker/blueprint/group.py:74
+#: lost_tracker/blueprint/group.py:76
 msgid "Accepted registration for group {}"
 msgstr "D'{}-Grupp ass registréiert!"
 
-#: lost_tracker/blueprint/group.py:82
+#: lost_tracker/blueprint/group.py:84
 msgid "Group {name} successfully updated!"
 msgstr "D'Grupp {name} ass upgedate!"
 
-#: lost_tracker/blueprint/group.py:86
+#: lost_tracker/blueprint/group.py:88
 msgid "E-Mail sent successfully!"
 msgstr "D'E-Mail ass fortgeschéckt!"
 
-#: lost_tracker/blueprint/group.py:100
+#: lost_tracker/blueprint/group.py:102
 msgid "Incorrect value for direction: {!r}"
 msgstr "Falschen Wert fir Richtung: {!r}"
 
-#: lost_tracker/blueprint/group.py:116 lost_tracker/blueprint/qr.py:42
-#: lost_tracker/blueprint/root.py:108 lost_tracker/blueprint/station.py:94
+#: lost_tracker/blueprint/group.py:118 lost_tracker/blueprint/qr.py:42
+#: lost_tracker/blueprint/root.py:110 lost_tracker/blueprint/station.py:94
 msgid "No such entity!"
 msgstr "Dat gëtt et net!"
 
-#: lost_tracker/blueprint/registration.py:58
+#: lost_tracker/blueprint/registration.py:60
 msgid ""
 "The registration has been recorded. You will receive an e-mail once the "
 "registartion has been successfully processed! You can see all your registered "
@@ -75,15 +75,15 @@ msgstr ""
 "D'Umeldung ass gespeichert. Du kriss eng Mail soubal së verschafft gouf. Du "
 "kanns all déng Umeldungen op <a href=\"{}\">déngem Profil</a> gesin."
 
-#: lost_tracker/blueprint/registration.py:74
+#: lost_tracker/blueprint/registration.py:76
 msgid "This group has already been accepted!"
 msgstr "Dës Grupp gëtt et schonn!"
 
-#: lost_tracker/blueprint/root.py:127
+#: lost_tracker/blueprint/root.py:142
 msgid "File not found!"
 msgstr "Datei nët fonnt!"
 
-#: lost_tracker/blueprint/root.py:255
+#: lost_tracker/blueprint/root.py:270
 msgid "Settings successfully saved."
 msgstr "Astellungen si gespeichert."
 
@@ -104,16 +104,12 @@ msgstr "D'Email ass op {} geännert gin."
 msgid "Edit Group"
 msgstr "Grupp Änneren"
 
-#: lost_tracker/templates/edit_group.html:8
-msgid "Group owner"
-msgstr "Gruppeneegentümer"
-
 #: lost_tracker/templates/edit_group.html:14
 msgid "Group Infos"
 msgstr "Gruppeninformatiounen"
 
 #: lost_tracker/templates/edit_group.html:18
-#: lost_tracker/templates/profile.html:29
+#: lost_tracker/templates/profile.html:28
 msgid "Name"
 msgstr "Numm"
 
@@ -123,53 +119,63 @@ msgid "Contact"
 msgstr "Kontakt"
 
 #: lost_tracker/templates/edit_group.html:22
+#: lost_tracker/templates/register.html:20
+msgid "Email"
+msgstr "E-Mail"
+
+#: lost_tracker/templates/edit_group.html:24
 #: lost_tracker/templates/group-tooltip.html:8
 msgid "Phone"
 msgstr "Telefonsnummer"
 
-#: lost_tracker/templates/edit_group.html:24
-#: lost_tracker/templates/register.html:24
+#: lost_tracker/templates/edit_group.html:26
+#: lost_tracker/templates/register.html:26
+msgid "Total number of participants (including vegetarians)"
+msgstr "Gesamtunzuel vun Gruppememberen (inklusiv Vegetarier)"
+
+#: lost_tracker/templates/edit_group.html:28
+#: lost_tracker/templates/register.html:28
 msgid "Number of vegetarians"
 msgstr "Unzuel vun Vegetarier"
 
-#: lost_tracker/templates/edit_group.html:27
-#: lost_tracker/templates/edit_group.html:30
+#: lost_tracker/templates/edit_group.html:31
+#: lost_tracker/templates/edit_group.html:34
 #: lost_tracker/templates/group-tooltip.html:9
 #: lost_tracker/templates/group_list.html:11
 msgid "Direction"
 msgstr "Richtung"
 
-#: lost_tracker/templates/edit_group.html:35
+#: lost_tracker/templates/edit_group.html:39
 #: lost_tracker/templates/group-tooltip.html:10
-#: lost_tracker/templates/profile.html:30
+#: lost_tracker/templates/profile.html:29
 msgid "Starting Time"
 msgstr "Startzäit"
 
-#: lost_tracker/templates/edit_group.html:37
+#: lost_tracker/templates/edit_group.html:41
 msgid "Flags"
 msgstr ""
 
-#: lost_tracker/templates/edit_group.html:38
+#: lost_tracker/templates/edit_group.html:42
 msgid "Group registration has been accepted"
 msgstr "D'Grupp ass ugeholl gin"
 
-#: lost_tracker/templates/edit_group.html:39
+#: lost_tracker/templates/edit_group.html:43
 msgid "Group has cancelled"
 msgstr "Grupp huet ofgebrach"
 
-#: lost_tracker/templates/edit_group.html:40
+#: lost_tracker/templates/edit_group.html:44
 msgid "Group has completed"
 msgstr "D'Grupp ass fäerdeg"
 
-#: lost_tracker/templates/edit_group.html:42
+#: lost_tracker/templates/edit_group.html:46
 msgid "Comments"
 msgstr "Kommentaren"
 
-#: lost_tracker/templates/edit_group.html:45
+#: lost_tracker/templates/edit_group.html:49
 msgid "Options"
 msgstr "Optiounen"
 
-#: lost_tracker/templates/edit_group.html:46
+#: lost_tracker/templates/edit_group.html:50
 msgid "Send e-mail to the group about the changes."
 msgstr "E-mail mat den Ännerungen un d'Grupp schécken."
 
@@ -291,8 +297,8 @@ msgid "Where is this?"
 msgstr "Wou geet et lass?"
 
 #: lost_tracker/templates/master_framed.html:24
-#: lost_tracker/templates/profile.html:48 lost_tracker/templates/register.html:3
-#: lost_tracker/templates/register.html:31
+#: lost_tracker/templates/profile.html:46 lost_tracker/templates/register.html:3
+#: lost_tracker/templates/register.html:35
 msgid "Register"
 msgstr "Umellen"
 
@@ -340,17 +346,17 @@ msgstr "Somm"
 
 #: lost_tracker/templates/messages.html:4
 msgid "Messages for"
-msgstr "Nochriichten fiir"
+msgstr "Nooriichten fir"
 
-#: lost_tracker/templates/messages.html:14
+#: lost_tracker/templates/messages.html:17
 msgid "No messages"
-msgstr "Keng Noochriichten"
+msgstr "Keng Nooriichten"
 
-#: lost_tracker/templates/messages.html:18
+#: lost_tracker/templates/messages.html:21
 msgid "Add Message"
-msgstr "Noochriicht bäisetzen"
+msgstr "Nooriichten bäisetzen"
 
-#: lost_tracker/templates/messages.html:22
+#: lost_tracker/templates/messages.html:25
 msgid ""
 "For text formatting use <a href=\"https://daringfireball.net/projects/markdown/"
 "basics\">markdown</a> (<a href=\"https://en.wikipedia.org/wiki/Markdown"
@@ -362,7 +368,7 @@ msgstr ""
 "org/wiki/Markdown\">Wikipedia</a> an <a href=\"https://github.com/adam-p/"
 "markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>."
 
-#: lost_tracker/templates/messages.html:24
+#: lost_tracker/templates/messages.html:27
 #: lost_tracker/templates/settings.html:26
 msgid "Save"
 msgstr "Speichren"
@@ -410,35 +416,27 @@ msgstr "Notiz"
 msgid "Your bookings"
 msgstr "Déng Umeldungen"
 
-#: lost_tracker/templates/profile.html:28
-msgid "QR-Code"
-msgstr "QR-Code"
-
-#: lost_tracker/templates/profile.html:31
+#: lost_tracker/templates/profile.html:30
 msgid "Verified by he Lost team?"
 msgstr "Vum Lost Team nokontrolléiert?"
 
-#: lost_tracker/templates/profile.html:32
-msgid "Messages"
-msgstr "Noochriichten"
-
-#: lost_tracker/templates/profile.html:47
+#: lost_tracker/templates/profile.html:45
 msgid "No bookings"
 msgstr "Keng Umeldungen"
 
-#: lost_tracker/templates/profile.html:60
+#: lost_tracker/templates/profile.html:58
 msgid "Personal Information"
 msgstr "Perséinlech Informatiounen"
 
-#: lost_tracker/templates/profile.html:62
+#: lost_tracker/templates/profile.html:60
 msgid "e-mail"
 msgstr "E-Mail"
 
-#: lost_tracker/templates/profile.html:65
+#: lost_tracker/templates/profile.html:63
 msgid "Update"
 msgstr ""
 
-#: lost_tracker/templates/profile.html:70
+#: lost_tracker/templates/profile.html:68
 msgid "Social Connections"
 msgstr "Sozial Verbindungen"
 
@@ -471,20 +469,20 @@ msgstr "Informatiounen iwwer deng Equipe"
 msgid "Group Name"
 msgstr "Numm vun der Grupp"
 
-#: lost_tracker/templates/register.html:20
+#: lost_tracker/templates/register.html:22
 msgid "Contact Name"
 msgstr "Kontaktnumm"
 
-#: lost_tracker/templates/register.html:20
 #: lost_tracker/templates/register.html:22
+#: lost_tracker/templates/register.html:24
 msgid "on the road"
 msgstr "ënnerwee"
 
-#: lost_tracker/templates/register.html:22
+#: lost_tracker/templates/register.html:24
 msgid "Phone Number"
 msgstr "Telefonsnummer"
 
-#: lost_tracker/templates/register.html:26
+#: lost_tracker/templates/register.html:30
 msgid "Details (if you have any special requests, let us know here)."
 msgstr "Detailer (Falls Du extra Wënsch hues, schreiw së heiran w.e.g)."
 
@@ -500,6 +498,11 @@ msgstr "Leider ass d'Umelldung am Moment zou!"
 #: lost_tracker/templates/scoreboard.html:11
 msgid "Current score"
 msgstr "momentan Punktenzuel"
+
+#: lost_tracker/templates/scoreboard.html:11
+#, python-format
+msgid "%s: Not yet completed"
+msgstr "%s: Nach nët färdeg"
 
 #: lost_tracker/templates/settings.html:7
 msgid "Application Settings"
@@ -600,3 +603,15 @@ msgstr "Mat %s umellen"
 
 #~ msgid "Details"
 #~ msgstr "Detailer"
+
+#~ msgid "Group owner"
+#~ msgstr "Gruppeneegentümer"
+
+#~ msgid "QR-Code"
+#~ msgstr "QR-Code"
+
+#~ msgid "Messages"
+#~ msgstr "Noochriichten"
+
+#~ msgid "Number of participants"
+#~ msgstr "Unzuel vun Gruppememberen"
