@@ -5,21 +5,20 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-31 18:29+0200\n"
-"PO-Revision-Date: 2016-03-31 18:32+0200\n"
+"POT-Creation-Date: 2016-04-04 22:24+0200\n"
+"PO-Revision-Date: 2016-04-04 22:21+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: de\n"
 "Language-Team: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
-"X-Generator: Poedit 1.8.4\n"
 
-#: lost_tracker/main.py:97
+#: lost_tracker/main.py:98
 msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
 msgstr "Erfolgreich mit {} verbunden. Ignoriere die Meldung die besagt: \"{}\""
 
@@ -28,63 +27,63 @@ msgstr "Erfolgreich mit {} verbunden. Ignoriere die Meldung die besagt: \"{}\""
 msgid "Invalid Request!"
 msgstr "Ungültiger Aufruf!"
 
-#: lost_tracker/blueprint/comment.py:33
+#: lost_tracker/blueprint/comment.py:34
 msgid "Access denied!"
 msgstr "Zugriff Verweigert"
 
-#: lost_tracker/blueprint/comment.py:43
+#: lost_tracker/blueprint/comment.py:46
 msgid "Message saved!"
 msgstr "Nachricht gespeichert!"
 
-#: lost_tracker/blueprint/comment.py:52 lost_tracker/blueprint/group.py:136
+#: lost_tracker/blueprint/comment.py:55 lost_tracker/blueprint/group.py:139
 msgid "Not found!"
 msgstr "Nicht gefunden!"
 
-#: lost_tracker/blueprint/group.py:49 lost_tracker/blueprint/group.py:118
-#: lost_tracker/blueprint/group.py:140
+#: lost_tracker/blueprint/group.py:49 lost_tracker/blueprint/group.py:121
+#: lost_tracker/blueprint/group.py:143
 msgid "Access Denied!"
 msgstr "Zugriff Verweigert"
 
-#: lost_tracker/blueprint/group.py:74
+#: lost_tracker/blueprint/group.py:76
 msgid "Accepted registration for group {}"
 msgstr "Anmeldung für die Gruppe {} wurde angenommen."
 
-#: lost_tracker/blueprint/group.py:82
+#: lost_tracker/blueprint/group.py:84
 msgid "Group {name} successfully updated!"
 msgstr "Gruppe {name} erfolgreich gespeichert!"
 
-#: lost_tracker/blueprint/group.py:86
+#: lost_tracker/blueprint/group.py:88
 msgid "E-Mail sent successfully!"
 msgstr "E-Mail erfolgreich versand."
 
-#: lost_tracker/blueprint/group.py:100
+#: lost_tracker/blueprint/group.py:102
 msgid "Incorrect value for direction: {!r}"
 msgstr "{!r} ist ein ungültiger Wert für dir Richtung."
 
-#: lost_tracker/blueprint/group.py:116 lost_tracker/blueprint/qr.py:42
-#: lost_tracker/blueprint/root.py:108 lost_tracker/blueprint/station.py:94
+#: lost_tracker/blueprint/group.py:118 lost_tracker/blueprint/qr.py:42
+#: lost_tracker/blueprint/root.py:110 lost_tracker/blueprint/station.py:94
 msgid "No such entity!"
 msgstr "Datenbank Eintrag nicht gefunden!"
 
-#: lost_tracker/blueprint/registration.py:58
+#: lost_tracker/blueprint/registration.py:60
 msgid ""
 "The registration has been recorded. You will receive an e-mail once the "
-"registartion has been successfully processed! You can see all your registered "
-"groups on <a href=\"{}\">your profile</a>."
+"registartion has been successfully processed! You can see all your "
+"registered groups on <a href=\"{}\">your profile</a>."
 msgstr ""
-"Die Anmeldung wurde gespeichert. Sobald sie von dem Lost team verarbeited wurde "
-"wirst du eine E-Mail bekommen. All deine Anmeldungen stehen auch auf <a href="
-"\"{}\">deinem Profil</a>."
+"Die Anmeldung wurde gespeichert. Sobald sie von dem Lost team verarbeited"
+" wurde wirst du eine E-Mail bekommen. All deine Anmeldungen stehen auch "
+"auf <a href=\"{}\">deinem Profil</a>."
 
-#: lost_tracker/blueprint/registration.py:74
+#: lost_tracker/blueprint/registration.py:76
 msgid "This group has already been accepted!"
 msgstr "Diese Gruppe wurde bereits angenommen!"
 
-#: lost_tracker/blueprint/root.py:127
+#: lost_tracker/blueprint/root.py:142
 msgid "File not found!"
 msgstr "Datei nicht gefunden!"
 
-#: lost_tracker/blueprint/root.py:255
+#: lost_tracker/blueprint/root.py:270
 msgid "Settings successfully saved."
 msgstr "Einstellungen Erfolgreich gespeichert"
 
@@ -105,16 +104,12 @@ msgstr "E-Mail erfolgreich auf {} geändert."
 msgid "Edit Group"
 msgstr "Gruppe bearbeiten"
 
-#: lost_tracker/templates/edit_group.html:8
-msgid "Group owner"
-msgstr "Gruppeneigentümer"
-
 #: lost_tracker/templates/edit_group.html:14
 msgid "Group Infos"
 msgstr "Gruppeninformationen"
 
 #: lost_tracker/templates/edit_group.html:18
-#: lost_tracker/templates/profile.html:29
+#: lost_tracker/templates/profile.html:28
 msgid "Name"
 msgstr "Name"
 
@@ -124,53 +119,63 @@ msgid "Contact"
 msgstr "Kontakt"
 
 #: lost_tracker/templates/edit_group.html:22
+#: lost_tracker/templates/register.html:20
+msgid "Email"
+msgstr "e-mail"
+
+#: lost_tracker/templates/edit_group.html:24
 #: lost_tracker/templates/group-tooltip.html:8
 msgid "Phone"
 msgstr "Tel"
 
-#: lost_tracker/templates/edit_group.html:24
-#: lost_tracker/templates/register.html:24
+#: lost_tracker/templates/edit_group.html:26
+#: lost_tracker/templates/register.html:26
+msgid "Total number of participants (including vegetarians)"
+msgstr "Gesamzahl von Teilnehmern (inklusive Vegetarier)"
+
+#: lost_tracker/templates/edit_group.html:28
+#: lost_tracker/templates/register.html:28
 msgid "Number of vegetarians"
 msgstr "Anzahl von Vegetariern"
 
-#: lost_tracker/templates/edit_group.html:27
-#: lost_tracker/templates/edit_group.html:30
+#: lost_tracker/templates/edit_group.html:31
+#: lost_tracker/templates/edit_group.html:34
 #: lost_tracker/templates/group-tooltip.html:9
 #: lost_tracker/templates/group_list.html:11
 msgid "Direction"
 msgstr "Richtung"
 
-#: lost_tracker/templates/edit_group.html:35
+#: lost_tracker/templates/edit_group.html:39
 #: lost_tracker/templates/group-tooltip.html:10
-#: lost_tracker/templates/profile.html:30
+#: lost_tracker/templates/profile.html:29
 msgid "Starting Time"
 msgstr "Startzeit"
 
-#: lost_tracker/templates/edit_group.html:37
+#: lost_tracker/templates/edit_group.html:41
 msgid "Flags"
 msgstr "Schalter"
 
-#: lost_tracker/templates/edit_group.html:38
+#: lost_tracker/templates/edit_group.html:42
 msgid "Group registration has been accepted"
 msgstr "Gruppe wurde akzeptiert"
 
-#: lost_tracker/templates/edit_group.html:39
+#: lost_tracker/templates/edit_group.html:43
 msgid "Group has cancelled"
 msgstr "Gruppe hat abgebrochen"
 
-#: lost_tracker/templates/edit_group.html:40
+#: lost_tracker/templates/edit_group.html:44
 msgid "Group has completed"
 msgstr "Gruppe ist fertig"
 
-#: lost_tracker/templates/edit_group.html:42
+#: lost_tracker/templates/edit_group.html:46
 msgid "Comments"
 msgstr "Kommentare"
 
-#: lost_tracker/templates/edit_group.html:45
+#: lost_tracker/templates/edit_group.html:49
 msgid "Options"
 msgstr "Optionen"
 
-#: lost_tracker/templates/edit_group.html:46
+#: lost_tracker/templates/edit_group.html:50
 msgid "Send e-mail to the group about the changes."
 msgstr "e-mail mit den Änderungen an die Gruppe senden. "
 
@@ -179,7 +184,8 @@ msgstr "e-mail mit den Änderungen an die Gruppe senden. "
 msgid "Pictures"
 msgstr "Bilder"
 
-#: lost_tracker/templates/gallery.html:14 lost_tracker/templates/gallery.html:17
+#: lost_tracker/templates/gallery.html:14
+#: lost_tracker/templates/gallery.html:17
 msgid "Nothing here yet"
 msgstr "Hier ist noch nichts."
 
@@ -234,15 +240,16 @@ msgstr "Startseite"
 #: lost_tracker/templates/index.html:8
 msgid "Registration is <strong>open</strong>! <a href=\"{url}\">Register now!</a>"
 msgstr ""
-"Die Anmeldung ist <strong>eröffnet</strong>! <a href=\"{url}\">Jetzt anmelden!</"
-"a>"
+"Die Anmeldung ist <strong>eröffnet</strong>! <a href=\"{url}\">Jetzt "
+"anmelden!</a>"
 
 #: lost_tracker/templates/index.html:10 lost_tracker/templates/register.html:16
 msgid ""
-"It may take a few days until your registration is accepted. Please be patient!"
+"It may take a few days until your registration is accepted. Please be "
+"patient!"
 msgstr ""
-"Es kann einige Tage dauern bis Ihre Anmeldung angenommen wird. Wir bitten um "
-"etwas Geduld!"
+"Es kann einige Tage dauern bis Ihre Anmeldung angenommen wird. Wir bitten"
+" um etwas Geduld!"
 
 #: lost_tracker/templates/index.html:15
 msgid "What is this?"
@@ -250,28 +257,29 @@ msgstr "Was ist das?"
 
 #: lost_tracker/templates/index.html:18
 msgid ""
-"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /"
-"> Impossible tasks.<br /> Not to be missed."
+"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br "
+"/>Riddles.<br /> Impossible tasks.<br /> Not to be missed."
 msgstr ""
-"Ein \"Nachtrallye\"<br />Draussen im Dunkeln<br />Spiele<br />Rätsel<br /"
-">Unmögliche Aufgaben<br />Nicht zu verpassen."
+"Ein \"Nachtrallye\"<br />Draussen im Dunkeln<br />Spiele<br />Rätsel<br "
+"/>Unmögliche Aufgaben<br />Nicht zu verpassen."
 
 #: lost_tracker/templates/index.html:23
 msgid ""
-"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
-"Scouten a Guiden vun der FNEL"
+"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br "
+"/> Scouten a Guiden vun der FNEL"
 msgstr ""
-"Organisiert von <br />Caper Piwitschen<br />und<br />Mamer Wiselen<br />Scouten "
-"a Guiden von der FNEL"
+"Organisiert von <br />Caper Piwitschen<br />und<br />Mamer Wiselen<br "
+"/>Scouten a Guiden von der FNEL"
 
 #: lost_tracker/templates/index.html:29
 msgid ""
-"Everybody who likes to spend a night outside, who's fairly well on foot and who "
-"does not mind getting home 3 hours late because they got lost may join :)"
+"Everybody who likes to spend a night outside, who's fairly well on foot "
+"and who does not mind getting home 3 hours late because they got lost may"
+" join :)"
 msgstr ""
-"Mitmachen kann jeder dem es Spass macht eine Nacht im Offenen zu verbringen, "
-"der gut zu Fuss unterwegs ist, und dem es nichts ausmacht mit 3 Stunden "
-"Verspätung zu Hause ankommt weil man sich verlaufen hat."
+"Mitmachen kann jeder dem es Spass macht eine Nacht im Offenen zu "
+"verbringen, der gut zu Fuss unterwegs ist, und dem es nichts ausmacht mit"
+" 3 Stunden Verspätung zu Hause ankommt weil man sich verlaufen hat."
 
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:6
 #: lost_tracker/templates/login.html:13 lost_tracker/templates/login.html:18
@@ -295,8 +303,9 @@ msgid "Where is this?"
 msgstr "Wo ist es?"
 
 #: lost_tracker/templates/master_framed.html:24
-#: lost_tracker/templates/profile.html:48 lost_tracker/templates/register.html:3
-#: lost_tracker/templates/register.html:31
+#: lost_tracker/templates/profile.html:46
+#: lost_tracker/templates/register.html:3
+#: lost_tracker/templates/register.html:35
 msgid "Register"
 msgstr "Anmelden"
 
@@ -346,27 +355,30 @@ msgstr "Summe"
 msgid "Messages for"
 msgstr "Nachricht für"
 
-#: lost_tracker/templates/messages.html:14
+#: lost_tracker/templates/messages.html:17
 msgid "No messages"
 msgstr "Keine Nachrichten"
 
-#: lost_tracker/templates/messages.html:18
+#: lost_tracker/templates/messages.html:21
 msgid "Add Message"
 msgstr "Nachricht hinzufügen"
 
-#: lost_tracker/templates/messages.html:22
+#: lost_tracker/templates/messages.html:25
 msgid ""
-"For text formatting use <a href=\"https://daringfireball.net/projects/markdown/"
-"basics\">markdown</a> (<a href=\"https://en.wikipedia.org/wiki/Markdown"
-"\">Wikipedia</a>, <a href=\"https://github.com/adam-p/markdown-here/wiki/"
-"Markdown-Cheatsheet\">Cheatsheet</a>)"
+"For text formatting use <a "
+"href=\"https://daringfireball.net/projects/markdown/basics\">markdown</a>"
+" (<a href=\"https://en.wikipedia.org/wiki/Markdown\">Wikipedia</a>, <a "
+"href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-"
+"Cheatsheet\">Cheatsheet</a>)"
 msgstr ""
-"Für Textformatierung wird <a href=\"https://daringfireball.net/projects/"
-"markdown/basics\">markdown</a> angeboten. Siehe auch <a href=\"https://en."
-"wikipedia.org/wiki/Markdown\">Wikipedia</a> und <a href=\"https://github.com/"
-"adam-p/markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>."
+"Für Textformatierung wird <a "
+"href=\"https://daringfireball.net/projects/markdown/basics\">markdown</a>"
+" angeboten. Siehe auch <a "
+"href=\"https://en.wikipedia.org/wiki/Markdown\">Wikipedia</a> und <a "
+"href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-"
+"Cheatsheet\">Cheatsheet</a>."
 
-#: lost_tracker/templates/messages.html:24
+#: lost_tracker/templates/messages.html:27
 #: lost_tracker/templates/settings.html:26
 msgid "Save"
 msgstr "Speichern"
@@ -381,10 +393,11 @@ msgstr "Für Essen und Trinken ist am Start und auf dem Weg gesorgt."
 
 #: lost_tracker/templates/misc.html:13
 msgid ""
-"We do this because we like it. Tell us wat you think and visit us on Facebook:"
+"We do this because we like it. Tell us wat you think and visit us on "
+"Facebook:"
 msgstr ""
-"Wir tun dies, weil wir es uns Spass macht. Sag uns deine Meinung un besuch uns "
-"auf Facebook:"
+"Wir tun dies, weil wir es uns Spass macht. Sag uns deine Meinung un "
+"besuch uns auf Facebook:"
 
 #: lost_tracker/templates/misc.html:14
 msgid "Lost in the Darkness on Facebook"
@@ -403,8 +416,8 @@ msgid ""
 "In the year 2015 we will donate all the income to the fnel Nepal Project "
 "(ongdFNEL)"
 msgstr ""
-"In 2015 die gesamten Einnahmen werden an das FNEL Nepal Projekt gespendet "
-"(ongdFNEL)."
+"In 2015 die gesamten Einnahmen werden an das FNEL Nepal Projekt gespendet"
+" (ongdFNEL)."
 
 #: lost_tracker/templates/notice.html:3 lost_tracker/templates/notice.html:7
 msgid "Notice"
@@ -414,35 +427,27 @@ msgstr "Notiz"
 msgid "Your bookings"
 msgstr "Deine Anmeldungen"
 
-#: lost_tracker/templates/profile.html:28
-msgid "QR-Code"
-msgstr "QR-Code"
-
-#: lost_tracker/templates/profile.html:31
+#: lost_tracker/templates/profile.html:30
 msgid "Verified by he Lost team?"
 msgstr "Vom Lost Team bestätigt?"
 
-#: lost_tracker/templates/profile.html:32
-msgid "Messages"
-msgstr "Nachrichten"
-
-#: lost_tracker/templates/profile.html:47
+#: lost_tracker/templates/profile.html:45
 msgid "No bookings"
 msgstr "Keine Anmeldungen"
 
-#: lost_tracker/templates/profile.html:60
+#: lost_tracker/templates/profile.html:58
 msgid "Personal Information"
 msgstr "Persönliche Daten"
 
-#: lost_tracker/templates/profile.html:62
+#: lost_tracker/templates/profile.html:60
 msgid "e-mail"
 msgstr "e-mail"
 
-#: lost_tracker/templates/profile.html:65
+#: lost_tracker/templates/profile.html:63
 msgid "Update"
 msgstr "Update"
 
-#: lost_tracker/templates/profile.html:70
+#: lost_tracker/templates/profile.html:68
 msgid "Social Connections"
 msgstr "Soziale Verbindungen"
 
@@ -452,11 +457,11 @@ msgstr "Anmeldung"
 
 #: lost_tracker/templates/register.html:8
 msgid ""
-"We are sorry, the event is currently fully booked! You can register however. "
-"With luck we can sqeeze you in, but don't get your hopes up :("
+"We are sorry, the event is currently fully booked! You can register "
+"however. With luck we can sqeeze you in, but don't get your hopes up :("
 msgstr ""
-"Eir sind leider ausgebucht! Sie können sich dennoch anmelden. Mit etwas Glück "
-"können wir Sie später noch aufnehmen."
+"Eir sind leider ausgebucht! Sie können sich dennoch anmelden. Mit etwas "
+"Glück können wir Sie später noch aufnehmen."
 
 #: lost_tracker/templates/register.html:10
 msgid "Only {free_slots} registrations remain available! Hurry up!"
@@ -471,20 +476,20 @@ msgstr "Informationen zu Ihrer Gruppe"
 msgid "Group Name"
 msgstr "Gruppenname"
 
-#: lost_tracker/templates/register.html:20
+#: lost_tracker/templates/register.html:22
 msgid "Contact Name"
 msgstr "Kontakt"
 
-#: lost_tracker/templates/register.html:20
 #: lost_tracker/templates/register.html:22
+#: lost_tracker/templates/register.html:24
 msgid "on the road"
 msgstr "unterwegs"
 
-#: lost_tracker/templates/register.html:22
+#: lost_tracker/templates/register.html:24
 msgid "Phone Number"
 msgstr "Telefonnummer"
 
-#: lost_tracker/templates/register.html:26
+#: lost_tracker/templates/register.html:30
 msgid "Details (if you have any special requests, let us know here)."
 msgstr "Details (falls Du spezielle Anfragen hasst, bitte hier eingeben)."
 
@@ -500,6 +505,11 @@ msgstr "Leider ist die Anmeldung momentan geschlossen!"
 #: lost_tracker/templates/scoreboard.html:11
 msgid "Current score"
 msgstr "Jetzige Punkte"
+
+#: lost_tracker/templates/scoreboard.html:11
+#, python-format
+msgid "%s: Not yet completed"
+msgstr "%s: Noch nicht abgeschlossen"
 
 #: lost_tracker/templates/settings.html:7
 msgid "Application Settings"
@@ -597,3 +607,16 @@ msgstr "Mit %s einloggen"
 
 #~ msgid "Details"
 #~ msgstr "Details"
+
+#~ msgid "Group owner"
+#~ msgstr "Gruppeneigentümer"
+
+#~ msgid "QR-Code"
+#~ msgstr "QR-Code"
+
+#~ msgid "Messages"
+#~ msgstr "Nachrichten"
+
+#~ msgid "Number of participants"
+#~ msgstr "Anzahl von Teilnehmern"
+
