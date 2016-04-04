@@ -4,8 +4,8 @@
 <h1>{{group.name}}</h1>
 {% if group.user.id != current_user.id %}
   <div style="text-align: center;">
-    {{ avatar(group.user, 100) }}<br />
-    {{ _("Group owner") }}: {{group.user.name}}
+    {{ avatar(group.user, 100) }}<br /><br />
+    {{group.user.name}}
   </div>
   <hr />
 {% endif %}
