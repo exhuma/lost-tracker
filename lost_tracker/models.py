@@ -143,6 +143,7 @@ class Group(DB.Model):
     updated = Column(DateTime)
     departure_time = Column(DateTime, server_default=None, default=None)
     num_vegetarians = Column(Integer, server_default='0', default=0)
+    num_participants = Column(Integer, server_default='0', default=0)
 
     user = relationship('User', backref="groups")
     stations = relationship('GroupStation')

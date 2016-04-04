@@ -56,6 +56,7 @@ def save_info(id):
         'contact': request.form['contact'],
         'email': request.form.get('email', ''),
         'num_vegetarians': int(request.form.get('num_vegetarians', 0)),
+        'num_participants': int(request.form.get('num_participants', 0)),
         'send_email': True,
         'notification_recipient': 'admins',
     }

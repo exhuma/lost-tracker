@@ -37,6 +37,7 @@ def new():
             "comments": request.form.get('comments'),
             "user_id": current_user.id,
             "num_vegetarians": request.form.get('num_vegetarians'),
+            "num_participants": request.form.get('num_participants'),
         }
         try:
             key = loco.store_registration(
