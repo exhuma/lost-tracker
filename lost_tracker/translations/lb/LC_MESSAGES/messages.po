@@ -8,15 +8,16 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2016-04-04 22:24+0200\n"
-"PO-Revision-Date: 2016-04-04 22:23+0200\n"
+"PO-Revision-Date: 2016-04-04 22:28+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: lb\n"
 "Language-Team: lb <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #: lost_tracker/main.py:98
 msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
@@ -33,7 +34,7 @@ msgstr "Zougang ass hei net erlabt!"
 
 #: lost_tracker/blueprint/comment.py:46
 msgid "Message saved!"
-msgstr "Nochriicht ass gespeäichert!"
+msgstr "Nooriichten ass gespeäichert!"
 
 #: lost_tracker/blueprint/comment.py:55 lost_tracker/blueprint/group.py:139
 msgid "Not found!"
@@ -68,11 +69,11 @@ msgstr "Dat gëtt et net!"
 #: lost_tracker/blueprint/registration.py:60
 msgid ""
 "The registration has been recorded. You will receive an e-mail once the "
-"registartion has been successfully processed! You can see all your "
-"registered groups on <a href=\"{}\">your profile</a>."
+"registartion has been successfully processed! You can see all your registered "
+"groups on <a href=\"{}\">your profile</a>."
 msgstr ""
-"D'Umeldung ass gespeichert. Du kriss eng Mail soubal së verschafft gouf. "
-"Du kanns all déng Umeldungen op <a href=\"{}\">déngem Profil</a> gesin."
+"D'Umeldung ass gespeichert. Du kriss eng Mail soubal së verschafft gouf. Du "
+"kanns all déng Umeldungen op <a href=\"{}\">déngem Profil</a> gesin."
 
 #: lost_tracker/blueprint/registration.py:76
 msgid "This group has already been accepted!"
@@ -183,8 +184,7 @@ msgstr "E-mail mat den Ännerungen un d'Grupp schécken."
 msgid "Pictures"
 msgstr "Biller"
 
-#: lost_tracker/templates/gallery.html:14
-#: lost_tracker/templates/gallery.html:17
+#: lost_tracker/templates/gallery.html:14 lost_tracker/templates/gallery.html:17
 msgid "Nothing here yet"
 msgstr "Hei ass nach näscht"
 
@@ -242,11 +242,10 @@ msgstr "D'Umellung ass <strong>op</strong>! <a href=\"{url}\">Elo umellen!</a>"
 
 #: lost_tracker/templates/index.html:10 lost_tracker/templates/register.html:16
 msgid ""
-"It may take a few days until your registration is accepted. Please be "
-"patient!"
+"It may take a few days until your registration is accepted. Please be patient!"
 msgstr ""
-"Et kann e puer Deeg dauren bis d'Umelldung ugehuel get. Mir bieden em e "
-"bessen Gedold!"
+"Et kann e puer Deeg dauren bis d'Umelldung ugehuel get. Mir bieden em e bessen "
+"Gedold!"
 
 #: lost_tracker/templates/index.html:15
 msgid "What is this?"
@@ -254,30 +253,27 @@ msgstr "Ëm wat geet et?"
 
 #: lost_tracker/templates/index.html:18
 msgid ""
-"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br "
-"/>Riddles.<br /> Impossible tasks.<br /> Not to be missed."
+"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /"
+"> Impossible tasks.<br /> Not to be missed."
 msgstr ""
-"En 'Nuetsrallye'.<br/>Dobaussen an der "
-"Däischtert.<br/>Spiller.<br/>Räetselen.<br/>Onméiglech Aufgaben.<br/>Net "
-"ze verpassen."
+"En 'Nuetsrallye'.<br/>Dobaussen an der Däischtert.<br/>Spiller.<br/>Räetselen."
+"<br/>Onméiglech Aufgaben.<br/>Net ze verpassen."
 
 #: lost_tracker/templates/index.html:23
 msgid ""
-"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br "
-"/> Scouten a Guiden vun der FNEL"
+"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
+"Scouten a Guiden vun der FNEL"
 msgstr ""
 "Organiséiert vun de <br /> Caper Piwitschen <br /> an de <br /> Mamer "
 "Wiselen<br /> vun de Scouten & Guiden vun der FNEL"
 
 #: lost_tracker/templates/index.html:29
 msgid ""
-"Everybody who likes to spend a night outside, who's fairly well on foot "
-"and who does not mind getting home 3 hours late because they got lost may"
-" join :)"
+"Everybody who likes to spend a night outside, who's fairly well on foot and who "
+"does not mind getting home 3 hours late because they got lost may join :)"
 msgstr ""
-"Jiddereen, dee gär eng Nuecht dobaussen ass, gutt ze Fouss ass an och kee"
-" Problem huet 3 Stonnen ze spéit heemzekommen, well e sech verlaf huet. "
-":)"
+"Jiddereen, dee gär eng Nuecht dobaussen ass, gutt ze Fouss ass an och kee "
+"Problem huet 3 Stonnen ze spéit heemzekommen, well e sech verlaf huet. :)"
 
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:6
 #: lost_tracker/templates/login.html:13 lost_tracker/templates/login.html:18
@@ -301,8 +297,7 @@ msgid "Where is this?"
 msgstr "Wou geet et lass?"
 
 #: lost_tracker/templates/master_framed.html:24
-#: lost_tracker/templates/profile.html:46
-#: lost_tracker/templates/register.html:3
+#: lost_tracker/templates/profile.html:46 lost_tracker/templates/register.html:3
 #: lost_tracker/templates/register.html:35
 msgid "Register"
 msgstr "Umellen"
@@ -351,30 +346,27 @@ msgstr "Somm"
 
 #: lost_tracker/templates/messages.html:4
 msgid "Messages for"
-msgstr "Nochriichten fiir"
+msgstr "Nooriichten fir"
 
 #: lost_tracker/templates/messages.html:17
 msgid "No messages"
-msgstr "Keng Noochriichten"
+msgstr "Keng Nooriichten"
 
 #: lost_tracker/templates/messages.html:21
 msgid "Add Message"
-msgstr "Noochriicht bäisetzen"
+msgstr "Nooriichten bäisetzen"
 
 #: lost_tracker/templates/messages.html:25
 msgid ""
-"For text formatting use <a "
-"href=\"https://daringfireball.net/projects/markdown/basics\">markdown</a>"
-" (<a href=\"https://en.wikipedia.org/wiki/Markdown\">Wikipedia</a>, <a "
-"href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-"
-"Cheatsheet\">Cheatsheet</a>)"
+"For text formatting use <a href=\"https://daringfireball.net/projects/markdown/"
+"basics\">markdown</a> (<a href=\"https://en.wikipedia.org/wiki/Markdown"
+"\">Wikipedia</a>, <a href=\"https://github.com/adam-p/markdown-here/wiki/"
+"Markdown-Cheatsheet\">Cheatsheet</a>)"
 msgstr ""
-"Fir Textformatéirung gët <a "
-"href=\"https://daringfireball.net/projects/markdown/basics\">markdown</a>"
-" ugebueden. Kuck och bei <a "
-"href=\"https://en.wikipedia.org/wiki/Markdown\">Wikipedia</a> an <a "
-"href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-"
-"Cheatsheet\">Cheatsheet</a>."
+"Fir Textformatéirung gët <a href=\"https://daringfireball.net/projects/markdown/"
+"basics\">markdown</a> ugebueden. Kuck och bei <a href=\"https://en.wikipedia."
+"org/wiki/Markdown\">Wikipedia</a> an <a href=\"https://github.com/adam-p/"
+"markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>."
 
 #: lost_tracker/templates/messages.html:27
 #: lost_tracker/templates/settings.html:26
@@ -391,11 +383,10 @@ msgstr "Iessen a Gedrénks gëtt et um Start, an der Mëtt an um Schluss vum Ral
 
 #: lost_tracker/templates/misc.html:13
 msgid ""
-"We do this because we like it. Tell us wat you think and visit us on "
-"Facebook:"
+"We do this because we like it. Tell us wat you think and visit us on Facebook:"
 msgstr ""
-"Mir organiséieren dëse Rallye, well et Freed mécht. Besich eis op "
-"Facebook a schreif eis, wat s de denks!"
+"Mir organiséieren dëse Rallye, well et Freed mécht. Besich eis op Facebook a "
+"schreif eis, wat s de denks!"
 
 #: lost_tracker/templates/misc.html:14
 msgid "Lost in the Darkness on Facebook"
@@ -455,19 +446,19 @@ msgstr "Umellung"
 
 #: lost_tracker/templates/register.html:8
 msgid ""
-"We are sorry, the event is currently fully booked! You can register "
-"however. With luck we can sqeeze you in, but don't get your hopes up :("
+"We are sorry, the event is currently fully booked! You can register however. "
+"With luck we can sqeeze you in, but don't get your hopes up :("
 msgstr ""
-"Et deet eis leed!<br/>Mer hu momentan keng fräi Startzäit méi! Mer huelen"
-" déng Umelldung awer gären un a setzen dëch op d'Waardelëscht! Mat e "
-"bësse Chance kënne mer deng Equipe entzwousch dertëscht quetschen. Mer "
-"mellen eis, wann sech eng Méiglechkeet bitt!"
+"Et deet eis leed!<br/>Mer hu momentan keng fräi Startzäit méi! Mer huelen déng "
+"Umelldung awer gären un a setzen dëch op d'Waardelëscht! Mat e bësse Chance "
+"kënne mer deng Equipe entzwousch dertëscht quetschen. Mer mellen eis, wann sech "
+"eng Méiglechkeet bitt!"
 
 #: lost_tracker/templates/register.html:10
 msgid "Only {free_slots} registrations remain available! Hurry up!"
 msgstr ""
-"Just nach {free_slots} Plaze fräi fir matzegoen!<br/>Mell dech séier un, "
-"ier et ze spéit ass!"
+"Just nach {free_slots} Plaze fräi fir matzegoen!<br/>Mell dech séier un, ier et "
+"ze spéit ass!"
 
 #: lost_tracker/templates/register.html:15
 msgid "Information about your group"
@@ -624,4 +615,3 @@ msgstr "Mat %s umellen"
 
 #~ msgid "Number of participants"
 #~ msgstr "Unzuel vun Gruppememberen"
-
