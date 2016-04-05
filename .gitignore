@@ -1,13 +1,12 @@
+*.egg-info
 *.mo
 *.pyc
 /.mamerwiselen
-/.vagrant
 /PKG-INFO
 /__libs__
 /build
+/components/web/lost_tracker/static/js/lost_tracker.js
 /dist
 /env
-/lost_tracker.egg-info
-/lost_tracker/static/js/lost_tracker.js
 /messages.pot
 /pylama.ini

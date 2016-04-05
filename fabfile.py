@@ -15,6 +15,7 @@ REMOTE_FOLDER = '/var/www/lost.lu/www'
 PLOVR_REVISION = '9f12b6c'
 PLOVR = 'plovr/build/plovr-{}.jar'.format(PLOVR_REVISION)
 CLOSURE_REVISION = '57bdfe0093c'
+APP_FOLDER = 'components/web/lost_tracker'
 
 
 @fab.task
@@ -189,7 +190,7 @@ def build():
 @fab.task
 def extract_pot():
     fab.local('./env/bin/pybabel extract '
-              '-F babel.cfg -o messages.pot lost_tracker')
+              '-F babel.cfg -o messages.pot %s' % APP_FOLDER)
 
 
 @fab.task
@@ -198,7 +199,8 @@ def babel_init(locale):
     Initialise support for a new locale.
     """
     fab.local('./env/bin/pybabel init '
-              '-i messages.pot -d lost_tracker/translations -l {}'.format(
+              '-i messages.pot -d {}/translations -l {}'.format(
+                  APP_FOLDER,
                   locale))
 
 
@@ -207,7 +209,7 @@ def babel_compile():
     """
     Compile all translations into the application.
     """
-    fab.local('./env/bin/pybabel compile -f -d lost_tracker/translations')
+    fab.local('./env/bin/pybabel compile -f -d %s/translations' % APP_FOLDER)
 
 
 @fab.task
@@ -218,7 +220,7 @@ def babel_update():
     fab.execute(extract_pot)
     fab.local('./env/bin/pybabel update '
               '-i messages.pot '
-              '-d lost_tracker/translations')
+              '-d %s/translations' % APP_FOLDER)
 
 
 def _get_psql_params():
