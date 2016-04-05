@@ -1,0 +1,31 @@
+version: '2'
+services:
+  application:
+    restart: always
+    build: ./web
+    expose:
+      - "8000"
+    links:
+      - postgres:postgres
+    env_file: docker.env
+    working_dir: /opt/app
+    depends_on:
+      - postgres
+    command: gunicorn -w 2 -b :8000 app:app
+
+  nginx:
+    restart: always
+    build: ./nginx
+    depends_on:
+      -  application
+    ports:
+      - "80"
+    links:
+      - application:blah
+
+  postgres:
+    restart: always
+    build: ./db
+    env_file: docker.env
+    ports:
+      - "5432"
