@@ -224,15 +224,22 @@ def fake_login():
     return redirect(url_for('root.profile'))
 
 
-if __name__ == '__main__':
+def main():
     myapp = make_app()
     myapp.add_url_rule('/fake_login', 'fake_login', fake_login)
     DEBUG = userbool(myapp.localconf.get('devserver', 'debug',
                                          default=False))
     if DEBUG:
+        myapp.logger.info('Running in DEBUG mode -> Using Dummy Mailer')
         myapp.mailer = DummyMailer()
     else:
+        myapp.logger.info('Running in PROD mode -> Using real Mailer')
         myapp.mailer = Mailer()
+
     myapp.run(debug=DEBUG,
               host=myapp.localconf.get('devserver', 'listen'),
               port=int(myapp.localconf.get('devserver', 'port')))
+
+
+if __name__ == '__main__':
+    main()
