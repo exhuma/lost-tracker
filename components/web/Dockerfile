@@ -11,4 +11,7 @@ VOLUME /var/lost_tracker/data
 RUN mkdir -p /opt/app/.mamerwiselen/lost-tracker
 COPY lost_tracker_docker.ini /opt/app/.mamerwiselen/lost-tracker/app.ini
 COPY logging.conf /opt/app
+RUN pip install alembic
+COPY alembic /opt/app/alembic
+COPY alembic.ini /opt/app
 CMD ["gunicorn", "--log-config", "logging.conf", "-w", "2", "-b", ":8000", "lost_tracker.main:make_app()"]

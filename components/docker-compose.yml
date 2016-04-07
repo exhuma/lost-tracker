@@ -5,13 +5,25 @@ services:
     build: ./web
     expose:
       - "8000"
+    ports:
+      - "50000:8000"
     links:
-      - postgres:postgres
+      - postgres:db
+    env_file: docker.env
+    working_dir: /opt/app
+    depends_on:
+      - migration
+    command: gunicorn --log-config logging.conf -w 2 -b :8000 lost_tracker.main:make_app()
+
+  migration:
+    build: ./web
+    links:
+      - postgres:db
     env_file: docker.env
     working_dir: /opt/app
     depends_on:
       - postgres
-    command: gunicorn -w 2 -b :8000 app:app
+    command: alembic upgrade head
 
   nginx:
     restart: always
