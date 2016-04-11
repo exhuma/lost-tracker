@@ -95,7 +95,7 @@ See ``INSTALL.rst``
 
 
 Running a Development Instance
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 Settings for the development server are in your configuration file in the
 section ``[devserver]``. Make sure to set these to your liking.
@@ -113,10 +113,44 @@ server in parallel. Simply open a new shell and type::
     fab serve_plovr
 
 Social Logins During Development
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can skip social logins during development by accessing the URL
 ``/fakelogin``. This is only accessible when running the development server
 though. On production, this route is unavailable for security reasons.
+
+
+Running as Docker Container
+---------------------------
+
+Overview
+~~~~~~~~
+
+This repository provides two images for docker:
+
+* A database image in ``components/web``
+* An application image in ``components/database``
+
+The third component, ``migration``, is only a helper container for database
+upgrades which should quit immediately.
+
+.. note::
+    By default the database will *not* create a data volume, so restarting the
+    container will destroy your data! It's up to you to configure a persistent
+    storage if you like.
+
+Running
+~~~~~~~
+
+First, to be able to run the application, you first need a configuration file
+in ``conponents/web/lost_docker.ini``. Building the docker image will copy this
+to the correct path. See :ref:`Configuration`.
+
+Once the configuration file is in place, run the following::
+
+    (cd components && docker-compose up)
+
+This should build and run the images, and expose the port ``50000`` on the
+local machine. You can change this port in ``components/docker-compose.yml``.
 
 .. _plovr: http://www.plovr.com

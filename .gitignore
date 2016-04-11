@@ -5,6 +5,7 @@
 /PKG-INFO
 /__libs__
 /build
+/components/web/lost_docker.ini
 /components/web/lost_tracker/static/js/lost_tracker.js
 /dist
 /env

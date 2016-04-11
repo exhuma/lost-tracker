@@ -3,12 +3,10 @@ services:
   application:
     restart: always
     build: ./web
-    expose:
-      - "8000"
     ports:
       - "50000:8000"
     links:
-      - postgres:db
+      - database:db
     env_file: docker.env
     working_dir: /opt/app
     depends_on:
@@ -18,24 +16,14 @@ services:
   migration:
     build: ./web
     links:
-      - postgres:db
+      - database:db
     env_file: docker.env
     working_dir: /opt/app
     depends_on:
-      - postgres
+      - database
     command: alembic upgrade head
 
-  nginx:
-    restart: always
-    build: ./nginx
-    depends_on:
-      -  application
-    ports:
-      - "80"
-    links:
-      - application:blah
-
-  postgres:
+  database:
     restart: always
     build: ./database
     env_file: docker.env
