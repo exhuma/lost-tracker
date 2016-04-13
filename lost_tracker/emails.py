@@ -1,4 +1,5 @@
 from collections import namedtuple
+from smtplib import SMTPException
 import logging
 
 from envelopes import Envelope
@@ -56,7 +57,10 @@ class Mailer(object):
         self._send(mail)
 
     def _send(self, mail):
-        mail.send('localhost')
+        try:
+            mail.send('localhost')
+        except SMTPException:
+            LOG.error("Unable to send email", exc_info=True)
 
 
 class DummyMailer(Mailer):
