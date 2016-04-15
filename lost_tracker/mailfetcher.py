@@ -90,7 +90,6 @@ class MailFetcher(object):
         has_error = False
         for index, header in metadata:
             LOG.debug('Processing part #%r in mail #%r', index, msgid)
-            index = index + 1
             try:
                 (major, minor, params, _, _, encoding, size) = header
                 encoding = encoding.decode('ascii')
