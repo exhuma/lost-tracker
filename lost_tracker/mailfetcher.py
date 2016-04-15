@@ -98,9 +98,15 @@ class MailFetcher(object):
                 response = self.connection.fetch([msgid], [element_name])
                 item = list(response.values())[0]
                 bindata = item[element_name]
+                if not bindata:
+                    LOG.error('Attachment data was empty for message #%r',
+                              index)
+                    has_error = True
+                    continue
+
                 md5sum = md5(bindata).hexdigest()
                 if self.in_index(md5sum):
-                    LOG.debug('Ignored duplicate file.')
+                    LOG.debug('Ignored duplicate file (md5=%s).', md5sum)
                     continue
 
                 params = dict(list(zip(params[0::2], params[1::2])))
