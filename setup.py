@@ -15,6 +15,7 @@ setup(
         'flask-sqlalchemy==2.1',
         'flask==0.10.1',
         'google-api-python-client==1.5.0',
+        'gouge >= 1.1, <2.0'
         'imapclient==1.0.1',
         'markdown==2.6.5',
         'pillow==2.8.1',

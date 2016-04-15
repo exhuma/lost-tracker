@@ -4,8 +4,9 @@ from os import makedirs
 from os.path import exists, join
 import logging
 
-from imapclient import IMAPClient, SEEN, FLAGGED, create_default_context
 from backports import ssl
+from gouge.colourcli import Simple
+from imapclient import IMAPClient, SEEN, FLAGGED, create_default_context
 
 
 LOG = logging.getLogger(__name__)
@@ -150,11 +151,11 @@ def run_cli():
     args = parser.parse_args()
 
     if args.verbose >= 2:
-        logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+        Simple.basicConfig(level=logging.DEBUG, stream=sys.stdout)
     elif args.verbose >= 1:
-        logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+        Simple.basicConfig(level=logging.INFO, stream=sys.stdout)
     else:
-        logging.basicConfig(level=logging.WARNING)
+        Simple.basicConfig(level=logging.WARNING)
 
     if not args.password:
         from getpass import getpass
@@ -184,7 +185,7 @@ def run_cli():
 
 if __name__ == '__main__':
     from getpass import getpass
-    logging.basicConfig(level=logging.DEBUG)
+    Simple.basicConfig(level=logging.DEBUG)
     fetcher = MailFetcher(
         input('Host: '),
         input('Login: '),
