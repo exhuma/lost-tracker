@@ -55,11 +55,12 @@ Clone the code::
 
     git clone ssh://git@github.com/exhuma/lost-tracker
 
-Enter the cloned folder and run the develop fabric-task. Running that task will
-set up a virtual-env, dowload required dependencies and install the application
-into that environment::
+Enter the cloned folder, switch to the ``develop`` branch  and run the develop
+fabric-task. Running that task will set up a virtual-env, dowload required
+dependencies and install the application into that environment::
 
     cd lost-tracker
+    git checkout develop
     fab develop
 
 When this successfully completes you should have an environment ready for happy
