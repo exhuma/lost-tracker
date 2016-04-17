@@ -11,6 +11,8 @@ Required Tools
 * Python 2.7 (Python 3.5 was tested hasl-arsedly, may work...)
 * Oracle Java 1.7+ (Tested with OpenJDK with mixed results). This is needed for
   live JS compilation. Without it, no JavaScript will run!
+* A database. I recommend PostgreSQL as the application has been tested with
+  that one.
 
 
 Additional Notes
