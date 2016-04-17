@@ -62,13 +62,12 @@ INSTALLATION
 Requirements
 ~~~~~~~~~~~~
 
-When installing this package, it will build the MySQL and Postgres clients. So
-you'll need the necessary headers, plus gcc on your machine.
+When installing this package, it will build the Postgres client. So you'll need
+the necessary headers, plus gcc on your machine.
 
 For Ubuntu, run the following::
 
-   sudo apt-get install libmysqlclient-dev libpq-dev python-dev \
-                        build-essential
+   sudo apt-get install libpq-dev python-dev build-essential
 
 Installation procedure
 ~~~~~~~~~~~~~~~~~~~~~~
