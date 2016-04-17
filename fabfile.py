@@ -77,8 +77,9 @@ def develop():
     the repo.
     """
     l = fab.local
+    ini_file = '.mamerwiselen/lost-tracker/app.ini'
+
     l('[ -d env ] || virtualenv env')
-    l('./env/bin/pip uninstall lost_tracker || true')
     l('./env/bin/pip install "setuptools>=0.8"')  # needed by IMAPClient
     # some packages are unavailable on pypi :( -> Use requirements.txt
     l('./env/bin/pip install -r requirements.txt')
@@ -102,9 +103,19 @@ def develop():
     l('mkdir -p .mamerwiselen/lost-tracker')
 
     with fab.settings(warn_only=True):
-        ini_is_missing = l('[ -f .mamerwiselen/lost-tracker/app.ini ]').failed
+        ini_is_missing = l('[ -f ' + ini_file + ' ]').failed
 
     if ini_is_missing:
+        print(clr.green('No INI file found. Please fill in the following '
+                        'values:'))
+        print('')
+        print(clr.green('      Look at "app.ini.dist" for documentation.'))
+        print('')
+        print(clr.yellow('   The file will be stored in {}'.format(ini_file)))
+        print(clr.yellow('   You can change this at any time. If you do, you '
+                         'need to restart the application if it is still '
+                         'running!'))
+        print('')
         cfg = SafeConfigParser()
         cfg.read('app.ini.dist')
         for sect in cfg.sections():
@@ -114,12 +125,10 @@ def develop():
                     clr.green(sect),
                     clr.blue(opt, bold=True)), default=curval)
                 cfg.set(sect, opt, newval)
-        cfg.write(open('.mamerwiselen/lost-tracker/app.ini', 'w'))
-        print(clr.green('>>> New config file created in '
-                        '.mamerwiselen/lost-tracker/app.ini'))
+        cfg.write(open(ini_file, 'w'))
+        print(clr.green('>>> New config file created in ' + ini_file))
     else:
-        print(clr.white('=== Kept old config file from '
-                        '.mamerwiselen/lost-tracker/app.ini', bold=True))
+        print(clr.white('=== Kept old config file from ' + ini_file, bold=True))
     fab.execute(babel_compile)
     print(clr.green('Done!'))
 
