@@ -4,6 +4,27 @@ Tracker for Lost in the Darkness
 Development
 -----------
 
+Required Tools
+~~~~~~~~~~~~~~
+
+* fabric (Python Task Runner)
+* Python 2.7 (Python 3.5 was tested hasl-arsedly, may work...)
+* Oracle Java 1.7+ (Tested with OpenJDK with mixed results). This is needed for
+  live JS compilation. Without it, no JavaScript will run!
+
+
+Additional Notes
+~~~~~~~~~~~~~~~~
+
+* The application sends e-mails. If it's running in "DEBUG" mode (see the
+  ``.ini`` file), those e-mails are NOT sent. Instead, they are only logged.
+* Currently you are required to properly log in. Even in development. So you
+  need API keys for one of Facebook or Google!
+
+
+Setting up the environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. note::
 
     You MAY run into missing system dependencies (header files) as some
