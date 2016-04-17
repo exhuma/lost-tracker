@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy.orm.exc import NoResultFound
+import logging
 
 from config_resolver import Config
 from flask.ext.babel import Babel, gettext
@@ -23,6 +23,7 @@ from flask import (
     session as flask_session,
     url_for,
 )
+from sqlalchemy.orm.exc import NoResultFound
 
 from lost_tracker.blueprint.comment import COMMENT
 from lost_tracker.blueprint.group import GROUP
@@ -48,6 +49,31 @@ from lost_tracker.const import (
     TABULAR_PREFIX,
     USER_PREFIX,
 )
+
+
+LOG = logging.getLogger(__name__)
+
+
+def _add_social_params(connections, identifier, conf):
+    """
+    Adds an oauth provider to the social connections dictionary, but only if
+    values are properly set (non-empty).
+    """
+    key = conf.get(identifier, 'consumer_key', default='').strip()
+    secret = conf.get(identifier, 'consumer_secret', default='').strip()
+    conf_key = 'SOCIAL_%s' % identifier.upper()
+
+    if key and secret:
+        connections[conf_key] = {
+            'consumer_key': key,
+            'consumer_secret': secret
+        }
+        if identifier == 'google':
+            connections[conf_key]['request_token_params'] = {
+                'scope': ('https://www.googleapis.com/auth/userinfo.profile '
+                          'https://www.googleapis.com/auth/plus.me '
+                          'https://www.googleapis.com/auth/userinfo.email')
+            }
 
 
 def make_app():
@@ -103,38 +129,21 @@ def make_app():
         return redirect(url_for('root.profile'))
 
     app.user_datastore = user_datastore
-    app.localconf = Config('mamerwiselen', 'lost-tracker',
-                           version='2.0', require_load=True)
-    app.config['SECRET_KEY'] = app.localconf.get('app', 'secret_key')
-    app.config['SQLALCHEMY_DATABASE_URI'] = app.localconf.get('db', 'dsn')
+    app.localconf = lconf = Config('mamerwiselen', 'lost-tracker',
+                                   version='2.0', require_load=True)
+    app.config['SECRET_KEY'] = lconf.get('app', 'secret_key')
+    app.config['SQLALCHEMY_DATABASE_URI'] = lconf.get('db', 'dsn')
     mdl.DB.init_app(app)
 
     # Social connections
     social_connections = {}
-    if 'facebook' in app.localconf.sections():
-        social_connections['SOCIAL_FACEBOOK'] = {
-            'consumer_key': app.localconf.get('facebook', 'consumer_key'),
-            'consumer_secret': app.localconf.get('facebook', 'consumer_secret')
-        }
-    if 'twitter' in app.localconf.sections():
-        social_connections['SOCIAL_TWITTER'] = {
-            'consumer_key': app.localconf.get('twitter', 'consumer_key'),
-            'consumer_secret': app.localconf.get('twitter', 'consumer_secret')
-        }
-    if 'google' in app.localconf.sections():
-        social_connections['SOCIAL_GOOGLE'] = {
-            'consumer_key': app.localconf.get('google', 'consumer_key'),
-            'consumer_secret': app.localconf.get('google', 'consumer_secret'),
-            'request_token_params': {
-                'scope': ('https://www.googleapis.com/auth/userinfo.profile '
-                          'https://www.googleapis.com/auth/plus.me '
-                          'https://www.googleapis.com/auth/userinfo.email')
-            }
-        }
+    _add_social_params(social_connections, 'facebook', app.localconf)
+    _add_social_params(social_connections, 'twitter', app.localconf)
+    _add_social_params(social_connections, 'google', app.localconf)
 
     if len(social_connections) < 1:
-        raise Exception('Must at least configure one social provider '
-                        '(facebook, google or twitter) in the config file!')
+        LOG.error('No Social/OAuth providers defined! Users will not be '
+                  'able to log-in!')
 
     app.config.update(social_connections)
 
