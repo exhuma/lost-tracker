@@ -71,6 +71,13 @@ def bootstrap():
 
 
 @fab.task
+def alembic():
+    "Run DB Migrations"
+    with fab.settings(shell_env={'PYTHONWARNINGS': ''}):
+        fab.local('./env/bin/alembic upgrade head')
+
+
+@fab.task
 def develop():
     """
     Sets up a new development environment. Should be run right after cloning
@@ -130,6 +137,14 @@ def develop():
     else:
         print(clr.white('=== Kept old config file from ' + ini_file, bold=True))
     fab.execute(babel_compile)
+    print(clr.green('Applying database migrations...'))
+    print(clr.yellow('NOTE: The DB must exist, and the URL in %r must be '
+                     'correct. I will pause now to give you a chance to fix '
+                     'that, if needed. Press ENTER when ready.' % ini_file))
+    print(clr.yellow('This step can always be re-executed by running '
+                     '"fab alembic"'))
+    fab.prompt('Press ENTER when ready...')
+    fab.execute(alembic)
     print(clr.green('Done!'))
 
 
