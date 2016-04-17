@@ -27,7 +27,7 @@ target_metadata = None
 
 def get_url():
     config = Config('mamerwiselen', 'lost-tracker',
-                    version='2.0', require_load=True)
+                    version='2.1', require_load=True)
     return config.get('db', 'dsn')
 
 def run_migrations_offline():
