@@ -1,6 +1,58 @@
 Tracker for Lost in the Darkness
 ================================
 
+Development
+-----------
+
+.. note::
+
+    You MAY run into missing system dependencies (header files) as some
+    third-party Python modules contain C source. You will see this if you get a
+    "*File not found*" error. On the top of my head, those dependencies should
+    be:
+
+    * python-dev (for anything, really)
+    * libpq-dev (For postgres connections)
+    * libjpeg-dev (for thumbnail generation in the image gallery)
+    * libffi-dev (for social logins)
+
+    Additionally, I *strongly* recommend to install the official Oracle Java
+    binaries (for the plovr server). I have tried with OpenJDK with mixed
+    results. The official binaries work best!
+
+    YMMV
+
+
+If you want to develop on lost-tracker, follow these steps to get a development
+environment set up and running:
+
+Clone the code::
+
+    git clone https://github.com/exhuma/lost-tracker
+
+... or, if you want to use SSH::
+
+    git clone ssh://git@github.com/exhuma/lost-tracker
+
+Enter the cloned folder and run the develop fabric-task. Running that task will
+set up a virtual-env, dowload required dependencies and install the application
+into that environment::
+
+    cd lost-tracker
+    fab develop
+
+When this successfully completes you should have an environment ready for happy
+hacking.
+
+One final note: JavaScript is compiled using the google-closure compiler with
+the help of plovr. Those dependencies should have been downloaded for you into
+the ``__libs__`` folder. You *must* run plovr during development! As a
+convenience, there's a ``tmux-serve.bash`` script which will run both the
+web-server and the plovr server::
+
+    ./tmux-serve.bash
+
+
 INSTALLATION
 ------------
 
