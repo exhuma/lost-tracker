@@ -1,17 +1,38 @@
+;
+; Metadata for config-resolver
+;
 [meta]
 version=2.1
 
+;
+; Database Settings (see http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html#database-urls)
+;
 [db]
 ; Database connection string
 dsn=postgresql://postgres@/lost_tracker
 
+;
+; Lost-Tracker Settings
+;
 [app]
+
+; The "helpdesk" text is used to show a phone number for on-site support
 helpdesk = Text visible on all pages
+
+; The photo gallery uses "photo_folder" to look for photos
 photo_folder = /path/to/folder
+
+; It the registration is currently open or not (deprecated, has been moved to the "settings" table in the DB
 registration_open = true
+
+; Login and Password for the HTTP API (used by the Android client)
 login = lost
 password = lost
+
+; Secret key to secure the application session
 secret_key = this-is-not-secret! use os.random to generate random bits!
+
+; Available time-slots for registrations
 time_slots =
     18h50
     19h00
@@ -37,10 +58,19 @@ time_slots =
 ; A secondary title which is visible on each page.
 shout = 
 
+;
+; Settings for flickr integration
+;
 [flickr]
 api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+; Show this photoset on the "gallery" page
 photoset_id=72157642905812775
 
+
+;
+; Settings for development
+;
 [devserver]
 ; Dev server listens on device ...
 listen=0.0.0.0
@@ -49,6 +79,10 @@ port=5000
 ; Enable/Disable debugging mode.
 debug=True
 
+;
+; Social login services.
+; At least one MUST be configured to be able to log-in.
+;
 [twitter]
 consumer_key=
 consumer_secret=
