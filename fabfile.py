@@ -16,7 +16,6 @@ PLOVR = 'plovr/build/plovr-{}.jar'.format(PLOVR_REVISION)
 CLOSURE_REVISION = '57bdfe0093c'
 
 
-
 @fab.task
 @fab.roles('prod', 'failover')
 def deploy():
@@ -103,9 +102,9 @@ def develop():
     l('mkdir -p .mamerwiselen/lost-tracker')
 
     with fab.settings(warn_only=True):
-        ini_exists = l('[ -f .mamerwiselen/lost-tracker/app.ini ]').failed
+        ini_is_missing = l('[ -f .mamerwiselen/lost-tracker/app.ini ]').failed
 
-    if ini_exists:
+    if ini_is_missing:
         cfg = SafeConfigParser()
         cfg.read('app.ini.dist')
         for sect in cfg.sections():
