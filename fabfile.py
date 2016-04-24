@@ -1,5 +1,6 @@
 from __future__ import print_function
 from ConfigParser import SafeConfigParser
+from os.path import exists
 
 import fabric.api as fab
 import fabric.colors as clr
@@ -139,15 +140,25 @@ def build():
     output_file = plovr_config['output-file']
 
     stat_in = stat(input_file)
-    stat_out = stat(output_file)
 
-    if stat_in.st_mtime <= stat_out.st_mtime:
+    if exists(output_file):
+        stat_out = stat(output_file)
+        needs_build = stat_in.st_mtime > stat_out.st_mtime
+    else:
+        needs_build = True
+
+    if not needs_build:
         print(clr.blue(input_file),
               clr.green('is older than'),
               clr.blue(output_file),
               clr.green('Assuming it has not changed and skipping '
                         'closure-build!'))
         return
+    else:
+        print(clr.blue(input_file),
+              clr.green('has changed'),
+              clr.green('recompiling to'),
+              clr.blue(output_file))
 
     fab.local('java -jar __libs__/{} build plovr-config.js'.format(PLOVR))
 
