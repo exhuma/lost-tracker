@@ -207,13 +207,13 @@ def run_cli():
     try:
         fetcher.connect()
     except Exception as exc:
-        print('Unable to connect: {}'.format(exc), file=sys.stderr)
+        LOG.critical('Unable to connect: {}'.format(exc), file=sys.stderr)
         sys.exit(1)
 
     try:
         fetcher.fetch()
     except Exception as exc:
-        print('Unable to fetch: {}'.format(exc), file=sys.stderr)
+        LOG.critical('Unable to fetch: {}'.format(exc), file=sys.stderr)
         sys.exit(1)
 
     sys.exit(0)
