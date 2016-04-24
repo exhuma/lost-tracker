@@ -28,6 +28,19 @@ def extract_elements(body, elements):
                 extract_elements(part, elements)
 
 
+def flatten_parts(body, start_index=0):
+    output = []
+    index = start_index
+    for element in body:
+        if element.is_multipart:
+            output.extend(flatten_parts(element[0], index))
+            index = output[-1][0] + 1
+        else:
+            output.append((index, element))
+            index += 1
+    return output
+
+
 class MailFetcher(object):
 
     def __init__(self, host, username, password, use_ssl, image_folder,
@@ -94,22 +107,29 @@ class MailFetcher(object):
     def download(self, msgid, metadata):
         LOG.debug('Downloading images for mail #%r', msgid)
         has_error = False
-        for index, header in metadata:
-            LOG.debug('Processing part #%r in mail #%r', index, msgid)
+
+        parts = flatten_parts(self.connection.fetch(
+            [msgid], ['BODY'])[msgid]['BODY'][0])
+        images = [part for part in parts if part[1][0] == 'image']
+        for image_id, header in images:
             try:
                 (major, minor, params, _, _, encoding, size) = header
+                # Convert "params" into a more conveniend dictionary
+                params = dict(zip(params[::2], params[1::2]))
+                filename = params['name']
+                unique_name = 'image_{}_{}_{}'.format(msgid, image_id, filename)
                 encoding = encoding.decode('ascii')
-                element_name = ('BODY[%d]' % index).encode('ascii')
-
-                response = self.connection.fetch([msgid], [element_name])
-                item = list(response.values())[0]
-                bindata = item[element_name]
-                if not bindata:
-                    LOG.error('Attachment data was empty for message #%r',
-                              index)
+                LOG.debug('Processing part #%r in mail #%r', image_id, msgid)
+                element_id = 'BODY[%d]' % image_id
+                response = self.connection.fetch([msgid], [element_id])
+                content = response[msgid][element_id]
+                if not content:
+                    LOG.error('Attachment data was empty for '
+                              'message #%r', msgid)
                     has_error = True
                     continue
 
+                bindata = content.decode(encoding)
                 md5sum = md5(bindata).hexdigest()
                 if self.in_index(md5sum) and not self.force:
                     LOG.debug('Ignored duplicate file (md5=%s).', md5sum)
@@ -117,13 +137,7 @@ class MailFetcher(object):
                 elif self.in_index(md5sum) and self.force:
                     LOG.debug('Bypassing index check (force=True)')
 
-                params = dict(list(zip(params[0::2], params[1::2])))
-                filename = params.get(b'name', b'')
-                filename = filename.decode('ascii', errors='ignore')
-                unique_name = 'image_{}_{}_{}'.format(msgid, index, filename)
-
                 fullname = join(self.image_folder, unique_name)
-
                 if not exists(fullname) or self.force:
                     suffix = ' (forced overwrite)' if exists(fullname) else ''
                     with open(fullname, 'wb') as fptr:
