@@ -30,7 +30,8 @@ def extract_elements(body, elements):
 
 class MailFetcher(object):
 
-    def __init__(self, host, username, password, use_ssl, image_folder):
+    def __init__(self, host, username, password, use_ssl, image_folder,
+                 force=False):
         self.host = host
         self.username = username
         self.password = password
@@ -39,6 +40,7 @@ class MailFetcher(object):
         self.connection = None
         self.context = create_default_context()
         self.context.verify_mode = ssl.CERT_NONE
+        self.force = force
 
     def connect(self):
         LOG.debug('Connecting to mail host...')
@@ -57,11 +59,15 @@ class MailFetcher(object):
         messages = self.connection.search(['NOT', 'DELETED'])
         response = self.connection.fetch(messages, ['FLAGS', 'BODY'])
         for msgid, data in response.items():
-            if SEEN in data[b'FLAGS']:
+            is_read = SEEN in data[b'FLAGS']
+            if is_read and not self.force:
                 LOG.debug('Skipping already processed message #%r', msgid)
                 continue
             else:
-                LOG.debug('Processing message #%r', msgid)
+                # Add a "forced" note only if the message would not have been
+                # processed otherwise.
+                LOG.debug('Processing message #%r%s', msgid,
+                          ' (forced override)' if is_read else '')
             body = data[b'BODY']
             el = []
             extract_elements(body, el)
@@ -105,9 +111,11 @@ class MailFetcher(object):
                     continue
 
                 md5sum = md5(bindata).hexdigest()
-                if self.in_index(md5sum):
+                if self.in_index(md5sum) and not self.force:
                     LOG.debug('Ignored duplicate file (md5=%s).', md5sum)
                     continue
+                elif self.in_index(md5sum) and self.force:
+                    LOG.debug('Bypassing index check (force=True)')
 
                 params = dict(list(zip(params[0::2], params[1::2])))
                 filename = params.get(b'name', b'')
@@ -116,10 +124,11 @@ class MailFetcher(object):
 
                 fullname = join(self.image_folder, unique_name)
 
-                if not exists(fullname):
+                if not exists(fullname) or self.force:
+                    suffix = ' (forced overwrite)' if exists(fullname) else ''
                     with open(fullname, 'wb') as fptr:
                         fptr.write(bindata)
-                    LOG.info('File written to %r', fullname)
+                    LOG.info('File written to %r%s', fullname, suffix)
                     self.add_to_index(md5sum)
                 else:
                     has_error = True
@@ -153,6 +162,10 @@ def run_cli():
     parser.add_argument('--destination', '-d', dest='destination',
                         required=True,
                         help='The folder where files will be stored')
+    parser.add_argument('--force', dest='force',
+                        action='store_true', default=False,
+                        help='Force fecthing mails. Even if they are read or '
+                        'in the index')
 
     args = parser.parse_args()
 
@@ -174,7 +187,8 @@ def run_cli():
         args.login,
         password,
         True,
-        args.destination)
+        args.destination,
+        args.force)
     try:
         fetcher.connect()
     except Exception as exc:
