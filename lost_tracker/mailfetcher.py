@@ -1,5 +1,4 @@
-from __future__ import print_function
-
+from base64 import b64decode
 from hashlib import md5
 from os import makedirs
 from os.path import exists, join
@@ -109,18 +108,18 @@ class MailFetcher(object):
         has_error = False
 
         parts = flatten_parts(self.connection.fetch(
-            [msgid], ['BODY'])[msgid]['BODY'][0])
-        images = [part for part in parts if part[1][0] == 'image']
+            [msgid], [b'BODY'])[msgid][b'BODY'][0])
+        images = [part for part in parts if part[1][0] == b'image']
         for image_id, header in images:
             try:
                 (major, minor, params, _, _, encoding, size) = header
                 # Convert "params" into a more conveniend dictionary
                 params = dict(zip(params[::2], params[1::2]))
-                filename = params['name']
+                filename = params[b'name'].decode('ascii', errors='ignore')
                 unique_name = 'image_{}_{}_{}'.format(msgid, image_id, filename)
                 encoding = encoding.decode('ascii')
                 LOG.debug('Processing part #%r in mail #%r', image_id, msgid)
-                element_id = 'BODY[%d]' % image_id
+                element_id = ('BODY[%d]' % image_id).encode('ascii')
                 response = self.connection.fetch([msgid], [element_id])
                 content = response[msgid][element_id]
                 if not content:
@@ -129,7 +128,10 @@ class MailFetcher(object):
                     has_error = True
                     continue
 
-                bindata = content.decode(encoding)
+                if encoding == 'base64':
+                    bindata = b64decode(content)
+                else:
+                    bindata = content.decode(encoding)
                 md5sum = md5(bindata).hexdigest()
                 if self.in_index(md5sum) and not self.force:
                     LOG.debug('Ignored duplicate file (md5=%s).', md5sum)
@@ -206,13 +208,13 @@ def run_cli():
     try:
         fetcher.connect()
     except Exception as exc:
-        print('Unable to connect: {}'.format(exc), file=sys.stderr)
+        LOG.critical('Unable to connect: {}'.format(exc), file=sys.stderr)
         sys.exit(1)
 
     try:
         fetcher.fetch()
     except Exception as exc:
-        print('Unable to fetch: {}'.format(exc), file=sys.stderr)
+        LOG.critical('Unable to fetch: {}'.format(exc), file=sys.stderr)
         sys.exit(1)
 
     sys.exit(0)
