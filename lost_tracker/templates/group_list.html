@@ -5,7 +5,7 @@
 <table id="grouplist">
   <thead>
     <tr>
-      <th colspan="2">{{_("Group")}}</th>
+      <th colspan="3">{{_("Group")}}</th>
       <th>{{_("Registration Date")}}</th>
       <th>{{_("Start Time")}}</th>
       <th>{{_("Direction")}}</th>
@@ -15,6 +15,11 @@
   <tbody>
     {% for group in groups -%}
     <tr>
+      <td>
+        {% if current_user.has_role(Role.ADMIN) %}
+          <a href="{{url_for('group.delete', id=group.id)}}"><i class="fa fa-trash" title="{{_("Delete Group")}}"></i></a>
+        {% endif %}
+      </td>
       <td
         class="{{'accepted' if group.accepted else 'confirmed' if group.is_confirmed else ''}}"
         data-group_id="{{group.id}}"><a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></td>
