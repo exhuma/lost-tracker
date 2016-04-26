@@ -284,11 +284,30 @@ class Station(DB.Model):
         qry = qry.first()
         return qry
 
+    @staticmethod
+    def by_name_or_id(key):
+        if isinstance(key, basestring):
+            station_id = Station.query.filter_by(name=key).one().id
+        else:
+            station_id = key
+        return Station.query.filter_by(id=station_id).one()
+
     def to_dict(self):
         return {
             '__class__': 'Station',
             'id': self.id,
             'name': self.name
+        }
+
+    @property
+    def neighbours(self):
+        left = Station.query.filter(
+            Station.order < self.order).limit(1).first()
+        right = Station.query.filter(
+            Station.order > self.order).limit(1).first()
+        return {
+            'before': left,
+            'after': right
         }
 
     @property
@@ -451,6 +470,12 @@ class GroupStation(DB.Model):
             GroupStation.group_id == group_id,
             GroupStation.station_id == station_id))
         return query.first()
+
+    @staticmethod
+    def by_station(station):
+        if not station:
+            return []
+        return station.states
 
     @staticmethod
     def set_score(session, group_id, station_id, station_score, form_score,
