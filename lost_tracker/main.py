@@ -174,8 +174,59 @@ def get_locale():
     return locale
 
 
+def fake_login():
+    """
+    Dummy login function. Logs in any user without password.
+
+    This should only made available during development! This currently is only
+    added to the URL rules if the application is started manually. When running
+    as a WSGI app (f.ex.: behind Apache), this route is unavailable for obvious
+    reasons.
+    """
+    from flask.ext.security import login_user
+    from flask import request
+    if not current_app.debug:
+        return 'Access Denied!', 500
+
+    usermail = request.args.get('email', 'admin@example.com')
+
+    user_query = mdl.DB.session.query(mdl.User).filter_by(email=usermail)
+    user = user_query.first()
+    if not user:
+        user = current_app.user_datastore.create_user(
+            email=usermail,
+            name='Fake User',
+            active=True,
+            confirmed_at=datetime.now(),
+        )
+    else:
+        mdl.DB.session.add(user)
+
+    if 'admin' in usermail:
+        role_query = mdl.DB.session.query(mdl.Role).filter_by(
+            name=mdl.Role.ADMIN)
+        try:
+            role = role_query.one()
+        except NoResultFound:
+            role = mdl.Role(name=mdl.Role.ADMIN)
+        user.roles.append(role)
+    elif 'staff' in usermail:
+        role_query = mdl.DB.session.query(mdl.Role).filter_by(name='staff')
+        try:
+            role = role_query.one()
+        except NoResultFound:
+            role = mdl.Role(name=mdl.Role.STAFF)
+        user.roles.append(role)
+
+    current_app.user_datastore.commit()
+    login_user(user)
+    mdl.DB.session.commit()
+    return redirect(url_for('root.profile'))
+
+
 if __name__ == '__main__':
     myapp = make_app()
+    myapp.add_url_rule('/fake_login', 'fake_login', fake_login)
     DEBUG = userbool(myapp.localconf.get('devserver', 'debug',
                                          default=False))
     if DEBUG:

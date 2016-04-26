@@ -112,4 +112,11 @@ server in parallel. Simply open a new shell and type::
 
     fab serve_plovr
 
+Social Logins During Development
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can skip social logins during development by accessing the URL
+``/fakelogin``. This is only accessible when running the development server
+though. On production, this route is unavailable for security reasons.
+
 .. _plovr: http://www.plovr.com
