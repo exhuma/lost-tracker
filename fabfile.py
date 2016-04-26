@@ -267,3 +267,19 @@ def pull_db():
         local_file = next(iter(retrieved_files))
         fab.local('psql -X -q -f %s lost_tracker_2016' % local_file)
         fab.local('rm %s' % local_file)
+
+
+@fab.task
+def serve_plovr():
+    """
+    Run JS development server.
+    """
+    fab.local('java -jar __libs__/{} serve plovr-config.js'.format(PLOVR))
+
+
+@fab.task
+def serve_web():
+    """
+    Run development server.
+    """
+    fab.local('./env/bin/python lost_tracker/main.py')
