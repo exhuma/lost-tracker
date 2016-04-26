@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 from pkg_resources import resource_string
-version = resource_string('lost_tracker', 'version.txt').decode('ascii')
+VERSION = resource_string('lost_tracker', 'version.txt').decode('ascii')
 setup(
     name="lost-tracker",
-    version=version.strip(),
+    version=VERSION.strip(),
     packages=find_packages(),
     install_requires=[
         'config-resolver >= 4.2, <5.0',

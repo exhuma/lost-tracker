@@ -41,6 +41,7 @@ WEB_IMAGES = {
 
 MatrixSum = namedtuple('MatrixSum', 'unknown arrived completed')
 
+
 def _generate_state_list(station):
     if not station:
         return []
