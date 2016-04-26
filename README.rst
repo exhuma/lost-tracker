@@ -71,10 +71,9 @@ hacking.
 One final note: JavaScript is compiled using the google-closure compiler with
 the help of plovr. Those dependencies should have been downloaded for you into
 the ``__libs__`` folder. You *must* run plovr during development! As a
-convenience, there's a ``tmux-serve.bash`` script which will run both the
-web-server and the plovr server::
+convenience, there is a fabric task to run this for you::
 
-    ./tmux-serve.bash
+    fab serve_plovr
 
 
 INSTALLATION
