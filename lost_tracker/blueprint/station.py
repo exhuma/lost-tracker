@@ -4,10 +4,13 @@ from json import dumps
 from flask import (
     Blueprint,
     abort,
+    flash,
     jsonify,
     make_response,
+    redirect,
     render_template,
     request,
+    url_for,
 )
 
 from flask.ext.babel import gettext
@@ -83,8 +86,17 @@ def details(name):
 @STATION.route('/<int:id>', methods=['DELETE'])
 @roles_accepted(mdl.Role.ADMIN)
 def delete(id):
-    loco.delete_station(id)
-    return jsonify(status='ok')
+
+    if request.args.get('confirmed', 0) == 'yes':
+        loco.delete_station(id)
+        flash(gettext('Station deleted!'))
+        return redirect(url_for('/'))
+    elif request.args.get('confirmed', 0) == 'no':
+        return redirect(url_for('/'))
+    else:
+        return render_template('confirm.html',
+                               requested_by='station.delete',
+                               requestor_args={'id': id})
 
 
 @STATION.route('/<station>/dashboard')
