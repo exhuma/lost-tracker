@@ -64,6 +64,21 @@ def _generate_state_list(station):
     return output
 
 
+def _dashboard_order(element):
+    if element is None or element.state is None:
+        return 3
+    elif element.state == STATE_FINISHED:
+        return 0
+    elif element.state == STATE_ARRIVED:
+        return 1
+    elif element.state == STATE_UNKNOWN:
+        return 2
+    elif element.group.cancelled:
+        return 80
+    else:
+        return 99
+
+
 class Matrix(object):
     """
     Returns a 2-dimensional array containing an entry for each group.
@@ -420,15 +435,32 @@ def set_score(session, group_id, station_id, station_score, form_score,
 
 
 def get_dashboard(station):
-    return {
-        "station": {
-            "name": station.name,
-            "id": station.id
-        },
-        "main_states": _generate_state_list(station),
-        "before_states": _generate_state_list(station.before),
-        "after_states": _generate_state_list(station.after)
-    }
+    """
+    Retrieves dashboard information for a given station. The dashboard contains
+    the states for each group at that station, and incoming groups from
+    neighbouring stations.
+    """
+    station = Station.by_name_or_id(station)
+    neighbours = station.neighbours
+    main_states = GroupStation.by_station(station)
+    before_states = sorted(GroupStation.by_station(neighbours['before']),
+                           key=_dashboard_order)
+    after_states = sorted(GroupStation.by_station(neighbours['after']),
+                          key=_dashboard_order)
+    finished_groups = {value.group_id for value in main_states
+                       if value.state == STATE_FINISHED}
+    before_states = [value for value in before_states
+                     if value.group_id not in finished_groups]
+    after_states = [value for value in after_states
+                    if value.group_id not in finished_groups]
+    output = dict(
+        station=station,
+        neighbours=neighbours,
+        main_states=main_states,
+        before_states=before_states,
+        after_states=after_states,
+    )
+    return output
 
 
 def delete_message(message):

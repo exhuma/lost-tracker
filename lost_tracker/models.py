@@ -296,7 +296,8 @@ class Station(DB.Model):
         return {
             '__class__': 'Station',
             'id': self.id,
-            'name': self.name
+            'name': self.name,
+            'order': self.order
         }
 
     @property
@@ -445,7 +446,7 @@ class GroupStation(DB.Model):
     form_score = Column(Integer, nullable=True, default=None)
 
     group = relationship("Group")
-    station = relationship("Station")
+    station = relationship("Station", backref='states')
 
     def __init__(self, group_id, station_id, state=STATE_UNKNOWN):
         self.group_id = group_id

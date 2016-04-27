@@ -87,11 +87,17 @@ def delete(id):
     return jsonify(status='ok')
 
 
-@STATION.route('/<name>/dashboard')
-def dashboard(name):
-    station = mdl.Station.one(name=name)
-    if not station:
-        return gettext('No such entity!'), 404
-
-    output = loco.get_dashboard(station)
+@STATION.route('/<station>/dashboard')
+def dashboard(station):
+    result = loco.get_dashboard(station)
+    output = {
+        'after_states': [gs.to_dict() for gs in result['after_states']],
+        'before_states': [gs.to_dict() for gs in result['before_states']],
+        'main_states': [gs.to_dict() for gs in result['main_states']],
+        'neighbours': {
+            'before': result['neighbours']['before'].to_dict(),
+            'after': result['neighbours']['after'].to_dict(),
+        },
+        'station': result['station'].to_dict()
+    }
     return jsonify(data=output)
