@@ -187,11 +187,14 @@ def scoreboard():
                     reverse=True)
     output = []
     pos = 1
+    last_score = result[0].score_sum
     for row in result:
+        if row.score_sum != last_score:
+            pos += 1
         group = mdl.Group.one(id=row.group_id)
         output.append(ScoreBoardRow(
             pos, group.name, row.score_sum, row.ppm, group.completed))
-        pos += 1
+        last_score = row.score_sum
     return render_template('scoreboard.html', scores=output)
 
 
