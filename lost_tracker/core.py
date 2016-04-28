@@ -29,7 +29,7 @@ from lost_tracker.models import (
     _get_unique_order,
 )
 
-from sqlalchemy import and_
+from sqlalchemy import and_, update  # TODO this module should have no SA
 from sqlalchemy import func  # TODO this module should have no SA
 from sqlalchemy.exc import IntegrityError  # TODO this module should have no SA
 
@@ -512,3 +512,37 @@ def set_group_state(session, group_id, station_id, new_state):
     state = session.merge(state)
     session.flush()
     return state
+
+
+def get_stations(session):
+    return session.query(Station).order_by(Station.order)
+
+
+def save_station(session, data):
+    # If this station is set to "start", we must remove that flag from all other
+    # stations. We'll just set them all to False, then update the given station
+    # with True. This ensures that we only have one starting station.
+    if data.get('is_start'):
+        session.execute(update(Station).values(is_start=False))
+
+    # Ensure we don't have duplicate values for the "order" field
+    same_order = session.query(Station).filter(and_(
+        Station.order == data['order'],
+        Station.id != data['id'])).first()
+    while same_order:  # As long as we have a matching entry, increment by 1
+        data['order'] += 1
+        same_order = session.query(Station).filter(and_(
+            Station.order == data['order'],
+            Station.id != data['id'])).first()
+
+    station = Station(
+        name=data['name'],
+        contact=data['contact'],
+        phone=data['phone'],
+    )
+    station.id=data.get('id')
+    station.order=data['order']
+    station.is_start=data['is_start']
+    merged = session.merge(station)
+    DB.session.commit()
+    return merged

@@ -1,0 +1,29 @@
+{% extends "master_narrow.html" %}
+{% block title %}{{_('Edit Station')}}{% endblock %}
+{% block content %}
+
+    <form id="edit_station_form" action="{{url_for('station.save')}}" method="POST">
+      <input type="hidden" name="id" value="{{station.id|default('', true)}}" />
+      <fieldset>
+        <legend>{{_("Information about this station")}}</legend>
+        <dl>
+          <dt>{{_("Station Name")}}</dt>
+          <dd><input type="text" name="name"
+            value="{{station.name|default('')}}" /></dd>
+          <dt>{{_("Order")}}</dt>
+          <dd><input type="number" name="order"
+            value="{{station.order|default(0)}}" /></dd>
+          <dt>{{_("Contact")}}</dt>
+          <dd><input type="text" name="contact"
+            value="{{station.contact|default('', true)}}" /></dd>
+          <dt>{{_("Phone")}}</dt>
+          <dd><input type="text" name="phone"
+            value="{{station.phone|default('', true)}}" /></dd>
+          <dt>{{_("Starting Station?")}}</dt>
+          <dd><input type="checkbox" name="is_start" {{'checked="checked"' if station.is_start else ''}} /></dd>
+        </dl>
+        <input type="submit" value="{{_("Save")}}" />
+      </fieldset>
+    </form>
+
+{% endblock %}
