@@ -1,5 +1,15 @@
 {% extends "master_wide.html" %}
 
+{% macro sum_cols(sums) %}
+  {% for col in sums %}
+  <td>
+    <span title="{{_('Pending')}}" class="unknown">{{col.unknown}}</span>
+    <span title="{{_('Arrived at station')}}" class="arrived">{{col.arrived}}</span>
+    <span title="{{_('Completed at station')}}" class="completed">{{col.completed}}</span>
+  </td>
+  {% endfor %}
+{% endmacro %}
+
 {% block title %}{{_('Matrix')}}{% endblock %}
 
 {% block head %}
@@ -17,25 +27,13 @@
       </tr>
       <tr class="sum">
           <td>{{_('SUM')}}</td>
-          {% for col in matrix.sums %}
-          <td>
-              <span class="unknown">{{col.unknown}}</span>
-              <span class="arrived">{{col.arrived}}</span>
-              <span class="completed">{{col.completed}}</span>
-          </td>
-          {% endfor %}
+          {{ sum_cols(matrix.sums) }}
       </tr>
     </thead>
     <tfoot>
       <tr class="sum">
           <td>SUM</td>
-          {% for col in matrix.sums %}
-          <td>
-              <span class="unknown">{{col.unknown}}</span>
-              <span class="arrived">{{col.arrived}}</span>
-              <span class="completed">{{col.completed}}</span>
-          </td>
-          {% endfor %}
+          {{ sum_cols(matrix.sums) }}
       </tr>
     </tfoot>
     <tbody>
