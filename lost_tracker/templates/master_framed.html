@@ -35,18 +35,26 @@
       </span>
 
       <span id="auth">
+        <a href="{{url_for('root.matrix')}}">{{_('Matrix')}}</a> |
         {% if current_user.is_authenticated %}
           {{_('Logged in as:')}} <a href="{{url_for('root.profile')}}">{{avatar(current_user, 20)}}</a>&nbsp;<a href="{{url_for('root.profile')}}">{{current_user.name}}</a> |
-          <a href="{{url_for('root.matrix')}}">{{_('Matrix')}}</a> |
-          {{ seclink(Role.ADMIN, url_for('root.slot_editor'), _('Slot Editor')) }} |
-          {{ seclink(Role.ADMIN, url_for('group.list'), _('Manage Groups'))}} |
-          {{ seclink(Role.ADMIN, url_for('root.settings'), _('Settings'))}} |
           <a href="{{url_for('security.logout')}}">{{_('Logout')}}</a>
         {% else %}
           <a href="{{url_for('security.login')}}">{{_('Login')}}</a>
         {% endif %}
       </span>
     </div>
+{% endblock %}
+
+{% block submenu %}
+  {% if current_user.has_role(Role.ADMIN) %}
+    <div id="submenu">
+      {{ seclink(Role.ADMIN, url_for('root.slot_editor'), _('Slot Editor')) }} |
+      {{ seclink(Role.ADMIN, url_for('group.list'), _('Manage Groups'))}} |
+      {{ seclink(Role.ADMIN, url_for('station.list'), _('Manage Stations'))}} |
+      {{ seclink(Role.ADMIN, url_for('root.settings'), _('Settings'))}}
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block logo %}

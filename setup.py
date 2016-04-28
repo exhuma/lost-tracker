@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 from pkg_resources import resource_string
-version = resource_string('lost_tracker', 'version.txt').decode('ascii')
+VERSION = resource_string('lost_tracker', 'version.txt').decode('ascii')
 setup(
     name="lost-tracker",
-    version=version.strip(),
+    version=VERSION.strip(),
     packages=find_packages(),
     install_requires=[
         'config-resolver >= 4.2, <5.0',
@@ -15,6 +15,7 @@ setup(
         'flask-sqlalchemy==2.1',
         'flask==0.10.1',
         'google-api-python-client==1.5.0',
+        'gouge >= 1.1, <2.0',
         'imapclient==1.0.1',
         'markdown==2.6.5',
         'pillow==2.8.1',

@@ -29,7 +29,7 @@ from lost_tracker.models import (
     _get_unique_order,
 )
 
-from sqlalchemy import and_
+from sqlalchemy import and_, update  # TODO this module should have no SA
 from sqlalchemy import func  # TODO this module should have no SA
 from sqlalchemy.exc import IntegrityError  # TODO this module should have no SA
 
@@ -40,6 +40,7 @@ WEB_IMAGES = {
 }
 
 MatrixSum = namedtuple('MatrixSum', 'unknown arrived completed')
+
 
 def _generate_state_list(station):
     if not station:
@@ -61,6 +62,21 @@ def _generate_state_list(station):
         })
     output = sorted(output, key=lambda x: (x['state'], x['groupName']))
     return output
+
+
+def _dashboard_order(element):
+    if element is None or element.state is None:
+        return 3
+    elif element.state == STATE_FINISHED:
+        return 0
+    elif element.state == STATE_ARRIVED:
+        return 1
+    elif element.state == STATE_UNKNOWN:
+        return 2
+    elif element.group.cancelled:
+        return 80
+    else:
+        return 99
 
 
 class Matrix(object):
@@ -419,15 +435,32 @@ def set_score(session, group_id, station_id, station_score, form_score,
 
 
 def get_dashboard(station):
-    return {
-        "station": {
-            "name": station.name,
-            "id": station.id
-        },
-        "main_states": _generate_state_list(station),
-        "before_states": _generate_state_list(station.before),
-        "after_states": _generate_state_list(station.after)
-    }
+    """
+    Retrieves dashboard information for a given station. The dashboard contains
+    the states for each group at that station, and incoming groups from
+    neighbouring stations.
+    """
+    station = Station.by_name_or_id(station)
+    neighbours = station.neighbours
+    main_states = GroupStation.by_station(station)
+    before_states = sorted(GroupStation.by_station(neighbours['before']),
+                           key=_dashboard_order)
+    after_states = sorted(GroupStation.by_station(neighbours['after']),
+                          key=_dashboard_order)
+    finished_groups = {value.group_id for value in main_states
+                       if value.state == STATE_FINISHED}
+    before_states = [value for value in before_states
+                     if value.group_id not in finished_groups]
+    after_states = [value for value in after_states
+                    if value.group_id not in finished_groups]
+    output = dict(
+        station=station,
+        neighbours=neighbours,
+        main_states=main_states,
+        before_states=before_states,
+        after_states=after_states,
+    )
+    return output
 
 
 def delete_message(message):
@@ -479,3 +512,37 @@ def set_group_state(session, group_id, station_id, new_state):
     state = session.merge(state)
     session.flush()
     return state
+
+
+def get_stations(session):
+    return session.query(Station).order_by(Station.order)
+
+
+def save_station(session, data):
+    # If this station is set to "start", we must remove that flag from all other
+    # stations. We'll just set them all to False, then update the given station
+    # with True. This ensures that we only have one starting station.
+    if data.get('is_start'):
+        session.execute(update(Station).values(is_start=False))
+
+    # Ensure we don't have duplicate values for the "order" field
+    same_order = session.query(Station).filter(and_(
+        Station.order == data['order'],
+        Station.id != data['id'])).first()
+    while same_order:  # As long as we have a matching entry, increment by 1
+        data['order'] += 1
+        same_order = session.query(Station).filter(and_(
+            Station.order == data['order'],
+            Station.id != data['id'])).first()
+
+    station = Station(
+        name=data['name'],
+        contact=data['contact'],
+        phone=data['phone'],
+    )
+    station.id=data.get('id')
+    station.order=data['order']
+    station.is_start=data['is_start']
+    merged = session.merge(station)
+    DB.session.commit()
+    return merged

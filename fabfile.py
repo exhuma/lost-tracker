@@ -17,7 +17,6 @@ PLOVR = 'plovr/build/plovr-{}.jar'.format(PLOVR_REVISION)
 CLOSURE_REVISION = '57bdfe0093c'
 
 
-
 @fab.task
 @fab.roles('prod', 'failover')
 def deploy():
@@ -73,14 +72,22 @@ def bootstrap():
 
 
 @fab.task
+def alembic():
+    "Run DB Migrations"
+    with fab.settings(shell_env={'PYTHONWARNINGS': ''}):
+        fab.local('./env/bin/alembic upgrade head')
+
+
+@fab.task
 def develop():
     """
     Sets up a new development environment. Should be run right after cloning
     the repo.
     """
     l = fab.local
+    ini_file = '.mamerwiselen/lost-tracker/app.ini'
+
     l('[ -d env ] || virtualenv env')
-    l('./env/bin/pip uninstall lost_tracker || true')
     l('./env/bin/pip install "setuptools>=0.8"')  # needed by IMAPClient
     # some packages are unavailable on pypi :( -> Use requirements.txt
     l('./env/bin/pip install -r requirements.txt')
@@ -104,9 +111,19 @@ def develop():
     l('mkdir -p .mamerwiselen/lost-tracker')
 
     with fab.settings(warn_only=True):
-        ini_exists = l('[ -f .mamerwiselen/lost-tracker/app.ini ]').failed
+        ini_is_missing = l('[ -f ' + ini_file + ' ]').failed
 
-    if ini_exists:
+    if ini_is_missing:
+        print(clr.green('No INI file found. Please fill in the following '
+                        'values:'))
+        print('')
+        print(clr.green('      Look at "app.ini.dist" for documentation.'))
+        print('')
+        print(clr.yellow('   The file will be stored in {}'.format(ini_file)))
+        print(clr.yellow('   You can change this at any time. If you do, you '
+                         'need to restart the application if it is still '
+                         'running!'))
+        print('')
         cfg = SafeConfigParser()
         cfg.read('app.ini.dist')
         for sect in cfg.sections():
@@ -116,13 +133,19 @@ def develop():
                     clr.green(sect),
                     clr.blue(opt, bold=True)), default=curval)
                 cfg.set(sect, opt, newval)
-        cfg.write(open('.mamerwiselen/lost-tracker/app.ini', 'w'))
-        print(clr.green('>>> New config file created in '
-                        '.mamerwiselen/lost-tracker/app.ini'))
+        cfg.write(open(ini_file, 'w'))
+        print(clr.green('>>> New config file created in ' + ini_file))
     else:
-        print(clr.white('=== Kept old config file from '
-                        '.mamerwiselen/lost-tracker/app.ini', bold=True))
+        print(clr.white('=== Kept old config file from ' + ini_file, bold=True))
     fab.execute(babel_compile)
+    print(clr.green('Applying database migrations...'))
+    print(clr.yellow('NOTE: The DB must exist, and the URL in %r must be '
+                     'correct. I will pause now to give you a chance to fix '
+                     'that, if needed. Press ENTER when ready.' % ini_file))
+    print(clr.yellow('This step can always be re-executed by running '
+                     '"fab alembic"'))
+    fab.prompt('Press ENTER when ready...')
+    fab.execute(alembic)
     print(clr.green('Done!'))
 
 
@@ -244,3 +267,19 @@ def pull_db():
         local_file = next(iter(retrieved_files))
         fab.local('psql -X -q -f %s lost_tracker_2016' % local_file)
         fab.local('rm %s' % local_file)
+
+
+@fab.task
+def serve_plovr():
+    """
+    Run JS development server.
+    """
+    fab.local('java -jar __libs__/{} serve plovr-config.js'.format(PLOVR))
+
+
+@fab.task
+def serve_web():
+    """
+    Run development server.
+    """
+    fab.local('./env/bin/python lost_tracker/main.py')

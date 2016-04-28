@@ -1,0 +1,11 @@
+{% extends "master_wide.html" %}
+{% block title %}{{_('Confirm!')}}{% endblock %}
+{% block content %}
+
+{{_("Are you sure?")}}<br />
+<a href="{{url_for(requested_by, confirmed='yes', **requestor_args)}}">{{_('Yes')}}</a>&nbsp;
+<a href="{{url_for(requested_by, confirmed='no', **requestor_args)}}">{{_('No')}}</a>
+
+<br clear="both" />
+
+{% endblock %}

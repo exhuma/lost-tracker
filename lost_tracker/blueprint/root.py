@@ -185,14 +185,30 @@ def advance(groupId, station_id):
 def scoreboard():
     result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
                     reverse=True)
+    if not result:
+        return gettext('No scores available yet!')
+
+    # Determine positions for "points per minute"
+    unique_ppms = set([row.ppm for row in result])
+    sorted_ppms = sorted(unique_ppms, reverse=True)
+    ppm_positions = {
+        value: sorted_ppms.index(value) + 1
+        for value in sorted_ppms
+    }
+
     output = []
     pos = 1
+    last_score = result[0].score_sum
     for row in result:
+        if row.score_sum != last_score:
+            pos += 1
         group = mdl.Group.one(id=row.group_id)
         output.append(ScoreBoardRow(
             pos, group.name, row.score_sum, row.ppm, group.completed))
-        pos += 1
-    return render_template('scoreboard.html', scores=output)
+        last_score = row.score_sum
+    return render_template('scoreboard.html',
+                           scores=output,
+                           ppm_positions=ppm_positions)
 
 
 @ROOT.route('/slot_editor')

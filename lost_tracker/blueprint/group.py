@@ -12,7 +12,12 @@ from flask import (
 )
 
 from flask.ext.babel import gettext
-from flask.ext.security import roles_accepted, current_user, login_required
+from flask.ext.security import (
+    current_user,
+    login_required,
+    roles_accepted,
+    roles_required,
+)
 
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
@@ -147,3 +152,18 @@ def edit(name):
                            dir_a=mdl.DIR_A,
                            dir_b=mdl.DIR_B,
                            intent='edit')
+
+
+@GROUP.route('/<int:id>/delete')
+@roles_required(mdl.Role.ADMIN)
+def delete(id):
+    if request.args.get('confirmed', 0) == 'yes':
+        loco.delete_group(id)
+        flash(gettext('Group deleted!'))
+        return redirect(url_for('.list'))
+    elif request.args.get('confirmed', 0) == 'no':
+        return redirect(url_for('.list'))
+    else:
+        return render_template('confirm.html',
+                               requested_by='group.delete',
+                               requestor_args={'id': id})

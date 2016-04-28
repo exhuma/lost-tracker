@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 from io import StringIO
 from textwrap import dedent
 

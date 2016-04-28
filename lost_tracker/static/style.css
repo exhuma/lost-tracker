@@ -481,6 +481,39 @@ TABLE#scoreboard TD {
     font-size: 120%;
 }
 
+.ppm_1 {
+    font-weight: bold;
+    color: hsl(50, 100%, 85%);
+    font-size: 100%;
+}
+
+.ppm_2 {
+    color: hsl(50, 100%, 50%);
+    font-weight: bold;
+    font-size: 90%%;
+}
+
+.ppm_3 {
+    color: hsl(35, 100%, 50%);
+    font-weight: bold;
+    font-size: 90%%;
+}
+
+.chevron2 {
+    position: relative;
+    bottom: 2.4em;
+}
+
+.chevron3 {
+    position: relative;
+    bottom: 4.8em;
+}
+
+TABLE#scoreboard TD.rising {
+    font-size: 50%;
+}
+
+TABLE#scoreboard TD.rising,
 TABLE#scoreboard TD.position,
 TABLE#scoreboard TD.score,
 TABLE#scoreboard TD.name {

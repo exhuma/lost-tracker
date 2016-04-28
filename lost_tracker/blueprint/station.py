@@ -1,13 +1,17 @@
 from collections import namedtuple
 from json import dumps
+import logging
 
 from flask import (
     Blueprint,
     abort,
+    flash,
     jsonify,
     make_response,
+    redirect,
     render_template,
     request,
+    url_for,
 )
 
 from flask.ext.babel import gettext
@@ -21,6 +25,7 @@ import lost_tracker.core as loco
 import lost_tracker.models as mdl
 
 STATION = Blueprint('station', __name__)
+LOG = logging.getLogger(__name__)
 
 
 def _stategetter(element):
@@ -42,9 +47,9 @@ def _stategetter(element):
         return 99
 
 
-@STATION.route('/<path:name>')
-def details(name):
-    station = mdl.Station.one(name=name)
+@STATION.route('/<int:key>')
+def details(key):
+    station = mdl.Station.by_name_or_id(key)
     if not station:
         return abort(404)
 
@@ -80,18 +85,78 @@ def details(name):
             **output)
 
 
+@STATION.route('/edit/<int:key>')
+def edit(key):
+    station = mdl.Station.by_name_or_id(key)
+    if not station:
+        return abort(404)
+
+    return render_template(
+        'edit_station.html',
+        station=station)
+
+
+@STATION.route('/new')
+def new():
+    return render_template('edit_station.html', station=None)
+
+
+@STATION.route('/save', methods=['POST'])
+def save():
+    try:
+        id = request.form.get('id', 0)
+        id = int(id) if id else None
+        data = {
+            'id': id,
+            'name': request.form['name'].strip(),
+            'order': int(request.form['order']),
+            'contact': request.form['contact'].strip(),
+            'phone': request.form['phone'].strip(),
+            'is_start': bool(request.form.get('is_start', False)),
+        }
+    except (KeyError, ValueError):
+        LOG.debug('Invalid request with data: %r', request.form, exc_info=True)
+        return '<h1>Bad Request</h1>Invalid variables specified!', 400
+    loco.save_station(mdl.DB.session, data)
+    flash(gettext('Station {} saved!').format(data['name']))
+    return redirect(url_for('.list'))
+
+
 @STATION.route('/<int:id>', methods=['DELETE'])
+@STATION.route('/<int:id>/delete')
 @roles_accepted(mdl.Role.ADMIN)
 def delete(id):
-    loco.delete_station(id)
-    return jsonify(status='ok')
+
+    if request.args.get('confirmed', 0) == 'yes':
+        loco.delete_station(id)
+        flash(gettext('Station deleted!'))
+        return redirect(url_for('.list'))
+    elif request.args.get('confirmed', 0) == 'no':
+        return redirect(url_for('.list'))
+    else:
+        return render_template('confirm.html',
+                               requested_by='station.delete',
+                               requestor_args={'id': id})
 
 
-@STATION.route('/<name>/dashboard')
-def dashboard(name):
-    station = mdl.Station.one(name=name)
-    if not station:
-        return gettext('No such entity!'), 404
-
-    output = loco.get_dashboard(station)
+@STATION.route('/<station>/dashboard')
+def dashboard(station):
+    result = loco.get_dashboard(station)
+    output = {
+        'after_states': [gs.to_dict() for gs in result['after_states']],
+        'before_states': [gs.to_dict() for gs in result['before_states']],
+        'main_states': [gs.to_dict() for gs in result['main_states']],
+        'neighbours': {
+            'before': result['neighbours']['before'].to_dict(),
+            'after': result['neighbours']['after'].to_dict(),
+        },
+        'station': result['station'].to_dict()
+    }
     return jsonify(data=output)
+
+
+@STATION.route('/')
+def list():
+    result = loco.get_stations(mdl.DB.session)
+    return render_template('list_stations.html',
+                           stations=result)

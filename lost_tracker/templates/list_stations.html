@@ -1,0 +1,34 @@
+{% extends "master_wide.html" %}
+{% block title %}{{_('Station List')}}{% endblock %}
+{% block content %}
+
+<a href="{{url_for('station.new')}}">{{_('Add new Station')}}</a><br />
+<table id="stationList">
+  <thead>
+    <tr>
+      <th colspan="2">{{_("Name")}}</th>
+      <th>{{_("Order")}}</th>
+      <th>{{_("Contact")}}</th>
+      <th>{{_("Phone")}}</th>
+      <th>{{_("Start?")}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for station in stations -%}
+    <tr>
+      <td>
+        {% if current_user.has_role(Role.ADMIN) %}
+          <a href="{{url_for('station.delete', id=station.id)}}"><i class="fa fa-trash" title="{{_("Delete Station")}}"></i></a>
+        {% endif %}
+      </td>
+      <td><a href="{{url_for('station.edit', key=station.id)}}">{{station.name}}</a></td>
+      <td>{{station.order}}</td>
+      <td>{{station.contact}}</td>
+      <td>{{station.phone}}</td>
+      <td>{{station.is_start}}</td>
+    </tr>
+    {%- endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
