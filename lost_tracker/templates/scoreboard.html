@@ -7,13 +7,20 @@
 {% endblock %}
 
 {% block content %}
-<h1>{{_("Scoreboard")}}</h1>
-<h3>({{_("Current score")}} - <small><i class="fa fa-hourglass-o"></i>{{_("%s: Not yet completed").format('')}}</small>)</h3>
-<a href="{{url_for('root.matrix')}}">{{_("Matrix")}}</a>
-
-<br>
 
 <table id="scoreboard" border="0" width="100%">
+  <thead>
+    <tr>
+      <td class="rising">&nbsp;</td>
+      <td class="position">&nbsp;</td>
+      <td class="name">
+        <h1>{{_("Scoreboard")}}</h1>
+        <h3>({{_("Current score")}} - <small><i class="fa fa-hourglass-o"></i>{{_("%s: Not yet completed").format('')}}</small>)</h3>
+        <a href="{{url_for('root.matrix')}}">{{_("Matrix")}}</a>
+      </td>
+      <td class="score">&nbsp;</td>
+    </tr>
+  </thead>
     {% for row in scores %}
     <tr class="{{'completed' if row.has_completed else ''}} position_{{row.position}}">
       <td class="rising">
