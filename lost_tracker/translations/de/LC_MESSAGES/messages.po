@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-25 22:04+0200\n"
-"PO-Revision-Date: 2016-04-25 22:16+0200\n"
+"POT-Creation-Date: 2016-04-28 21:44+0200\n"
+"PO-Revision-Date: 2016-04-28 21:51+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: de\n"
 "Language-Team: \n"
@@ -62,7 +62,7 @@ msgid "Incorrect value for direction: {!r}"
 msgstr "{!r} ist ein ungültiger Wert für dir Richtung."
 
 #: lost_tracker/blueprint/group.py:123 lost_tracker/blueprint/qr.py:42
-#: lost_tracker/blueprint/root.py:110 lost_tracker/blueprint/station.py:94
+#: lost_tracker/blueprint/root.py:110
 msgid "No such entity!"
 msgstr "Datenbank Eintrag nicht gefunden!"
 
@@ -88,9 +88,21 @@ msgstr "Diese Gruppe wurde bereits angenommen!"
 msgid "File not found!"
 msgstr "Datei nicht gefunden!"
 
-#: lost_tracker/blueprint/root.py:270
+#: lost_tracker/blueprint/root.py:189
+msgid "No scores available yet!"
+msgstr "Es sind noch keine Punke erhältlich!"
+
+#: lost_tracker/blueprint/root.py:286
 msgid "Settings successfully saved."
 msgstr "Einstellungen Erfolgreich gespeichert"
+
+#: lost_tracker/blueprint/station.py:121
+msgid "Station {} saved!"
+msgstr "Posten {} wurde gespeichert!"
+
+#: lost_tracker/blueprint/station.py:132
+msgid "Station deleted!"
+msgstr "Posten ist gelöscht worden"
 
 #: lost_tracker/blueprint/tabedit.py:34 lost_tracker/blueprint/tabedit.py:92
 #: lost_tracker/blueprint/tabedit.py:119
@@ -130,12 +142,15 @@ msgid "Group Infos"
 msgstr "Gruppeninformationen"
 
 #: lost_tracker/templates/edit_group.html:18
+#: lost_tracker/templates/list_stations.html:9
 #: lost_tracker/templates/profile.html:28
 msgid "Name"
 msgstr "Name"
 
 #: lost_tracker/templates/edit_group.html:20
+#: lost_tracker/templates/edit_station.html:16
 #: lost_tracker/templates/group-tooltip.html:6
+#: lost_tracker/templates/list_stations.html:11
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -145,7 +160,9 @@ msgid "Email"
 msgstr "e-mail"
 
 #: lost_tracker/templates/edit_group.html:24
+#: lost_tracker/templates/edit_station.html:19
 #: lost_tracker/templates/group-tooltip.html:8
+#: lost_tracker/templates/list_stations.html:12
 msgid "Phone"
 msgstr "Tel"
 
@@ -199,6 +216,32 @@ msgstr "Optionen"
 #: lost_tracker/templates/edit_group.html:50
 msgid "Send e-mail to the group about the changes."
 msgstr "e-mail mit den Änderungen an die Gruppe senden. "
+
+#: lost_tracker/templates/edit_station.html:2
+msgid "Edit Station"
+msgstr "Posten Bearbeiten"
+
+#: lost_tracker/templates/edit_station.html:8
+msgid "Information about this station"
+msgstr "Informationen zu diesem Posten"
+
+#: lost_tracker/templates/edit_station.html:10
+msgid "Station Name"
+msgstr "Name de Postens"
+
+#: lost_tracker/templates/edit_station.html:13
+#: lost_tracker/templates/list_stations.html:10
+msgid "Order"
+msgstr "Sortierung"
+
+#: lost_tracker/templates/edit_station.html:22
+msgid "Starting Station?"
+msgstr "Startposten?"
+
+#: lost_tracker/templates/edit_station.html:25
+#: lost_tracker/templates/messages.html:27 lost_tracker/templates/settings.html:26
+msgid "Save"
+msgstr "Speichern"
 
 #: lost_tracker/templates/gallery.html:3
 #: lost_tracker/templates/master_framed.html:26
@@ -303,9 +346,25 @@ msgstr ""
 "der gut zu Fuss unterwegs ist, und dem es nichts ausmacht mit 3 Stunden "
 "Verspätung zu Hause ankommt weil man sich verlaufen hat."
 
+#: lost_tracker/templates/list_stations.html:2
+msgid "Station List"
+msgstr "Liste der Posten"
+
+#: lost_tracker/templates/list_stations.html:5
+msgid "Add new Station"
+msgstr "Neuen Posten hinzufügen"
+
+#: lost_tracker/templates/list_stations.html:13
+msgid "Start?"
+msgstr "Start?"
+
+#: lost_tracker/templates/list_stations.html:21
+msgid "Delete Station"
+msgstr "Posten Löschen"
+
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:6
 #: lost_tracker/templates/login.html:13 lost_tracker/templates/login.html:18
-#: lost_tracker/templates/master_framed.html:46
+#: lost_tracker/templates/master_framed.html:43
 #: lost_tracker/templates/security/login_user.html:4
 #: lost_tracker/templates/security/login_user.html:16
 msgid "Login"
@@ -332,7 +391,7 @@ msgstr "Anmelden"
 
 #: lost_tracker/templates/master_framed.html:27
 #: lost_tracker/templates/scoreboard.html:3
-#: lost_tracker/templates/scoreboard.html:10
+#: lost_tracker/templates/scoreboard.html:17
 msgid "Scoreboard"
 msgstr "Punktestand"
 
@@ -341,34 +400,50 @@ msgstr "Punktestand"
 msgid "Anything else?"
 msgstr "Sonst noch was?"
 
-#: lost_tracker/templates/master_framed.html:39
-msgid "Logged in as:"
-msgstr "Angemeldet als:"
-
-#: lost_tracker/templates/master_framed.html:40
-#: lost_tracker/templates/matrix.html:3
+#: lost_tracker/templates/master_framed.html:38
+#: lost_tracker/templates/matrix.html:13 lost_tracker/templates/scoreboard.html:19
 msgid "Matrix"
 msgstr "Matrix"
 
+#: lost_tracker/templates/master_framed.html:40
+msgid "Logged in as:"
+msgstr "Angemeldet als:"
+
 #: lost_tracker/templates/master_framed.html:41
+msgid "Logout"
+msgstr "Abmelden"
+
+#: lost_tracker/templates/master_framed.html:52
 #: lost_tracker/templates/slot_editor.html:3
 msgid "Slot Editor"
 msgstr "Zeitpunkt Editor"
 
-#: lost_tracker/templates/master_framed.html:42
+#: lost_tracker/templates/master_framed.html:53
 msgid "Manage Groups"
 msgstr "Gruppen bearbeiten"
 
-#: lost_tracker/templates/master_framed.html:43
+#: lost_tracker/templates/master_framed.html:54
+msgid "Manage Stations"
+msgstr "Posten bearbeiten"
+
+#: lost_tracker/templates/master_framed.html:55
 #: lost_tracker/templates/settings.html:3
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: lost_tracker/templates/master_framed.html:44
-msgid "Logout"
-msgstr "Abmelden"
+#: lost_tracker/templates/matrix.html:6
+msgid "Pending"
+msgstr "Erwartend"
 
-#: lost_tracker/templates/matrix.html:19
+#: lost_tracker/templates/matrix.html:7
+msgid "Arrived at station"
+msgstr "Am Posten angekommen"
+
+#: lost_tracker/templates/matrix.html:8
+msgid "Completed at station"
+msgstr "Am Posten abgeschlossen"
+
+#: lost_tracker/templates/matrix.html:29
 msgid "SUM"
 msgstr "Summe"
 
@@ -395,10 +470,6 @@ msgstr ""
 "markdown/basics\">markdown</a> angeboten. Siehe auch <a href=\"https://en."
 "wikipedia.org/wiki/Markdown\">Wikipedia</a> und <a href=\"https://github.com/"
 "adam-p/markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>."
-
-#: lost_tracker/templates/messages.html:27 lost_tracker/templates/settings.html:26
-msgid "Save"
-msgstr "Speichern"
 
 #: lost_tracker/templates/misc.html:8
 msgid "Entry fees are about €7 to €9 per person."
@@ -488,7 +559,7 @@ msgid "Information about your group"
 msgstr "Informationen zu Ihrer Gruppe"
 
 #: lost_tracker/templates/register.html:18
-#: lost_tracker/templates/slot_editor.html:30
+#: lost_tracker/templates/slot_editor.html:31
 msgid "Group Name"
 msgstr "Gruppenname"
 
@@ -517,11 +588,11 @@ msgstr "Anmeldung abgeschlossen"
 msgid "We are sorry, the registration is currently closed!"
 msgstr "Leider ist die Anmeldung momentan geschlossen!"
 
-#: lost_tracker/templates/scoreboard.html:11
+#: lost_tracker/templates/scoreboard.html:18
 msgid "Current score"
 msgstr "Jetzige Punkte"
 
-#: lost_tracker/templates/scoreboard.html:11
+#: lost_tracker/templates/scoreboard.html:18
 #, python-format
 msgid "%s: Not yet completed"
 msgstr "%s: Noch nicht abgeschlossen"
@@ -534,15 +605,15 @@ msgstr "Programmeinstellungen"
 msgid "Global"
 msgstr "Global"
 
-#: lost_tracker/templates/slot_editor.html:6
+#: lost_tracker/templates/slot_editor.html:7
 msgid "Time Slots"
 msgstr "Zeitpunkt"
 
-#: lost_tracker/templates/slot_editor.html:10
+#: lost_tracker/templates/slot_editor.html:11
 msgid "Slot"
 msgstr "Zeitpunkt"
 
-#: lost_tracker/templates/slot_editor.html:26
+#: lost_tracker/templates/slot_editor.html:27
 msgid "Unassigned Groups"
 msgstr "Unzugewiesene Gruppen"
 
