@@ -185,6 +185,9 @@ def advance(groupId, station_id):
 def scoreboard():
     result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
                     reverse=True)
+    if not result:
+        return gettext('No scores available yet!')
+
     output = []
     pos = 1
     last_score = result[0].score_sum
