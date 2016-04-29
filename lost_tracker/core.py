@@ -23,6 +23,7 @@ from lost_tracker.models import (
     STATE_ARRIVED,
     STATE_FINISHED,
     STATE_UNKNOWN,
+    Setting,
     Station,
     TimeSlot,
     User,
@@ -317,14 +318,20 @@ def update_group(mailer, id, data):
     """
     Updates an existing group.
     """
+    registration_open = Setting.get('registration_open', False)
+
     group = Group.one(id=id)
     group.name = data['name']
     group.phone = data['phone']
     group.comments = data['comments']
     group.contact = data['contact']
     group.email = data['email']
-    group.num_vegetarians = data['num_vegetarians']
-    group.num_participants = data['num_participants']
+
+    # Only allow the number of participants to change as long as the
+    # registration is open!
+    if data['user_is_admin'] or registration_open:
+        group.num_vegetarians = data['num_vegetarians']
+        group.num_participants = data['num_participants']
 
     if 'direction' in data:
         group.direction = data['direction']
