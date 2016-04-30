@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-28 21:44+0200\n"
-"PO-Revision-Date: 2016-04-28 21:51+0200\n"
+"POT-Creation-Date: 2016-04-30 13:24+0200\n"
+"PO-Revision-Date: 2016-04-30 13:25+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: de\n"
 "Language-Team: \n"
@@ -36,37 +36,37 @@ msgstr "Zugriff Verweigert"
 msgid "Message saved!"
 msgstr "Nachricht gespeichert!"
 
-#: lost_tracker/blueprint/comment.py:55 lost_tracker/blueprint/group.py:144
+#: lost_tracker/blueprint/comment.py:55 lost_tracker/blueprint/group.py:146
 msgid "Not found!"
 msgstr "Nicht gefunden!"
 
-#: lost_tracker/blueprint/group.py:54 lost_tracker/blueprint/group.py:126
-#: lost_tracker/blueprint/group.py:148
+#: lost_tracker/blueprint/group.py:54 lost_tracker/blueprint/group.py:128
+#: lost_tracker/blueprint/group.py:150
 msgid "Access Denied!"
 msgstr "Zugriff Verweigert"
 
-#: lost_tracker/blueprint/group.py:81
+#: lost_tracker/blueprint/group.py:82
 msgid "Accepted registration for group {}"
 msgstr "Anmeldung für die Gruppe {} wurde angenommen."
 
-#: lost_tracker/blueprint/group.py:89
+#: lost_tracker/blueprint/group.py:91
 msgid "Group {name} successfully updated!"
 msgstr "Gruppe {name} erfolgreich gespeichert!"
 
-#: lost_tracker/blueprint/group.py:93
+#: lost_tracker/blueprint/group.py:95
 msgid "E-Mail sent successfully!"
 msgstr "E-Mail erfolgreich versand."
 
-#: lost_tracker/blueprint/group.py:107
+#: lost_tracker/blueprint/group.py:109
 msgid "Incorrect value for direction: {!r}"
 msgstr "{!r} ist ein ungültiger Wert für dir Richtung."
 
-#: lost_tracker/blueprint/group.py:123 lost_tracker/blueprint/qr.py:42
+#: lost_tracker/blueprint/group.py:125 lost_tracker/blueprint/qr.py:42
 #: lost_tracker/blueprint/root.py:110
 msgid "No such entity!"
 msgstr "Datenbank Eintrag nicht gefunden!"
 
-#: lost_tracker/blueprint/group.py:162
+#: lost_tracker/blueprint/group.py:164
 msgid "Group deleted!"
 msgstr "Gruppe ist gelöscht worden"
 
@@ -138,82 +138,90 @@ msgid "Edit Group"
 msgstr "Gruppe bearbeiten"
 
 #: lost_tracker/templates/edit_group.html:14
+msgid ""
+"Registration is <strong>closed</strong>! Changes to the number of people in the "
+"team are not possible at this time!"
+msgstr ""
+"Anmeldung ist <strong>geschlossen</strong>! Änderungen an der Anzahl von "
+"Mitspielern ist momentan nicht möglich."
+
+#: lost_tracker/templates/edit_group.html:19
 msgid "Group Infos"
 msgstr "Gruppeninformationen"
 
-#: lost_tracker/templates/edit_group.html:18
+#: lost_tracker/templates/edit_group.html:23
 #: lost_tracker/templates/list_stations.html:9
 #: lost_tracker/templates/profile.html:28
 msgid "Name"
 msgstr "Name"
 
-#: lost_tracker/templates/edit_group.html:20
+#: lost_tracker/templates/edit_group.html:25
 #: lost_tracker/templates/edit_station.html:16
 #: lost_tracker/templates/group-tooltip.html:6
 #: lost_tracker/templates/list_stations.html:11
 msgid "Contact"
 msgstr "Kontakt"
 
-#: lost_tracker/templates/edit_group.html:22
+#: lost_tracker/templates/edit_group.html:27
 #: lost_tracker/templates/register.html:20
 msgid "Email"
 msgstr "e-mail"
 
-#: lost_tracker/templates/edit_group.html:24
+#: lost_tracker/templates/edit_group.html:29
 #: lost_tracker/templates/edit_station.html:19
 #: lost_tracker/templates/group-tooltip.html:8
 #: lost_tracker/templates/list_stations.html:12
 msgid "Phone"
 msgstr "Tel"
 
-#: lost_tracker/templates/edit_group.html:26
+#: lost_tracker/templates/edit_group.html:31
 #: lost_tracker/templates/register.html:26
 msgid "Total number of participants (including vegetarians)"
 msgstr "Gesamzahl von Teilnehmern (inklusive Vegetarier)"
 
-#: lost_tracker/templates/edit_group.html:28
+#: lost_tracker/templates/edit_group.html:39
 #: lost_tracker/templates/register.html:28
 msgid "Number of vegetarians"
 msgstr "Anzahl von Vegetariern"
 
-#: lost_tracker/templates/edit_group.html:31
-#: lost_tracker/templates/edit_group.html:34
+#: lost_tracker/templates/edit_group.html:48
+#: lost_tracker/templates/edit_group.html:51
 #: lost_tracker/templates/group-tooltip.html:9
 #: lost_tracker/templates/group_list.html:11
 msgid "Direction"
 msgstr "Richtung"
 
-#: lost_tracker/templates/edit_group.html:39
+#: lost_tracker/templates/edit_group.html:56
 #: lost_tracker/templates/group-tooltip.html:10
 #: lost_tracker/templates/profile.html:29
 msgid "Starting Time"
 msgstr "Startzeit"
 
-#: lost_tracker/templates/edit_group.html:41
+#: lost_tracker/templates/edit_group.html:58
 msgid "Flags"
 msgstr "Schalter"
 
-#: lost_tracker/templates/edit_group.html:42
+#: lost_tracker/templates/edit_group.html:59
 msgid "Group registration has been accepted"
 msgstr "Gruppe wurde akzeptiert"
 
-#: lost_tracker/templates/edit_group.html:43
+#: lost_tracker/templates/edit_group.html:60
 msgid "Group has cancelled"
 msgstr "Gruppe hat abgebrochen"
 
-#: lost_tracker/templates/edit_group.html:44
+#: lost_tracker/templates/edit_group.html:61
 msgid "Group has completed"
 msgstr "Gruppe ist fertig"
 
-#: lost_tracker/templates/edit_group.html:46
+#: lost_tracker/templates/edit_group.html:63
 msgid "Comments"
 msgstr "Kommentare"
 
-#: lost_tracker/templates/edit_group.html:49
+#: lost_tracker/templates/edit_group.html:66
 msgid "Options"
 msgstr "Optionen"
 
-#: lost_tracker/templates/edit_group.html:50
+#: lost_tracker/templates/edit_group.html:67
 msgid "Send e-mail to the group about the changes."
 msgstr "e-mail mit den Änderungen an die Gruppe senden. "
 
