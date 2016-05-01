@@ -21,6 +21,7 @@ from flask.ext.security import (
 )
 
 from lost_tracker.localtypes import json_encoder
+from lost_tracker.util import basic_auth
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
 
@@ -48,6 +49,7 @@ def _stategetter(element):
 
 
 @STATION.route('/<int:key>')
+@basic_auth
 def details(key):
     station = mdl.Station.by_name_or_id(key)
     if not station:
