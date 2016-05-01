@@ -19,6 +19,7 @@ from flask.ext.security import (
     roles_required,
 )
 
+from lost_tracker.util import basic_auth
 import lost_tracker.core as loco
 import lost_tracker.models as mdl
 
@@ -27,7 +28,7 @@ LOG = logging.getLogger(__name__)
 
 
 @GROUP.route('/<int:group_id>/score/<int:station_id>', methods=['PUT'])
-@roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
+@basic_auth
 def set_score(group_id, station_id):
     try:
         form_score = request.json['form']
