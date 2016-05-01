@@ -64,6 +64,7 @@ def save_info(id):
         'num_participants': int(request.form.get('num_participants', 0)),
         'send_email': True,
         'notification_recipient': 'admins',
+        'user_is_admin': False,
     }
 
     # ... next, if we are allowed, add admin-only attributes
@@ -83,6 +84,7 @@ def save_info(id):
         else:
             data['accepted'] = request.form.get('accepted') == 'true'
         data['notification_recipient'] = 'owner'
+        data['user_is_admin'] = True
 
     loco.update_group(current_app.mailer, id, data)
 

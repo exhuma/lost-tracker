@@ -20,7 +20,7 @@ Required Tools
 ~~~~~~~~~~~~~~
 
 * fabric (Python Task Runner). This is optional but highly convenient!
-* Python 2.7 (Python 3.5 was tested hasl-arsedly, may work...)
+* Python 2.7 (Python 3.5 was tested half-arsedly, may work...)
 * Oracle Java 1.7+ (Tested with OpenJDK with mixed results). This is needed for
   live JS compilation. Without it, no JavaScript will run!
 * A database. I recommend PostgreSQL as the application has been tested with
@@ -32,8 +32,14 @@ Additional Notes
 
 * The application sends e-mails. If it's running in "DEBUG" mode (see the
   ``.ini`` file), those e-mails are NOT sent. Instead, they are only logged.
-* Currently you are required to properly log in. Even in development. So you
-  need API keys for one of Facebook or Google!
+* During development, there's an additional route available: ``/fake_login``
+  which immediately logs you in as admin. You can also log-in as standard user
+  by specifying an e-mail in the request:
+  ``/fake_login?email=jdoe@example.com``
+
+  This route is obviously not available in the production environment (or, to
+  be more precive, when run as a WSGI application). NEVER run this application
+  in debug mode on a production host!
 
 
 Setting up the development environment
@@ -59,18 +65,14 @@ Setting up the development environment
 
 
 If you want to develop on lost-tracker, follow these steps to get a development
-environment set up and running:
+environment up and running:
 
 Clone the code::
 
     git clone https://github.com/exhuma/lost-tracker
 
-... or, if you want to use SSH::
-
-    git clone ssh://git@github.com/exhuma/lost-tracker
-
 Enter the cloned folder, switch to the ``develop`` branch  and run the develop
-fabric-task. Running that task will set up a virtual-env, dowload required
+fabric-task. Running that task will set up a virtual-env, download required
 dependencies and install the application into that environment::
 
     cd lost-tracker

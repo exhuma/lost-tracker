@@ -23,6 +23,7 @@ from lost_tracker.models import (
     STATE_ARRIVED,
     STATE_FINISHED,
     STATE_UNKNOWN,
+    Setting,
     Station,
     TimeSlot,
     User,
@@ -43,6 +44,9 @@ MatrixSum = namedtuple('MatrixSum', 'unknown arrived completed')
 
 
 def _generate_state_list(station):
+    """
+    Generates a simple Python dictionary with current group "states".
+    """
     if not station:
         return []
     groups = Group.all().order_by(Group.order)
@@ -65,6 +69,10 @@ def _generate_state_list(station):
 
 
 def _dashboard_order(element):
+    """
+    Given a dashboard element, this function returns a comparable value used for
+    ordering these elements in the dashboard.
+    """
     if element is None or element.state is None:
         return 3
     elif element.state == STATE_FINISHED:
@@ -176,6 +184,9 @@ def add_station(stat_name, contact, phone, order, session):
 
 
 def add_form(session, name, max_score, order=0):
+    """
+    Adds a new Form to the database.
+    """
     order = _get_unique_order(Form, order)
     new_form = Form(name, max_score, order)
     session.add(new_form)
@@ -192,10 +203,11 @@ def store_registration(mailer, session, data):
         * contact_name
         * email
         * tel
-        * time
+        * time: The time of day that the group begins the "run".
         * comments
         * num_vegetarians
         * num_participants
+        * user_id: The ID of the user that made the registration
     """
     qry = Group.query.filter_by(name=data['group_name'])
     check = qry.first()
@@ -306,14 +318,20 @@ def update_group(mailer, id, data):
     """
     Updates an existing group.
     """
+    registration_open = Setting.get('registration_open', False)
+
     group = Group.one(id=id)
     group.name = data['name']
     group.phone = data['phone']
     group.comments = data['comments']
     group.contact = data['contact']
     group.email = data['email']
-    group.num_vegetarians = data['num_vegetarians']
-    group.num_participants = data['num_participants']
+
+    # Only allow the number of participants to change as long as the
+    # registration is open!
+    if data['user_is_admin'] or registration_open:
+        group.num_vegetarians = data['num_vegetarians']
+        group.num_participants = data['num_participants']
 
     if 'direction' in data:
         group.direction = data['direction']
@@ -352,6 +370,9 @@ def update_group(mailer, id, data):
 
 
 def auth(login, password):
+    """
+    Verify login/password pair. Returns True on match, False otherwise.
+    """
     query = User.query.filter(and_(
         User.login == login,
         User.password == password))
@@ -392,6 +413,9 @@ def delete_form(id):
 
 
 def stats(conf):
+    """
+    Fetch some basic stats from the system.
+    """
     num_groups = Group.all().count()
     num_slots = len(TimeSlot.all(conf)) * 2  # DIR_A and DIR_B
     return {
@@ -403,6 +427,12 @@ def stats(conf):
 
 
 def get_local_photos(conf, url_generator):
+    """
+    Return a collection of photos from the local files. Return a dictionary with
+    two keys: *title* and *photos*.
+
+    *photos* contains URLs to the photos.
+    """
     path = conf.get('app', 'photo_folder', default='')
     if not path or not exists(path):
         return {}
@@ -469,6 +499,9 @@ def delete_message(message):
 
 
 def store_message(session, mailer, group, user, content, url):
+    """
+    Stores a new message in the group's message stream.
+    """
     msg = Message(
         content=content,
         user=user,
@@ -492,6 +525,9 @@ def store_message(session, mailer, group, user, content, url):
 
 
 def set_group_state(session, group_id, station_id, new_state):
+    """
+    Updates the group state for a given station
+    """
     station = session.query(Station).filter_by(id=station_id).first()
     if not station:
         LOG.debug('No station found with ID %r', station_id)
@@ -519,6 +555,9 @@ def get_stations(session):
 
 
 def save_station(session, data):
+    """
+    Add or update a station in the DB.
+    """
     # If this station is set to "start", we must remove that flag from all other
     # stations. We'll just set them all to False, then update the given station
     # with True. This ensures that we only have one starting station.
@@ -540,9 +579,9 @@ def save_station(session, data):
         contact=data['contact'],
         phone=data['phone'],
     )
-    station.id=data.get('id')
-    station.order=data['order']
-    station.is_start=data['is_start']
+    station.id = data.get('id')
+    station.order = data['order']
+    station.is_start = data['is_start']
     merged = session.merge(station)
     DB.session.commit()
     return merged
