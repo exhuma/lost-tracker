@@ -444,6 +444,8 @@ class GroupStation(DB.Model):
     state = Column(Integer, default=STATE_UNKNOWN)
     score = Column(Integer, nullable=True, default=None)
     form_score = Column(Integer, nullable=True, default=None)
+    updated = Column(DateTime(timezone=True), nullable=False,
+                     default=datetime.now(), server_default=func.now())
 
     group = relationship("Group")
     station = relationship("Station", backref='states')
@@ -512,6 +514,8 @@ class GroupStation(DB.Model):
             row.form_score = form_score
             if state is not None:
                 row.state = state
+
+        row.updated = func.now()
 
     def to_dict(self):
         return {

@@ -1,4 +1,5 @@
 from collections import namedtuple
+from datetime import datetime, timedelta
 from os.path import exists
 from stat import S_ISREG, ST_CTIME, ST_MODE
 import logging
@@ -30,6 +31,7 @@ from lost_tracker.models import (
     _get_unique_order,
 )
 
+from pytz import timezone
 from sqlalchemy import and_, update  # TODO this module should have no SA
 from sqlalchemy import func  # TODO this module should have no SA
 from sqlalchemy.exc import IntegrityError  # TODO this module should have no SA
@@ -500,10 +502,18 @@ def get_dashboard(station):
     main_states.extend([GroupStation(group.id, station.id)
                         for group in missing_groups])
 
-    before_states = sorted(GroupStation.by_station(neighbours['before']),
-                           key=_dashboard_order)
-    after_states = sorted(GroupStation.by_station(neighbours['after']),
-                          key=_dashboard_order)
+    time_threshold = datetime.now(
+        timezone('Europe/Luxembourg')) - timedelta(minutes=30)
+    before_states = sorted(
+        GroupStation.by_station(neighbours['before']),
+        key=_dashboard_order)
+    before_states = [state for state in before_states
+                     if state.updated > time_threshold]
+    after_states = sorted(
+        GroupStation.by_station(neighbours['after']),
+        key=_dashboard_order)
+    after_states = [state for state in after_states
+                    if state.updated > time_threshold]
     main_states = sorted(main_states, key=_main_dashboard_order)
     finished_groups = {value.group_id for value in main_states
                        if value.state == STATE_FINISHED}
