@@ -510,7 +510,7 @@ class GroupStation(DB.Model):
         else:
             row.score = station_score
             row.form_score = form_score
-            if state:
+            if state is not None:
                 row.state = state
 
     def to_dict(self):
