@@ -522,6 +522,7 @@ class GroupStation(DB.Model):
             'score': self.score or 0,
             'form_score': self.form_score or 0,
             'group_name': self.group.name,
+            'station_name': self.station.name,
         }
 
 

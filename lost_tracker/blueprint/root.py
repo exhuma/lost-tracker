@@ -296,8 +296,8 @@ def update_group_station_state(group, station):
     group = unquote_plus(group)
     station = unquote_plus(station)
     try:
-        form_score = request.json['form']
-        station_score = request.json['station']
+        form_score = request.json['form_score']
+        station_score = request.json['score']
         station_state = request.json['state']
     except LookupError:
         return jsonify({'message': 'Missing value'}), 400
@@ -309,7 +309,7 @@ def update_group_station_state(group, station):
     group_entity = mdl.Group.one(name=group)
 
     return jsonify(
-        name=group,
+        group_name=group,
         form_score=form_score,
         score=station_score,
         state=station_state,
@@ -333,7 +333,8 @@ def get_group_station_state(group, station):
 
     state = mdl.GroupStation.get(group.id, station.id)
     if not state:
-        return '"Not state"', 404
+        # return new default state
+        state = mdl.GroupStation(group.id, station.id)
 
     return jsonify(state.to_dict())
 
