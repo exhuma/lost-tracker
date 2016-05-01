@@ -473,6 +473,14 @@ def get_dashboard(station):
     station = Station.by_name_or_id(station)
     neighbours = station.neighbours
     main_states = GroupStation.by_station(station)
+
+    # Add missing groups to the main states because the UI should list them all.
+    # Even if no scores have been reported yet.
+    missing_groups = Group.query.filter(~Group.id.in_([
+        row.group_id for row in main_states]))
+    main_states.extend([GroupStation(group.id, station.id)
+                        for group in missing_groups])
+
     before_states = sorted(GroupStation.by_station(neighbours['before']),
                            key=_dashboard_order)
     after_states = sorted(GroupStation.by_station(neighbours['after']),
