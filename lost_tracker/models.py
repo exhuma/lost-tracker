@@ -519,8 +519,9 @@ class GroupStation(DB.Model):
             'group_id': self.group_id,
             'station_id': self.station_id,
             'state': self.state,
-            'score': self.score,
-            'form_score': self.form_score,
+            'score': self.score or 0,
+            'form_score': self.form_score or 0,
+            'group_name': self.group.name,
         }
 
 
