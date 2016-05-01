@@ -172,7 +172,7 @@ def matrix():
 
 
 @ROOT.route('/advance/<groupId>/<station_id>')
-@login_required
+@basic_auth
 def advance(groupId, station_id):
     new_state = mdl.advance(mdl.DB.session, groupId, station_id)
     return jsonify(
