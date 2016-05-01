@@ -142,13 +142,15 @@ def delete(id):
 @STATION.route('/<station>/dashboard')
 def dashboard(station):
     result = loco.get_dashboard(station)
+    before = result['neighbours']['before']
+    after = result['neighbours']['after']
     output = {
         'after_states': [gs.to_dict() for gs in result['after_states']],
         'before_states': [gs.to_dict() for gs in result['before_states']],
         'main_states': [gs.to_dict() for gs in result['main_states']],
         'neighbours': {
-            'before': result['neighbours']['before'].to_dict(),
-            'after': result['neighbours']['after'].to_dict(),
+            'before': before.to_dict() if before else None,
+            'after': after.to_dict() if after else None,
         },
         'station': result['station'].to_dict()
     }
