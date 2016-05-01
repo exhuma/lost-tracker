@@ -87,6 +87,25 @@ def _dashboard_order(element):
         return 99
 
 
+def _main_dashboard_order(element):
+    """
+    Given a dashboard element, this function returns a comparable value used for
+    ordering the main elements in the dashboard.
+    """
+    if element is None or element.state is None:
+        return "%d%s" % (3, element.group.name)
+    elif element.state == STATE_FINISHED:
+        return "%d%s" % (90, element.group.name)
+    elif element.state == STATE_ARRIVED:
+        return "%d%s" % (1, element.group.name)
+    elif element.state == STATE_UNKNOWN:
+        return "%d%s" % (2, element.group.name)
+    elif element.group.cancelled:
+        return "%d%s" % (80, element.group.name)
+    else:
+        return "%d%s" % (99, element.group.name)
+
+
 class Matrix(object):
     """
     Returns a 2-dimensional array containing an entry for each group.
@@ -485,6 +504,7 @@ def get_dashboard(station):
                            key=_dashboard_order)
     after_states = sorted(GroupStation.by_station(neighbours['after']),
                           key=_dashboard_order)
+    main_states = sorted(main_states, key=_main_dashboard_order)
     finished_groups = {value.group_id for value in main_states
                        if value.state == STATE_FINISHED}
     before_states = [value for value in before_states
