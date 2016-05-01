@@ -71,7 +71,7 @@ def _generate_state_list(station):
 def _dashboard_order(element):
     """
     Given a dashboard element, this function returns a comparable value used for
-    ordering these elements in the dashboard.
+    ordering the small sidebar elements in the dashboard.
     """
     if element is None or element.state is None:
         return 3
