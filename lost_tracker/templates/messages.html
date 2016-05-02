@@ -1,7 +1,7 @@
 {% extends "master_narrow.html" %}
 
 {% block content %}
-<h2>{{_("Messages for")}} {{group.name}}</h2>
+<h2>{{_("Messages for")}} <a href="{{url_for('group.edit', name=group.name)}}">{{group.name}}</a></h2>
 <blockquote>
   {{group.comments}}
 </blockquote>
