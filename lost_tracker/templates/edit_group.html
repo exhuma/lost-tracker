@@ -25,7 +25,7 @@
       <dt>{{_('Contact')}}</dt>
       <dd><input type="text" name="contact" value="{{group.contact}}" /></dd>
       <dt>{{_('Email')}}</dt>
-      <dd><input type="email" name="email" value="{{group.email}}" /></dd>
+      <dd><input type="email" name="email" value="{{group.email|default('', True)}}" /></dd>
       <dt>{{_('Phone')}}</dt>
       <dd><input type="text" name="phone" value="{{group.phone}}" /></dd>
       <dt>{{_('Total number of participants (including vegetarians)')}}</dt>
