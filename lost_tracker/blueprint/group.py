@@ -55,14 +55,16 @@ def save_info(id):
             return gettext("Access Denied!"), 403
 
     # attributes that don't require admin permissions.
+    num_vegetarians = request.form.get('num_vegetarians', 0)
+    num_participants = request.form.get('num_participants', 0)
     data = {
         'name': request.form['name'],
         'phone': request.form['phone'],
         'comments': request.form['comments'],
         'contact': request.form['contact'],
         'email': request.form.get('email', ''),
-        'num_vegetarians': int(request.form.get('num_vegetarians', 0)),
-        'num_participants': int(request.form.get('num_participants', 0)),
+        'num_vegetarians': int(num_vegetarians) if num_vegetarians else 0,
+        'num_participants': int(num_participants) if num_participants else 0,
         'send_email': True,
         'notification_recipient': 'admins',
         'user_is_admin': False,
@@ -141,6 +143,7 @@ def list():
 
 
 @GROUP.route('/<name>')
+@roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def edit(name):
     group = mdl.Group.one(name=name)
     if not group:
