@@ -143,6 +143,7 @@ def list():
 
 
 @GROUP.route('/<name>')
+@roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def edit(name):
     group = mdl.Group.one(name=name)
     if not group:
