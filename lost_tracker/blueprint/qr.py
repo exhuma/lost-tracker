@@ -21,7 +21,7 @@ LOG = logging.getLogger(__name__)
 def generate(id):
     group = mdl.Group.one(id=id)
     data = {
-        'action': 'scan_at_station',
+        'action': 'scan_station',
         'group_id': group.id,
         'group_name': group.name,
     }
