@@ -117,15 +117,19 @@ def convert_markdown(value):
 
 @ROOT.app_template_filter('avatar_url')
 def fetch_avatar_url(user):
-    if not user.social_connections:
-        mailhash = md5(user.email.lower()).hexdigest()
-        gravatar = 'http://www.gravatar.com/avatar/%s?d=identicon' % mailhash
-        return gravatar
-    first_social = user.social_connections[0]
-    if first_social.provider_id == 'facebook':
-        return fb.get_image_url(first_social)
-    else:
-        return first_social.image_url
+    # Use gravatar as default
+    mailhash = md5(user.email.lower()).hexdigest()
+    gravatar = 'http://www.gravatar.com/avatar/%s?d=identicon' % mailhash
+    social_link = ''
+
+    if user.social_connections:
+        first_social = user.social_connections[0]
+        if first_social.provider_id == 'facebook':
+            social_link = fb.get_image_url(first_social)
+        else:
+            social_link = first_social.image_url
+
+    return social_link or gravatar
 
 
 @ROOT.app_template_filter('humantime')
