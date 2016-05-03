@@ -28,7 +28,7 @@
       <td>{{station.order}}</td>
       <td>{{station.contact}}</td>
       <td>{{station.phone}}</td>
-      <td>{{station.is_start}}</td>
+      <td><i class="fa fa-{{'check' if station.is_start else 'times'}}"></i></td>
     </tr>
     {%- endfor %}
   </tbody>
