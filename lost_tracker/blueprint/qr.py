@@ -1,7 +1,14 @@
 from json import dumps
 import logging
 
-from flask import make_response, Blueprint, request, url_for, current_app
+from flask import (
+    Blueprint,
+    current_app,
+    make_response,
+    render_template,
+    request,
+    url_for,
+)
 from flask.ext.babel import gettext
 from flask.ext.security import login_required
 import io
@@ -84,3 +91,16 @@ def submit_qr(station_name):
     else:
         mdl.DB.session.commit()
         return '"OK"'
+
+
+@QR.route('/display')
+def display():
+    all_args = request.args.to_dict()
+    endpoint = all_args.pop('type')
+    title = all_args.pop('title')
+    if not title or not endpoint:
+        return 'Unsupported QR display', 400
+    image_url = url_for(endpoint, **all_args)
+    return render_template('qr_display.html',
+                           image_url=image_url,
+                           title=title)

@@ -64,7 +64,7 @@
 {% endfor %}
 <br />
 <h3>{{_("Quick Settings")}}</h3>
-<a href="{{url_for('qr.config', station=station.id)}}">
+<a href="{{url_for('qr.display', type='qr.config', station=station.id, title=station.name)}}">
   <img src="{{url_for('qr.config', station=station.id, size=64)}}" /></a>
 <script type="text/javascript">
   lost_tracker.app.attachEvents({{station.id}});
