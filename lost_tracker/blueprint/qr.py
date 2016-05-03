@@ -1,7 +1,7 @@
 from json import dumps
 import logging
 
-from flask import make_response, Blueprint, request
+from flask import make_response, Blueprint, request, url_for, current_app
 from flask.ext.babel import gettext
 from flask.ext.security import login_required
 import io
@@ -21,9 +21,32 @@ LOG = logging.getLogger(__name__)
 def generate(id):
     group = mdl.Group.one(id=id)
     data = {
-        'action': 'scan_at_station',
+        'action': 'scan_station',
         'group_id': group.id,
         'group_name': group.name,
+    }
+    img = qrcode.make(dumps(data))
+    blob = io.BytesIO()
+    img.save(blob, format="PNG")
+    output = blob.getvalue()
+    response = make_response(output)
+    response.content_type = "image/png"
+    return response
+
+
+@QR.route('/config/<int:station>')
+@basic_auth
+def config(station):
+    station = mdl.Station.one(id=station)
+    base_url = url_for('root.index', _external=True)
+    if base_url.endswith('/'):
+        base_url = base_url[:-1]
+    data = {
+        'action': 'app_settings',
+        'baseUrl': base_url,
+        'stationName': station.name,
+        'login': current_app.localconf.get('app', 'login'),
+        'password': current_app.localconf.get('app', 'password'),
     }
     img = qrcode.make(dumps(data))
     blob = io.BytesIO()
