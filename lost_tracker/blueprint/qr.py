@@ -38,9 +38,12 @@ def generate(id):
 @basic_auth
 def config(station):
     station = mdl.Station.one(id=station)
+    base_url = url_for('root.index', _external=True)
+    if base_url.endswith('/'):
+        base_url = base_url[:-1]
     data = {
         'action': 'app_settings',
-        'baseUrl': url_for('root.index', _external=True),
+        'baseUrl': base_url,
         'stationName': station.name,
         'login': current_app.localconf.get('app', 'login'),
         'password': current_app.localconf.get('app', 'password'),
