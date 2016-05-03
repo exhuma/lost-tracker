@@ -23,8 +23,8 @@
         {% endif %}
       </td>
       <td><a href="{{url_for('station.edit', key=station.id)}}">{{station.name}}</a></td>
-      <td><a href="{{url_for('qr.config', station=station.id)}}">
-          <img src="{{url_for('qr.config', station=station.id, size=64)}}" /></a></td>
+      <td><a href="{{url_for('qr.config', station=station.id, title=True)}}">
+          <img src="{{url_for('qr.config', station=station.id, size=24)}}" height="24" width="24"/></a></td>
       <td>{{station.order}}</td>
       <td>{{station.contact}}</td>
       <td>{{station.phone}}</td>
