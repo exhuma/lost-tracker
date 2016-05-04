@@ -98,7 +98,7 @@ def advance(session, group_id, station_id):
     if not state:
         group = Group.one(id=group_id)
         station = Station.one(id=station_id)
-        if not group.departure_time and station.is_start:
+        if not group.departure_time and station.is_start and state == STATE_FINISHED:
             group.departure_time = func.now()
         state = GroupStation(group_id, station_id)
         state.state = STATE_ARRIVED
@@ -109,7 +109,7 @@ def advance(session, group_id, station_id):
     station = state.station
 
     if state.state == STATE_UNKNOWN:
-        if not group.departure_time and station.is_start:
+        if not group.departure_time and station.is_start and state == STATE_FINISHED:
             group.departure_time = func.now()
         state.state = STATE_ARRIVED
     elif state.state == STATE_ARRIVED:
@@ -503,19 +503,19 @@ class GroupStation(DB.Model):
 
         row = query.first()
         if not row:
-            gs = GroupStation(group.id, station.id)
-            gs.score = station_score
-            gs.form_score = form_score
+            row = GroupStation(group.id, station.id)
+            row.score = station_score
+            row.form_score = form_score
             if state:
-                gs.state = state
-            session.add(gs)
+                row.state = state
+            row.updated = func.now()
+            session.add(row)
         else:
             row.score = station_score
             row.form_score = form_score
             if state is not None:
                 row.state = state
-
-        row.updated = func.now()
+            row.updated = func.now()
 
     def to_dict(self):
         return {
