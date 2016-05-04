@@ -492,6 +492,7 @@ def get_dashboard(station):
     neighbouring stations.
     """
     station = Station.by_name_or_id(station)
+
     neighbours = station.neighbours
     main_states = GroupStation.by_station(station)
 
@@ -501,6 +502,10 @@ def get_dashboard(station):
         row.group_id for row in main_states]))
     main_states.extend([GroupStation(group.id, station.id)
                         for group in missing_groups])
+
+    # remove states from cancelled/abandoned groups
+    main_states = [state for state in main_states
+                   if not state.group.cancelled]
 
     time_threshold = datetime.now(
         timezone('Europe/Luxembourg')) - timedelta(minutes=45)
