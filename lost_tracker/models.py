@@ -301,12 +301,12 @@ class Station(DB.Model):
     @property
     def neighbours(self):
         left = Station.query.filter(
-            Station.order < self.order).limit(1).first()
+            Station.order < self.order).order_by(Station.order).limit(1)
         right = Station.query.filter(
-            Station.order > self.order).limit(1).first()
+            Station.order > self.order).order_by(Station.order).limit(1)
         return {
-            'before': left,
-            'after': right
+            'before': left.first(),
+            'after': right.first()
         }
 
     @property
