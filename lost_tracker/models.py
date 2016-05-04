@@ -503,19 +503,19 @@ class GroupStation(DB.Model):
 
         row = query.first()
         if not row:
-            gs = GroupStation(group.id, station.id)
-            gs.score = station_score
-            gs.form_score = form_score
+            row = GroupStation(group.id, station.id)
+            row.score = station_score
+            row.form_score = form_score
             if state:
-                gs.state = state
-            session.add(gs)
+                row.state = state
+            row.updated = func.now()
+            session.add(row)
         else:
             row.score = station_score
             row.form_score = form_score
             if state is not None:
                 row.state = state
-
-        row.updated = func.now()
+            row.updated = func.now()
 
     def to_dict(self):
         return {
