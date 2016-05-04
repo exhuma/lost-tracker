@@ -505,7 +505,7 @@ def get_dashboard(station):
 
     # remove states from cancelled/abandoned groups
     main_states = [state for state in main_states
-                   if not state.group.cancelled]
+                   if state.group and not state.group.cancelled]
 
     time_threshold = datetime.now(
         timezone('Europe/Luxembourg')) - timedelta(minutes=45)
