@@ -496,7 +496,7 @@ class GroupStation(DB.Model):
             GroupStation.group_id == group.id,
             GroupStation.station_id == station.id))
 
-        if not group.departure_time and station.is_start and state == STATE_ARRIVED:
+        if not group.departure_time and station.is_start and state == STATE_FINISHED:
             group.departure_time = func.now()
 
         row = query.first()
