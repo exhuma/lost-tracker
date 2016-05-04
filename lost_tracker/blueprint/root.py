@@ -168,7 +168,8 @@ def misc():
 @ROOT.route('/matrix')
 def matrix():
     stations = mdl.Station.all()
-    groups = mdl.Group.all()
+    groups = mdl.Group.all().order_by(mdl.Group.direction,
+                                      mdl.Group.order)
     state_matrix = loco.Matrix(stations, groups)
     return render_template('matrix.html',
                            matrix=state_matrix,
@@ -218,7 +219,7 @@ def scoreboard():
 @ROOT.route('/slot_editor')
 @roles_accepted(mdl.Role.ADMIN)
 def slot_editor():
-    groups = mdl.Group.all()
+    groups = mdl.Group.all().order_by(mdl.Group.order)
     slots = mdl.TimeSlot.all(current_app.localconf)
 
     groups_a = {}

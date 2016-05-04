@@ -55,7 +55,7 @@ def details(key):
     if not station:
         return abort(404)
 
-    groups = mdl.Group.all()
+    groups = mdl.Group.all().order_by(mdl.Group.order)
     GroupStateRow = namedtuple('GroupStateRow', 'group, state')
     group_states = []
     for group in groups:

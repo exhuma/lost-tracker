@@ -176,7 +176,6 @@ class Group(DB.Model):
     @staticmethod
     def all():
         groups = Group.query
-        groups = groups.order_by(Group.order)
         return groups
 
     @staticmethod

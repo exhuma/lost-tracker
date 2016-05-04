@@ -137,7 +137,6 @@ def show_comments(id):
 @roles_accepted(mdl.Role.STAFF, mdl.Role.ADMIN)
 def list():
     groups = mdl.Group.all()
-    groups = groups.order_by(None)
     groups = groups.order_by(mdl.Group.inserted)
     return render_template('group_list.html', groups=groups)
 
