@@ -576,7 +576,7 @@ def set_group_state(session, group_id, station_id, new_state):
         LOG.debug('No group found with ID %r', group_id)
         return False
 
-    if not group.departure_time and station.is_start and new_state == STATE_ARRIVED:
+    if not group.departure_time and station.is_start and new_state == STATE_FINISHED:
         group.departure_time = func.now()
 
     state = GroupStation(
