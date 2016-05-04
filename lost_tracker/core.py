@@ -503,7 +503,7 @@ def get_dashboard(station):
                         for group in missing_groups])
 
     time_threshold = datetime.now(
-        timezone('Europe/Luxembourg')) - timedelta(minutes=30)
+        timezone('Europe/Luxembourg')) - timedelta(minutes=45)
     before_states = sorted(
         GroupStation.by_station(neighbours['before']),
         key=_dashboard_order)
