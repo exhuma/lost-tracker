@@ -98,8 +98,6 @@ def advance(session, group_id, station_id):
     if not state:
         group = Group.one(id=group_id)
         station = Station.one(id=station_id)
-        if not group.departure_time and station.is_start and state == STATE_FINISHED:
-            group.departure_time = func.now()
         state = GroupStation(group_id, station_id)
         state.state = STATE_ARRIVED
         session.add(state)
@@ -109,10 +107,10 @@ def advance(session, group_id, station_id):
     station = state.station
 
     if state.state == STATE_UNKNOWN:
-        if not group.departure_time and station.is_start and state == STATE_FINISHED:
-            group.departure_time = func.now()
         state.state = STATE_ARRIVED
     elif state.state == STATE_ARRIVED:
+        if not group.departure_time and station.is_start:
+            group.departure_time = func.now()
         state.state = STATE_FINISHED
     elif state.state == STATE_FINISHED:
         state.state = STATE_UNKNOWN
