@@ -301,7 +301,7 @@ class Station(DB.Model):
     @property
     def neighbours(self):
         left = Station.query.filter(
-            Station.order < self.order).order_by(Station.order).limit(1)
+            Station.order < self.order).order_by(Station.order.desc()).limit(1)
         right = Station.query.filter(
             Station.order > self.order).order_by(Station.order).limit(1)
         return {
