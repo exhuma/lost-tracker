@@ -51,6 +51,9 @@ def thumbnail(basename):
         return
 
     fullname = os.path.join(root, basename)
+    if not os.path.exists(fullname):
+        return 'File not found!', 404
+
     mimetype, _ = mimetypes.guess_type(fullname)
 
     try:
