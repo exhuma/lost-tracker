@@ -21,6 +21,8 @@
             value="{{station.phone|default('', true)}}" /></dd>
           <dt>{{_("Starting Station?")}}</dt>
           <dd><input type="checkbox" name="is_start" {{'checked="checked"' if station.is_start else ''}} /></dd>
+          <dt>{{_("Final Station?")}}</dt>
+          <dd><input type="checkbox" name="is_end" {{'checked="checked"' if station.is_end else ''}} /></dd>
         </dl>
         <input type="submit" value="{{_("Save")}}" />
       </fieldset>
