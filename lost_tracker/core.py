@@ -581,8 +581,12 @@ def set_group_state(session, group_id, station_id, new_state):
         LOG.debug('No group found with ID %r', group_id)
         return False
 
-    if not group.departure_time and station.is_start and new_state == STATE_FINISHED:
-        group.departure_time = func.now()
+    if new_state == STATE_FINISHED:
+        if not group.departure_time and station.is_start:
+            group.departure_time = func.now()
+        if not group.finish_time and station.is_end:
+            group.finish_time = func.now()
+            group.completed = True
 
     state = GroupStation(
         group_id=group_id,
@@ -607,6 +611,9 @@ def save_station(session, data):
     if data.get('is_start'):
         session.execute(update(Station).values(is_start=False))
 
+    if data.get('is_end'):
+        session.execute(update(Station).values(is_end=False))
+
     # Ensure we don't have duplicate values for the "order" field
     same_order = session.query(Station).filter(and_(
         Station.order == data['order'],
@@ -625,6 +632,7 @@ def save_station(session, data):
     station.id = data.get('id')
     station.order = data['order']
     station.is_start = data['is_start']
+    station.is_end = data['is_end']
     merged = session.merge(station)
     DB.session.commit()
     return merged

@@ -12,6 +12,7 @@
       <th>{{_("Contact")}}</th>
       <th>{{_("Phone")}}</th>
       <th>{{_("Start?")}}</th>
+      <th>{{_("End?")}}</th>
     </tr>
   </thead>
   <tbody>
@@ -29,6 +30,7 @@
       <td>{{station.contact}}</td>
       <td>{{station.phone}}</td>
       <td><i class="fa fa-{{'check' if station.is_start else 'times'}}"></i></td>
+      <td><i class="fa fa-{{'check' if station.is_end else 'times'}}"></i></td>
     </tr>
     {%- endfor %}
   </tbody>

@@ -115,6 +115,7 @@ def save():
             'contact': request.form['contact'].strip(),
             'phone': request.form['phone'].strip(),
             'is_start': bool(request.form.get('is_start', False)),
+            'is_end': bool(request.form.get('is_end', False)),
         }
     except (KeyError, ValueError):
         LOG.debug('Invalid request with data: %r', request.form, exc_info=True)

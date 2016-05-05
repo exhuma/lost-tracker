@@ -111,6 +111,9 @@ def advance(session, group_id, station_id):
     elif state.state == STATE_ARRIVED:
         if not group.departure_time and station.is_start:
             group.departure_time = func.now()
+        if not group.finish_time and station.is_end:
+            group.finish_time = func.now()
+            group.completed = True
         state.state = STATE_FINISHED
     elif state.state == STATE_FINISHED:
         state.state = STATE_UNKNOWN
@@ -142,6 +145,7 @@ class Group(DB.Model):
     departure_time = Column(DateTime, server_default=None, default=None)
     num_vegetarians = Column(Integer, server_default='0', default=0)
     num_participants = Column(Integer, server_default='0', default=0)
+    finish_time = Column(DateTime, server_default=None, default=None)
 
     user = relationship('User', backref="groups")
     stations = relationship('GroupStation')
@@ -248,6 +252,7 @@ class Station(DB.Model):
     contact = Column(Unicode(50))
     phone = Column(Unicode(20))
     is_start = Column(Boolean, default=False)
+    is_end = Column(Boolean, default=False)
 
     groups = relationship('GroupStation')
 
@@ -496,8 +501,14 @@ class GroupStation(DB.Model):
             GroupStation.group_id == group.id,
             GroupStation.station_id == station.id))
 
-        if not group.departure_time and station.is_start and state == STATE_FINISHED:
-            group.departure_time = func.now()
+        if state == STATE_FINISHED:
+
+            if not group.departure_time and station.is_start:
+                group.departure_time = func.now()
+
+            if not group.finish_time and station.is_end:
+                group.finish_time = func.now()
+                group.completed = True
 
         row = query.first()
         if not row:
