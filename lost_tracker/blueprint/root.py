@@ -192,27 +192,26 @@ def scoreboard():
     if not result:
         return gettext('No scores available yet!')
 
-    # Determine positions for "points per minute"
-    unique_ppms = set([row.ppm for row in result])
-    sorted_ppms = sorted(unique_ppms, reverse=True)
-    ppm_positions = {
-        value: sorted_ppms.index(value) + 1
-        for value in sorted_ppms
-    }
-
+    # Remove cancelled groups & handle tied positions.
     output = []
-    pos = 1
-    last_score = result[0].score_sum
+    pos = 0
+    last_score = 0
+    num_tied = 0
     for row in result:
-        if row.score_sum != last_score:
-            pos += 1
         group = mdl.Group.one(id=row.group_id)
+        if group.cancelled:
+            continue
+
+        if row.score_sum == last_score:
+            num_tied += 1
+        else:
+            pos += 1 + num_tied
+            num_tied = 0
+
         output.append(ScoreBoardRow(
             pos, group.name, row.score_sum, row.ppm, group.completed))
         last_score = row.score_sum
-    return render_template('scoreboard.html',
-                           scores=output,
-                           ppm_positions=ppm_positions)
+    return render_template('scoreboard.html', scores=output)
 
 
 @ROOT.route('/slot_editor')

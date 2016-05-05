@@ -1,6 +1,9 @@
+from os import makedirs
+from shutil import move
 import io
-import os.path
+import logging
 import mimetypes
+import os.path
 
 from flask import (
     Blueprint,
@@ -17,6 +20,7 @@ import lost_tracker.core as core
 
 mimetypes.init()
 PHOTO = Blueprint('photo', __name__)
+LOG = logging.getLogger(__name__)
 
 
 def photo_url_generator(basename):
@@ -49,7 +53,15 @@ def thumbnail(basename):
     fullname = os.path.join(root, basename)
     mimetype, _ = mimetypes.guess_type(fullname)
 
-    im = Image.open(fullname)
+    try:
+        im = Image.open(fullname)
+    except IOError as exc:
+        LOG.exception(exc)
+        quarantine = os.path.join(root, 'quarantine')
+        if not os.path.exists(quarantine):
+            makedirs(quarantine)
+        move(fullname, quarantine)
+        return 'Unreadable Image :(', 500
 
     exif_orientation_id = None
     for tag in ExifTags.TAGS:
