@@ -192,13 +192,16 @@ def scoreboard():
     if not result:
         return gettext('No scores available yet!')
 
+    # Remove cancelled groups & handle tied positions.
     output = []
     pos = 1
     last_score = result[0].score_sum
     for row in result:
+        group = mdl.Group.one(id=row.group_id)
+        if group.cancelled:
+            continue
         if row.score_sum != last_score:
             pos += 1
-        group = mdl.Group.one(id=row.group_id)
         output.append(ScoreBoardRow(
             pos, group.name, row.score_sum, row.ppm, group.completed))
         last_score = row.score_sum
