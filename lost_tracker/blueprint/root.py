@@ -192,14 +192,6 @@ def scoreboard():
     if not result:
         return gettext('No scores available yet!')
 
-    # Determine positions for "points per minute"
-    unique_ppms = set([row.ppm for row in result])
-    sorted_ppms = sorted(unique_ppms, reverse=True)
-    ppm_positions = {
-        value: sorted_ppms.index(value) + 1
-        for value in sorted_ppms
-    }
-
     output = []
     pos = 1
     last_score = result[0].score_sum
@@ -210,9 +202,7 @@ def scoreboard():
         output.append(ScoreBoardRow(
             pos, group.name, row.score_sum, row.ppm, group.completed))
         last_score = row.score_sum
-    return render_template('scoreboard.html',
-                           scores=output,
-                           ppm_positions=ppm_positions)
+    return render_template('scoreboard.html', scores=output)
 
 
 @ROOT.route('/slot_editor')

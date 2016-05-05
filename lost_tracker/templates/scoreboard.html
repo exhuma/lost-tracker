@@ -11,7 +11,6 @@
 <table id="scoreboard" border="0" width="100%">
   <thead>
     <tr>
-      <td class="rising">&nbsp;</td>
       <td class="position">&nbsp;</td>
       <td class="name">
         <h1>{{_("Scoreboard")}}</h1>
@@ -23,35 +22,10 @@
   </thead>
     {% for row in scores %}
     <tr class="{{'completed' if row.has_completed else ''}} position_{{row.position}}">
-      <td class="rising">
-        <span class="fa-stack ppm_{{ppm_positions[row.points_per_minute]}}">
-          {% if ppm_positions[row.points_per_minute] == 1 %}
-            <i class="fa fa-chevron-up icon-stack-1x"></i>
-            <i class="fa fa-chevron-up icon-stack-1x chevron2"></i>
-            <i class="fa fa-chevron-up icon-stack-1x chevron3"></i>
-          {% elif ppm_positions[row.points_per_minute] == 2 %}
-            <i class="fa fa-chevron-up icon-stack-1x"></i>
-            <i class="fa fa-chevron-up icon-stack-1x chevron2"></i>
-          {% elif ppm_positions[row.points_per_minute] == 3 %}
-            <i class="fa fa-chevron-up icon-stack-1x"></i>
-          {% endif %}
-        </span>
-      </td>
-      <td class="position">
-        {{row.position}}{%if not row.has_completed %}<sup><small><i class="fa fa-hourglass-o"></i></small></sup>{% endif %}
-      </td>
-      <td class="name">
-        {{row.group_name}}
-      </td>
-      <td class="score">{{row.total_score}}
-        <br />
-        <small class="ppm_{{ppm_positions[row.points_per_minute]}}">
-          {{'%3.2f' % row.points_per_minute}}/min
-          (Pos: {{ppm_positions[row.points_per_minute]}})
-        </small>
-      </td>
+      <td class="position">{{row.position}}{%if not row.has_completed %}<sup><small><i class="fa fa-hourglass-o"></i></small></sup>{% endif %}</td>
+        <td class="name">{{row.group_name}}</td>
+        <td class="score">{{row.total_score}}</td>
     </tr>
     {% endfor %}
 </table>
-
 {% endblock %}
