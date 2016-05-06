@@ -152,7 +152,7 @@ def mdtemplate(filename):
 
 @ROOT.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', Group=mdl.Group)
 
 
 @ROOT.route('/where')
@@ -264,9 +264,18 @@ def delete_station(id):
 @ROOT.route('/settings')
 @roles_accepted(mdl.Role.ADMIN)
 def settings():
+    result = sorted(mdl.score_totals(), key=attrgetter('score_sum'),
+                    reverse=True)
+    groups = [mdl.Group.one(id=row.group_id) for row in result]
     settings = {stng.key: stng.value
                 for stng in mdl.Setting.all(mdl.DB.session)}
-    return render_template('settings.html', settings=settings)
+    return render_template('settings.html',
+                           settings=settings,
+                           groups=groups,
+                           first_place=settings.get('first_place', 0),
+                           second_place=settings.get('second_place', 0),
+                           third_place=settings.get('third_place', 0),
+                           )
 
 
 @ROOT.route('/settings', methods=['POST'])
@@ -280,12 +289,31 @@ def save_settings():
     event_location = request.form.get('event_location', '')
     location_coords = request.form.get('location_coords', '')
 
+    # placings
+    first_place = int(request.form.get('first_place', 0))
+    second_place = int(request.form.get('second_place', 0))
+    third_place = int(request.form.get('third_place', 0))
+    # Only set placings if we have all the values
+    if all([first_place, second_place, third_place]):
+        mdl.Setting.put(mdl.DB.session, 'first_place', first_place)
+        mdl.Setting.put(mdl.DB.session, 'second_place', second_place)
+        mdl.Setting.put(mdl.DB.session, 'third_place', third_place)
+    elif any([first_place, second_place, third_place]):
+        # if they were not all set, but we have a value, we issue a warning.
+        flash(gettext('Placings must be set all together.'), 'error')
+    else:
+        # We have not a single value. We set the placings to 0
+        mdl.Setting.put(mdl.DB.session, 'first_place', 0)
+        mdl.Setting.put(mdl.DB.session, 'second_place', 0)
+        mdl.Setting.put(mdl.DB.session, 'third_place', 0)
+
     mdl.Setting.put(mdl.DB.session, 'helpdesk', helpdesk)
     mdl.Setting.put(mdl.DB.session, 'registration_open', registration_open)
     mdl.Setting.put(mdl.DB.session, 'shout', shout)
     mdl.Setting.put(mdl.DB.session, 'event_date', event_date)
     mdl.Setting.put(mdl.DB.session, 'event_location', event_location)
     mdl.Setting.put(mdl.DB.session, 'location_coords', location_coords)
+
     flash(gettext('Settings successfully saved.'), 'info')
     return redirect(url_for(".settings"))
 

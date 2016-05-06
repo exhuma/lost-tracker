@@ -220,4 +220,8 @@ BLOCKQUOTE {
     font-style: italic;
 }
 
+#placings H2 STRONG {
+    color: hsl(30, 100%, 80%);
+}
+
 /* vim: set fdm=marker : */

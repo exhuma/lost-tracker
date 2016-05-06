@@ -1,5 +1,14 @@
 {% extends "master_narrow.html" %}
 
+{% macro group_select(name, selected_id) %}
+<select name="{{name}}">
+  <option value="0">---</option>
+  {% for group in groups %}
+  <option {{'selected' if selected_id == group.id else ''}} value="{{group.id}}">{{group.name}}</option>
+  {% endfor %}
+</select>
+{% endmacro %}
+
 {% block title %}{{_('Settings')}}{% endblock %}
 
 {% block content %}
@@ -23,8 +32,22 @@
     <dt>Location</dt>
     <dd><input type="text" name="location_coords" value="{{settings.location_coords or ''}}" /></dd>
   </dl>
-  <input type="submit" value="{{_('Save')}}" />
 </fieldset>
+<fieldset>
+  <div class="admonition note">
+    {{_("If these values are <em>all</em> set, the winners will be displayed on the start-page!")}}
+  </div>
+  <legend>{{_("Winners")}}</legend>
+  <dl>
+    <dt>{{_("1<sup>st</sup> place")}}</dt>
+    <dd>{{ group_select("first_place", first_place)}}</dd>
+    <dt>{{_("2<sup>nd</sup> place")}}</dt>
+    <dd>{{ group_select("second_place", second_place)}}</dd>
+    <dt>{{_("3<sup>rd</sup> place")}}</dt>
+    <dd>{{ group_select("third_place", third_place)}}</dd>
+  </dl>
+</fieldset>
+<input type="submit" value="{{_('Save')}}" />
 </form>
 
 {% endblock %}

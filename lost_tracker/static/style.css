@@ -519,6 +519,10 @@ TD.qrcode IMG {
     max-width: 64px !important;
 }
 
+#placings H2 {
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
 /* {{{ Modal Dialogs */
 .modal-dialog {
     max-width: 30em;

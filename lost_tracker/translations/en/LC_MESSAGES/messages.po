@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-04-30 13:24+0200\n"
-"PO-Revision-Date: 2016-04-30 13:25+0200\n"
+"POT-Creation-Date: 2016-05-06 10:41+0200\n"
+"PO-Revision-Date: 2016-05-06 10:43+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: en\n"
 "Language-Team: en <LL@li.org>\n"
@@ -23,8 +23,8 @@ msgstr ""
 msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
 msgstr "Successfully linked login with {}. Ignore the message saying: \"{}\""
 
-#: lost_tracker/blueprint/comment.py:28 lost_tracker/blueprint/qr.py:50
-#: lost_tracker/blueprint/qr.py:55
+#: lost_tracker/blueprint/comment.py:28 lost_tracker/blueprint/qr.py:80
+#: lost_tracker/blueprint/qr.py:85
 msgid "Invalid Request!"
 msgstr "Invalid Request!"
 
@@ -36,37 +36,37 @@ msgstr "Access denied!"
 msgid "Message saved!"
 msgstr "Message saved!"
 
-#: lost_tracker/blueprint/comment.py:55 lost_tracker/blueprint/group.py:146
+#: lost_tracker/blueprint/comment.py:55 lost_tracker/blueprint/group.py:150
 msgid "Not found!"
 msgstr "Not found!"
 
-#: lost_tracker/blueprint/group.py:54 lost_tracker/blueprint/group.py:128
-#: lost_tracker/blueprint/group.py:150
+#: lost_tracker/blueprint/group.py:55 lost_tracker/blueprint/group.py:131
+#: lost_tracker/blueprint/group.py:154
 msgid "Access Denied!"
 msgstr "Access Denied!"
 
-#: lost_tracker/blueprint/group.py:82
+#: lost_tracker/blueprint/group.py:85
 msgid "Accepted registration for group {}"
 msgstr "Accepted registration for group {}"
 
-#: lost_tracker/blueprint/group.py:91
+#: lost_tracker/blueprint/group.py:94
 msgid "Group {name} successfully updated!"
 msgstr "Group {name} successfully updated!"
 
-#: lost_tracker/blueprint/group.py:95
+#: lost_tracker/blueprint/group.py:98
 msgid "E-Mail sent successfully!"
 msgstr "E-Mail sent successfully!"
 
-#: lost_tracker/blueprint/group.py:109
+#: lost_tracker/blueprint/group.py:112
 msgid "Incorrect value for direction: {!r}"
 msgstr "Incorrect value for direction: {!r}"
 
-#: lost_tracker/blueprint/group.py:125 lost_tracker/blueprint/qr.py:42
+#: lost_tracker/blueprint/group.py:128 lost_tracker/blueprint/qr.py:72
 #: lost_tracker/blueprint/root.py:110
 msgid "No such entity!"
 msgstr "No such entity!"
 
-#: lost_tracker/blueprint/group.py:164
+#: lost_tracker/blueprint/group.py:168
 msgid "Group deleted!"
 msgstr "Group deleted!"
 
@@ -84,23 +84,27 @@ msgstr ""
 msgid "This group has already been accepted!"
 msgstr "This group has already been accepted!"
 
-#: lost_tracker/blueprint/root.py:142
+#: lost_tracker/blueprint/root.py:146
 msgid "File not found!"
 msgstr "File not found!"
 
-#: lost_tracker/blueprint/root.py:189
+#: lost_tracker/blueprint/root.py:193
 msgid "No scores available yet!"
 msgstr "No scores available yet!"
 
-#: lost_tracker/blueprint/root.py:286
+#: lost_tracker/blueprint/root.py:303
+msgid "Placings must be set all together."
+msgstr "Placings must be set all together."
+
+#: lost_tracker/blueprint/root.py:317
 msgid "Settings successfully saved."
 msgstr "Settings successfully saved."
 
-#: lost_tracker/blueprint/station.py:121
+#: lost_tracker/blueprint/station.py:124
 msgid "Station {} saved!"
 msgstr "Station {} saved!"
 
-#: lost_tracker/blueprint/station.py:132
+#: lost_tracker/blueprint/station.py:135
 msgid "Station deleted!"
 msgstr "Station deleted!"
 
@@ -158,7 +162,7 @@ msgstr "Name"
 #: lost_tracker/templates/edit_group.html:25
 #: lost_tracker/templates/edit_station.html:16
 #: lost_tracker/templates/group-tooltip.html:6
-#: lost_tracker/templates/list_stations.html:11
+#: lost_tracker/templates/list_stations.html:12
 msgid "Contact"
 msgstr "Contact"
 
@@ -170,7 +174,7 @@ msgstr "Email"
 #: lost_tracker/templates/edit_group.html:29
 #: lost_tracker/templates/edit_station.html:19
 #: lost_tracker/templates/group-tooltip.html:8
-#: lost_tracker/templates/list_stations.html:12
+#: lost_tracker/templates/list_stations.html:13
 msgid "Phone"
 msgstr "Phone"
 
@@ -187,7 +191,7 @@ msgstr "Number of vegetarians"
 #: lost_tracker/templates/edit_group.html:48
 #: lost_tracker/templates/edit_group.html:51
 #: lost_tracker/templates/group-tooltip.html:9
-#: lost_tracker/templates/group_list.html:11
+#: lost_tracker/templates/group_list.html:12
 msgid "Direction"
 msgstr "Direction"
 
@@ -238,7 +242,7 @@ msgid "Station Name"
 msgstr "Station Name"
 
 #: lost_tracker/templates/edit_station.html:13
-#: lost_tracker/templates/list_stations.html:10
+#: lost_tracker/templates/list_stations.html:11
 msgid "Order"
 msgstr "Order"
 
@@ -246,8 +250,12 @@ msgstr "Order"
 msgid "Starting Station?"
 msgstr "Starting Station?"
 
-#: lost_tracker/templates/edit_station.html:25
-#: lost_tracker/templates/messages.html:27 lost_tracker/templates/settings.html:26
+#: lost_tracker/templates/edit_station.html:24
+msgid "Final Station?"
+msgstr "Final Station?"
+
+#: lost_tracker/templates/edit_station.html:27
+#: lost_tracker/templates/messages.html:27 lost_tracker/templates/settings.html:50
 msgid "Save"
 msgstr "Save"
 
@@ -292,19 +300,19 @@ msgstr "Group List"
 msgid "Group"
 msgstr "Group"
 
-#: lost_tracker/templates/group_list.html:9
+#: lost_tracker/templates/group_list.html:10
 msgid "Registration Date"
 msgstr "Registration Date"
 
-#: lost_tracker/templates/group_list.html:10
+#: lost_tracker/templates/group_list.html:11
 msgid "Start Time"
 msgstr "Start Time"
 
-#: lost_tracker/templates/group_list.html:12
+#: lost_tracker/templates/group_list.html:13
 msgid "Accept Registration"
 msgstr "Accept Registration"
 
-#: lost_tracker/templates/group_list.html:20
+#: lost_tracker/templates/group_list.html:21
 msgid "Delete Group"
 msgstr "Delete Group"
 
@@ -322,27 +330,43 @@ msgid ""
 msgstr ""
 "It may take a few days until your registration is accepted. Please be patient!"
 
-#: lost_tracker/templates/index.html:15
+#: lost_tracker/templates/index.html:17 lost_tracker/templates/settings.html:40
+msgid "Winners"
+msgstr "Winners"
+
+#: lost_tracker/templates/index.html:18 lost_tracker/templates/settings.html:42
+msgid "1<sup>st</sup> place"
+msgstr "1<sup>st</sup> place"
+
+#: lost_tracker/templates/index.html:19 lost_tracker/templates/settings.html:44
+msgid "2<sup>nd</sup> place"
+msgstr "2<sup>nd</sup> place"
+
+#: lost_tracker/templates/index.html:20 lost_tracker/templates/settings.html:46
+msgid "3<sup>rd</sup> place"
+msgstr "3<sup>rd</sup> place"
+
+#: lost_tracker/templates/index.html:26
 msgid "What is this?"
 msgstr "What is this?"
 
-#: lost_tracker/templates/index.html:18
-msgid ""
-"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /> "
-"Impossible tasks.<br /> Not to be missed."
-msgstr ""
-"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /> "
-"Impossible tasks.<br /> Not to be missed."
-
-#: lost_tracker/templates/index.html:23
-msgid ""
-"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
-"Scouten a Guiden vun der FNEL"
-msgstr ""
-"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
-"Scouten a Guiden vun der FNEL"
-
 #: lost_tracker/templates/index.html:29
+msgid ""
+"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /> "
+"Impossible tasks.<br /> Not to be missed."
+msgstr ""
+"A 'Night Rallye'.<br /> Outside in the darkness<br /> Games.<br />Riddles.<br /> "
+"Impossible tasks.<br /> Not to be missed."
+
+#: lost_tracker/templates/index.html:34
+msgid ""
+"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
+"Scouten a Guiden vun der FNEL"
+msgstr ""
+"Organised by <br /> Caper Piwitschen <br /> and <br /> Mamer Wiselen<br /> "
+"Scouten a Guiden vun der FNEL"
+
+#: lost_tracker/templates/index.html:40
 msgid ""
 "Everybody who likes to spend a night outside, who's fairly well on foot and who "
 "does not mind getting home 3 hours late because they got lost may join :)"
@@ -358,11 +382,15 @@ msgstr "Station List"
 msgid "Add new Station"
 msgstr "Add new Station"
 
-#: lost_tracker/templates/list_stations.html:13
+#: lost_tracker/templates/list_stations.html:14
 msgid "Start?"
 msgstr "Start?"
 
-#: lost_tracker/templates/list_stations.html:21
+#: lost_tracker/templates/list_stations.html:15
+msgid "End?"
+msgstr "End?"
+
+#: lost_tracker/templates/list_stations.html:23
 msgid "Delete Station"
 msgstr "Delete Station"
 
@@ -395,7 +423,7 @@ msgstr "Register"
 
 #: lost_tracker/templates/master_framed.html:27
 #: lost_tracker/templates/scoreboard.html:3
-#: lost_tracker/templates/scoreboard.html:17
+#: lost_tracker/templates/scoreboard.html:16
 msgid "Scoreboard"
 msgstr "Scoreboard"
 
@@ -405,7 +433,7 @@ msgid "Anything else?"
 msgstr "Anything else?"
 
 #: lost_tracker/templates/master_framed.html:38
-#: lost_tracker/templates/matrix.html:13 lost_tracker/templates/scoreboard.html:19
+#: lost_tracker/templates/matrix.html:13 lost_tracker/templates/scoreboard.html:18
 msgid "Matrix"
 msgstr "Matrix"
 
@@ -431,7 +459,7 @@ msgid "Manage Stations"
 msgstr "Manage Stations"
 
 #: lost_tracker/templates/master_framed.html:55
-#: lost_tracker/templates/settings.html:3
+#: lost_tracker/templates/settings.html:12
 msgid "Settings"
 msgstr "Settings"
 
@@ -591,22 +619,30 @@ msgstr "Registration Closed"
 msgid "We are sorry, the registration is currently closed!"
 msgstr "We are sorry, the registration is currently closed!"
 
-#: lost_tracker/templates/scoreboard.html:18
+#: lost_tracker/templates/scoreboard.html:17
 msgid "Current score"
 msgstr "Current score"
 
-#: lost_tracker/templates/scoreboard.html:18
+#: lost_tracker/templates/scoreboard.html:17
 #, python-format
 msgid "%s: Not yet completed"
 msgstr "%s: Not yet completed"
 
-#: lost_tracker/templates/settings.html:7
+#: lost_tracker/templates/settings.html:16
 msgid "Application Settings"
 msgstr "Application Settings"
 
-#: lost_tracker/templates/settings.html:11
+#: lost_tracker/templates/settings.html:20
 msgid "Global"
 msgstr "Global"
+
+#: lost_tracker/templates/settings.html:38
+msgid ""
+"If these values are <em>all</em> set, the winners will be displayed on the start-"
+"page!"
+msgstr ""
+"If these values are <em>all</em> set, the winners will be displayed on the start-"
+"page!"
 
 #: lost_tracker/templates/slot_editor.html:7
 msgid "Time Slots"
@@ -620,13 +656,17 @@ msgstr "Slot"
 msgid "Unassigned Groups"
 msgstr "Unassigned Groups"
 
-#: lost_tracker/templates/station.html:3 lost_tracker/templates/station.html:28
+#: lost_tracker/templates/station.html:3 lost_tracker/templates/station.html:33
 msgid "Station"
 msgstr "Station"
 
-#: lost_tracker/templates/station.html:43
+#: lost_tracker/templates/station.html:48
 msgid "Questionnaire"
 msgstr "Questionnaire"
+
+#: lost_tracker/templates/station.html:71
+msgid "Quick Settings"
+msgstr "Quick Settings"
 
 #: lost_tracker/templates/tabular.html:48
 #: lost_tracker/templates/tabularindex.html:3
