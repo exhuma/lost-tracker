@@ -12,6 +12,17 @@
 {% endif %}
 
 
+<div id="placings">
+{% if Setting.get('first_place', 0) %}
+  <h1>{{_("Winners")}} {{Setting.get('event_date').strftime('%Y') if Setting.get('event_date') else ''}}</h1>
+  <h2>{{_("1<sup>st</sup> place")}}: <strong>{{Group.one(id=Setting.get('first_place'))}}</strong></h2>
+  <h2>{{_("2<sup>nd</sup> place")}}: <strong>{{Group.one(id=Setting.get('second_place'))}}</strong></h2>
+  <h2>{{_("3<sup>rd</sup> place")}}: <strong>{{Group.one(id=Setting.get('third_place'))}}</strong></h2>
+  <br /><hr />
+{% endif %}
+</div>
+
+
 <h1>{{_("What is this?")}}</h1>
 <div class="col-group">
   <div>
