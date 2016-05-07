@@ -36,6 +36,9 @@ def show(basename):
         return
 
     fullname = os.path.join(root, basename)
+    if not os.path.exists(fullname):
+        return 'File not found', 404
+
     mimetype, _ = mimetypes.guess_type(fullname)
     with open(fullname, 'rb') as fptr:
         response = make_response(fptr.read())
