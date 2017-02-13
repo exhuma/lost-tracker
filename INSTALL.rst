@@ -66,6 +66,34 @@ To initialise the database run the following commands::
     The environment variable should point to the path *containing* ``app.ini``.
     Not the filename itself!
 
+Apache Config
+~~~~~~~~~~~~~
+
+Example::
+
+    <VirtualHost *:80>
+
+        ServerName www.lost.lu
+        ServerAlias lost.lu
+
+        DocumentRoot /var/www/lost.lu/www/htdocs
+
+        <Directory /var/www/lost.lu/www/htdocs>
+            Order allow,deny
+            Allow from all
+        </Directory>
+
+        WSGIDaemonProcess lost.lu processes=2 threads=15 display-name=%{GROUP} python-home=/var/www/lost.lu/www/env user=lost_tracker
+        WSGIProcessGroup lost.lu
+        WSGIScriptAlias / /var/www/lost.lu/www/wsgi/lost-tracker.wsgi
+
+        <Directory /var/www/lost.lu/www/wsgi>
+            Order allow,deny
+            Allow from all
+        </Directory>
+
+    </VirtualHost>
+
 
 Configuration
 -------------

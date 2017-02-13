@@ -1,24 +1,26 @@
 from __future__ import print_function
 from ConfigParser import SafeConfigParser
+from getpass import getuser
 from os.path import exists
 
 import fabric.api as fab
 import fabric.colors as clr
 
 fab.env.roledefs = {
-    'failover': ['lostlu@dozer.foobar.lu'],
-    'prod': ['lost_tracker_backup@eurinfo.net'],
+    'prod': ['178.62.219.167'],
 }
 
 
 REMOTE_FOLDER = '/var/www/lost.lu/www'
+REMOTE_USER = 'lost_tracker'
 PLOVR_REVISION = '9f12b6c'
-PLOVR = 'plovr/build/plovr-{}.jar'.format(PLOVR_REVISION)
+PLOVR = 'plovr/build/plovr.jar'.format(PLOVR_REVISION)
 CLOSURE_REVISION = '57bdfe0093c'
 
 
 @fab.task
-@fab.roles('prod', 'failover')
+@fab.roles('prod')
+@fab.with_settings(user=REMOTE_USER)
 def deploy():
     fab.execute(build)
     fab.execute(babel_compile)
@@ -28,6 +30,7 @@ def deploy():
 
 
 @fab.task
+@fab.with_settings(user=REMOTE_USER)
 def upload():
     fab.local('python setup.py sdist')
     name = fab.local('python setup.py --fullname', capture=True)
@@ -39,6 +42,7 @@ def upload():
 
 
 @fab.task
+@fab.with_settings(user=REMOTE_USER)
 def install():
     name = fab.local('python setup.py --fullname', capture=True)
     with fab.cd(REMOTE_FOLDER):
@@ -57,6 +61,7 @@ def clean():
 
 
 @fab.task
+@fab.with_settings(user=REMOTE_USER)
 def redeploy():
     name = fab.local('python setup.py --name', capture=True)
     with fab.cd(REMOTE_FOLDER):
@@ -65,10 +70,25 @@ def redeploy():
 
 
 @fab.task
+@fab.with_settings(user=getuser())
 def bootstrap():
+    fab.run('mkdir -p %s' % REMOTE_FOLDER)
+    fab.sudo('apt-get install aptitude')
+    fab.sudo('aptitude update')
+    fab.sudo('aptitude install -y '
+             'apache2 libapache2-mod-wsgi python3-venv libpq-dev '
+             'libffi-dev '
+             'python3-dev python-dev libjpeg-dev build-essential '
+             'postgresql')
     with fab.cd(REMOTE_FOLDER):
         fab.run('mkdir -p wsgi')
-        fab.put('wsgi/lost-tracker.wsgi', 'wsgi')
+        fab.put('wsgi/lost-tracker.wsgi', '/tmp')
+        fab.run('[ -f wsgi/lost-tracker.wsgi ] || mv /tmp/lost-tracker.wsgi',
+                'wsgi')
+        fab.run('[ -f /tmp/lost-tracker.wsgi ] && rm -f /tmp/lost-tracker.wsgi')
+        fab.run('[ -d env ] || pyvenv env')
+        fab.run('./env/bin/pip install -U pip alembic')
+    fab.sudo('chown -R {0}:{0} {1}'.format(REMOTE_USER, REMOTE_FOLDER))
 
 
 @fab.task
