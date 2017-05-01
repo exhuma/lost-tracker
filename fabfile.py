@@ -13,9 +13,6 @@ fab.env.roledefs = {
 
 REMOTE_FOLDER = '/var/www/lost.lu/www'
 REMOTE_USER = 'lost_tracker'
-PLOVR_REVISION = '9f12b6c'
-PLOVR = 'plovr/build/plovr.jar'.format(PLOVR_REVISION)
-CLOSURE_REVISION = '57bdfe0093c'
 DOCKER_PLOVR = 'exhuma/lost-tracker-closure'
 
 
@@ -298,7 +295,10 @@ def serve_plovr():
     """
     Run JS development server.
     """
-    fab.local('java -jar __libs__/{} serve plovr-config.js'.format(PLOVR))
+    fab.local('docker run -v {}:/app --rm {} serve /app/plovr-config.js'.format(
+        dirname(__file__),
+        DOCKER_PLOVR,
+    ))
 
 
 @fab.task
