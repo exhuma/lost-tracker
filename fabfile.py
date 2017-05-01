@@ -110,22 +110,7 @@ def develop():
     # some packages are unavailable on pypi :( -> Use requirements.txt
     l('./env/bin/pip install -r requirements.txt')
     l('./env/bin/pip install -e .[dev,test]')
-    l('mkdir -p __libs__')
-
-    with fab.lcd('__libs__'):
-        l('[ -d plovr ] || '
-          'git clone https://github.com/bolinfest/plovr.git')
-        l('[ -d closure-library ] || '
-          'git clone https://github.com/google/closure-library.git')
-
-    with fab.lcd('__libs__/plovr'):
-        l('git fetch')
-        l('git checkout {}'.format(PLOVR_REVISION))
-
-    with fab.lcd('__libs__/closure-library'):
-        l('git fetch')
-        l('git checkout {}'.format(CLOSURE_REVISION))
-
+    l('docker pull {}'.format(DOCKER_PLOVR))
     l('mkdir -p .mamerwiselen/lost-tracker')
 
     with fab.settings(warn_only=True):
