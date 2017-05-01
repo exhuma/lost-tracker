@@ -1,7 +1,7 @@
 from __future__ import print_function
 from ConfigParser import SafeConfigParser
 from getpass import getuser
-from os.path import exists
+from os.path import exists, dirname
 
 import fabric.api as fab
 import fabric.colors as clr
@@ -16,6 +16,7 @@ REMOTE_USER = 'lost_tracker'
 PLOVR_REVISION = '9f12b6c'
 PLOVR = 'plovr/build/plovr.jar'.format(PLOVR_REVISION)
 CLOSURE_REVISION = '57bdfe0093c'
+DOCKER_PLOVR = 'exhuma/lost-tracker-closure'
 
 
 @fab.task
@@ -203,7 +204,10 @@ def build():
               clr.green('recompiling to'),
               clr.blue(output_file))
 
-    fab.local('java -jar __libs__/{} build plovr-config.js'.format(PLOVR))
+    fab.local('docker run -v {}:/app --rm {} build /app/plovr-config.js'.format(
+        dirname(__file__),
+        DOCKER_PLOVR,
+    ))
 
 
 @fab.task
