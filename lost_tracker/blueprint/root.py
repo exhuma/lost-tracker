@@ -1,3 +1,4 @@
+import logging
 from collections import namedtuple
 from datetime import datetime
 from hashlib import md5
@@ -12,6 +13,7 @@ from flask import (
     Markup,
     current_app,
     flash,
+    g,
     jsonify,
     redirect,
     render_template,
@@ -43,6 +45,18 @@ ScoreBoardRow = namedtuple(
 ROOT = Blueprint('root', __name__)
 
 
+class MyFilter:
+
+    def __init__(self, request):
+        self.request = request
+
+    def filter(self, record):
+        request_id = request.headers.get('X-Request-Id', None)
+        record.request_id = request_id
+        if request_id:
+            record.msg = '>> %s >>> %s' % (request_id, record.msg)
+
+
 @ROOT.before_app_first_request
 def create_admin_user():
     user = current_app.user_datastore.create_user(
@@ -60,6 +74,12 @@ def create_admin_user():
 
 @ROOT.before_app_request
 def before_request():
+
+    g.log_filter = MyFilter(request)
+    for logger in logging.getLogger().manager.loggerDict.values():
+        for handler in getattr(logger, 'handlers', []):
+            handler.addFilter(g.log_filter)
+
     # Only set this if the argument is present (which means the user wants to
     # change the language)
     if 'lang' in request.args:
@@ -70,6 +90,9 @@ def before_request():
 
 @ROOT.teardown_app_request
 def teardown_request(exc):
+    for logger in logging.getLogger().manager.loggerDict.values():
+        for handler in getattr(logger, 'handlers', []):
+            handler.removeFilter(g.log_filter)
     try:
         mdl.DB.session.commit()
     except Exception:
