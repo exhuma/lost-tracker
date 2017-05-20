@@ -118,7 +118,7 @@ def convert_markdown(value):
 @ROOT.app_template_filter('avatar_url')
 def fetch_avatar_url(user):
     # Use gravatar as default
-    mailhash = md5(user.email.lower()).hexdigest()
+    mailhash = md5(user.email.lower().encode('ascii')).hexdigest()
     gravatar = 'http://www.gravatar.com/avatar/%s?d=identicon' % mailhash
     social_link = ''
 

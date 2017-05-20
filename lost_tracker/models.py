@@ -442,8 +442,12 @@ class Setting(DB.Model):
 class GroupStation(DB.Model):
     __tablename__ = 'group_station_state'
 
-    group_id = Column(Integer, ForeignKey('group.id'), primary_key=True)
-    station_id = Column(Integer, ForeignKey('station.id'), primary_key=True)
+    group_id = Column(Integer, ForeignKey(
+        'group.id', on_update='CASCADE', on_delete='CASCADE'),
+        primary_key=True)
+    station_id = Column(Integer, ForeignKey(
+        'station.id', on_update='CASCADE', on_delete='CASCADE'),
+        primary_key=True)
     state = Column(Integer, default=STATE_UNKNOWN)
     score = Column(Integer, nullable=True, default=None)
     form_score = Column(Integer, nullable=True, default=None)

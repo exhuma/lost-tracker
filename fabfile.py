@@ -1,24 +1,24 @@
 from __future__ import print_function
 from ConfigParser import SafeConfigParser
-from os.path import exists
+from getpass import getuser
+from os.path import exists, dirname
 
 import fabric.api as fab
 import fabric.colors as clr
 
 fab.env.roledefs = {
-    'failover': ['lostlu@dozer.foobar.lu'],
-    'prod': ['lost_tracker_backup@eurinfo.net'],
+    'prod': ['178.62.219.167'],
 }
 
 
 REMOTE_FOLDER = '/var/www/lost.lu/www'
-PLOVR_REVISION = '9f12b6c'
-PLOVR = 'plovr/build/plovr-{}.jar'.format(PLOVR_REVISION)
-CLOSURE_REVISION = '57bdfe0093c'
+REMOTE_USER = 'lost_tracker'
+DOCKER_PLOVR = 'exhuma/lost-tracker-closure'
 
 
 @fab.task
-@fab.roles('prod', 'failover')
+@fab.roles('prod')
+@fab.with_settings(user=REMOTE_USER)
 def deploy():
     fab.execute(build)
     fab.execute(babel_compile)
@@ -28,6 +28,7 @@ def deploy():
 
 
 @fab.task
+@fab.with_settings(user=REMOTE_USER)
 def upload():
     fab.local('python setup.py sdist')
     name = fab.local('python setup.py --fullname', capture=True)
@@ -39,6 +40,7 @@ def upload():
 
 
 @fab.task
+@fab.with_settings(user=REMOTE_USER)
 def install():
     name = fab.local('python setup.py --fullname', capture=True)
     with fab.cd(REMOTE_FOLDER):
@@ -57,6 +59,7 @@ def clean():
 
 
 @fab.task
+@fab.with_settings(user=REMOTE_USER)
 def redeploy():
     name = fab.local('python setup.py --name', capture=True)
     with fab.cd(REMOTE_FOLDER):
@@ -65,10 +68,25 @@ def redeploy():
 
 
 @fab.task
+@fab.with_settings(user=getuser())
 def bootstrap():
+    fab.run('mkdir -p %s' % REMOTE_FOLDER)
+    fab.sudo('apt-get install aptitude')
+    fab.sudo('aptitude update')
+    fab.sudo('aptitude install -y '
+             'apache2 libapache2-mod-wsgi python3-venv libpq-dev '
+             'libffi-dev '
+             'python3-dev python-dev libjpeg-dev build-essential '
+             'postgresql')
     with fab.cd(REMOTE_FOLDER):
         fab.run('mkdir -p wsgi')
-        fab.put('wsgi/lost-tracker.wsgi', 'wsgi')
+        fab.put('wsgi/lost-tracker.wsgi', '/tmp')
+        fab.run('[ -f wsgi/lost-tracker.wsgi ] || mv /tmp/lost-tracker.wsgi',
+                'wsgi')
+        fab.run('[ -f /tmp/lost-tracker.wsgi ] && rm -f /tmp/lost-tracker.wsgi')
+        fab.run('[ -d env ] || pyvenv env')
+        fab.run('./env/bin/pip install -U pip alembic')
+    fab.sudo('chown -R {0}:{0} {1}'.format(REMOTE_USER, REMOTE_FOLDER))
 
 
 @fab.task
@@ -92,22 +110,7 @@ def develop():
     # some packages are unavailable on pypi :( -> Use requirements.txt
     l('./env/bin/pip install -r requirements.txt')
     l('./env/bin/pip install -e .[dev,test]')
-    l('mkdir -p __libs__')
-
-    with fab.lcd('__libs__'):
-        l('[ -d plovr ] || '
-          'git clone https://github.com/bolinfest/plovr.git')
-        l('[ -d closure-library ] || '
-          'git clone https://github.com/google/closure-library.git')
-
-    with fab.lcd('__libs__/plovr'):
-        l('git fetch')
-        l('git checkout {}'.format(PLOVR_REVISION))
-
-    with fab.lcd('__libs__/closure-library'):
-        l('git fetch')
-        l('git checkout {}'.format(CLOSURE_REVISION))
-
+    l('docker pull {}'.format(DOCKER_PLOVR))
     l('mkdir -p .mamerwiselen/lost-tracker')
 
     with fab.settings(warn_only=True):
@@ -183,7 +186,10 @@ def build():
               clr.green('recompiling to'),
               clr.blue(output_file))
 
-    fab.local('java -jar __libs__/{} build plovr-config.js'.format(PLOVR))
+    fab.local('docker run -v {}:/app --rm {} build /app/plovr-config.js'.format(
+        dirname(__file__),
+        DOCKER_PLOVR,
+    ))
 
 
 @fab.task
@@ -274,7 +280,11 @@ def serve_plovr():
     """
     Run JS development server.
     """
-    fab.local('java -jar __libs__/{} serve plovr-config.js'.format(PLOVR))
+    fab.local('docker run -p 9810:9810 -v {}:/app --rm {} '
+              'serve /app/plovr-config.js'.format(
+                  dirname(__file__),
+                  DOCKER_PLOVR,
+              ))
 
 
 @fab.task

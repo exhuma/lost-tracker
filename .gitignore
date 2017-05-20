@@ -4,6 +4,7 @@
 /.vagrant
 /PKG-INFO
 /__libs__
+/app.ini
 /build
 /dist
 /env
