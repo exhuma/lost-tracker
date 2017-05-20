@@ -280,10 +280,11 @@ def serve_plovr():
     """
     Run JS development server.
     """
-    fab.local('docker run -v {}:/app --rm {} serve /app/plovr-config.js'.format(
-        dirname(__file__),
-        DOCKER_PLOVR,
-    ))
+    fab.local('docker run -p 9810:9810 -v {}:/app --rm {} '
+              'serve /app/plovr-config.js'.format(
+                  dirname(__file__),
+                  DOCKER_PLOVR,
+              ))
 
 
 @fab.task

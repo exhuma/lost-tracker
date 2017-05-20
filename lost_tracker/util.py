@@ -31,6 +31,7 @@ def check_auth(username, password):
     """This function is called to check if a username /
     password combination is valid.
     """
+    LOG.debug('Authenticating user %r...' % username)
     app_login = current_app.localconf.get('app', 'login')
     app_password = current_app.localconf.get('app', 'password')
 
@@ -39,6 +40,7 @@ def check_auth(username, password):
 
 def authenticate():
     """Sends a 401 response that enables basic auth"""
+    LOG.debug('Sending "authentication needed" package')
     return Response(
         'Could not verify your access level for that URL.\n'
         'You have to login with proper credentials', 401,
