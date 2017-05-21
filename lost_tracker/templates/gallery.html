@@ -4,6 +4,10 @@
 
 {% block content %}
 
+{% if not galleries %}
+  <p class="note">{{_('Nothing here yet')}}</p>
+{% endif %}
+
 {% for gallery in galleries %}
   {% if gallery['photos'] %}
     <h2>{{gallery['title']}}</h2>
@@ -13,8 +17,6 @@
   {% else %}
     <p class="note">{{_('Nothing here yet')}}</p>
   {% endif %}
-{% else %}
-  <p class="note">{{_('Nothing here yet')}}</p>
 {% endfor %}
 
 {% endblock %}
