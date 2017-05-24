@@ -71,6 +71,12 @@ def score_totals():
                               'group_id, score_sum, ppm')
 
     query = GroupStation.query
+    query = query.join(Group)
+    query = query.filter(and_(
+        Group.cancelled == False,
+        Group._start_time != None,
+        Group._start_time != 'None'
+    ))
     group_scores = {}
     for row in query:
         station_score = row.score or 0
