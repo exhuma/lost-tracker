@@ -184,6 +184,17 @@ class Group(DB.Model):
         return groups
 
     @staticmethod
+    def all_valid():
+        '''
+        Returns all groups with a valid start time.
+        '''
+        groups = Group.query
+        groups = groups.filter(Group._start_time != 'None')
+        groups = groups.filter(Group._start_time != None)  # NOQA
+        groups = groups.order_by(Group.order)
+        return groups
+
+    @staticmethod
     def one(**filters):
         """
         Returns a group from the database as :py:class:`Group` instance.

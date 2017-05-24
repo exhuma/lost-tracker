@@ -168,7 +168,7 @@ def misc():
 @ROOT.route('/matrix')
 def matrix():
     stations = mdl.Station.all()
-    groups = mdl.Group.all()
+    groups = mdl.Group.all_valid()
     state_matrix = loco.Matrix(stations, groups)
     return render_template('matrix.html',
                            matrix=state_matrix,
