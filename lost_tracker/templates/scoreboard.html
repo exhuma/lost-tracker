@@ -24,7 +24,12 @@
     <tr class="{{'completed' if row.has_completed else ''}} position_{{row.position}}">
       <td class="position">{{row.position}}{%if not row.has_completed %}<sup><small><i class="fa fa-hourglass-o"></i></small></sup>{% endif %}</td>
         <td class="name">{{row.group_name}}</td>
-        <td class="score">{{row.total_score}}</td>
+        <td class="score">
+          {{row.total_score}}
+          {% if row.ppm %}
+          <p class="ppm">({{row.ppm}} ppm)</p>
+          {% endif %}jk
+        </td>
     </tr>
     {% endfor %}
 </table>

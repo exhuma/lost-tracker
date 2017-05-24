@@ -523,6 +523,10 @@ TD.qrcode IMG {
     font-family: Arial, Helvetica, sans-serif !important;
 }
 
+P.ppm {
+    font-size: 70%;
+}
+
 /* {{{ Modal Dialogs */
 .modal-dialog {
     max-width: 30em;
