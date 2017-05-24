@@ -95,17 +95,17 @@ def _main_dashboard_order(element):
     ordering the main elements in the dashboard.
     """
     if element is None or element.state is None:
-        return "%d%s" % (3, element.group.name)
+        return "%d%s" % (3, element.group.order)
     elif element.state == STATE_FINISHED:
-        return "%d%s" % (90, element.group.name)
+        return "%d%s" % (90, element.group.order)
     elif element.state == STATE_ARRIVED:
-        return "%d%s" % (1, element.group.name)
+        return "%d%s" % (1, element.group.order)
     elif element.state == STATE_UNKNOWN:
-        return "%d%s" % (2, element.group.name)
+        return "%d%s" % (2, element.group.order)
     elif element.group.cancelled:
-        return "%d%s" % (80, element.group.name)
+        return "%d%s" % (80, element.group.order)
     else:
-        return "%d%s" % (99, element.group.name)
+        return "%d%s" % (99, element.group.order)
 
 
 class Matrix(object):
