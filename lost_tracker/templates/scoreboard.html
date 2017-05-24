@@ -26,8 +26,8 @@
         <td class="name">{{row.group_name}}</td>
         <td class="score">
           {{row.total_score}}
-          {% if row.ppm %}
-          <p class="ppm">({{row.ppm}} ppm)</p>
+          {% if row.points_per_minute %}
+          <p class="ppm">({{'%.2f' % row.points_per_minute}} ppm)</p>
           {% endif %}
         </td>
     </tr>
