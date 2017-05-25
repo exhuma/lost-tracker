@@ -87,7 +87,8 @@ def score_totals():
     output = []
     for group in group_scores:
         if group.departure_time:
-            interval = datetime.now() - group.departure_time
+            finish_time = group.finish_time or datetime.now()
+            interval = finish_time - group.departure_time
             minutes_since_start = interval.total_seconds() / 60.0
             ppm = group_scores[group] / minutes_since_start
         else:
