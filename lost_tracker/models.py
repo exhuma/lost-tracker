@@ -71,6 +71,12 @@ def score_totals():
                               'group_id, score_sum, ppm')
 
     query = GroupStation.query
+    query = query.join(Group)
+    query = query.filter(and_(
+        Group.cancelled == False,
+        Group._start_time != None,
+        Group._start_time != 'None'
+    ))
     group_scores = {}
     for row in query:
         station_score = row.score or 0
@@ -82,7 +88,7 @@ def score_totals():
     for group in group_scores:
         if group.departure_time:
             interval = datetime.now() - group.departure_time
-            minutes_since_start = interval.total_seconds() / 60
+            minutes_since_start = interval.total_seconds() / 60.0
             ppm = group_scores[group] / minutes_since_start
         else:
             ppm = 0
@@ -180,6 +186,17 @@ class Group(DB.Model):
     @staticmethod
     def all():
         groups = Group.query
+        groups = groups.order_by(Group.order)
+        return groups
+
+    @staticmethod
+    def all_valid():
+        '''
+        Returns all groups with a valid start time.
+        '''
+        groups = Group.query
+        groups = groups.filter(Group._start_time != 'None')
+        groups = groups.filter(Group._start_time != None)  # NOQA
         groups = groups.order_by(Group.order)
         return groups
 

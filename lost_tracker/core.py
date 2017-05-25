@@ -95,17 +95,17 @@ def _main_dashboard_order(element):
     ordering the main elements in the dashboard.
     """
     if element is None or element.state is None:
-        return "%d%s" % (3, element.group.name)
+        return "%d%s" % (3, element.group.order)
     elif element.state == STATE_FINISHED:
-        return "%d%s" % (90, element.group.name)
+        return "%d%s" % (90, element.group.order)
     elif element.state == STATE_ARRIVED:
-        return "%d%s" % (1, element.group.name)
+        return "%d%s" % (1, element.group.order)
     elif element.state == STATE_UNKNOWN:
-        return "%d%s" % (2, element.group.name)
+        return "%d%s" % (2, element.group.order)
     elif element.group.cancelled:
-        return "%d%s" % (80, element.group.name)
+        return "%d%s" % (80, element.group.order)
     else:
-        return "%d%s" % (99, element.group.name)
+        return "%d%s" % (99, element.group.order)
 
 
 class Matrix(object):
@@ -503,9 +503,11 @@ def get_dashboard(station):
     main_states.extend([GroupStation(group.id, station.id)
                         for group in missing_groups])
 
-    # remove states from cancelled/abandoned groups
+    # remove states from cancelled/abandoned/invalid groups
     main_states = [state for state in main_states
-                   if state.group and not state.group.cancelled]
+                   if (state.group and
+                       not state.group.cancelled and
+                       state.group.start_time not in (None, 'None'))]
 
     time_threshold = datetime.now(
         timezone('Europe/Luxembourg')) - timedelta(minutes=45)
