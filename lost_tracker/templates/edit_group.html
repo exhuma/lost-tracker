@@ -54,7 +54,7 @@
           </select>
         </dd>
         <dt>{{_('Starting Time')}}</dt>
-        <dd><input type="text" name="start_time" value="{{group.start_time}}"/></dd>
+        <dd><input type="text" name="start_time" value="{{group.start_time or ''}}"/></dd>
         <dt>{{_('Flags')}}</dt>
         <dd><input type="checkbox" {{'checked' if group.accepted else ''}} id="accepted" name="accepted" value="true" /><label for="accepted">{{_('Group registration has been accepted')}}</label></dd>
         <dd><input type="checkbox" {{'checked' if group.cancelled else ''}} id="cancelled" name="cancelled" value="true" /><label for="cancelled">{{_('Group has cancelled')}}</label></dd>
