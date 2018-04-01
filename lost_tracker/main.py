@@ -226,6 +226,8 @@ def fake_login():
 
 if __name__ == '__main__':
     from lost_tracker.colorize import colorize_werkzeug
+    from gouge.colourcli import Simple
+    Simple.basicConfig(level=0)
     colorize_werkzeug()
     myapp = make_app()
     myapp.add_url_rule('/fake_login', 'fake_login', fake_login)
