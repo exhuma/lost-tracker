@@ -44,6 +44,7 @@ def upload():
 def install():
     name = fab.local('python setup.py --fullname', capture=True)
     with fab.cd(REMOTE_FOLDER):
+        fab.run('env/bin/pip install alembic')
         fab.run('env/bin/pip install -r requirements.txt')
         fab.run('env/bin/pip install {0}.tar.gz'.format(name))
         fab.run('env/bin/alembic upgrade head')
