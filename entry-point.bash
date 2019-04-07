@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export
 python3 /materialize_config.py
 chmod 600 /etc/mamerwiselen/lost-tracker/app.ini
 (cd /alembic && alembic upgrade head)
