@@ -29,7 +29,6 @@ def deploy(ctx):  # type: ignore
 
 @task
 def publish(ctx):  # type: ignore
-    ctx.run('docker build -t malbert/lost-tracker:2019 -t lost-tracker:latest .')
     ctx.run('docker login')
     ctx.run('docker push malbert/lost-tracker:latest')
 
@@ -99,18 +98,18 @@ def develop(ctx):  # type: ignore
     l = ctx.run
     ini_file = '.mamerwiselen/lost-tracker/app.ini'
 
-    l('[ -d env ] || virtualenv env')
+    l('[ -d env ] || python3 -m venv env')
     l('./env/bin/pip install "setuptools>=0.8"')  # needed by IMAPClient
-    # some packages are unavailable on pypi :( -> Use requirements.txt
-    l('./env/bin/pip install -r requirements.txt')
+    # some packages are unavailable on pypi :( -> Use custom-requirements.txt
+    l('./env/bin/pip install -r custom-requirements.txt')
     l('./env/bin/pip install -e .[dev,test]')
     l('docker pull {}'.format(DOCKER_PLOVR))
     l('mkdir -p .mamerwiselen/lost-tracker')
 
-    ini_is_missing = l('[ -f ' + ini_file + ' ]', run=True).failed
+    ini_is_missing = l('[ -f ' + ini_file + ' ]').failed
 
+    term = Terminal()
     if ini_is_missing:
-        term = Terminal()
         print(term.green('No INI file found. Please fill in the following '
                          'values:'))
         print('')
@@ -135,8 +134,7 @@ def develop(ctx):  # type: ignore
         cfg.write(open(ini_file, 'w'))
         print(term.green('>>> New config file created in ' + ini_file))
     else:
-        print(term.white('=== Kept old config file from ' + ini_file,
-              bold=True))
+        print(term.bold_white('=== Kept old config file from ' + ini_file))
     babel_compile(ctx)
     print(term.green('Applying database migrations...'))
     print(term.yellow('NOTE: The DB must exist, and the URL in %r must be '
@@ -150,7 +148,7 @@ def develop(ctx):  # type: ignore
 
 
 @task
-def build(ctx):  # type: ignore
+def build_js(ctx):  # type: ignore
     """
     Compile JS sources.
     """
@@ -188,6 +186,22 @@ def build(ctx):  # type: ignore
         dirname(__file__),
         DOCKER_PLOVR,
     ))
+
+@task
+def build(ctx):  # type: ignore
+    """
+    Compile JS sources.
+    """
+    from os import listdir
+    build_js(ctx)
+    ctx.run('rm -rf dist')
+    ctx.run('python setup.py sdist')
+    files = [fname for fname in listdir('dist') if not fname.startswith('.')]
+    assert len(files) == 1
+    ctx.run('mv dist/%s dist/docker.tar.gz' % files[0])
+    ctx.run(
+        'docker build -t malbert/lost-tracker:2019 -t malbert/lost-tracker:latest .')
+
 
 
 @task

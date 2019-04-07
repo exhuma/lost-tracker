@@ -1,0 +1,3 @@
+git+https://github.com/exhuma/flask-social@711b21fd8#egg=flask-social
+git+https://github.com/pythonforfacebook/facebook-sdk@master#egg=facebook-sdk
+# git+https://github.com/bear/python-twitter
