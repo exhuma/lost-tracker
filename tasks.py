@@ -193,14 +193,28 @@ def build(ctx):  # type: ignore
     Compile JS sources.
     """
     from os import listdir
+
+    # Create a clean dist for clean requirements
+    ctx.run('[ -d env ] && rm -rf dist-env')
+    ctx.run('python3 -m venv dist-env')
+    ctx.run('./dist-env/bin/pip install .')
+    frozen = ctx.run('./dist-env/bin/pip freeze').stdout
+    filtered = [line for line in frozen.splitlines() if 'lost-tracker' not in
+                line]
+    with open('dist-requirements.txt', 'w') as fptr:
+        fptr.write('\n'.join(filtered))
+
     build_js(ctx)
     ctx.run('rm -rf dist')
     ctx.run('python setup.py sdist')
     files = [fname for fname in listdir('dist') if not fname.startswith('.')]
     assert len(files) == 1
     ctx.run('mv dist/%s dist/docker.tar.gz' % files[0])
-    ctx.run(
-        'docker build -t malbert/lost-tracker:2019 -t malbert/lost-tracker:latest .')
+    ctx.run('docker build '
+            '-t malbert/lost-tracker:2019 '
+            '-t malbert/lost-tracker:latest '
+            '.')
+    ctr.run('rm -rf dist-env dist-requirements.txt')
 
 
 
