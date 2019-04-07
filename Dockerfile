@@ -1,14 +1,15 @@
 FROM ubuntu:xenial
-RUN apt-get update
-RUN apt-get install -y apache2 libapache2-mod-wsgi \
-    libpq-dev libffi-dev python3-dev libjpeg-dev \
-    build-essential python3-pip
-RUN apt-get install -y git
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    libffi-dev \
+    python3-dev \
+    libjpeg-dev \
+    build-essential \
+    python3-pip \
+    git
+
 RUN pip3 install -U pip
 RUN pip install alembic gunicorn
-
-ENV PIP_INDEX_URL=http://192.168.1.2:50000/root/pypi
-ENV PIP_TRUSTED_HOST=192.168.1.2
 
 ENV TRACKER_DSN=postgresql://lost@database/lost
 ENV TRACKER_HELPDESK=
@@ -25,7 +26,6 @@ COPY entry-point.bash /
 RUN mkdir -p /alembic
 ADD alembic /alembic/alembic
 ADD alembic.ini /alembic
-RUN pip install alembic
 RUN chmod +x /entry-point.bash
 RUN pip install -r /dist-requirements.txt
 RUN pip install /docker.tar.gz
