@@ -393,6 +393,14 @@ class Form(DB.Model):
         }
 
 
+def date_from_db(val):
+    return datetime.strptime(val, '%Y-%m-%d').date() if val else None
+
+
+def date_to_db(val):
+    return val.strftime('%Y-%m-%d') if val else ''
+
+
 class Setting(DB.Model):
     __tablename__ = 'settings'
     key = Column(Unicode(20), primary_key=True)
@@ -401,10 +409,7 @@ class Setting(DB.Model):
 
     # Allow simple conversions for saved values.
     TYPECONVERSION = {
-        'event_date': (
-            lambda val: datetime.strptime(val, '%Y-%m-%d').date() if val else None,  # NOQA
-            lambda val: val.strftime('%Y-%m-%d') if val else ''
-        )
+        'event_date': (date_from_db, date_to_db)
     }
 
     def __init__(self, key, value):
@@ -417,17 +422,21 @@ class Setting(DB.Model):
 
     @property
     def value(self):
-        value = loads(self.value_)
-        if isinstance(value, str) and '-' in value:
-            try:
-                value = datetime.strptime(loads(self.value_), DATE_FORMAT)
-            except ValueError:
-                value = 'Unknown Value'
+        raw_value = loads(self.value_)
+        convert_outof_db, _ = Setting.TYPECONVERSION.get(
+            self.key, (lambda x: x, None))
+        try:
+            value = convert_outof_db(raw_value)
+        except ValueError:
+            value = 'Unknown Value'
+
         return value
 
     @value.setter
     def value(self, new_value):
-        self.value_ = dumps(new_value, default=custom_json_serializer)
+        _, convert_to_db = Setting.TYPECONVERSION.get(
+            self.key, (None, lambda x: x))
+        self.value_ = convert_to_db(new_value)
 
     @staticmethod
     def get(key, default=None):
@@ -438,10 +447,7 @@ class Setting(DB.Model):
             output = new_row.value
         else:
             output = row.value
-
-        convert_outof_db, _ = Setting.TYPECONVERSION.get(
-            key, (lambda x: x, None))
-        return convert_outof_db(output)
+        return output
 
     @staticmethod
     def put(session, key, value):
