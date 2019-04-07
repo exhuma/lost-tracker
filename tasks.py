@@ -30,7 +30,7 @@ def deploy(ctx):  # type: ignore
 @task
 def publish(ctx):  # type: ignore
     ctx.run('docker login')
-    ctx.run('docker push malbert/lost-tracker:latest')
+    ctx.run('docker push exhuma/lost-tracker:latest')
 
 
 # @task
@@ -211,11 +211,10 @@ def build(ctx):  # type: ignore
     assert len(files) == 1
     ctx.run('mv dist/%s dist/docker.tar.gz' % files[0])
     ctx.run('docker build '
-            '-t malbert/lost-tracker:2019 '
-            '-t malbert/lost-tracker:latest '
+            '-t exhuma/lost-tracker:2019 '
+            '-t exhuma/lost-tracker:latest '
             '.')
-    ctr.run('rm -rf dist-env dist-requirements.txt')
-
+    ctx.run('rm -rf dist-env dist-requirements.txt')
 
 
 @task
