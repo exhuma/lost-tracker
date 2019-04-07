@@ -1,8 +1,9 @@
 ;
 ; Metadata for config-resolver
 ;
+; v2.2: added app.external_registration
 [meta]
-version=2.1
+version=2.2
 
 ;
 ; Database Settings (see http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html#database-urls)
@@ -15,6 +16,10 @@ dsn=${DSN}
 ; Lost-Tracker Settings
 ;
 [app]
+
+; An optional URL which will be used as registration intead of the internal
+; system
+external_registration = ${REGISTER_URL}
 
 ; The "helpdesk" text is used to show a phone number for on-site support
 helpdesk = ${HELPDESK}

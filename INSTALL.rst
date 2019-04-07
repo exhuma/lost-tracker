@@ -41,6 +41,10 @@ The following environment variables are available when running the container:
     A key which is allowed to access the Flickr API. This is used for
     additional photos.
 
+**TRACKER_REGISTER_URL**
+    An optional URL which will be used for registrations instead of the builtin
+    solution
+
 
 When the container starts up it will automatically apply database upgrades as
 necessary.

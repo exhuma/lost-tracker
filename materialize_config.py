@@ -14,4 +14,5 @@ with open('/etc/mamerwiselen/lost-tracker/app.ini', 'w') as fptr:
         SECRET_KEY=environ['TRACKER_SECRET_KEY'],
         SHOUT=environ['TRACKER_SHOUT'],
         FLICKR_API_KEY=environ['TRACKER_FLICKR_API_KEY'],
+        REGISTER_URL=environ.get('TRACKER_REGISTER_URL', ''),
     )))

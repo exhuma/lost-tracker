@@ -2,6 +2,7 @@ from flask import (
     Blueprint,
     current_app,
     flash,
+    redirect,
     render_template,
     request,
     url_for,
@@ -21,8 +22,14 @@ REGISTRATION = Blueprint('registration', __name__)
 
 
 @REGISTRATION.route('/new', methods=['GET', 'POST'])
-@login_required
 def new():
+    external_registration = current_app.localconf.get(
+        'app', 'external_registration', fallback='').strip()
+    if external_registration:
+        return redirect(external_registration)
+
+    if not current_user.is_authenticated:
+        return current_app.login_manager.unauthorized()
     is_open = mdl.Setting.get('registration_open', default=False)
     if not is_open and not current_user.has_role(mdl.Role.ADMIN):
         return render_template('registration_closed.html')
