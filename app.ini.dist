@@ -1,36 +1,41 @@
 ;
 ; Metadata for config-resolver
 ;
+; v2.2: added app.external_registration
 [meta]
-version=2.1
+version=2.2
 
 ;
 ; Database Settings (see http://docs.sqlalchemy.org/en/rel_1_0/core/engines.html#database-urls)
 ;
 [db]
 ; Database connection string
-dsn=postgresql://postgres@/lost_tracker
+dsn=${DSN}
 
 ;
 ; Lost-Tracker Settings
 ;
 [app]
 
+; An optional URL which will be used as registration intead of the internal
+; system
+external_registration = ${REGISTER_URL}
+
 ; The "helpdesk" text is used to show a phone number for on-site support
-helpdesk = Text visible on all pages
+helpdesk = ${HELPDESK}
 
 ; The photo gallery uses "photo_folder" to look for photos
-photo_folder = /path/to/folder
+photo_folder = ${PHOTO_FOLDER}
 
 ; It the registration is currently open or not (deprecated, has been moved to the "settings" table in the DB
 registration_open = true
 
 ; Login and Password for the HTTP API (used by the Android client)
-login = lost
-password = lost
+login = ${HTTP_LOGIN}
+password = ${HTTP_PASSWORD}
 
 ; Secret key to secure the application session
-secret_key = this-is-not-secret! use os.random to generate random bits!
+secret_key = ${SECRET_KEY}
 
 ; Available time-slots for registrations
 time_slots =
@@ -56,13 +61,13 @@ time_slots =
     22h00
 
 ; A secondary title which is visible on each page.
-shout = 
+shout = ${SHOUT}
 
 ;
 ; Settings for flickr integration
 ;
 [flickr]
-api_key=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+api_key=${FLICKR_API_KEY}
 
 ; Show this photoset on the "gallery" page
 photoset_id=72157642905812775
@@ -75,7 +80,7 @@ photoset_id=72157642905812775
 ; Dev server listens on device ...
 listen=0.0.0.0
 ; ... and port
-port=5000
+port=50000
 ; Enable/Disable debugging mode.
 debug=True
 

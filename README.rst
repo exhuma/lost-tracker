@@ -19,12 +19,9 @@ Development
 Required Tools
 ~~~~~~~~~~~~~~
 
-* fabric (Python Task Runner). This is optional but highly convenient!
-* Python 2.7 (Python 3.5 was tested half-arsedly, may work...)
-* Oracle Java 1.7+ (Tested with OpenJDK with mixed results). This is needed for
-  live JS compilation. Without it, no JavaScript will run!
-* A database. I recommend PostgreSQL as the application has been tested with
-  that one.
+* invoke (Python Task Runner). This is optional but highly convenient!
+* Python 3
+* docker (for javascript compilation)
 
 
 Additional Notes
@@ -72,22 +69,21 @@ Clone the code::
     git clone https://github.com/exhuma/lost-tracker
 
 Enter the cloned folder, switch to the ``develop`` branch  and run the develop
-fabric-task. Running that task will set up a virtual-env, download required
+invoke-task. Running that task will set up a virtual-env, download required
 dependencies and install the application into that environment::
 
     cd lost-tracker
     git checkout develop  # Make sure you're on the latest developmen branch
-    fab develop           # Prepares a virtualenv and downloads dependencies.
+    inv develop           # Prepares a virtualenv and downloads dependencies.
 
 When this successfully completes you should have an environment ready for happy
 hacking.
 
 One final note: JavaScript is compiled using the google-closure compiler with
-the help of plovr_. Those dependencies should have been downloaded for you into
-the ``__libs__`` folder. You *must* run plovr during development! As a
-convenience, there is a fabric task to run this for you::
+the help of plovr_. The compiler has been wrapped in a docker container and
+should be downloaded and run transparently. An invoke task is available::
 
-    fab serve_plovr
+    inv serve_plovr
 
 
 Configuration
@@ -107,12 +103,12 @@ look through the rest of the config file as well.
 
 Once all is configured the development server can be run with::
 
-    fab serve_web
+    inv serve_web
 
 During development (when ``DEBUG=True``), you also need to run the plovr_
 server in parallel. Simply open a new shell and type::
 
-    fab serve_plovr
+    inv serve_plovr
 
 Social Logins During Development
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

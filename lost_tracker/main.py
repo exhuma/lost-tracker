@@ -3,13 +3,6 @@ import logging
 
 from config_resolver import Config
 from flask.ext.babel import Babel, gettext
-from flask.ext.social import (
-    SQLAlchemyConnectionDatastore,
-    Social,
-    login_failed,
-)
-from flask.ext.social.views import connect_handler
-from flask.ext.social.utils import get_connection_values_from_oauth_response
 from flask.ext.security import (
     SQLAlchemyUserDatastore,
     Security,
@@ -80,53 +73,9 @@ def make_app():
 
     babel = Babel()
     security = Security()
-    social = Social()
     user_datastore = SQLAlchemyUserDatastore(mdl.DB, mdl.User, mdl.Role)
 
     app = Flask(__name__)
-
-    @login_failed.connect_via(app)
-    def auto_add_user(sender, provider, oauth_response):
-        connection_values = get_connection_values_from_oauth_response(
-            provider, oauth_response)
-        email = connection_values['email']
-        if not email or not email.strip():
-            email = ''
-
-        if provider.name.lower() == 'facebook':
-            fname = connection_values['full_name']
-            email = fb.get_email(oauth_response)
-        elif provider.name.lower() == 'twitter':
-            fname = connection_values['display_name'][1:]  # cut off leading @
-        else:
-            fname = connection_values['display_name']
-
-        user = user_datastore.create_user(
-            email=email,
-            name=fname,
-            active=True,
-            confirmed_at=datetime.now(),
-        )
-
-        role_query = mdl.DB.session.query(mdl.Role).filter_by(
-            name='authenticated')
-        try:
-            role = role_query.one()
-        except NoResultFound:
-            role = mdl.Role(name='authenticated')
-
-        user.roles.append(role)
-        user_datastore.commit()
-        connection_values['user_id'] = user.id
-        connect_handler(connection_values, provider)
-        login_user(user)
-        mdl.DB.session.commit()
-        flash(gettext(
-            'Successfully linked login with {}. '
-            'Ignore the message saying: "{}"').format(
-            provider.name, '... account not associated with an existing user'),
-            'info')
-        return redirect(url_for('root.profile'))
 
     app.user_datastore = user_datastore
     app.localconf = lconf = Config('mamerwiselen', 'lost-tracker',
@@ -147,7 +96,6 @@ def make_app():
 
     app.config.update(social_connections)
 
-    social.init_app(app, SQLAlchemyConnectionDatastore(mdl.DB, mdl.Connection))
     security.init_app(app, user_datastore)
 
     app.register_blueprint(COMMENT, url_prefix=COMMENT_PREFIX)

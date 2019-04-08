@@ -1,106 +1,50 @@
 INSTALLATION
 ------------
 
-.. note:: I recommend using virtualenv, but nothing prevents you installing
-          it into the root system
+Since 2019, this application is available as a docker-container. You should be
+able to run it using::
 
-Requirements
-~~~~~~~~~~~~
+    docker run exhuma/lost-tracker
 
-When installing this package, it will build the Postgres client. So you'll need
-the necessary headers, plus gcc on your machine.
+Internally it will expose the port ``8080`` as HTTP
 
-For Ubuntu, run the following::
+Environment Variables
+---------------------
 
-   sudo apt-get install libpq-dev python-dev build-essential
+The following environment variables are available when running the container:
 
-Installation procedure
-~~~~~~~~~~~~~~~~~~~~~~
+**TRACKER_DSN** (required)
+    An SQLAlchemy databse URL. For example:
+    ``postgresql://john:password@dbhost/dbname``
 
-- Download the latest package from http://www.github.com/exhuma/lost-tracker I
-  recommend using the latest tagged version, but if you want bleeding edge, you
-  may also download the "master" branch.
+**TRACKER_HELPDESK**
+    A text which is available on each page
 
-- untar the package::
+**TRACKER_PHOTO_FOLDER**
+    A folder-name which contains photos which are shown on the web-page.
+    It is recommended to mount a host-folder into the running container to this
+    location.
 
-     tar xzf exhuma-lost-tracker-<version number+hash>.tar.gz
+**TRACKER_HTTP_LOGIN**
+    A plain-text HTTP username used for API clients
 
-- enter the folder::
+**TRACKER_HTTP_PASSWORD**
+    A plain-text HTTP password used for API clients
 
-     cd exhuma-lost-tracker-<version number+hash>
+**TRACKER_SECRET_KEY**
+    Internally used for security. Should be set to a random string
 
-When not using virtualenv, you may skip this section
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**TRACKER_SHOUT**
+    A text shown on each page
 
-.. note:: If you don't have virtualenv, run the following:
+**TRACKER_FLICKR_API_KEY**
+    A key which is allowed to access the Flickr API. This is used for
+    additional photos.
 
-    ``sudo apt-get install python-setuptools && easy_install virtualenv``
-
-- create a virtualenv::
-
-     virtualenv --no-site-packages /path/to/your/env
-
-- activate the environment::
-
-     source /path/to/your/env/bin/activate
-
-Without virtualenv
-~~~~~~~~~~~~~~~~~~
-
-- run the installer::
-
-     python setup.py install
+**TRACKER_REGISTER_URL**
+    An optional URL which will be used for registrations instead of the builtin
+    solution
 
 
-Database initialisation
-~~~~~~~~~~~~~~~~~~~~~~~
-
-To initialise the database run the following commands::
-
-    # export MAMERWISELEN_LOST_TRACKER_PATH="/path/which/contains/app.ini"
-    # ./env/bin/alembic upgrade head
-
-
-.. note::
-
-    The environment variable should point to the path *containing* ``app.ini``.
-    Not the filename itself!
-
-Apache Config
-~~~~~~~~~~~~~
-
-Example::
-
-    <VirtualHost *:80>
-
-        ServerName www.lost.lu
-        ServerAlias lost.lu
-
-        DocumentRoot /var/www/lost.lu/www/htdocs
-
-        <Directory /var/www/lost.lu/www/htdocs>
-            Order allow,deny
-            Allow from all
-        </Directory>
-
-        WSGIDaemonProcess lost.lu processes=2 threads=15 display-name=%{GROUP} python-home=/var/www/lost.lu/www/env user=lost_tracker
-        WSGIProcessGroup lost.lu
-        WSGIScriptAlias / /var/www/lost.lu/www/wsgi/lost-tracker.wsgi
-
-        <Directory /var/www/lost.lu/www/wsgi>
-            Order allow,deny
-            Allow from all
-        </Directory>
-
-    </VirtualHost>
-
-
-Configuration
--------------
-
-Configuration is handled using ``ini`` style config files. An example file is
-given in ``app.ini.dist``.
-
-The file is looked up using config_resolver_.
-
-.. _config_resolver:: https://config-resolver.readthedocs.org/en/latest/
+When the container starts up it will automatically apply database upgrades as
+necessary.
