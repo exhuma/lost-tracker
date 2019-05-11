@@ -23,8 +23,8 @@
         {% if registration_open or current_user.has_role(Role.ADMIN) %}
           <a href="{{url_for('registration.new')}}">{{_('Register')}}</a> |
         {% endif %}
-        <a href="{{url_for('photo.gallery')}}">{{_('Pictures')}}</a> |
-        <a href="{{url_for('root.scoreboard')}}">{{_('Scoreboard')}}</a> |
+        <a href="https://tracker.lost.lu/gallery">{{_('Pictures')}}</a> |
+        <a href="https://tracker.lost.lu/scoreboard">{{_('Scoreboard')}}</a> |
         <a href="{{url_for('root.misc')}}">{{_('Anything else?')}}</a>
       </span>
 
