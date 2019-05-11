@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-06 10:41+0200\n"
-"PO-Revision-Date: 2016-05-06 10:46+0200\n"
+"POT-Creation-Date: 2019-04-07 16:09+0200\n"
+"PO-Revision-Date: 2019-04-07 16:15+0200\n"
 "Last-Translator: Michel Albert <michel@albert.lu>\n"
 "Language: lb\n"
 "Language-Team: lb <LL@li.org>\n"
@@ -16,12 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.2.0\n"
-"X-Generator: Poedit 1.8.7.1\n"
-
-#: lost_tracker/main.py:124
-msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
-msgstr "Benotzer ass elo mat {} verboon. Ignoréier d'Message déi seet: \"{}\""
+"Generated-By: Babel 2.6.0\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: lost_tracker/blueprint/comment.py:28 lost_tracker/blueprint/qr.py:80
 #: lost_tracker/blueprint/qr.py:85
@@ -263,7 +259,7 @@ msgstr "Speichren"
 msgid "Pictures"
 msgstr "Biller"
 
-#: lost_tracker/templates/gallery.html:14 lost_tracker/templates/gallery.html:17
+#: lost_tracker/templates/gallery.html:8 lost_tracker/templates/gallery.html:18
 msgid "Nothing here yet"
 msgstr "Hei ass nach näscht"
 
@@ -396,7 +392,6 @@ msgstr "Posten Läschen"
 
 #: lost_tracker/templates/login.html:3 lost_tracker/templates/login.html:6
 #: lost_tracker/templates/login.html:13 lost_tracker/templates/login.html:18
-#: lost_tracker/templates/master_framed.html:43
 #: lost_tracker/templates/security/login_user.html:4
 #: lost_tracker/templates/security/login_user.html:16
 msgid "Login"
@@ -432,33 +427,20 @@ msgstr "Punktentafel"
 msgid "Anything else?"
 msgstr "Detailer"
 
-#: lost_tracker/templates/master_framed.html:38
-#: lost_tracker/templates/matrix.html:13 lost_tracker/templates/scoreboard.html:18
-msgid "Matrix"
-msgstr "Matrix"
-
-#: lost_tracker/templates/master_framed.html:40
-msgid "Logged in as:"
-msgstr "Ageloggt als:"
-
-#: lost_tracker/templates/master_framed.html:41
-msgid "Logout"
-msgstr "Ausloggen"
-
-#: lost_tracker/templates/master_framed.html:52
+#: lost_tracker/templates/master_framed.html:42
 #: lost_tracker/templates/slot_editor.html:3
 msgid "Slot Editor"
 msgstr "Slot Editor"
 
-#: lost_tracker/templates/master_framed.html:53
+#: lost_tracker/templates/master_framed.html:43
 msgid "Manage Groups"
 msgstr "Gruppen bearbechten"
 
-#: lost_tracker/templates/master_framed.html:54
+#: lost_tracker/templates/master_framed.html:44
 msgid "Manage Stations"
 msgstr "Posten Bearbechten"
 
-#: lost_tracker/templates/master_framed.html:55
+#: lost_tracker/templates/master_framed.html:45
 #: lost_tracker/templates/settings.html:12
 msgid "Settings"
 msgstr "Astellungen"
@@ -474,6 +456,10 @@ msgstr "Um Posten ukomm"
 #: lost_tracker/templates/matrix.html:8
 msgid "Completed at station"
 msgstr "Färdeg um Posten"
+
+#: lost_tracker/templates/matrix.html:13 lost_tracker/templates/scoreboard.html:18
+msgid "Matrix"
+msgstr "Matrix"
 
 #: lost_tracker/templates/matrix.html:29
 msgid "SUM"
@@ -504,33 +490,43 @@ msgstr ""
 "markdown-here/wiki/Markdown-Cheatsheet\">Cheatsheet</a>."
 
 #: lost_tracker/templates/misc.html:8
-msgid "Entry fees are about €7 to €9 per person."
-msgstr "Et kascht tëschent 7€ an 9€ op de Kapp fir matzemaachen."
+msgid "Entry fees are about €9 to €11 per person."
+msgstr "Et kascht tëschend €9 an €11 pro Persoun."
 
 #: lost_tracker/templates/misc.html:10
 msgid "Food and beverages are available at the start and on the trail."
 msgstr "Iessen a Gedrénks gëtt et um Start, an der Mëtt an um Schluss vum Rallye."
 
-#: lost_tracker/templates/misc.html:13
+#: lost_tracker/templates/misc.html:12
+msgid ""
+"Strollers: There are many inclines en route and much of the trail passes "
+"through the woods."
+msgstr "Kannerkutschen: Et geet biergop, biergof a vill duerch de Besch."
+
+#: lost_tracker/templates/misc.html:14
+msgid "Dogs are welcome and have to be kept on a leash throughout the event."
+msgstr "Hënn si wëllkomm a mussen während dem ganzen Rallye un der Léngt bleiwen."
+
+#: lost_tracker/templates/misc.html:17
 msgid ""
 "We do this because we like it. Tell us wat you think and visit us on Facebook:"
 msgstr ""
 "Mir organiséieren dëse Rallye, well et Freed mécht. Besich eis op Facebook a "
 "schreif eis, wat s de denks!"
 
-#: lost_tracker/templates/misc.html:14
+#: lost_tracker/templates/misc.html:18
 msgid "Lost in the Darkness on Facebook"
 msgstr "Lost in the Darkness op Facebook"
 
-#: lost_tracker/templates/misc.html:18
+#: lost_tracker/templates/misc.html:22
 msgid "Everything penny we earn is donated to ONGD FNEL!"
 msgstr "All Su geet un d'ONGD FNEL!"
 
-#: lost_tracker/templates/misc.html:20
+#: lost_tracker/templates/misc.html:24
 msgid "In the year 2014 we raised €1000, donated to fnel Rover Tanzania."
 msgstr "Am Joër 2014 hu mer €1000 un d'fnel Rover Tanzania gespend."
 
-#: lost_tracker/templates/misc.html:22
+#: lost_tracker/templates/misc.html:26
 msgid ""
 "In the year 2015 we will donate all the income to the fnel Nepal Project "
 "(ongdFNEL)"
@@ -564,7 +560,7 @@ msgstr "E-Mail"
 
 #: lost_tracker/templates/profile.html:63
 msgid "Update"
-msgstr ""
+msgstr "Update"
 
 #: lost_tracker/templates/profile.html:68
 msgid "Social Connections"
@@ -595,7 +591,7 @@ msgid "Information about your group"
 msgstr "Informatiounen iwwer deng Equipe"
 
 #: lost_tracker/templates/register.html:18
-#: lost_tracker/templates/slot_editor.html:31
+#: lost_tracker/templates/slot_editor.html:30
 msgid "Group Name"
 msgstr "Numm vun der Grupp"
 
@@ -649,15 +645,15 @@ msgstr ""
 "Wann déi Werter <em>alleguer</em> gesat sin, gin d'Gewënner op der éischter "
 "Säit ugewisen."
 
-#: lost_tracker/templates/slot_editor.html:7
+#: lost_tracker/templates/slot_editor.html:6
 msgid "Time Slots"
 msgstr "Zäiten"
 
-#: lost_tracker/templates/slot_editor.html:11
+#: lost_tracker/templates/slot_editor.html:10
 msgid "Slot"
 msgstr "Platz"
 
-#: lost_tracker/templates/slot_editor.html:27
+#: lost_tracker/templates/slot_editor.html:26
 msgid "Unassigned Groups"
 msgstr "Onzougewisen Gruppen"
 
@@ -756,3 +752,15 @@ msgstr "Mat %s umellen"
 
 #~ msgid "Number of participants"
 #~ msgstr "Unzuel vun Gruppememberen"
+
+#~ msgid "Successfully linked login with {}. Ignore the message saying: \"{}\""
+#~ msgstr "Benotzer ass elo mat {} verboon. Ignoréier d'Message déi seet: \"{}\""
+
+#~ msgid "Logged in as:"
+#~ msgstr "Ageloggt als:"
+
+#~ msgid "Logout"
+#~ msgstr "Ausloggen"
+
+#~ msgid "Entry fees are about €7 to €9 per person."
+#~ msgstr "Et kascht tëschent 7€ an 9€ op de Kapp fir matzemaachen."
