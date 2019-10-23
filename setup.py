@@ -18,7 +18,7 @@ setup(
         'gouge >= 1.1, <2.0',
         'imapclient==1.0.1',
         'markdown==2.6.5',
-        'pillow==2.8.1',
+        'pillow==6.2.0',
         'psycopg2==2.5.2',
         'python-twitter>=3.0rc1',
         'pytz',
