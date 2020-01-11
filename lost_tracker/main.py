@@ -1,9 +1,9 @@
 from datetime import datetime
 import logging
 
-from config_resolver import Config
-from flask.ext.babel import Babel, gettext
-from flask.ext.security import (
+from config_resolver import get_config
+from flask_babel import Babel, gettext
+from flask_security import (
     SQLAlchemyUserDatastore,
     Security,
     login_user,
@@ -29,7 +29,7 @@ from lost_tracker.blueprint.tabedit import TABULAR
 from lost_tracker.blueprint.user import USER
 from lost_tracker.emails import Mailer, DummyMailer
 
-import lost_tracker.models as mdl
+import lost_tracker.models
 import lost_tracker.fbhelper as fb
 
 from lost_tracker.const import (
@@ -52,8 +52,8 @@ def _add_social_params(connections, identifier, conf):
     Adds an oauth provider to the social connections dictionary, but only if
     values are properly set (non-empty).
     """
-    key = conf.get(identifier, 'consumer_key', default='').strip()
-    secret = conf.get(identifier, 'consumer_secret', default='').strip()
+    key = conf.get(identifier, 'consumer_key', fallback='').strip()
+    secret = conf.get(identifier, 'consumer_secret', fallback='').strip()
     conf_key = 'SOCIAL_%s' % identifier.upper()
 
     if key and secret:
@@ -78,8 +78,15 @@ def make_app():
     app = Flask(__name__)
 
     app.user_datastore = user_datastore
-    app.localconf = lconf = Config('mamerwiselen', 'lost-tracker',
-                                   version='2.0', require_load=True)
+    app.localconf = lconf = get_config(
+        'lost-tracker',
+        'mamerwiselen',
+        filename='app.ini',
+        lookup_options={
+            'version': '2.0',
+            'require_load': True,
+        },
+    ).config
     app.config['SECRET_KEY'] = lconf.get('app', 'secret_key')
     app.config['SQLALCHEMY_DATABASE_URI'] = lconf.get('db', 'dsn')
     mdl.DB.init_app(app)
@@ -131,7 +138,7 @@ def fake_login():
     as a WSGI app (f.ex.: behind Apache), this route is unavailable for obvious
     reasons.
     """
-    from flask.ext.security import login_user
+    from flask_security import login_user
     from flask import request
     if not current_app.debug:
         return 'Access Denied!', 500
@@ -180,7 +187,7 @@ if __name__ == '__main__':
     myapp = make_app()
     myapp.add_url_rule('/fake_login', 'fake_login', fake_login)
     DEBUG = userbool(myapp.localconf.get('devserver', 'debug',
-                                         default=False))
+                                         fallback=False))
     if DEBUG:
         myapp.mailer = DummyMailer()
     else:

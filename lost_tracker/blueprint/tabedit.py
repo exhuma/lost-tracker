@@ -9,8 +9,8 @@ from flask import (
     request,
 )
 
-from flask.ext.babel import gettext
-from flask.ext.security import roles_accepted
+from flask_babel import gettext
+from flask_security import roles_accepted
 
 import lost_tracker.models as mdl
 
