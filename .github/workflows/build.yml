@@ -20,3 +20,10 @@ jobs:
     - name: Build Pages
       run: |
         pelican content
+    - uses: actions-hub/gcloud@master
+      env:
+        PROJECT_ID: api-project-776884208995
+        APPLICATION_CREDENTIALS: ${{ secrets.GCP_APPLICATION_CREDENTIALS }}
+        CLI: gsutil
+      with:
+        args: gsutil rsync -R output gs://lost-dev.albert.lu
