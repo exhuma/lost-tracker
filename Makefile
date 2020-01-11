@@ -38,8 +38,6 @@ help:
 	@echo '                                                                          '
 
 netlify:
-	pip install invoke fabric
-	inv develop
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 html:
