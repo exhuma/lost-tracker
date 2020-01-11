@@ -1,0 +1,240 @@
+/*
+ * Logo RED: HSL:     0°, 100%, 39%
+ * Logo Yellow: HSL: 61°,  96%  46%
+ */
+
+BODY {
+    background-color: #000;
+    color: hsl(30, 50%, 50%);
+    background: url('/static/images/stressed_linen.png');
+}
+
+#logo {
+    text-align: center;
+}
+
+TABLE {
+    border: 1px solid #880000;
+}
+
+TABLE TH {
+    color: #ff8800;
+    background-color: hsla(0, 0%, 0%, 0.6);
+}
+
+TABLE TD, TABLE TH {
+    border: 1px solid #770000;
+}
+
+A {
+    color: #ffff00;
+}
+
+A:visited {
+    color: #ff9900;
+}
+
+A:active {
+    color: #ffff55;
+}
+
+#mainmenu A.active {
+    font-weight: extra-bold;
+    color: #ff0;
+}
+
+#mainmenu A.active:visited {
+    color: #ff0;
+}
+
+#mainmenu A.active:active {
+    color: #fff;
+}
+
+H1,
+H2,
+H3,
+H4,
+H5,
+H6 {
+    color: hsl(30, 100%, 50%);
+}
+
+TD:focus {
+    background-color: hsla(0, 0%, 0%, 0.4);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    outline: none;
+}
+
+.tooltip {
+    border: 1px solid hsl(0, 100%, 40%);
+    background: hsla(0, 0%, 3%, 0.95);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+}
+
+.tooltip H1 {
+    border-bottom: 1px solid hsl(30, 100%, 80%);
+}
+
+TD.confirmed {
+    border: 2px dotted yellow;
+}
+
+TD.accepted {
+    border: 2px solid green;
+}
+
+/* form elements {{{ */
+
+INPUT[type="checkbox"]:focus{
+    -webkit-box-shadow: 0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
+    -moz-box-shadow:    0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
+    box-shadow:         0px 0px 8px 0px hsla(30, 100%, 50%, 0.75);
+}
+
+INPUT[type='password'],
+INPUT[type='text'],
+INPUT[type='email'],
+INPUT[type='number'],
+TEXTAREA {
+    background: hsla(0, 0%, 0%, 0.4);
+    border: 1px solid hsl(30, 100%, 10%);
+    color: hsl(30, 100%, 70%);
+    padding: 0.2em 0.5em;
+    width: 80%;
+}
+
+INPUT[type='number']:focus,
+INPUT[type='text']:focus,
+INPUT[type='email']:focus,
+TEXTAREA:focus {
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 50%, 0.75);
+}
+
+INPUT:focus,
+TEXTAREA:focus {
+    outline: none;
+}
+
+FIELDSET {
+    border: 1px solid hsl(30, 100%, 30%);
+}
+
+INPUT[type='submit'] {
+    padding: 1em;
+    background: hsl(30, 100%, 20%);
+    border: 1px solid hsl(30, 100%, 30%);
+    color: hsl(30, 100%, 70%);
+}
+
+INPUT[type='submit']:hover,
+INPUT[type='submit']:focus {
+    background: hsl(30, 100%, 30%);
+    border: 1px solid hsl(30, 100%, 70%);
+    color: hsl(30, 100%, 90%);
+    -webkit-box-shadow: 0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    -moz-box-shadow:    0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+    box-shadow:         0px 0px 5px 0px hsla(30, 100%, 90%, 0.75);
+}
+
+INPUT[type='submit']:active {
+    background: hsl(30, 100%, 34%);
+    border: 1px solid hsl(30, 100%, 80%);
+    color: hsl(30, 100%, 100%);
+}
+
+/* }}} */
+
+DT {
+    margin-top: 0.5em;
+}
+
+/* {{{ Flashes */
+
+#flashes {
+    line-height: 2;
+}
+
+#flashes DIV.info,
+.admonition.note {
+    background: hsl(230, 40%, 10%);
+    border: 1px solid hsl(230, 50%, 20%);
+    color: hsl(230, 20%, 50%);
+}
+
+#flashes DIV.success,
+.admonition.success {
+    background: hsl(120, 42%, 13%);
+    border: 1px solid hsl(127, 50%, 20%);
+    color: hsl(92, 39%, 58%);
+}
+
+#flashes DIV.error,
+.admonition.error {
+    background: hsl(20, 40%, 10%);
+    border: 1px solid hsl(20, 50%, 20%);
+    color: hsl(20, 70%, 50%);
+}
+
+/* }}} */
+
+/* {{{ Modal Dialogs */
+.modal-dialog {
+  background: #000000;
+  border: 1px solid hsl(0, 50%, 50%);
+  color: hsl(30, 100%, 70%);
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+  color: #06c;
+}
+
+.modal-dialog-bg {
+  background: #444;
+}
+
+.modal-dialog-title {
+    background: hsl(230, 40%, 10%);
+    border: 1px solid hsl(230, 50%, 20%);
+    color: hsl(230, 20%, 50%);
+}
+
+.modal-dialog-buttons,
+.modal-dialog-content {
+  font-size: 90%;
+  background-color: hsl(0, 0%, 7%);
+}
+
+.modal-dialog-buttons {
+  border-left: 1px solid hsl(230, 50%, 20%);
+  border-bottom: 1px solid hsl(230, 50%, 20%);
+  border-right: 1px solid hsl(230, 50%, 20%);
+}
+
+.modal-dialog-content {
+  border-left: 1px solid hsl(230, 50%, 20%);
+  border-right: 1px solid hsl(230, 50%, 20%);
+}
+/* }}} */
+
+
+BLOCKQUOTE {
+    border-left: 5px solid #770000;
+    border-right: 5px solid #770000;
+    padding: 0 3em;
+    font-style: italic;
+}
+
+#placings H2 STRONG {
+    color: hsl(30, 100%, 80%);
+}
+
+/* vim: set fdm=marker : */
