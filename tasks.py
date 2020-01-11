@@ -115,5 +115,6 @@ def develop(c):
     c.run('[ -d env ] || python3 -m venv env')
     c.run('./env/bin/pip install -U pip')
     c.run('./env/bin/pip install pelican[Markdown] icalendar')
-    c.run('[ -d pelican-plugins ] || '
-          'git clone --recursive https://github.com/getpelican/pelican-plugins')
+    c.run('[ -d pelican-plugins-src ] || '
+          'git clone --recursive https://github.com/getpelican/pelican-plugins '
+          'pelican-plugins-src')
