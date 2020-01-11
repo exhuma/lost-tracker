@@ -23,8 +23,8 @@
         {% if registration_open or current_user.has_role(Role.ADMIN) %}
           <a href="{{url_for('registration.new')}}">{{_('Register')}}</a> |
         {% endif %}
-        <a href="{{url_for('photo.gallery')}}">{{_('Pictures')}}</a> |
-        <a href="{{url_for('root.scoreboard')}}">{{_('Scoreboard')}}</a> |
+        <a href="https://tracker.lost.lu/gallery">{{_('Pictures')}}</a> |
+        <a href="https://tracker.lost.lu/scoreboard">{{_('Scoreboard')}}</a> |
         <a href="{{url_for('root.misc')}}">{{_('Anything else?')}}</a>
       </span>
 
@@ -32,16 +32,6 @@
         <a href="{{request.path}}?lang=en"><img src="{{url_for('static', filename='flags/gb.png')}}" /></a>&nbsp;
         <a href="{{request.path}}?lang=de"><img src="{{url_for('static', filename='flags/de.png')}}" /></a>&nbsp;
         <a href="{{request.path}}?lang=lb"><img src="{{url_for('static', filename='flags/lu.png')}}" /></a>
-      </span>
-
-      <span id="auth">
-        <a href="{{url_for('root.matrix')}}">{{_('Matrix')}}</a> |
-        {% if current_user.is_authenticated %}
-          {{_('Logged in as:')}} <a href="{{url_for('root.profile')}}">{{avatar(current_user, 20)}}</a>&nbsp;<a href="{{url_for('root.profile')}}">{{current_user.name}}</a> |
-          <a href="{{url_for('security.logout')}}">{{_('Logout')}}</a>
-        {% else %}
-          <a href="{{url_for('security.login')}}">{{_('Login')}}</a>
-        {% endif %}
       </span>
     </div>
 {% endblock %}
