@@ -23,7 +23,8 @@ jobs:
     - uses: actions-hub/gcloud@master
       env:
         PROJECT_ID: api-project-776884208995
-        APPLICATION_CREDENTIALS: ${{ secrets.GCP_APPLICATION_CREDENTIALS }}
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         CLI: gsutil
       with:
-        args: rsync -R output gs://lost-dev.albert.lu
+        # args: rsync -R output gs://lost-dev.albert.lu
+        args: cp output/index.html gs://lost-dev.albert.lu/test.html
