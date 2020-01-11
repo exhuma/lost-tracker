@@ -26,4 +26,4 @@ jobs:
         APPLICATION_CREDENTIALS: ${{ secrets.GCP_APPLICATION_CREDENTIALS }}
         CLI: gsutil
       with:
-        args: gsutil rsync -R output gs://lost-dev.albert.lu
+        args: rsync -R output gs://lost-dev.albert.lu
