@@ -6,4 +6,8 @@ This is the start location
 :authors: Michel Albert
 :summary: Details about the start location of the event
 
-Hello World
+.. raw:: html
+
+    <iframe width="600" height="450" frameborder="0" style="border:0"
+    src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJGytSvoVMlUcRqUJ0oDcTLR4&key=AIzaSyBhTmrrEiXXxGGdr5je73uZphZElHNxyac"
+    allowfullscreen></iframe>
