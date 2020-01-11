@@ -26,5 +26,4 @@ jobs:
         APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         CLI: gsutil
       with:
-        # args: rsync -R output gs://lost-dev.albert.lu
-        args: cp output/index.html gs://lost-dev.albert.lu/test.html
+        args: rsync -d -R output gs://lost-dev.albert.lu
