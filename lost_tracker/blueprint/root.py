@@ -19,8 +19,8 @@ from flask import (
     session as flask_session,
     url_for,
 )
-from flask.ext.babel import gettext, format_datetime, format_date, get_locale
-from flask.ext.security import (
+from flask_babel import gettext, format_datetime, format_date, get_locale
+from flask_security import (
     login_required,
     roles_accepted,
 )

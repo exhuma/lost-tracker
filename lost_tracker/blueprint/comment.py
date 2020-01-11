@@ -9,8 +9,8 @@ from flask import (
     url_for,
 )
 
-from flask.ext.babel import gettext
-from flask.ext.security import current_user, login_required, roles_required
+from flask_babel import gettext
+from flask_security import current_user, login_required, roles_required
 
 import lost_tracker.core as loco
 import lost_tracker.models as mdl

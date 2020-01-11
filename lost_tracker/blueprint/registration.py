@@ -8,8 +8,8 @@ from flask import (
     url_for,
 )
 
-from flask.ext.babel import gettext
-from flask.ext.security import (
+from flask_babel import gettext
+from flask_security import (
     current_user,
     login_required,
     roles_accepted,

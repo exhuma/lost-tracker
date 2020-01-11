@@ -14,9 +14,9 @@ from flask import (
     url_for,
 )
 
-from flask.ext.babel import gettext
+from flask_babel import gettext
 
-from flask.ext.security import (
+from flask_security import (
     roles_accepted,
 )
 

@@ -9,8 +9,8 @@ from flask import (
     request,
     url_for,
 )
-from flask.ext.babel import gettext
-from flask.ext.security import login_required
+from flask_babel import gettext
+from flask_security import login_required
 import io
 import qrcode
 

@@ -6,9 +6,9 @@ from flask import (
     url_for,
 )
 
-from flask.ext.babel import gettext
-from flask.ext.security import current_user
-from flask.ext.security import roles_accepted
+from flask_babel import gettext
+from flask_security import current_user
+from flask_security import roles_accepted
 
 USER = Blueprint('user', __name__)
 

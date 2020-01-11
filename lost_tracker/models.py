@@ -3,8 +3,8 @@ from datetime import datetime
 from json import loads, dumps
 import logging
 
-from flask.ext.security import UserMixin, RoleMixin
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_security import UserMixin, RoleMixin
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import (
     Boolean,
     Column,
