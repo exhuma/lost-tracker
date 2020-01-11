@@ -1,5 +1,5 @@
-PY?=./env/bin/python3
-PELICAN?=./env/bin/pelican
+PY?=python3
+PELICAN?=pelican
 PELICANOPTS=
 
 BASEDIR=$(CURDIR)
@@ -37,10 +37,12 @@ help:
 	@echo 'Set the RELATIVE variable to 1 to enable relative urls                    '
 	@echo '                                                                          '
 
+netlify:
+	pip3 install invoke fabric
+	inv develop
+	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
+
 html:
-	[ -d env ] || python3 -m venv env
-	./env/bin/pip install invoke fabric
-	./env/bin/inv develop
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 clean:
