@@ -1,5 +1,5 @@
-PY?=python3
-PELICAN?=pelican
+PY?=./env/bin/python3
+PELICAN?=./env/bin/pelican
 PELICANOPTS=
 
 BASEDIR=$(CURDIR)
@@ -38,6 +38,9 @@ help:
 	@echo '                                                                          '
 
 html:
+	[ -d env ] || python3 -m venv env
+	./env/bin/pip install invoke fabric
+	./env/bin/inv develop
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
 clean:
