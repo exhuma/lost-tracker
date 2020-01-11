@@ -69,7 +69,9 @@ def _add_social_params(connections, identifier, conf):
             }
 
 
-def make_app():
+def make_app(mdl=None, mail_handler=None):
+
+    mdl = mdl or lost_tracker.models
 
     babel = Babel()
     security = Security()
