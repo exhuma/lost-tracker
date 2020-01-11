@@ -38,7 +38,7 @@ help:
 	@echo '                                                                          '
 
 netlify:
-	pip3 install invoke fabric
+	pip install invoke fabric
 	inv develop
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
 
