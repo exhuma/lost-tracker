@@ -7,9 +7,6 @@ This is the start location
 :summary: Details about the start location of the event
 
 
-Hello World
------------
-
 .. raw:: html
 
     <iframe width="600" height="450" frameborder="0" style="border:0"
