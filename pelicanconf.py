@@ -14,6 +14,12 @@ PLUGINS = ['i18n_subsites', 'events']
 I18N_SUBSITES = {
     'lu': {
         'SITENAME': 'lost.lu'
+    },
+    'de': {
+        'SITENAME': 'lost.lu'
+    },
+    'en': {
+        'SITENAME': 'lost.lu'
     }
 }
 STATIC_PATHS = ['static']
@@ -23,7 +29,7 @@ PATH = 'content'
 
 TIMEZONE = 'Europe/Luxembourg'
 
-DEFAULT_LANG = 'en'
+DEFAULT_LANG = 'lu'
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
