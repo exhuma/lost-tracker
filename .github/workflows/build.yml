@@ -19,7 +19,7 @@ jobs:
         pip install -r requirements.txt
     - name: Build Pages
       run: |
-        for f in content/**/*.{rst,md}; do sed -i -e "s/{{GMAPS_API_KEY}}/${{secrets.GMAPS_API_KEY}}/" "${f}"; done
+        find content -name "*.rst" -or -name "*.md" | xargs sed -i -e "s/{{GMAPS_API_KEY}}/${{secrets.GMAPS_API_KEY}}/"
         pelican content
     - name: Archive Production Artifact
       uses: actions/upload-artifact@master
