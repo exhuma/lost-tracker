@@ -17,11 +17,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Embed Secrets
-      run: |
-        "for f in content/**/*.{rst,md}; do sed -i -e 's/{{GMAPS_API_KEY}}/${{secrets.GMAPS_API_KEY}}/' '${f}'; done"
     - name: Build Pages
       run: |
+        for f in content/**/*.{rst,md}; do sed -i -e "s/{{GMAPS_API_KEY}}/${{secrets.GMAPS_API_KEY}}/" "${f}"; done
         pelican content
     - name: Archive Production Artifact
       uses: actions/upload-artifact@master
