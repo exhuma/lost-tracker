@@ -1,5 +1,4 @@
-# Anything else?
-
+Title: Anything else?
 Date: 2020-01-12 10:52:47
 Modified: 2020-01-12 10:52:50
 Authors: Mamer Wiselen
@@ -26,4 +25,4 @@ In the year 2014 we raised €1000, donated to fnel Rover Tanzania.
 In the year 2015 we will donate all the income to the fnel Nepal Project
 (ongdFNEL)
 
-![Group Photo]({filename}/images/gruppefoto.jpg)
+![Group Photo](/static/images/gruppefoto.jpg)

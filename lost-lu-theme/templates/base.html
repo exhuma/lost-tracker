@@ -41,11 +41,6 @@
 <body id="index" class="home">
   <div id="menu">
     <span id="mainmenu">
-      {#
-      {% for title, link in MENUITEMS %}
-          <li><a href="{{ link }}">{{ title }}</a></li>
-      {% endfor %}
-      #}
       {% for p in pages %}
       <a{% if p == page %} class="active"{% endif %} href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a> |
       {% endfor %}
