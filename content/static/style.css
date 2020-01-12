@@ -533,6 +533,19 @@ P.ppm {
     font-size: 70%;
 }
 
+HR {
+    border: 0;
+    border-top: 1px solid #572c0d;
+}
+
+P.lastupdated {
+    border-top: 1px solid #572c0d;
+    font-size: 70%;
+    text-align: right;
+    padding-top: 1em;
+    margin-top: 4em;
+}
+
 /* {{{ Modal Dialogs */
 .modal-dialog {
     max-width: 30em;
