@@ -3,6 +3,8 @@ Date: 2020-01-12 10:52:47
 Modified: 2020-01-12 10:52:50
 Authors: Mamer Wiselen
 Summary: Additional Information
+Lang: en
+Slug: anything-else
 
 
 Entry fees are about €9 to €11 per person.
