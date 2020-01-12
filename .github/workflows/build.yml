@@ -20,10 +20,26 @@ jobs:
     - name: Build Pages
       run: |
         pelican content
-    - uses: actions-hub/gcloud@master
-      env:
-        PROJECT_ID: api-project-776884208995
-        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        CLI: gsutil
+    - name: Archive Production Artifact
+      uses: actions/upload-artifact@master
       with:
-        args: rsync -d -R output gs://lost-dev.albert.lu
+        name: output
+        path: output
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: output
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
