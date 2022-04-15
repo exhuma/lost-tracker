@@ -39,9 +39,6 @@ jobs:
         with:
           name: output
           path: output
-      - name: treeview
-        run: |
-          find .
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
