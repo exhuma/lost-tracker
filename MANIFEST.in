@@ -1,4 +1,0 @@
-include lost_tracker/version.txt
-recursive-include lost_tracker/static *.png *.js *.css *.gif *.jpg
-recursive-include lost_tracker/templates *.html *.txt *.md
-recursive-include lost_tracker/translations *.mo

@@ -1,8 +1,0 @@
-application {
-    name = "lost-tracker"
-    type = "custom"
-}
-
-customization "dev" {
-    vagrantfile = "./Vagrantfile"
-}
