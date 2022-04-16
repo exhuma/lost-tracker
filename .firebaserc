@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "api-project-776884208995"
+  },
+  "targets": {
+    "api-project-776884208995": {
+      "hosting": {
+        "tracker": [
+          "lost-tracker"
+        ]
+      }
+    }
   }
 }
